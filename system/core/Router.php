@@ -223,6 +223,7 @@ class CI_Router {
 
 		$request_method = isset ($_SERVER['REQUEST_METHOD']) ? strtolower ($_SERVER['REQUEST_METHOD']) : 'get';
 		$uri = implode ('/', $this->uri->segments) . '/';
+		$uri = str_replace ('-', '_', $uri);
 
 		if (isset ($this->routes[$request_method . ':' . $uri]) && is_string ($this->routes[$request_method . ':' . $uri]))
 			return $this->_set_request (explode ('/', $this->routes[$request_method . ':' . $uri]));
