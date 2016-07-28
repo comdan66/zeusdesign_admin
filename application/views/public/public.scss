@@ -5,19 +5,22 @@
 
 @import "_oa";
 
-@include font-face("Monaco", font-files("monaco/monaco.ttf", "monaco/monaco.otf"));
-// @include font-face("icomoon", font-files("icomoon/icomoon.eot", "icomoon/icomoon.woff", "icomoon/icomoon.ttf", "icomoon/icomoon.svg"));
-// [class^="icon-"], [class*=" icon-"] {
-//   font-family: 'icomoon', Monaco, "微軟正黑體", "Microsoft JhengHei";
-//   speak: none;
-//   font-style: normal;
-//   font-weight: normal;
-//   font-variant: normal;
-//   text-transform: none;
-//   line-height: 1;
+@include font-face("icomoon", font-files("icomoon/icomoon.eot", "icomoon/icomoon.woff", "icomoon/icomoon.ttf", "icomoon/icomoon.svg"));
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'icomoon', "微軟正黑體","Open sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
 
-//   @include font-smoothing(antialiased);
-// }
+  @include font-smoothing(antialiased);
+}
+
+
+
+
 
 * {
   &, &:after, &:before {
@@ -33,29 +36,108 @@ html {
 
   body {
     position: relative;
+
+    background-color: $mainBackgroundColor;
+    background-image: none;
+
+    font-family: "微軟正黑體","Open sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+    height: auto;
+    color: rgba(85, 85, 85, 1);
+
     display: inline-block;
     text-align: center;
     margin: 0;
+    padding: 0;
     width: 100%;
-    height: 100%;
     font-size: medium;
-    font-family: Monaco, "微軟正黑體", "Microsoft JhengHei";
-    background: $mainBackgroundColor $mainBackgroundImage;
-    color: rgba(50, 50, 50, 0.8);
+    font-weight: normal;
 
     @include font-smoothing(antialiased);
-    
-    #container {
-      position: relative;
-      display: block;
-      margin: 0 auto;
-      max-width: $mainWidth;
-
-      padding: 0 10px;
-
-      @media screen and (min-width: #{$mainWidth}) {
-        padding: 0;
-      }
-    }
   }
 }
+
+.icon-d:before {
+  content: "\e904";
+}
+.icon-b:before {
+  content: "\e907";
+}
+.icon-g:before {
+  content: "\e908";
+}
+.icon-e:before {
+  content: "\e906";
+}
+.icon-im:before {
+  content: "\e90d";
+}
+.icon-ims:before {
+  content: "\e90e";
+}
+.icon-s:before {
+  content: "\e986";
+}
+.icon-t:before {
+  content: "\e9ac";
+}
+.icon-y:before {
+  content: "\e901";
+}
+.icon-ta:before {
+  content: "\e905";
+}
+.icon-u:before {
+  content: "\e900";
+}
+.icon-i:before {
+  content: "\e23e";
+}
+.icon-p:before {
+  content: "\e8ad";
+}
+.icon-a:before {
+  content: "\e03b";
+}
+.icon-r:before {
+  content: "\e114";
+}
+.icon-x:before {
+  content: "\e117";
+}
+.icon-m:before {
+  content: "\e120";
+}
+.icon-fa:before {
+  content: "\e125";
+}
+.icon-c:before {
+  content: "\f00c";
+}
+.icon-o:before {
+  content: "\f011";
+}
+.icon-ca:before {
+  content: "\f073";
+}
+.icon-f:before {
+  content: "\f0f6";
+}
+.icon-ti:before {
+  content: "\f145";
+}
+.icon-ua:before {
+  content: "\f234";
+}
+.icon-al:before {
+  content: "\e902";
+}
+.icon-ar:before {
+  content: "\e903";
+}
+.icon-td:before {
+  content: "\e909";
+}
+.icon-tu:before {
+  content: "\e90a";
+}
+
