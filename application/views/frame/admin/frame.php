@@ -71,7 +71,7 @@
                 <span class='icon-ims'>首頁上搞</span>
                 <ul>
                   <li><a href="<?php echo $url = base_url ('banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>Banner 設定</a></li>
-                  <li><a href="" class='icon-im'>Promo 設定</a></li>
+                  <li><a href="<?php echo $url = base_url ('promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>Promo 設定</a></li>
                 </ul>
               </label>
             </li>

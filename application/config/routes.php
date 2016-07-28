@@ -15,6 +15,7 @@ Route::group ('api', function () {
 
 Route::resourcePagination (array ('schedule_tags'), 'schedule_tags');
 Route::resourcePagination (array ('banners'), 'banners');
+Route::resourcePagination (array ('promos'), 'promos');
 
 // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
 // var_dump (Route::getRoute ());
