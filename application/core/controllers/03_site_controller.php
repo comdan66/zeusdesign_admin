@@ -29,12 +29,11 @@ class Site_controller extends Oa_controller {
   }
 
   private function _add_css () {
-    return $this;
+    return $this->add_css ('http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700', false);
   }
 
   private function _add_js () {
-    return $this->add_js (base_url ('resource', 'javascript', 'jquery_v1.10.2', 'jquery-1.10.2.min.js'))
-                ->add_js (base_url ('resource', 'javascript', 'jquery-rails_d2015_03_09', 'jquery_ujs.js'))
+    return $this->add_js (res_url ('res', 'js', 'main.js'))
                 ;
   }
 }
