@@ -26,8 +26,8 @@ class Promo extends OaModel {
     self::ENABLE_YES => '啟用',
   );
 
-  const TARGET_BLANK = 0;
-  const TARGET_SELF  = 1;
+  const TARGET_BLANK = 1;
+  const TARGET_SELF  = 0;
 
   static $targetNames = array(
     self::TARGET_BLANK => '分頁',
@@ -39,9 +39,28 @@ class Promo extends OaModel {
 
     OrmImageUploader::bind ('cover', 'PromoCoverImageUploader');
   }
+  public function to_array () {
+    return array (
+        'id' => $this->id,
+        'title' => $this->title,
+        'content' => $this->content,
+        'link' => $this->link,
+        'target' => $this->target,
+        'is_enabled' => $this->is_enabled,
+        'sort' => $this->sort,
+        'cover' => array (
+            'ori' => $this->cover->url (),
+            'w500' => $this->cover->url ('500w'),
+          ),
+      );
+  }
   public function mini_content ($length = 100) {
     if (!isset ($this->content)) return '';
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->content), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
+  }
+  public function mini_link ($length = 80) {
+    if (!isset ($this->link)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->link), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->link);
   }
   public function destroy () {
     if (!(isset ($this->cover) && isset ($this->id)))
