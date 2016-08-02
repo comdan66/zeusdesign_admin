@@ -211,11 +211,11 @@ class Promos extends Admin_controller {
     $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
 
-    if (isset ($posts['title']) && !($posts['title'] = trim ($posts['title']))) return '標題錯誤！';
-    if (isset ($posts['content']) && !($posts['content'] = trim ($posts['content']))) return '內容錯誤！';
-    if (isset ($posts['link']) && !($posts['link'] = trim ($posts['link']))) return '鏈結錯誤！';
-    if (isset ($posts['target']) && !(is_numeric ($posts['target'] = trim ($posts['target'])) && in_array ($posts['target'], array_keys (Promo::$targetNames)))) return '開啟方式錯誤！';
-    if (isset ($posts['is_enabled']) && !(is_numeric ($posts['is_enabled'] = trim ($posts['is_enabled'])) && in_array ($posts['is_enabled'], array_keys (Promo::$enableNames)))) return '狀態錯誤！';
+    if (isset ($posts['title']) && !($posts['title'] = trim ($posts['title']))) return '標題格式錯誤！';
+    if (isset ($posts['content']) && !($posts['content'] = trim ($posts['content']))) return '內容格式錯誤！';
+    if (isset ($posts['link']) && !($posts['link'] = trim ($posts['link']))) return '鏈結格式錯誤！';
+    if (isset ($posts['target']) && !(is_numeric ($posts['target'] = trim ($posts['target'])) && in_array ($posts['target'], array_keys (Promo::$targetNames)))) return '開啟方式格式錯誤！';
+    if (isset ($posts['is_enabled']) && !(is_numeric ($posts['is_enabled'] = trim ($posts['is_enabled'])) && in_array ($posts['is_enabled'], array_keys (Promo::$enableNames)))) return '狀態格式錯誤！';
     return '';
   }
   private function _validation_must (&$posts) {
