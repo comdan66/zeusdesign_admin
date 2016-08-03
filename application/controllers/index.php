@@ -9,16 +9,12 @@ class Index extends Admin_controller {
 
   public function __construct () {
     parent::__construct ();
-    $this->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'ckeditor.js'), false)
-         ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'config.js'), false)
-         ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'adapters', 'jquery.js'), false);
-         
   }
   public function a () {
-    $this->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'ckeditor.js'), false)
-         ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'config.js'), false)
-         ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'adapters', 'jquery.js'), false)
-         ->load_view ();
+    // $this->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'ckeditor.js'), false)
+    //      ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'config.js'), false)
+    //      ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'adapters', 'jquery.js'), false)
+    //      ->load_view ();
   }
   public function calendar () {
     $tags = ScheduleTag::find ('all', array ('select' => 'id, name, color', 'conditions' => array ('user_id = ?', User::current ()->id)));
