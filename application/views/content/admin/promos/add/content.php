@@ -8,7 +8,7 @@
     <div class='row n2'>
       <label>標題</label>
       <div>
-        <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : '';?>' placeholder='請輸入標題..' maxlength='200' pattern='.{1,200}' required title='輸入名稱!' autofocus />
+        <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : '';?>' placeholder='請輸入標題..' maxlength='200' pattern='.{1,200}' required title='輸入標題!' autofocus />
       </div>
     </div>
     <div class='row n2'>
@@ -20,7 +20,7 @@
     <div class='row n2'>
       <label>鏈結</label>
       <div>
-        <input type='text' name='link' value='<?php echo isset ($posts['link']) ? $posts['link'] : '';?>' placeholder='請輸入鏈結..' maxlength='200' pattern='.{1,200}' required title='輸入名稱!' />
+        <input type='text' name='link' value='<?php echo isset ($posts['link']) ? $posts['link'] : '';?>' placeholder='請輸入鏈結..' maxlength='200' pattern='.{1,200}' required title='輸入鏈結!' />
       </div>
     </div>
 
