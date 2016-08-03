@@ -13,6 +13,7 @@ class Migration_Add_article_sources extends CI_Migration {
         `article_id` int(11) unsigned NOT NULL COMMENT 'Article ID',
         `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '標題',
         `href` text  COMMENT '網址',
+        `sort` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '排列順序，上至下 ASC',
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',
         PRIMARY KEY (`id`)

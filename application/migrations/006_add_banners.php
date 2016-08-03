@@ -16,8 +16,8 @@ class Migration_Add_banners extends CI_Migration {
         `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '鏈結',
         `cover` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '封面',
         
-        `target` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '鏈結開啟方式，1 分頁，0 本頁',
-        `is_enabled` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '上下架，1 上架，0 下架',
+        `target` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '鏈結開啟方式，1 分頁，0 本頁',
+        `is_enabled` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '上下架，1 上架，0 下架',
         
         `sort` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '排列順序，上至下 ASC',
         
