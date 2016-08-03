@@ -71,7 +71,7 @@
                 <input type='checkbox' />
                 <span class='icon-f'>文章管理</span>
                 <ul>
-                  <li><a href="" class='icon-ta'>分類設定</a></li>
+                  <li><a href="<?php echo $url = base_url ('article-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
                   <li><a href="" class='icon-fa'>文章設定</a></li>
                 </ul>
               </label>

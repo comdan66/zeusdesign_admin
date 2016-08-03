@@ -18,6 +18,7 @@ Route::resourcePagination (array ('schedule_tags'), 'schedule_tags');
 Route::resourcePagination (array ('banners'), 'banners');
 Route::resourcePagination (array ('promos'), 'promos');
 Route::resourcePagination (array ('users'), 'users');
+Route::resourcePagination (array ('article_tags'), 'article_tags');
 
 Route::get ('/users/(:id)/show', 'users@show($1)');
 Route::get ('/users/(:id)/show/(:any)', 'users@show($1, $2)');
