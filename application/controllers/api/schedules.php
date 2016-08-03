@@ -30,7 +30,7 @@ class Schedules extends Api_controller {
     if (isset ($gets['range']['year']) && isset ($gets['range']['month'])) OaModel::addConditions ($conditions, '((year = ? AND month = ?) OR (year = ? AND month = ?) OR (year = ? AND month = ?))', $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['year'] : $gets['range']['year'] : $gets['range']['year'] - 1, $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['month'] - 1 : 11 : 12, $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['year'] : $gets['range']['year'] : $gets['range']['year'], $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['month'] : 12 : 1, $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['year'] : $gets['range']['year'] + 1 : $gets['range']['year'], $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['month'] + 1 : 1 : 2);
 
     $schedules = Schedule::find ('all', array (
-      'order' => 'sort ASC',
+      'order' => 'sort ASC, id DESC',
       'include' => array ('tag'),
       'conditions' => $conditions));
 
@@ -43,8 +43,9 @@ class Schedules extends Api_controller {
   public function create () {
 
     $posts = OAInput::post ();
+    if (isset ($posts['description'])) $posts['description'] = OAInput::post ('description', false);
 
-    if ($msg = $this->_validation_create ($posts))
+    if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
       return $this->output_error_json ($msg);
 
     $posts['user_id'] = $this->user->id;
@@ -53,21 +54,15 @@ class Schedules extends Api_controller {
     });
 
     if (!$create) return $this->output_error_json ('新增失敗！');
-    
-    UserLog::transaction (function () use ($schedule) {
-      UserLog::create (array (
-          'user_id' => $schedule->user_id,
-          'content' => '[行程]新增一項行程，標題是 “' . $schedule->title . '”。'
-        ));
-    });
 
     return $this->output_json ($schedule->to_array ());
   }
 
   public function update ($id = 0) {
     $posts = OAInput::post ();
+    if (isset ($posts['description'])) $posts['description'] = OAInput::post ('description', false);
 
-    if ($msg = $this->_validation_update ($posts))
+    if ($msg = $this->_validation ($posts))
       return $this->output_error_json ($msg);
 
     if ($columns = array_intersect_key ($posts, $this->schedule->table ()->columns))
@@ -79,13 +74,6 @@ class Schedules extends Api_controller {
 
     if (!$update) return $this->output_error_json ('更新失敗！');
 
-    UserLog::transaction (function () use ($schedule) {
-      UserLog::create (array (
-          'user_id' => $schedule->user_id,
-          'content' => '[行程]更新 “' . $schedule->title . '” 行程。'
-        ));
-    });
-
     return $this->output_json ($schedule->to_array ());
   }
 
@@ -94,13 +82,6 @@ class Schedules extends Api_controller {
     $delete = Schedule::transaction (function () use ($schedule) { return $schedule->destroy (); });
 
     if (!$delete) return $this->output_error_json ('刪除失敗！');
-
-    UserLog::transaction (function () use ($schedule) {
-      UserLog::create (array (
-          'user_id' => $schedule->user_id,
-          'content' => '[行程]將 “' . $schedule->title . '” 行程刪除了。'
-        ));
-    });
 
     return $this->output_json (array ('message' => '刪除成功！'));
   }
@@ -132,14 +113,6 @@ class Schedules extends Api_controller {
         }))
       return $this->output_error_json ('更新失敗！');
 
-
-    UserLog::transaction (function () use ($user) {
-      UserLog::create (array (
-          'user_id' => $user->id,
-          'content' => '[行程]調整行程順序。'
-        ));
-    });
-
     return $this->output_json (array_map (function ($data) {
         return array (
             'id' => $data['schedule']->id,
@@ -147,44 +120,30 @@ class Schedules extends Api_controller {
           );
       }, $datas));
   }
-  private function _validation_update (&$posts) {
-    $keys = array ('title', 'description', 'year', 'month', 'day', 'finish', 'sort', 'tag_id');
-    $new_posts = array ();
-    foreach ($posts as $key => $value)
-      if (in_array ($key, $keys))
-        $new_posts[$key] = $value;
 
+  private function _validation (&$posts) {
+    $keys = array ('title', 'year', 'month', 'day', 'description', 'finish', 'sort', 'tag_id');
+
+    $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
-    if (isset ($posts['title']) && !($posts['title'] = trim ($posts['title']))) return '標題錯誤！';
-    if (!(isset ($posts['description']) && is_string ($posts['description'] = trim ($posts['description'])))) $posts['description'] = '';
-    if (isset ($posts['year']) && !(($posts['year'] = trim ($posts['year'])) && is_numeric ($posts['year']))) return '年份錯誤！';
-    if (isset ($posts['month']) && !(($posts['month'] = trim ($posts['month'])) && is_numeric ($posts['month']))) return '月份錯誤！';
-    if (isset ($posts['day']) && !(($posts['day'] = trim ($posts['day'])) && is_numeric ($posts['day']))) return '日期錯誤！';
-    if (isset ($posts['finish']) && !(is_numeric ($posts['finish']) && in_array ($posts['finish'], array_keys (Schedule::$finishNames)))) return '參數錯誤！';
-    
-    if (!(isset ($posts['tag_id']) && is_numeric ($posts['tag_id'] = trim ($posts['tag_id'])) && (ScheduleTag::find ('one', array ('conditions' => array ('id = ?', $posts['tag_id'])))))) $posts['tag_id'] = NULL;
-    else $posts['schedule_tag_id'] = $posts['tag_id'];
 
+    if (isset ($posts['title']) && !($posts['title'] = trim ($posts['title']))) return '標題格式錯誤！';
+    if (isset ($posts['year']) && !(is_numeric ($posts['year'] = trim ($posts['year'])))) return '年份格式錯誤！';
+    if (isset ($posts['month']) && !(is_numeric ($posts['month'] = trim ($posts['month'])))) return '月份格式錯誤！';
+    if (isset ($posts['day']) && !(is_numeric ($posts['day'] = trim ($posts['day'])))) return '日期格式錯誤！';
+    if (isset ($posts['description']) && !(is_string ($posts['description'] = trim ($posts['description'])))) return '敘述格式錯誤！';
+    if (isset ($posts['finish']) && !(is_numeric ($posts['finish'] = trim ($posts['finish'])) && in_array ($posts['finish'], array_keys (Schedule::$finishNames)))) return '狀態格式錯誤！';
+    if (isset ($posts['sort']) && !(is_numeric ($posts['sort'] = trim ($posts['sort'])))) return '順序格式錯誤！';
+    if (isset ($posts['tag_id']) && !(is_numeric ($posts['tag_id'] = trim ($posts['tag_id'])) && (ScheduleTag::find ('one', array ('conditions' => array ('id = ? AND user_id = ?', $posts['tag_id'], $this->user->id)))))) return '標籤格式錯誤！';
+    if (isset ($posts['tag_id']) && ($posts['schedule_tag_id'] = $posts['tag_id'])) unset ($posts['tag_id']);
     return '';
   }
-  private function _validation_create (&$posts) {
-    $keys = array ('title', 'description', 'year', 'month', 'day', 'finish', 'sort', 'tag_id');
-    $new_posts = array ();
-    foreach ($posts as $key => $value)
-      if (in_array ($key, $keys))
-        $new_posts[$key] = $value;
-
-    $posts = $new_posts;
-    if (!(isset ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '標題錯誤！';
-    if (!(isset ($posts['year']) && ($posts['year'] = trim ($posts['year'])) && is_numeric ($posts['year']))) return '年份錯誤！';
-    if (!(isset ($posts['month']) && ($posts['month'] = trim ($posts['month'])) && is_numeric ($posts['month']))) return '月份錯誤！';
-    if (!(isset ($posts['day']) && ($posts['day'] = trim ($posts['day'])) && is_numeric ($posts['day']))) return '日期錯誤！';
-    
-    if (!(isset ($posts['description']) && is_string ($posts['description'] = trim ($posts['description'])))) $posts['description'] = '';
-    if (isset ($posts['finish']) && !(is_numeric ($posts['finish']) && in_array ($posts['finish'], array_keys (Schedule::$finishNames)))) return '參數錯誤！';
-    
-    if (!(isset ($posts['tag_id']) && is_numeric ($posts['tag_id'] = trim ($posts['tag_id'])) && (ScheduleTag::find ('one', array ('conditions' => array ('id = ?', $posts['tag_id'])))))) $posts['tag_id'] = NULL;
-    else $posts['schedule_tag_id'] = $posts['tag_id'];
+  private function _validation_must (&$posts) {
+    if (!isset ($posts['title'])) return '沒有填寫 標題！';
+    if (!isset ($posts['year'])) return '沒有填寫 年份！';
+    if (!isset ($posts['month'])) return '沒有填寫 月份！';
+    if (!isset ($posts['day'])) return '沒有填寫 日期！';
+    if (!isset ($posts['description'])) $posts['description'] = '';
 
     return '';
   }
