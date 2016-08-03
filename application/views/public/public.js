@@ -25,6 +25,7 @@ window.ajaxError = function (result) {
 
 $(function () {
   $('._i').imgLiquid ({ verticalAlign:'center' });
+  $('._it').imgLiquid ({ verticalAlign:'top' });
   window.vars = {};
   window.funs = {};
 
