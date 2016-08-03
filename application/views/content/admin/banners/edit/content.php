@@ -59,7 +59,7 @@
       <label>上、下架</label>
       <div>
         <label class='switch'>
-          <input type='checkbox' name='is_enabled'<?php echo (isset ($posts['is_enabled']) ? $posts['is_enabled'] : $banner->is_enabled) ? ' checked' : '';?> />
+          <input type='checkbox' name='is_enabled'<?php echo (isset ($posts['is_enabled']) ? $posts['is_enabled'] : $banner->is_enabled) == Banner::ENABLE_YES ? ' checked' : '';?> />
           <span></span>
         </label>
       </div>

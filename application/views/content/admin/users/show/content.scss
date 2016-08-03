@@ -165,7 +165,12 @@
 
 #main .panel .person {
   padding: 10px 5px;
-
+  a {
+    @include a;
+    &[class^="icon-"], &[class*=" icon-"] {
+      font-size: 16px;
+    }
+  }
   .info {
 
     .avatar {

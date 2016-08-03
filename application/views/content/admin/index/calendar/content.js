@@ -228,7 +228,7 @@ $(function () {
     .complete (function (result) {});
   }
   function initSchedule (t) {
-    var $checkbox = $('<label />').addClass ('checkbox').data ('column', 'finish').data ('url', 'api/schedules/' + t.id).append (
+    var $checkbox = $('<label />').addClass ('checkbox').addClass ('blue').data ('column', 'finish').data ('url', 'api/schedules/' + t.id).append (
       $('<input />').attr ('type', 'checkbox').prop ('checked', t.finish ? true : false)).append (
       $('<span />'));
     
