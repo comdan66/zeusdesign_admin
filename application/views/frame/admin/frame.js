@@ -79,7 +79,7 @@ $(function () {
 
   window.funs.initPhotoSwipeFromDOM ('.content table', 'figure._i');
 
-  window.funs.updateFlag = function ($objs) {
+  window.funs.updateFlag = function ($objs, callback) {
     $objs.each (function () {
       var $that = $(this);
       var $input = $(this).find ('input');
@@ -112,6 +112,7 @@ $(function () {
           .done (function (result) {
             $(this).prop ('checked', result[column] ? true : false).prop ('disabled', false);
             $that.removeClass ('loading').get (0).oriVal = $(this).prop ('checked');
+            callback && callback.bind ($that, result[column] ? true : false) ();
           }.bind ($(this)))
           .fail (function (result) {
             $(this).prop ('checked', $that.removeClass ('loading').get (0).oriVal).prop ('disabled', false);
@@ -183,5 +184,131 @@ $(function () {
     $(this).find ('input[type="checkbox"]').each (function () {
       $(this).val ($(this).prop ('checked') ? 1 : 0).prop ('checked', true).parent ().addClass ('loading');
     });
-  })
+  });
+
+  $('time[datetime]').timeago ();
+
+  window.funs.schedulePrompt = function (okCallback, title, inputText, textareaText, radioVal, noCallback) {
+    window.vars.$schedulePrompt = $('.schedulePrompt');
+    
+    this.closeResult = function () {
+      var that = window.vars.$schedulePrompt.removeClass ('result')
+      that.get (0).vars.$tip.attr ('title', '');
+      return that;
+    }
+    this.closeLoading = function () {
+      var that = window.vars.$schedulePrompt.removeClass ('loading')
+      that.get (0).vars.$tip.attr ('title', '');
+      return that;
+    }
+    this.loading = function (title) {
+      var that = this.closeResult ().addClass ('loading')
+      that.get (0).vars.$tip.attr ('title', title);
+      return that;
+    }
+    this.result = function (title) {
+      var that = this.closeLoading ().addClass ('result');
+      that.get (0).vars.$tip.attr ('title', title);
+      return that;
+    }
+    this.loadTags = function (callback) {
+      var vals = window.vars.$schedulePrompt.get (0).vars;
+      if (typeof vals.tags !== 'undefined') return callback && callback ();
+
+      $.ajax ({
+        url: '/api/schedule-tags/',
+        async: true, cache: false, dataType: 'json', type: 'GET',
+        beforeSend: function () {
+          this.loading ('初始中..');
+        }.bind (this)
+      })
+      .done (function (result) {
+        vals.tags = result;
+
+        vals.$radios.append (vals.tags.map (function (t) {
+          return $('<label>').css ({'padding-bottom': '2px', 'border-bottom': '2px solid ' + (t.color ? t.color : '#000000')}).append (
+            $('<input />').attr ('type', 'radio').attr ('name', 'tag').val (t.id)).append (
+            $('<span />')).append (
+            t.name);
+        }));
+
+        callback && callback ();
+      }.bind (this))
+      .fail (function (result) { ajaxError (result); })
+      .complete (function (result) { this.closeLoading (); }.bind (this));
+    }
+
+    this.okCallback = function (callback) {
+      if (callback) window.vars.$schedulePrompt.get (0).vars.$ok.unbind ('click').click (callback.bind ($(this), window.vars.$schedulePrompt.get (0).vars.$input, window.vars.$schedulePrompt.get (0).vars.$textarea));
+    }
+    this.close = function () {
+      window.vars.$schedulePrompt.removeClass ('show_animation').addClass ('hide_animation');
+
+      window.vars.$schedulePrompt.get (0).vars.timer = setTimeout (function () {
+        window.vars.$schedulePrompt.attr ('class', 'schedulePrompt');
+
+        window.vars.$schedulePrompt.get (0).vars.$input.val ('');
+        window.vars.$schedulePrompt.get (0).vars.$textarea.val ('');
+        window.vars.$schedulePrompt.get (0).vars.$radios && window.vars.$schedulePrompt.get (0).vars.$radios.find ('input').prop ('checked', false);
+        window.vars.$schedulePrompt.get (0).vars.timer = null;
+      }, 500);
+    };
+
+    if (window.vars.$schedulePrompt.length < 1) {
+      
+      window.vars.$schedulePrompt = $('<div />').addClass ('schedulePrompt').appendTo (window.vars.$body);
+
+      window.vars.$schedulePrompt.get (0).vars = {
+        $title: $('<div />').addClass ('title'),
+        $input: $('<input />').attr ('type', 'text').attr ('placeholder', '請輸入標題..'),
+        $textarea: $('<textarea />').attr ('placeholder', '請輸入細節..'),
+        $ok: $('<a />').addClass ('ok').text ('確定'),
+        $no: $('<a />').addClass ('no').text ('取消'),
+        $radios: $('<div />').addClass ('radios'),
+        $tip: $('<div />').addClass ('tip'),
+        timer: null,
+      };
+      
+      // window.vars.$schedulePrompt.get (0).vars.$textarea.ckeditor ({
+      //   height: 100,
+      //   toolbarGroups: [
+      //       { name: '1', groups: [ 'mode', 'tools' ] },
+      //       { name: '2', groups: [ 'links', 'basicstyles', 'colors', 'insert' ] },
+      //     ],
+      //   removeButtons: 'Image,Strike,Underline,Italic,Table,HorizontalRule,Smiley,Subscript,Superscript,Forms,Save,NewPage,Print,Preview,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Form,RemoveFormat,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Flash,PageBreak,Iframe,About,Styles'
+      // });
+
+      window.vars.$schedulePrompt.append (
+        $('<div />').addClass ('cover').click (this.close)).append (
+        $('<div />').addClass ('wrapper').append (
+          window.vars.$schedulePrompt.get (0).vars.$title).append (
+          window.vars.$schedulePrompt.get (0).vars.$tip).append (
+          $('<div />').addClass ('content').append (
+            window.vars.$schedulePrompt.get (0).vars.$input).append (
+            window.vars.$schedulePrompt.get (0).vars.$textarea).append (
+            window.vars.$schedulePrompt.get (0).vars.$radios)).append (
+          $('<div />').addClass ('btns').append (
+            window.vars.$schedulePrompt.get (0).vars.$ok.click (this.close)).append (
+            window.vars.$schedulePrompt.get (0).vars.$no.click (this.close))));
+    }
+    var $that = $(this);
+    this.loadTags (function () {
+      if (window.vars.$schedulePrompt.get (0).vars.timer) return false;
+
+      if (title) window.vars.$schedulePrompt.get (0).vars.$title.text (title);
+      if (inputText) window.vars.$schedulePrompt.get (0).vars.$input.val (inputText);
+      if (textareaText) window.vars.$schedulePrompt.get (0).vars.$textarea.val (textareaText);
+      if (radioVal) window.vars.$schedulePrompt.get (0).vars.$radios.find ('input[value="' + radioVal + '"]').prop ('checked', true);
+
+      if (okCallback) window.vars.$schedulePrompt.get (0).vars.$ok.unbind ('click').click (okCallback.bind (
+        $that,
+        window.vars.$schedulePrompt.get (0).vars.$input,
+        window.vars.$schedulePrompt.get (0).vars.$textarea,
+        window.vars.$schedulePrompt.get (0).vars.$radios));
+      if (noCallback) window.vars.$schedulePrompt.get (0).vars.$no.unbind ('click').click (noCallback);
+      window.vars.$schedulePrompt.addClass ('show').addClass ('show_animation');
+      window.vars.$schedulePrompt.get (0).vars.$input.focus ();
+    });
+  };
+
 });

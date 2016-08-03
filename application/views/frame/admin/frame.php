@@ -36,10 +36,11 @@
             <li>
               <label>
                 <input type='checkbox' />
-                <span class='icon-ca'>行事曆</span>
+                <span class='icon-se'>個人管理</span>
                 <ul>
-                  <li><a href="<?php echo $url = base_url ('calendar');?>" class='icon-b<?php echo $now_url == $url ? ' active' : '';?>'>個人行程</a></li>
-                  <li><a href="<?php echo $url = base_url ('schedule-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
+                  <li><a href="<?php echo $url = base_url ('my');?>" class='icon-u<?php echo $now_url == $url ? ' active' : '';?>'>基本資料</a></li>
+                  <li><a href="<?php echo $url = base_url ('calendar');?>" class='icon-ca<?php echo $now_url == $url ? ' active' : '';?>'>個人行程</a></li>
+                  <li><a href="<?php echo $url = base_url ('schedule-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>行程分類</a></li>
                 </ul>
               </label>
             </li>
@@ -49,7 +50,18 @@
                 <input type='checkbox' />
                 <span class='icon-u'>人員管理</span>
                 <ul>
-                  <li><a href="" class='icon-ua'>權限設定</a></li>
+                  <li><a href="<?php echo $url = base_url ('users');?>" class='icon-ua<?php echo $now_url == $url ? ' active' : '';?>'>權限設定</a></li>
+                </ul>
+              </label>
+            </li>
+
+            <li>
+              <label>
+                <input type='checkbox' />
+                <span class='icon-ims'>首頁上搞</span>
+                <ul>
+                  <li><a href="<?php echo $url = base_url ('banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>旗幟設定</a></li>
+                  <li><a href="<?php echo $url = base_url ('promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>促銷設定</a></li>
                 </ul>
               </label>
             </li>
@@ -61,17 +73,6 @@
                 <ul>
                   <li><a href="" class='icon-ta'>分類設定</a></li>
                   <li><a href="" class='icon-fa'>文章設定</a></li>
-                </ul>
-              </label>
-            </li>
-
-            <li>
-              <label>
-                <input type='checkbox' />
-                <span class='icon-ims'>首頁上搞</span>
-                <ul>
-                  <li><a href="<?php echo $url = base_url ('banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>Banner 設定</a></li>
-                  <li><a href="<?php echo $url = base_url ('promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>Promo 設定</a></li>
                 </ul>
               </label>
             </li>
