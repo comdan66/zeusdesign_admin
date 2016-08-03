@@ -39,6 +39,9 @@ class Admin_controller extends Oa_controller {
   private function _add_js () {
     return $this->add_js (res_url ('res', 'js', 'main.js'))
                 ->add_js (res_url ('res', 'js', 'autosize_v3.0.8', 'autosize.min.js'))
+                ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'ckeditor.js'), false)
+                ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'config.js'), false)
+                ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'adapters', 'jquery.js'), false)
                 ;
   }
 }

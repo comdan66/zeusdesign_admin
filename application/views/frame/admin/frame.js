@@ -311,4 +311,61 @@ $(function () {
     });
   };
 
+  window.funs.formAddSource = function ($obj) {
+    $obj.each (function () {
+      var that = this,
+          $sources = $(this),
+          $addSource = $sources.find ('.add_source');
+
+      that.fm = function (i, t, h) {
+        return $('<div />').addClass ('source').append (
+          $('<div />').append ($('<a />').addClass ('icon-tu').click (function () {
+            var $p = $(this).parents ('.source');
+            $p.clone (true).insertBefore ($p.index () > 0 ? $p.prev () : $addSource);
+            $p.remove ();
+          })).append ($('<a />').addClass ('icon-td').click (function () {
+            var $p = $(this).parents ('.source'), $x = $p.next (), $n = $p.clone (true);
+            if ($x.hasClass ('add_source')) $n.prependTo ($td);
+            else $n.insertAfter ($x);
+            $p.remove ();
+          }))
+        ).append (
+          $('<input />').attr ('type', 'text').attr ('name', 'sources[' + i + '][title]').attr ('placeholder', '請輸入參考來源名稱..').attr ('maxlength', 200).val (t ? t : '')
+        ).append (
+          $('<input />').attr ('type', 'text').attr ('name', 'sources[' + i + '][href]').attr ('placeholder', '請輸入參考來源網址..').val (h ? h : '')
+        ).append (
+          $('<button />').attr ('type', 'button').addClass ('icon-t').click (function () {
+            $(this).parents ('.source').remove ();
+          })
+        );
+      };
+
+      if ($sources.data ('sources'))
+        $sources.data ('sources').forEach (function (t) {
+          that.fm ($sources.data ('i'), t.title, t.href).insertBefore ($addSource);
+          $sources.data ('i', $sources.data ('i') + 1);
+        });
+
+      $addSource.find ('.add').click (function () {
+        that.fm ($sources.data ('i')).insertBefore ($addSource);
+        $sources.data ('i', $sources.data ('i') + 1);
+      }).click ();
+
+    });
+  };
+  window.funs.formAddSource ($('form.form .row.sources'));
+
+  $('textarea.cke').ckeditor ({
+    filebrowserUploadUrl: '/wqe',
+    filebrowserImageBrowseUrl: '/qwe',
+    height: 300,
+    resize_enabled: false,
+    removePlugins: 'elementspath',
+    toolbarGroups: [
+        { name: '1', groups: [ 'mode', 'tools', 'links', 'basicstyles', 'colors', 'insert' ] },
+      ],
+    skin: 'oa',
+    removeButtons: 'Strike,Underline,Italic,Table,HorizontalRule,Smiley,Subscript,Superscript,Forms,Save,NewPage,Print,Preview,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Form,RemoveFormat,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Flash,PageBreak,Iframe,About,Styles'
+  });
+
 });
