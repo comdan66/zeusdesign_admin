@@ -82,8 +82,8 @@
                 <input type='checkbox' />
                 <span class='icon-g'>作品管理</span>
                 <ul>
-                  <li><a href="" class='icon-ta'>分類設定</a></li>
-                  <li><a href="" class='icon-g'>作品設定</a></li>
+                  <li><a href="<?php echo $url = base_url ('work-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
+                  <li><a href="<?php echo $url = base_url ('works');?>" class='icon-g<?php echo $now_url == $url ? ' active' : '';?>'>作品設定</a></li>
                 </ul>
               </label>
             </li>
