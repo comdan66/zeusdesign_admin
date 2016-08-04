@@ -7,7 +7,7 @@
 
 class Ckeditor extends Admin_controller {
 
-  public function ckeditors_browser_image () {
+  public function image_browser () {
     $ckes = CkeditorImage::all (array ('order' => 'id DESC'));
 
     return $this->set_frame_path ('frame', 'pure')
@@ -15,7 +15,7 @@ class Ckeditor extends Admin_controller {
                     'ckes' => $ckes
                   ));
   }
-  public function ckeditors_upload_image () {
+  public function image_upload () {
     $funcNum = $_GET['CKEditorFuncNum'];
     $upload = OAInput::file ('upload');
 

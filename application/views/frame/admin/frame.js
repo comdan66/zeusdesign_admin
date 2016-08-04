@@ -11,6 +11,16 @@
 $(function () {
   
   window.vars.apis = {
+    ckeditor: {
+      apis: {
+        images: {
+          upload: '/ckeditor/image_upload/',
+          browser: '/ckeditor/image_browser/',
+        }
+      },
+      postImage: function () { return this.apis.images.upload ; },
+      getImages: function () { return this.apis.images.browser ; },
+    },
     scheduleTags: {
       apis: {
         list: '/api/schedule-tags/',
@@ -382,8 +392,8 @@ $(function () {
   window.funs.formAddSource ($('form.form .row.sources'));
 
   $('textarea.cke').ckeditor ({
-    filebrowserUploadUrl: '/ckeditor/ckeditors_upload_image/',
-    filebrowserImageBrowseUrl: '/ckeditor/ckeditors_browser_image/',
+    filebrowserUploadUrl: window.vars.apis.ckeditor.postImage (),
+    filebrowserImageBrowseUrl: window.vars.apis.ckeditor.getImages (),
     height: 300,
     resize_enabled: false,
     removePlugins: 'elementspath',
