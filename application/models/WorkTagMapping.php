@@ -7,7 +7,7 @@
 
 class WorkTagMapping extends OaModel {
 
-  static $table_name = 'WorkTagMappings';
+  static $table_name = 'work_tag_mappings';
 
   static $has_one = array (
   );

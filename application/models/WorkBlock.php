@@ -7,7 +7,7 @@
 
 class WorkBlock extends OaModel {
 
-  static $table_name = 'WorkBlocks';
+  static $table_name = 'work_blocks';
 
   static $has_one = array (
   );

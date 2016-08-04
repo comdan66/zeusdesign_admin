@@ -7,7 +7,7 @@
 
 class Work extends OaModel {
 
-  static $table_name = 'Works';
+  static $table_name = 'works';
 
   static $has_one = array (
   );
