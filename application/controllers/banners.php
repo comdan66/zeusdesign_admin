@@ -198,12 +198,12 @@ class Banners extends Admin_controller {
 
     if (!$update)
       return redirect_message (array ($this->uri_1), array (
-          '_flash_danger' => '排序失敗！',
-          'posts' => $posts
+          '_flash_danger' => '排序失敗！'
         ));
-      return redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '排序成功！'
-      ));
+    
+    return redirect_message (array ($this->uri_1), array (
+      '_flash_info' => '排序成功！'
+    ));
   }
   private function _validation (&$posts) {
     $keys = array ('title', 'content', 'link', 'target', 'is_enabled');

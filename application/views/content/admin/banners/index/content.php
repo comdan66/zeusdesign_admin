@@ -50,7 +50,7 @@
           <th>內容</th>
           <th width='150'>鏈結</th>
           <th width='50' class='center'>排序</th>
-          <th width='80' class='center'>修改/刪除</th>
+          <th width='85' class='center'>修改/刪除</th>
         </tr>
       </thead>
       <tbody>
