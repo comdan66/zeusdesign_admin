@@ -31,7 +31,7 @@ $(function () {
           $('<div />').data ('id', t.id).css ({'background-color': t.tag.color ? t.tag.color : '#000000'}).addClass (t.finish ? 'finished' : null).text (t.title));
       })
     })
-    .fail (function (result) { ajaxError (result); })
+    .fail (function (result) { window.funs.ajaxError (result); })
     .complete (function (result) {});
   }
   function monthDayCount (y, m) {
@@ -126,7 +126,7 @@ $(function () {
     .done (function (result) {
       $daySchedule.append (result.map (initSchedule));
     }.bind ($(this)))
-    .fail (function (result) { ajaxError (result); })
+    .fail (function (result) { window.funs.ajaxError (result); })
     .complete (function (result) {});
   }
 
@@ -164,7 +164,7 @@ $(function () {
           prompt.close ();
         });
       })
-      .fail (function (result) { ajaxError (result); })
+      .fail (function (result) { window.funs.ajaxError (result); })
       .complete (function (result) {});
     }, '新增工作');
   }
@@ -208,7 +208,7 @@ $(function () {
           prompt.close ();
         });
       })
-      .fail (function (result) { ajaxError (result); })
+      .fail (function (result) { window.funs.ajaxError (result); })
       .complete (function (result) {});
     }, '修改工作', $h3.text (), $span.html (), $schedule.data ('tag_id'));
   }
@@ -224,7 +224,7 @@ $(function () {
     .done (function (result) {
       $schedule.remove ();
     })
-    .fail (function (result) { ajaxError (result); })
+    .fail (function (result) { window.funs.ajaxError (result); })
     .complete (function (result) {});
   }
   function initSchedule (t) {

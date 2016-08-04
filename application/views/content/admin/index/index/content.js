@@ -70,7 +70,7 @@ $(function () {
           prompt.close ();
         });
       })
-      .fail (function (result) { ajaxError (result); })
+      .fail (function (result) { window.funs.ajaxError (result); })
       .complete (function (result) {});
     }, '新增工作');
   }
@@ -118,7 +118,7 @@ $(function () {
           prompt.close ();
         });
       })
-      .fail (function (result) { ajaxError (result); })
+      .fail (function (result) { window.funs.ajaxError (result); })
       .complete (function (result) {});
     }, '修改工作', $h3.text (), $span.html (), $schedule.data ('tag_id'));
   }
@@ -134,7 +134,7 @@ $(function () {
     .done (function (result) {
       $schedule.remove ();
     })
-    .fail (function (result) { ajaxError (result); })
+    .fail (function (result) { window.funs.ajaxError (result); })
     .complete (function (result) {});
   }
   function updateSort (data) {

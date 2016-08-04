@@ -43,6 +43,16 @@ $(function () {
     }
   }
 
+  window.funs.storage = {};
+  window.funs.storage.minMenu = {
+    storageKey: 'zeus.menu.min',
+    isMin: function (val) {
+      if (typeof val !== 'undefined') setStorage (this.storageKey, val);
+      var tmp = getStorage (this.storageKey);
+      return tmp ? tmp : false;
+    },
+  };
+
   autosize ($('.autosize'));
 
   window.funs.initPhotoSwipeFromDOM = function (gallerySelector, fnx) {
@@ -115,17 +125,14 @@ $(function () {
 
   window.funs.updateFlag = function ($objs, callback) {
     $objs.each (function () {
-      var $that = $(this);
-      var $input = $(this).find ('input');
-      var url = $(this).data ('url');
-      var column = $(this).data ('column');
-      var data = { _method: 'put', _type: 'api' };
+      var $that = $(this),
+          $input = $(this).find ('input'),
+          url = $(this).data ('url'),
+          column = $(this).data ('column'),
+          data = { _method: 'put', _type: 'api' };
 
-      if ($input.attr ('type') == 'checkbox') {
-        $that.get (0).oriVal = $input.prop ('checked');
-      } else if ($input.attr ('type') == 'radio') {
-        $that.get (0).oriVal = $input.filter (':checked').val ();
-      }
+      if ($input.attr ('type') == 'checkbox') $that.get (0).oriVal = $input.prop ('checked');
+      else if ($input.attr ('type') == 'radio') $that.get (0).oriVal = $input.filter (':checked').val ();
 
       $input.unbind ('change').change (function () {
         if ($(this).attr ('type') == 'checkbox') {
@@ -138,19 +145,14 @@ $(function () {
 
           data[column] = $(this).prop ('checked') ? 1 : 0;
           $.ajax ({ url: url, data: data, async: true, cache: false, dataType: 'json', type: 'POST',
-            beforeSend: function () {
-              $(this).prop ('disabled', true);
-              $that.addClass ('loading');
-            }.bind ($(this))
+            beforeSend: function () { $(this).prop ('disabled', true); $that.addClass ('loading'); }.bind ($(this))
           })
           .done (function (result) {
             $(this).prop ('checked', result[column] ? true : false).prop ('disabled', false);
             $that.removeClass ('loading').get (0).oriVal = $(this).prop ('checked');
             callback && callback.bind ($that, result[column] ? true : false) ();
           }.bind ($(this)))
-          .fail (function (result) {
-            $(this).prop ('checked', $that.removeClass ('loading').get (0).oriVal).prop ('disabled', false);
-          }.bind ($(this)));
+          .fail (function (result) { $(this).prop ('checked', $that.removeClass ('loading').get (0).oriVal).prop ('disabled', false); }.bind ($(this)));
         } else if ($input.attr ('type') == 'radio') {
           if (!(url && column)) {
             setTimeout (function () { $input.filter ('[value="' + $that.removeClass ('loading').get (0).oriVal + '"]').prop ('checked', true); }.bind ($(this)), 100);
@@ -159,18 +161,10 @@ $(function () {
 
           data[column] = $input.filter (':checked').val ();
           $.ajax ({ url: url, data: data, async: true, cache: false, dataType: 'json', type: 'POST',
-            beforeSend: function () {
-              $input.prop ('disabled', true);
-              $that.addClass ('loading');
-            }
+            beforeSend: function () { $input.prop ('disabled', true); $that.addClass ('loading'); }
           })
-          .done (function (result) {
-            $input.prop ('disabled', false).filter ('[value="' + result[column] + '"]').prop ('checked', true);
-            $that.removeClass ('loading').get (0).oriVal = $input.filter (':checked').val ();
-          })
-          .fail (function (result) {
-            $input.prop ('disabled', false).filter ('[value="' + $that.removeClass ('loading').get (0).oriVal + '"]').prop ('checked', true);
-          });
+          .done (function (result) { $input.prop ('disabled', false).filter ('[value="' + result[column] + '"]').prop ('checked', true); $that.removeClass ('loading').get (0).oriVal = $input.filter (':checked').val (); })
+          .fail (function (result) { $input.prop ('disabled', false).filter ('[value="' + $that.removeClass ('loading').get (0).oriVal + '"]').prop ('checked', true); });
         }
       });
     });
@@ -180,19 +174,19 @@ $(function () {
   window.funs.updateFlag ($('table.table .checkbox'));
 
   $('form.form').each (function () {
-    var $imgDiv = $(this).find ('.img');
-    var $img = $imgDiv.find ('img');
-    var $input = $(this).find ('input[type="file"]').change (function () {
+    var $imgDiv = $(this).find ('.img'),
+        $img = $imgDiv.find ('img'),
+        $input = $(this).find ('input[type="file"]').change (function () {
+          var $label = $img.parent ().attr ('data-loading', '圖片讀取中..').removeClass ('h');
 
-      var $label = $img.parent ().attr ('data-loading', '圖片讀取中..').removeClass ('h');
-      if (!$(this).val ().length) $label.attr ('data-loading', '').addClass ('h');
+          if (!$(this).val ().length) $label.attr ('data-loading', '').addClass ('h');
 
-      if ($(this).get (0).files && $(this).get (0).files[0]) {
-        var reader = new FileReader ();
-        reader.onload = function (e) { $img.attr ('src', e.target.result).load (function () { $img.addClass ('o'); $label.attr ('data-loading', '').removeClass ('h'); }); };
-        reader.readAsDataURL ($(this).get (0).files[0]);
-      }
-    });
+          if ($(this).get (0).files && $(this).get (0).files[0]) {
+            var reader = new FileReader ();
+            reader.onload = function (e) { $img.attr ('src', e.target.result).load (function () { $img.addClass ('o'); $label.attr ('data-loading', '').removeClass ('h'); }); };
+            reader.readAsDataURL ($(this).get (0).files[0]);
+          }
+        });
 
     $(this).find ('.file, .img>div:first-child').click (function () { $input.click (); });
 
@@ -268,7 +262,7 @@ $(function () {
 
         callback && callback ();
       }.bind (this))
-      .fail (function (result) { ajaxError (result); })
+      .fail (function (result) { window.funs.ajaxError (result); })
       .complete (function (result) { this.closeLoading (); }.bind (this));
     }
 
@@ -347,44 +341,30 @@ $(function () {
 
   window.funs.formAddSource = function ($obj) {
     $obj.each (function () {
-      var that = this,
-          $sources = $(this),
-          $addSource = $sources.find ('.add_source');
+      var that = this, $sources = $(this), $addSource = $sources.find ('.add_source');
 
       that.fm = function (i, t, h) {
         return $('<div />').addClass ('source').append (
-          $('<div />').append ($('<a />').addClass ('icon-tu').click (function () {
-            var $p = $(this).parents ('.source');
-            $p.clone (true).insertBefore ($p.index () > 0 ? $p.prev () : $addSource);
-            $p.remove ();
-          })).append ($('<a />').addClass ('icon-td').click (function () {
-            var $p = $(this).parents ('.source'), $x = $p.next (), $n = $p.clone (true);
-            if ($x.hasClass ('add_source')) $n.prependTo ($td);
-            else $n.insertAfter ($x);
-            $p.remove ();
-          }))
-        ).append (
-          $('<input />').attr ('type', 'text').attr ('name', 'sources[' + i + '][title]').attr ('placeholder', '請輸入參考來源名稱..').attr ('maxlength', 200).val (t ? t : '')
-        ).append (
-          $('<input />').attr ('type', 'text').attr ('name', 'sources[' + i + '][href]').attr ('placeholder', '請輸入參考來源網址..').val (h ? h : '')
-        ).append (
-          $('<button />').attr ('type', 'button').addClass ('icon-t').click (function () {
-            $(this).parents ('.source').remove ();
-          })
+          $('<div />').append (
+            $('<a />').addClass ('icon-tu').click (function () {
+              var $p = $(this).parents ('.source');
+              $p.clone (true).insertBefore ($p.index () > 0 ? $p.prev () : $addSource);
+              $p.remove ();
+            })).append (
+            $('<a />').addClass ('icon-td').click (function () {
+              var $p = $(this).parents ('.source'), $x = $p.next (), $n = $p.clone (true);
+              if ($x.hasClass ('add_source')) $n.prependTo ($td);
+              else $n.insertAfter ($x);
+              $p.remove ();
+            }))).append (
+          $('<input />').attr ('type', 'text').attr ('name', 'sources[' + i + '][title]').attr ('placeholder', '請輸入參考來源名稱..').attr ('maxlength', 200).val (t ? t : '')).append (
+          $('<input />').attr ('type', 'text').attr ('name', 'sources[' + i + '][href]').attr ('placeholder', '請輸入參考來源網址..').val (h ? h : '')).append (
+          $('<button />').attr ('type', 'button').addClass ('icon-t').click (function () { $(this).parents ('.source').remove (); })
         );
       };
 
-      if ($sources.data ('sources'))
-        $sources.data ('sources').forEach (function (t) {
-          that.fm ($sources.data ('i'), t.title, t.href).insertBefore ($addSource);
-          $sources.data ('i', $sources.data ('i') + 1);
-        });
-
-      $addSource.find ('.add').click (function () {
-        that.fm ($sources.data ('i')).insertBefore ($addSource);
-        $sources.data ('i', $sources.data ('i') + 1);
-      }).click ();
-
+      if ($sources.data ('sources')) $sources.data ('sources').forEach (function (t) { that.fm ($sources.data ('i'), t.title, t.href).insertBefore ($addSource); $sources.data ('i', $sources.data ('i') + 1); });
+      $addSource.find ('.add').click (function () { that.fm ($sources.data ('i')).insertBefore ($addSource); $sources.data ('i', $sources.data ('i') + 1); }).click ();
     });
   };
   window.funs.formAddSource ($('form.form .row.sources'));
