@@ -560,8 +560,11 @@ $selectWidth: 3px;
         color: rgba(115, 135, 156, 1.00);
         margin: 0;
         font-size: 18px;
+        > a {
+          @include a(1px, true);
+        }
       }
-      button, a {
+      > button, > a {
         float: right;
         border: 1px solid transparent;
         background-color: transparent;
