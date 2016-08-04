@@ -14,7 +14,6 @@ class Articles extends Admin_controller {
     
     $this->uri_1 = 'articles';
 
-
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Article::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array (

@@ -17,7 +17,6 @@ class Tag_work_tags extends Admin_controller {
     $this->uri_1     = 'tag';
     $this->uri_2     = 'work-tags';
 
-
     if (!(($id = $this->uri->rsegments (3, 0)) && ($this->parent = WorkTag::find_by_id ($id))))
       return redirect_message (array ('work-tags'), array (
           '_flash_danger' => '找不到該筆資料。'

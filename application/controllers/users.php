@@ -14,7 +14,6 @@ class Users extends Admin_controller {
     
     $this->uri_1 = 'users';
 
-
     if (in_array ($this->uri->rsegments (2, 0), array ('update', 'show')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = User::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array (
