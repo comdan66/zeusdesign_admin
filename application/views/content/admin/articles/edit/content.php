@@ -12,7 +12,7 @@
       <label>公開</label>
       <div>
         <label class='switch'>
-          <input type='checkbox' name='is_visibled'<?php echo (isset ($posts['is_visibled']) ? $posts['is_visibled'] : $article->is_visibled) ? ' checked' : '';?> />
+          <input type='checkbox' name='is_enabled'<?php echo (isset ($posts['is_enabled']) ? $posts['is_enabled'] : $article->is_enabled) ? ' checked' : '';?> />
           <span></span>
         </label>
       </div>
