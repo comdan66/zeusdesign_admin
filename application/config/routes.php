@@ -21,6 +21,7 @@ Route::resourcePagination (array ('users'), 'users');
 Route::resourcePagination (array ('article_tags'), 'article_tags');
 Route::resourcePagination (array ('articles'), 'articles');
 Route::resourcePagination (array ('work_tags'), 'work_tags');
+Route::resourcePagination (array ('tag', 'work_tags'), 'tag_work_tags');
 
 Route::get ('/users/(:id)/show', 'users@show($1)');
 Route::get ('/users/(:id)/show/(:any)', 'users@show($1, $2)');

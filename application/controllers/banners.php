@@ -185,7 +185,7 @@ class Banners extends Admin_controller {
         break;
     }
 
-    Banner::addConditions ($conditions, 'sort = ?', $this->banner->sort);
+    OaModel::addConditions ($conditions, 'sort = ?', $this->banner->sort);
 
     $banner = $this->banner;
     $update = Banner::transaction (function () use ($conditions, $banner, $sort) {

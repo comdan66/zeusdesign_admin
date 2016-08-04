@@ -185,7 +185,7 @@ class Promos extends Admin_controller {
         break;
     }
 
-    Promo::addConditions ($conditions, 'sort = ?', $this->promo->sort);
+    OaModel::addConditions ($conditions, 'sort = ?', $this->promo->sort);
 
     $promo = $this->promo;
     $update = Promo::transaction (function () use ($conditions, $promo, $sort) {
