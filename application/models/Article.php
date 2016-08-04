@@ -21,13 +21,13 @@ class Article extends OaModel {
   static $belongs_to = array (
     array ('user', 'class_name' => 'User'),
   );
+  
+  const ENABLE_NO  = 0;
+  const ENABLE_YES = 1;
 
-  const NO_VISIBLED = 0;
-  const IS_VISIBLED = 1;
-
-  static $visibleNames = array(
-    self::NO_VISIBLED => '隱藏',
-    self::IS_VISIBLED => '公開',
+  static $enableNames = array(
+    self::ENABLE_NO  => '停用',
+    self::ENABLE_YES => '啟用',
   );
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);

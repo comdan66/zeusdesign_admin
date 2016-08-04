@@ -226,7 +226,7 @@ class Articles extends Admin_controller {
       ));
   }
   private function _validation (&$posts) {
-    $keys = array ('user_id', 'title', 'content', 'is_visibled');
+    $keys = array ('user_id', 'title', 'content', 'is_enabled');
 
     $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
@@ -235,7 +235,7 @@ class Articles extends Admin_controller {
     if (isset ($posts['title']) && !($posts['title'] = trim ($posts['title']))) return '標題格式錯誤！';
     if (isset ($posts['content']) && !($posts['content'] = trim ($posts['content']))) return '內容格式錯誤！';
     if (isset ($posts['target']) && !(is_numeric ($posts['target'] = trim ($posts['target'])) && in_array ($posts['target'], array_keys (Article::$targetNames)))) return '開啟方式格式錯誤！';
-    if (isset ($posts['is_visibled']) && !(is_numeric ($posts['is_visibled'] = trim ($posts['is_visibled'])) && in_array ($posts['is_visibled'], array_keys (Article::$visibleNames)))) return '狀態格式錯誤！';
+    if (isset ($posts['is_enabled']) && !(is_numeric ($posts['is_enabled'] = trim ($posts['is_enabled'])) && in_array ($posts['is_enabled'], array_keys (Article::$enableNames)))) return '狀態格式錯誤！';
     return '';
   }
   private function _validation_must (&$posts) {

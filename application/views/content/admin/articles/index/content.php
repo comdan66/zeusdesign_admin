@@ -58,8 +58,8 @@
             <tr>
               <td class='center'><?php echo $article->id;?></td>
               <td class='center'>
-                <label class='switch' data-column='is_visibled' data-url='<?php echo base_url ($uri_1, $article->id);?>'>
-                  <input type='checkbox' name='is_visibled'<?php echo $article->is_visibled == Article::IS_VISIBLED ? ' checked' : '';?> />
+                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, $article->id);?>'>
+                  <input type='checkbox' name='is_enabled'<?php echo $article->is_enabled == Article::ENABLE_YES ? ' checked' : '';?> />
                   <span></span>
                 </label>
               </td>
