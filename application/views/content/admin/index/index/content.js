@@ -56,7 +56,7 @@ $(function () {
       if (tag_id) data.tag_id = tag_id;
 
       $.ajax ({
-        url: '/api/schedules/',
+        url: window.vars.apis.schedules.postItem (),
         data: data,
         async: true, cache: false, dataType: 'json', type: 'POST',
         beforeSend: function () {
@@ -98,7 +98,7 @@ $(function () {
       if (tag_id) data.tag_id = tag_id;
 
       $.ajax ({
-        url: '/api/schedules/' + $that.data ('id'),
+        url: window.vars.apis.schedules.putItem ($that.data ('id')),
         data: data,
         async: true, cache: false, dataType: 'json', type: 'POST',
         beforeSend: function () {
@@ -127,7 +127,7 @@ $(function () {
 
     var $schedule = $(this).parents ('.schedule');
     $.ajax ({
-      url: '/api/schedules/' + $(this).data ('id'),
+      url: window.vars.apis.schedules.deleteItem ($(this).data ('id')),
       async: true, cache: false, dataType: 'json', type: 'delete',
       beforeSend: function () {}
     })
@@ -141,7 +141,7 @@ $(function () {
     if (!data.length) return;
     
     $.ajax ({
-      url: '/api/schedules/sort/',
+      url: window.vars.apis.schedules.postSort (),
       data: { data: data },
       async: true, cache: false, dataType: 'json', type: 'post'
     });
