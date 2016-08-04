@@ -173,32 +173,41 @@ $(function () {
   window.funs.updateFlag ($('table.table .radios'));
   window.funs.updateFlag ($('table.table .checkbox'));
 
-  $('form.form').each (function () {
-    var $imgDiv = $(this).find ('.img'),
-        $img = $imgDiv.find ('img'),
-        $input = $(this).find ('input[type="file"]').change (function () {
-          var $label = $img.parent ().attr ('data-loading', '圖片讀取中..').removeClass ('h');
+  window.funs.dropUploadImg = function ($objs) {
+    $objs.each (function () {
+      var $obj = $(this),
+          $img = $obj.find ('img'),
+          $input = $obj.find ('input[type="file"]').change (function () {
+            $obj.attr ('data-loading', '讀取中..').removeClass ('no_cchoice');
+            if (!$(this).val ().length) {
+              $img.attr ('src', '');
+              $obj.removeAttr ('data-loading').addClass ('no_cchoice');
+            }
 
-          if (!$(this).val ().length) $label.attr ('data-loading', '').addClass ('h');
+            if ($(this).get (0).files && $(this).get (0).files[0]) {
+              var reader = new FileReader ();
+              reader.onload = function (e) {
+                $img.attr ('src', e.target.result).load (function () {
+                  $obj.removeAttr ('data-loading').removeClass ('no_cchoice');
+                });
+              };
+              reader.readAsDataURL ($(this).get (0).files[0]);
+            }
+          });
 
-          if ($(this).get (0).files && $(this).get (0).files[0]) {
-            var reader = new FileReader ();
-            reader.onload = function (e) { $img.attr ('src', e.target.result).load (function () { $img.addClass ('o'); $label.attr ('data-loading', '').removeClass ('h'); }); };
-            reader.readAsDataURL ($(this).get (0).files[0]);
-          }
-        });
+      $obj.click (function () { $input.click (); });
 
-    $(this).find ('.file, .img>div:first-child').click (function () { $input.click (); });
-
-    $imgDiv.bind ('dragover', function (e) {
-      e.stopPropagation ();
-      e.preventDefault ();
-      $(this).addClass ('h');
-      $input.offset ({ top: e.originalEvent.pageY - 15, left: e.originalEvent.pageX - 100 });
-    })
-    .bind ('dragleave', function (e) { e.stopPropagation (); e.preventDefault (); $(this).removeClass ('h'); })
-    .bind ('drop', function (e) { $(this).removeClass ('h'); });
-  });
+      $obj.bind ('dragover', function (e) {
+        e.stopPropagation ();
+        e.preventDefault ();
+        $(this).addClass ('no_cchoice');
+        $input.offset ({ top: e.originalEvent.pageY - 15, left: e.originalEvent.pageX - 100 });
+      })
+      .bind ('dragleave', function (e) { e.stopPropagation (); e.preventDefault (); $(this).removeClass ('no_cchoice'); })
+      .bind ('drop', function (e) { $(this).removeClass ('no_cchoice'); });
+    });
+  };
+  window.funs.dropUploadImg ($('.drop_img'));
 
   $('a[data-method="delete"]').click (function () {
     if (!confirm ('確定要刪除？')) return false;

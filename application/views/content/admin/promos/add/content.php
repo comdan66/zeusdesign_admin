@@ -26,15 +26,11 @@
 
     <div class='row n2'>
       <label>封面</label>
-      <div class='img'>
-
-        <div class='h'><img src='' /></div>
-
-        <div>
+      <div class='img_row'>
+        <div class='drop_img no_cchoice'>
+          <img src='' />
           <input type='file' name='cover' />
-          <button type='button' class='file'>選擇檔案</button>
         </div>
-
       </div>
     </div>
     <div class='row n2'>
