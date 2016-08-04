@@ -10,6 +10,7 @@ class Migration_Add_promos extends CI_Migration {
     $this->db->query (
       "CREATE TABLE `promos` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+        
         `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
         `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '內容',
         `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '鏈結',

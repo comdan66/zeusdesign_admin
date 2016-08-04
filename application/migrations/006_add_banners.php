@@ -17,10 +17,8 @@ class Migration_Add_banners extends CI_Migration {
         `cover` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '封面',
         
         `target` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '鏈結開啟方式，1 分頁，0 本頁',
+        `sort` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '排列順序，上至下 DESC',
         `is_enabled` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '上下架，1 上架，0 下架',
-        
-        `sort` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '排列順序，上至下 ASC',
-        
 
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',

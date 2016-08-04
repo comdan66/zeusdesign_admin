@@ -16,7 +16,7 @@ class Migration_Add_works extends CI_Migration {
         `cover` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '封面',
         `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '內容',
 
-        `is_enabled` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '上下架，1 上架，0 下架',
+        `is_enabled` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '上下架，1 上架，0 下架',
 
         `pv` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'Page view',
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
