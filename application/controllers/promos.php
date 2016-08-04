@@ -7,16 +7,15 @@
 
 class Promos extends Admin_controller {
   private $uri_1 = null;
-  private $promo = null;
+  private $obj = null;
 
   public function __construct () {
     parent::__construct ();
     
     $this->uri_1 = 'promos';
 
-
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy', 'sort')))
-      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->promo = Promo::find ('one', array ('conditions' => array ('id = ?', $id))))))
+      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Promo::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array (
             '_flash_danger' => '找不到該筆資料。'
           ));
@@ -39,7 +38,7 @@ class Promos extends Admin_controller {
 
     $this->load->library ('pagination');
     $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $promos = Promo::find ('all', array (
+    $objs = Promo::find ('all', array (
         'offset' => $offset,
         'limit' => $limit,
         'order' => 'sort DESC',
@@ -47,7 +46,7 @@ class Promos extends Admin_controller {
       ));
 
     return $this->load_view (array (
-        'promos' => $promos,
+        'objs' => $objs,
         'pagination' => $pagination,
         'columns' => $columns
       ));
@@ -81,8 +80,8 @@ class Promos extends Admin_controller {
         ));
 
     $posts['sort'] = Promo::count ();
-    $create = Promo::transaction (function () use (&$promo, $posts, $cover) {
-      return verifyCreateOrm ($promo = Promo::create (array_intersect_key ($posts, Promo::table ()->columns))) && $promo->cover->put ($cover);
+    $create = Promo::transaction (function () use (&$obj, $posts, $cover) {
+      return verifyCreateOrm ($obj = Promo::create (array_intersect_key ($posts, Promo::table ()->columns))) && $obj->cover->put ($cover);
     });
 
     if (!$create)
@@ -100,12 +99,12 @@ class Promos extends Admin_controller {
 
     return $this->load_view (array (
                     'posts' => $posts,
-                    'promo' => $this->promo
+                    'obj' => $this->obj
                   ));
   }
   public function update () {
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, $this->promo->id, 'edit'), array (
+      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
         ));
 
@@ -113,47 +112,47 @@ class Promos extends Admin_controller {
     $is_api = isset ($posts['_type']) && ($posts['_type'] == 'api') ? true : false;
     $cover = OAInput::file ('cover');
 
-    if (!((string)$this->promo->cover || $cover))
-      return $is_api ? $this->output_error_json ('Pic Format Error!') : redirect_message (array ($this->get_class (), $this->promo->id, 'edit'), array (
+    if (!((string)$this->obj->cover || $cover))
+      return $is_api ? $this->output_error_json ('Pic Format Error!') : redirect_message (array ($this->get_class (), $this->obj->id, 'edit'), array (
           '_flash_danger' => '請選擇圖片(gif、jpg、png)檔案!',
           'posts' => $posts
         ));
     
     if ($msg = $this->_validation ($posts))
-      return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->promo->id, 'edit'), array (
+      return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => $msg,
           'posts' => $posts
         ));
 
-    if ($columns = array_intersect_key ($posts, $this->promo->table ()->columns))
+    if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
       foreach ($columns as $column => $value)
-        $this->promo->$column = $value;
+        $this->obj->$column = $value;
     
-    $promo = $this->promo;
-    $update = Promo::transaction (function () use ($promo, $posts, $cover) {
-      if (!$promo->save ())
+    $obj = $this->obj;
+    $update = Promo::transaction (function () use ($obj, $posts, $cover) {
+      if (!$obj->save ())
         return false;
 
-      if ($cover && !$promo->cover->put ($cover))
+      if ($cover && !$obj->cover->put ($cover))
         return false;
       
       return true;
     });
 
     if (!$update)
-      return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->promo->id, 'edit'), array (
+      return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => '更新失敗！',
           'posts' => $posts
         ));
 
-    return $is_api ? $this->output_json ($promo->to_array ()) : redirect_message (array ($this->uri_1), array (
+    return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
         '_flash_info' => '更新成功！'
       ));
   }
   public function destroy () {
-    $promo = $this->promo;
-    $delete = Promo::transaction (function () use ($promo) {
-      return $promo->destroy ();
+    $obj = $this->obj;
+    $delete = Promo::transaction (function () use ($obj) {
+      return $obj->destroy ();
     });
 
     if (!$delete)
@@ -175,23 +174,23 @@ class Promos extends Admin_controller {
 
     switch ($sort) {
       case 'up':
-        $sort = $this->promo->sort;
-        $this->promo->sort = $this->promo->sort + 1 >= $total ? 0 : $this->promo->sort + 1;
+        $sort = $this->obj->sort;
+        $this->obj->sort = $this->obj->sort + 1 >= $total ? 0 : $this->obj->sort + 1;
         break;
 
       case 'down':
-        $sort = $this->promo->sort;
-        $this->promo->sort = $this->promo->sort - 1 < 0 ? $total - 1 : $this->promo->sort - 1;
+        $sort = $this->obj->sort;
+        $this->obj->sort = $this->obj->sort - 1 < 0 ? $total - 1 : $this->obj->sort - 1;
         break;
     }
 
-    OaModel::addConditions ($conditions, 'sort = ?', $this->promo->sort);
+    OaModel::addConditions ($conditions, 'sort = ?', $this->obj->sort);
 
-    $promo = $this->promo;
-    $update = Promo::transaction (function () use ($conditions, $promo, $sort) {
+    $obj = $this->obj;
+    $update = Promo::transaction (function () use ($conditions, $obj, $sort) {
       if (($next = Promo::find ('one', array ('conditions' => $conditions))) && (($next->sort = $sort) || true))
         if (!$next->save ()) return false;
-      if (!$promo->save ()) return false;
+      if (!$obj->save ()) return false;
 
       return true;
     });

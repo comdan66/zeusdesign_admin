@@ -7,7 +7,7 @@
 
 class Article_tags extends Admin_controller {
   private $uri_1 = null;
-  private $tag = null;
+  private $obj = null;
 
   public function __construct () {
     parent::__construct ();
@@ -15,7 +15,7 @@ class Article_tags extends Admin_controller {
     $this->uri_1 = 'article-tags';
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
-      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->tag = ArticleTag::find ('one', array ('conditions' => array ('id = ?', $id))))))
+      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = ArticleTag::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array (
             '_flash_danger' => '找不到該筆資料。'
           ));
@@ -37,7 +37,7 @@ class Article_tags extends Admin_controller {
 
     $this->load->library ('pagination');
     $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $tags = ArticleTag::find ('all', array (
+    $objs = ArticleTag::find ('all', array (
         'offset' => $offset,
         'limit' => $limit,
         'order' => 'id DESC',
@@ -46,7 +46,7 @@ class Article_tags extends Admin_controller {
       ));
 
     return $this->load_view (array (
-        'tags' => $tags,
+        'objs' => $objs,
         'pagination' => $pagination,
         'columns' => $columns
       ));
@@ -72,8 +72,8 @@ class Article_tags extends Admin_controller {
           'posts' => $posts
         ));
 
-    $create = ArticleTag::transaction (function () use (&$tag, $posts) {
-      return verifyCreateOrm ($tag = ArticleTag::create (array_intersect_key ($posts, ArticleTag::table ()->columns)));
+    $create = ArticleTag::transaction (function () use (&$obj, $posts) {
+      return verifyCreateOrm ($obj = ArticleTag::create (array_intersect_key ($posts, ArticleTag::table ()->columns)));
     });
 
     if (!$create)
@@ -91,34 +91,34 @@ class Article_tags extends Admin_controller {
 
     return $this->load_view (array (
                     'posts' => $posts,
-                    'tag' => $this->tag
+                    'obj' => $this->obj
                   ));
   }
   public function update () {
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, $this->tag->id, 'edit'), array (
+      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
         ));
 
     $posts = OAInput::post ();
 
     if ($msg = $this->_validation ($posts))
-      return redirect_message (array ($this->uri_1, $this->tag->id, 'edit'), array (
+      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => $msg,
           'posts' => $posts
         ));
 
-    if ($columns = array_intersect_key ($posts, $this->tag->table ()->columns))
+    if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
       foreach ($columns as $column => $value)
-        $this->tag->$column = $value;
+        $this->obj->$column = $value;
     
-    $tag = $this->tag;
-    $update = ArticleTag::transaction (function () use ($tag, $posts) {
-      return $tag->save ();
+    $obj = $this->obj;
+    $update = ArticleTag::transaction (function () use ($obj, $posts) {
+      return $obj->save ();
     });
 
     if (!$update)
-      return redirect_message (array ($this->uri_1, $this->tag->id, 'edit'), array (
+      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => '更新失敗！',
           'posts' => $posts
         ));
@@ -129,9 +129,9 @@ class Article_tags extends Admin_controller {
   }
 
   public function destroy () {
-    $tag = $this->tag;
-    $delete = ArticleTag::transaction (function () use ($tag) {
-      return $tag->destroy ();
+    $obj = $this->obj;
+    $delete = ArticleTag::transaction (function () use ($obj) {
+      return $obj->destroy ();
     });
 
     if (!$delete)

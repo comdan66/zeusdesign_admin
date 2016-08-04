@@ -54,35 +54,35 @@
         </tr>
       </thead>
       <tbody>
-  <?php if ($banners) {
-          foreach ($banners as $banner) { ?>
+  <?php if ($objs) {
+          foreach ($objs as $obj) { ?>
             <tr>
-              <td class='center'><?php echo $banner->id;?></td>
+              <td class='center'><?php echo $obj->id;?></td>
               <td class='center'>
-                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, $banner->id);?>'>
-                  <input type='checkbox' name='is_enabled'<?php echo $banner->is_enabled == Banner::ENABLE_YES ? ' checked' : '';?> />
+                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                  <input type='checkbox' name='is_enabled'<?php echo $obj->is_enabled == Banner::ENABLE_YES ? ' checked' : '';?> />
                   <span></span>
                 </label>
               </td>
               <td class='center'>
-                <figure class='_i' href='<?php echo $banner->cover->url ('800w');?>'>
-                  <img src='<?php echo $banner->cover->url ('800w');?>' />
-                  <figcaption data-description='<?php echo $banner->mini_content (0);?>'><?php echo $banner->title;?></figcaption>
+                <figure class='_i' href='<?php echo $obj->cover->url ('800w');?>'>
+                  <img src='<?php echo $obj->cover->url ('800w');?>' />
+                  <figcaption data-description='<?php echo $obj->mini_content (0);?>'><?php echo $obj->title;?></figcaption>
                 </figure>
               </td>
-              <td><?php echo $banner->title;?></td>
-              <td><?php echo $banner->mini_content (50);?></td>
-              <td><?php echo mini_link ($banner->link, 25);?></td>
+              <td><?php echo $obj->title;?></td>
+              <td><?php echo $obj->mini_content (50);?></td>
+              <td><?php echo mini_link ($obj->link, 25);?></td>
 
 
               <td class='center'>
-                <a class='icon-tu' href='<?php echo base_url ('banners', $banner->id, 'sort', 'up');?>' data-method='post'></a>
-                <a class='icon-td' href='<?php echo base_url ('banners', $banner->id, 'sort', 'down');?>' data-method='post'></a>
+                <a class='icon-tu' href='<?php echo base_url ($uri_1, $obj->id, 'sort', 'up');?>' data-method='post'></a>
+                <a class='icon-td' href='<?php echo base_url ($uri_1, $obj->id, 'sort', 'down');?>' data-method='post'></a>
               </td>
               <td class='center'>
-                <a class='icon-e' href="<?php echo base_url ($uri_1, $banner->id, 'edit');?>"></a>
+                <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
-                <a class='icon-t' href="<?php echo base_url ($uri_1, $banner->id);?>" data-method='delete'></a>
+                <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
               </td>
 
             </tr>

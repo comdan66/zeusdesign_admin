@@ -7,7 +7,7 @@
 
 class Articles extends Admin_controller {
   private $uri_1 = null;
-  private $article = null;
+  private $obj = null;
 
   public function __construct () {
     parent::__construct ();
@@ -16,7 +16,7 @@ class Articles extends Admin_controller {
 
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
-      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->article = Article::find ('one', array ('conditions' => array ('id = ?', $id))))))
+      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Article::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array (
             '_flash_danger' => '找不到該筆資料。'
           ));
@@ -40,7 +40,7 @@ class Articles extends Admin_controller {
 
     $this->load->library ('pagination');
     $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $articles = Article::find ('all', array (
+    $objs = Article::find ('all', array (
         'offset' => $offset,
         'limit' => $limit,
         'order' => 'id DESC',
@@ -49,7 +49,7 @@ class Articles extends Admin_controller {
       ));
 
     return $this->load_view (array (
-        'articles' => $articles,
+        'objs' => $objs,
         'pagination' => $pagination,
         'columns' => $columns
       ));
@@ -89,8 +89,8 @@ class Articles extends Admin_controller {
           'posts' => $posts
         ));
 
-    $create = Article::transaction (function () use (&$article, $posts, $cover) {
-      return verifyCreateOrm ($article = Article::create (array_intersect_key ($posts, Article::table ()->columns))) && $article->cover->put ($cover);
+    $create = Article::transaction (function () use (&$obj, $posts, $cover) {
+      return verifyCreateOrm ($obj = Article::create (array_intersect_key ($posts, Article::table ()->columns))) && $obj->cover->put ($cover);
     });
 
     if (!$create)
@@ -101,15 +101,15 @@ class Articles extends Admin_controller {
 
     if ($post_tag_ids && ($tag_ids = column_array (ArticleTag::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $post_tag_ids))), 'id')))
       foreach ($tag_ids as $tag_id)
-        ArticleTagMapping::transaction (function () use ($tag_id, $article) {
-          return verifyCreateOrm (ArticleTagMapping::create (array_intersect_key (array ('article_tag_id' => $tag_id, 'article_id' => $article->id), ArticleTagMapping::table ()->columns)));
+        ArticleTagMapping::transaction (function () use ($tag_id, $obj) {
+          return verifyCreateOrm (ArticleTagMapping::create (array_intersect_key (array ('article_tag_id' => $tag_id, 'article_id' => $obj->id), ArticleTagMapping::table ()->columns)));
         });
 
     if ($post_sources)
       foreach ($post_sources as $i => $source)
-        ArticleSource::transaction (function () use ($i, $source, $article) {
+        ArticleSource::transaction (function () use ($i, $source, $obj) {
           return verifyCreateOrm (ArticleSource::create (array_intersect_key (array_merge ($source, array (
-            'article_id' => $article->id,
+            'article_id' => $obj->id,
             'sort' => $i
             )), ArticleSource::table ()->columns)));
         });
@@ -123,18 +123,18 @@ class Articles extends Admin_controller {
 
     $posts['sources'] = isset ($posts['sources']) && $posts['sources'] ? array_slice (array_filter ($posts['sources'], function ($source) {
       return (isset ($source['title']) && $source['title']) || (isset ($source['href']) && $source['href']);
-    }), 0) : ($this->article->sources ? array_filter (array_map (function ($source) {return array ('title' => $source->title, 'href' => $source->href);}, $this->article->sources), function ($source) {
+    }), 0) : ($this->obj->sources ? array_filter (array_map (function ($source) {return array ('title' => $source->title, 'href' => $source->href);}, $this->obj->sources), function ($source) {
       return (isset ($source['title']) && $source['title']) || (isset ($source['href']) && $source['href']);
     }) : array ());
 
     return $this->load_view (array (
                     'posts' => $posts,
-                    'article' => $this->article
+                    'obj' => $this->obj
                   ));
   }
   public function update () {
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, $this->article->id, 'edit'), array (
+      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
         ));
 
@@ -144,42 +144,42 @@ class Articles extends Admin_controller {
     $post_sources = isset ($posts['sources']) ? $posts['sources'] : array ();
     $cover = OAInput::file ('cover');
 
-    if (!((string)$this->article->cover || $cover))
-      return $is_api ? $this->output_error_json ('Pic Format Error!') : redirect_message (array ($this->get_class (), $this->article->id, 'edit'), array (
+    if (!((string)$this->obj->cover || $cover))
+      return $is_api ? $this->output_error_json ('Pic Format Error!') : redirect_message (array ($this->get_class (), $this->obj->id, 'edit'), array (
           '_flash_danger' => '請選擇圖片(gif、jpg、png)檔案!',
           'posts' => $posts
         ));
     
     if ($msg = $this->_validation ($posts))
-      return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->article->id, 'edit'), array (
+      return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => $msg,
           'posts' => $posts
         ));
 
-    if ($columns = array_intersect_key ($posts, $this->article->table ()->columns))
+    if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
       foreach ($columns as $column => $value)
-        $this->article->$column = $value;
+        $this->obj->$column = $value;
     
-    $article = $this->article;
-    $update = Article::transaction (function () use ($article, $posts, $cover) {
-      if (!$article->save ())
+    $obj = $this->obj;
+    $update = Article::transaction (function () use ($obj, $posts, $cover) {
+      if (!$obj->save ())
         return false;
 
-      if ($cover && !$article->cover->put ($cover))
+      if ($cover && !$obj->cover->put ($cover))
         return false;
 
       return true;
     });
 
     if (!$update)
-      return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->article->id, 'edit'), array (
+      return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => '更新失敗！',
           'posts' => $posts
         ));
 
-    $ori_ids = column_array ($article->mappings, 'article_tag_id');
+    $ori_ids = column_array ($obj->mappings, 'article_tag_id');
 
-    if (($del_ids = array_diff ($ori_ids, $post_tag_ids)) && ($mappings = ArticleTagMapping::find ('all', array ('select' => 'id, article_tag_id', 'conditions' => array ('article_id = ? AND article_tag_id IN (?)', $article->id, $del_ids)))))
+    if (($del_ids = array_diff ($ori_ids, $post_tag_ids)) && ($mappings = ArticleTagMapping::find ('all', array ('select' => 'id, article_tag_id', 'conditions' => array ('article_id = ? AND article_tag_id IN (?)', $obj->id, $del_ids)))))
       foreach ($mappings as $mapping)
         ArticleTagMapping::transaction (function () use ($mapping) {
           return $mapping->destroy ();
@@ -187,33 +187,33 @@ class Articles extends Admin_controller {
 
     if (($add_ids = array_diff ($post_tag_ids, $ori_ids)) && ($tags = ArticleTag::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $add_ids)))))
       foreach ($tags as $tag)
-        ArticleTagMapping::transaction (function () use ($tag, $article) {
-          return verifyCreateOrm (ArticleTagMapping::create (Array_intersect_key (array ('article_tag_id' => $tag->id, 'article_id' => $article->id), ArticleTagMapping::table ()->columns)));
+        ArticleTagMapping::transaction (function () use ($tag, $obj) {
+          return verifyCreateOrm (ArticleTagMapping::create (Array_intersect_key (array ('article_tag_id' => $tag->id, 'article_id' => $obj->id), ArticleTagMapping::table ()->columns)));
         });
 
-    if ($article->sources)
-      foreach ($article->sources as $source)
+    if ($obj->sources)
+      foreach ($obj->sources as $source)
         ArticleSource::transaction (function () use ($source) {
           return $source->destroy ();
         });
 
     if ($post_sources)
       foreach ($post_sources as $i => $source)
-        ArticleSource::transaction (function () use ($i, $source, $article) {
+        ArticleSource::transaction (function () use ($i, $source, $obj) {
           return verifyCreateOrm (ArticleSource::create (array_intersect_key (array_merge ($source, array (
-            'article_id' => $article->id,
+            'article_id' => $obj->id,
             'sort' => $i
             )), ArticleSource::table ()->columns)));
         });
 
-    return $is_api ? $this->output_json ($article->to_array ()) : redirect_message (array ($this->uri_1), array (
+    return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
         '_flash_info' => '更新成功！'
       ));
   }
   public function destroy () {
-    $article = $this->article;
-    $delete = Article::transaction (function () use ($article) {
-      return $article->destroy ();
+    $obj = $this->obj;
+    $delete = Article::transaction (function () use ($obj) {
+      return $obj->destroy ();
     });
 
     if (!$delete)

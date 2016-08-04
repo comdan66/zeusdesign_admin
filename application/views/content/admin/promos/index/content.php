@@ -54,35 +54,35 @@
         </tr>
       </thead>
       <tbody>
-  <?php if ($promos) {
-          foreach ($promos as $promo) { ?>
+  <?php if ($objs) {
+          foreach ($objs as $obj) { ?>
             <tr>
-              <td class='center'><?php echo $promo->id;?></td>
+              <td class='center'><?php echo $obj->id;?></td>
               <td class='center'>
-                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, $promo->id);?>'>
-                  <input type='checkbox' name='is_enabled'<?php echo $promo->is_enabled == Promo::ENABLE_YES ? ' checked' : '';?> />
+                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                  <input type='checkbox' name='is_enabled'<?php echo $obj->is_enabled == Promo::ENABLE_YES ? ' checked' : '';?> />
                   <span></span>
                 </label>
               </td>
               <td class='center'>
-                <figure class='_i' href='<?php echo $promo->cover->url ('500w');?>'>
-                  <img src='<?php echo $promo->cover->url ('500w');?>' />
-                  <figcaption data-description='<?php echo $promo->mini_content (0);?>'><?php echo $promo->title;?></figcaption>
+                <figure class='_i' href='<?php echo $obj->cover->url ('500w');?>'>
+                  <img src='<?php echo $obj->cover->url ('500w');?>' />
+                  <figcaption data-description='<?php echo $obj->mini_content (0);?>'><?php echo $obj->title;?></figcaption>
                 </figure>
               </td>
-              <td><?php echo $promo->title;?></td>
-              <td><?php echo $promo->mini_content (50);?></td>
-              <td><?php echo mini_link ($promo->link, 25);?></td>
+              <td><?php echo $obj->title;?></td>
+              <td><?php echo $obj->mini_content (50);?></td>
+              <td><?php echo mini_link ($obj->link, 25);?></td>
 
 
               <td class='center'>
-                <a class='icon-tu' href='<?php echo base_url ('promos', $promo->id, 'sort', 'up');?>' data-method='post'></a>
-                <a class='icon-td' href='<?php echo base_url ('promos', $promo->id, 'sort', 'down');?>' data-method='post'></a>
+                <a class='icon-tu' href='<?php echo base_url ($uri_1, $obj->id, 'sort', 'up');?>' data-method='post'></a>
+                <a class='icon-td' href='<?php echo base_url ($uri_1, $obj->id, 'sort', 'down');?>' data-method='post'></a>
               </td>
               <td class='center'>
-                <a class='icon-e' href="<?php echo base_url ($uri_1, $promo->id, 'edit');?>"></a>
+                <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
-                <a class='icon-t' href="<?php echo base_url ($uri_1, $promo->id);?>" data-method='delete'></a>
+                <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
               </td>
 
             </tr>

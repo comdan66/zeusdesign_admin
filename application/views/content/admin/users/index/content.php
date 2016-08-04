@@ -50,23 +50,23 @@
         </tr>
       </thead>
       <tbody>
-  <?php if ($users) {
-          foreach ($users as $user) { ?>
+  <?php if ($objs) {
+          foreach ($objs as $obj) { ?>
             <tr>
-              <td class='center'><?php echo $user->id;?></td>
+              <td class='center'><?php echo $obj->id;?></td>
               
               <td class='center'>
-                <figure class='_i' href='<?php echo $user->avatar (200, 200);?>'>
-                  <img src='<?php echo $user->avatar (200, 200);?>' />
-                  <figcaption data-description='<?php echo $user->name;?>'><?php echo $user->name;?></figcaption>
+                <figure class='_i' href='<?php echo $obj->avatar (200, 200);?>'>
+                  <img src='<?php echo $obj->avatar (200, 200);?>' />
+                  <figcaption data-description='<?php echo $obj->name;?>'><?php echo $obj->name;?></figcaption>
                 </figure>
               </td>
-              <td><?php echo $user->name;?></td>
-              <td><?php echo $user->email;?></td>
+              <td><?php echo $obj->name;?></td>
+              <td><?php echo $obj->email;?></td>
 
 
               <td class='center'>
-                <a class='icon-se' href="<?php echo base_url ($uri_1, $user->id, 'show');?>"></a>
+                <a class='icon-se' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
               </td>
 
             </tr>

@@ -51,19 +51,19 @@
         </tr>
       </thead>
       <tbody>
-  <?php if ($tags) {
-          foreach ($tags as $tag) { ?>
+  <?php if ($objs) {
+          foreach ($objs as $obj) { ?>
             <tr>
-              <td><?php echo $tag->id;?></td>
+              <td><?php echo $obj->id;?></td>
               <td>
-                <div class='color' style='background-color: #<?php echo $tag->color;?>;'></div>
+                <div class='color' style='background-color: #<?php echo $obj->color;?>;'></div>
               </td>
-              <td><?php echo count ($tag->schedules);?></td>
-              <td><?php echo $tag->name;?></td>
+              <td><?php echo count ($obj->schedules);?></td>
+              <td><?php echo $obj->name;?></td>
               <td class='right'>
-                <a class='icon-e' href="<?php echo base_url ($uri_1, $tag->id, 'edit');?>"></a>
+                <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
-                <a class='icon-t' href="<?php echo base_url ($uri_1, $tag->id);?>" data-method='delete'></a>
+                <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
               </td>
             </tr>
     <?php }

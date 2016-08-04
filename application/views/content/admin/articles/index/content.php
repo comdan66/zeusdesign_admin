@@ -53,29 +53,29 @@
         </tr>
       </thead>
       <tbody>
-  <?php if ($articles) {
-          foreach ($articles as $article) { ?>
+  <?php if ($objs) {
+          foreach ($objs as $obj) { ?>
             <tr>
-              <td class='center'><?php echo $article->id;?></td>
+              <td class='center'><?php echo $obj->id;?></td>
               <td class='center'>
-                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, $article->id);?>'>
-                  <input type='checkbox' name='is_enabled'<?php echo $article->is_enabled == Article::ENABLE_YES ? ' checked' : '';?> />
+                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                  <input type='checkbox' name='is_enabled'<?php echo $obj->is_enabled == Article::ENABLE_YES ? ' checked' : '';?> />
                   <span></span>
                 </label>
               </td>
               <td class='center'>
-                <figure class='_i' href='<?php echo $article->cover->url ('450x180c');?>'>
-                  <img src='<?php echo $article->cover->url ('450x180c');?>' />
-                  <figcaption data-description='<?php echo $article->mini_content (0);?>'><?php echo $article->title;?></figcaption>
+                <figure class='_i' href='<?php echo $obj->cover->url ('450x180c');?>'>
+                  <img src='<?php echo $obj->cover->url ('450x180c');?>' />
+                  <figcaption data-description='<?php echo $obj->mini_content (0);?>'><?php echo $obj->title;?></figcaption>
                 </figure>
               </td>
-              <td><?php echo $article->user->name;?></td>
-              <td><?php echo $article->mini_title (25);?></td>
-              <td><?php echo $article->mini_content (50);?></td>
+              <td><?php echo $obj->user->name;?></td>
+              <td><?php echo $obj->mini_title (25);?></td>
+              <td><?php echo $obj->mini_content (50);?></td>
               <td class='center'>
-                <a class='icon-e' href="<?php echo base_url ($uri_1, $article->id, 'edit');?>"></a>
+                <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
-                <a class='icon-t' href="<?php echo base_url ($uri_1, $article->id);?>" data-method='delete'></a>
+                <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
               </td>
             </tr>
     <?php }

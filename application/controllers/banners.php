@@ -7,7 +7,7 @@
 
 class Banners extends Admin_controller {
   private $uri_1 = null;
-  private $banner = null;
+  private $obj = null;
 
   public function __construct () {
     parent::__construct ();
@@ -16,7 +16,7 @@ class Banners extends Admin_controller {
 
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy', 'sort')))
-      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->banner = Banner::find ('one', array ('conditions' => array ('id = ?', $id))))))
+      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Banner::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array (
             '_flash_danger' => '找不到該筆資料。'
           ));
@@ -39,7 +39,7 @@ class Banners extends Admin_controller {
 
     $this->load->library ('pagination');
     $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $banners = Banner::find ('all', array (
+    $objs = Banner::find ('all', array (
         'offset' => $offset,
         'limit' => $limit,
         'order' => 'sort DESC',
@@ -47,7 +47,7 @@ class Banners extends Admin_controller {
       ));
 
     return $this->load_view (array (
-        'banners' => $banners,
+        'objs' => $objs,
         'pagination' => $pagination,
         'columns' => $columns
       ));
@@ -81,8 +81,8 @@ class Banners extends Admin_controller {
         ));
 
     $posts['sort'] = Banner::count ();
-    $create = Banner::transaction (function () use (&$banner, $posts, $cover) {
-      return verifyCreateOrm ($banner = Banner::create (array_intersect_key ($posts, Banner::table ()->columns))) && $banner->cover->put ($cover);
+    $create = Banner::transaction (function () use (&$obj, $posts, $cover) {
+      return verifyCreateOrm ($obj = Banner::create (array_intersect_key ($posts, Banner::table ()->columns))) && $obj->cover->put ($cover);
     });
 
     if (!$create)
@@ -100,12 +100,12 @@ class Banners extends Admin_controller {
 
     return $this->load_view (array (
                     'posts' => $posts,
-                    'banner' => $this->banner
+                    'obj' => $this->obj
                   ));
   }
   public function update () {
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, $this->banner->id, 'edit'), array (
+      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
         ));
 
@@ -113,47 +113,47 @@ class Banners extends Admin_controller {
     $is_api = isset ($posts['_type']) && ($posts['_type'] == 'api') ? true : false;
     $cover = OAInput::file ('cover');
 
-    if (!((string)$this->banner->cover || $cover))
-      return $is_api ? $this->output_error_json ('Pic Format Error!') : redirect_message (array ($this->get_class (), $this->banner->id, 'edit'), array (
+    if (!((string)$this->obj->cover || $cover))
+      return $is_api ? $this->output_error_json ('Pic Format Error!') : redirect_message (array ($this->get_class (), $this->obj->id, 'edit'), array (
           '_flash_danger' => '請選擇圖片(gif、jpg、png)檔案!',
           'posts' => $posts
         ));
     
     if ($msg = $this->_validation ($posts))
-      return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->banner->id, 'edit'), array (
+      return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => $msg,
           'posts' => $posts
         ));
 
-    if ($columns = array_intersect_key ($posts, $this->banner->table ()->columns))
+    if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
       foreach ($columns as $column => $value)
-        $this->banner->$column = $value;
+        $this->obj->$column = $value;
     
-    $banner = $this->banner;
-    $update = Banner::transaction (function () use ($banner, $posts, $cover) {
-      if (!$banner->save ())
+    $obj = $this->obj;
+    $update = Banner::transaction (function () use ($obj, $posts, $cover) {
+      if (!$obj->save ())
         return false;
 
-      if ($cover && !$banner->cover->put ($cover))
+      if ($cover && !$obj->cover->put ($cover))
         return false;
       
       return true;
     });
 
     if (!$update)
-      return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->banner->id, 'edit'), array (
+      return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => '更新失敗！',
           'posts' => $posts
         ));
 
-    return $is_api ? $this->output_json ($banner->to_array ()) : redirect_message (array ($this->uri_1), array (
+    return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
         '_flash_info' => '更新成功！'
       ));
   }
   public function destroy () {
-    $banner = $this->banner;
-    $delete = Banner::transaction (function () use ($banner) {
-      return $banner->destroy ();
+    $obj = $this->obj;
+    $delete = Banner::transaction (function () use ($obj) {
+      return $obj->destroy ();
     });
 
     if (!$delete)
@@ -175,23 +175,23 @@ class Banners extends Admin_controller {
 
     switch ($sort) {
       case 'up':
-        $sort = $this->banner->sort;
-        $this->banner->sort = $this->banner->sort + 1 >= $total ? 0 : $this->banner->sort + 1;
+        $sort = $this->obj->sort;
+        $this->obj->sort = $this->obj->sort + 1 >= $total ? 0 : $this->obj->sort + 1;
         break;
 
       case 'down':
-        $sort = $this->banner->sort;
-        $this->banner->sort = $this->banner->sort - 1 < 0 ? $total - 1 : $this->banner->sort - 1;
+        $sort = $this->obj->sort;
+        $this->obj->sort = $this->obj->sort - 1 < 0 ? $total - 1 : $this->obj->sort - 1;
         break;
     }
 
-    OaModel::addConditions ($conditions, 'sort = ?', $this->banner->sort);
+    OaModel::addConditions ($conditions, 'sort = ?', $this->obj->sort);
 
-    $banner = $this->banner;
-    $update = Banner::transaction (function () use ($conditions, $banner, $sort) {
+    $obj = $this->obj;
+    $update = Banner::transaction (function () use ($conditions, $obj, $sort) {
       if (($next = Banner::find ('one', array ('conditions' => $conditions))) && (($next->sort = $sort) || true))
         if (!$next->save ()) return false;
-      if (!$banner->save ()) return false;
+      if (!$obj->save ()) return false;
 
       return true;
     });
