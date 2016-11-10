@@ -5,7 +5,7 @@
   </div>
 
   <form class='select'>
-    <button type='submit'>尋找</button>
+    <button type='submit' class='icon-s'></button>
 
 <?php 
     if ($columns) { ?>
