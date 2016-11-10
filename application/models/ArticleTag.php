@@ -14,7 +14,7 @@ class ArticleTag extends OaModel {
 
   static $has_many = array (
     array ('mappings', 'class_name' => 'ArticleTagMapping'),
-    array ('articles', 'class_name' => 'Article', 'through' => 'mappings'),
+    array ('articles', 'class_name' => 'Article', 'through' => 'mappings', 'conditions' => array ('is_enabled = ?', Article::ENABLE_YES)),
   );
 
   static $belongs_to = array (

@@ -7,5 +7,5 @@
     <div class='m'><?php echo $_flash_message;?></div>
 <?php 
   }?>
-  <a id='facebook' href='<?php echo Fb::loginUrl ('platform', 'fb_sign_in', 'index');?>'>facebook 登入</a>
+  <a id='fb-login' href='<?php echo Fb::loginUrl ('platform', 'fb_sign_in', 'admin');?>'>facebook 登入</a>
 </div>

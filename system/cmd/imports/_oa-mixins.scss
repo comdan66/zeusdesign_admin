@@ -12,7 +12,7 @@
 
 @import "functions/_oa-material";
 
-@mixin icomoon-font ($ff) {
+@mixin admin-icomoon-font ($ff) {
   @content;
   font-family: $ff, "微軟正黑體","Open sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 }

@@ -8,9 +8,6 @@
 class Main extends Site_controller {
 
   public function index () {
-    if (User::current () && User::current ()->is_login ())
-      return redirect_message (array ('index'), array ());
-    else 
-      return redirect_message (array ('login'), array ());
+    $this->load_view ();
   }
 }

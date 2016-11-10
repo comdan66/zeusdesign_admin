@@ -14,7 +14,7 @@ class Migration_Add_works extends CI_Migration {
 
         `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
         `cover` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '封面',
-        `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '內容',
+        `content` text NOT NULL COMMENT '內容',
 
         `is_enabled` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '上下架，1 上架，0 下架',
 

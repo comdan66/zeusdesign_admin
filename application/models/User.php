@@ -34,31 +34,18 @@ class User extends OaModel {
   }
   public function is_login () {
     if (!$this->roles) return false;
-
-    if ($this->is_root ())
-      return true;
-
+    if ($this->is_root ()) return true;
     return in_array ('member', column_array ($this->roles, 'name'));
   }
   public function in_roles ($roles = array ()) {
     if (!$this->roles) return false;
-
-    if ($this->is_root ())
-      return true;
-
-    if (!($roles = array_filter ($roles, function ($role) { return in_array ($role, Cfg::setting ('role', 'roles')); })))
-      return false;
-
-    foreach ($this->roles as $role)
-      if (in_array ($role->name, $roles))
-        return true;
-
+    if ($this->is_root ()) return true;
+    if (!($roles = array_filter ($roles, function ($role) { return in_array ($role, Cfg::setting ('role', 'roles')); }))) return false;
+    foreach ($this->roles as $role) if (in_array ($role->name, $roles)) return true;
     return false;
   }
   public function role_names () {
-    return array_filter (array_map (function ($role) {
-      return Cfg::setting ('role', 'role_names', $role);
-    }, column_array ($this->roles, 'name')));
+    return array_filter (array_map (function ($role) { return Cfg::setting ('role', 'role_names', $role); }, column_array ($this->roles, 'name')));
   }
   public function facebook_link () {
     if (!isset ($this->uid)) return '';
@@ -66,9 +53,7 @@ class User extends OaModel {
   }
   public function avatar ($w = 100, $h = 100) {
     $size = array ();
-    array_push ($size, isset ($w) && $w ? 'width=' . $w : '');
-    array_push ($size, isset ($h) && $h ? 'height=' . $h : '');
-
+    array_push ($size, isset ($w) && $w ? 'width=' . $w : ''); array_push ($size, isset ($h) && $h ? 'height=' . $h : '');
     return 'https://graph.facebook.com/' . $this->uid . '/picture' . (($size = implode ('&', array_filter ($size))) ? '?' . $size : '');
   }
   public function to_array () {
@@ -80,9 +65,7 @@ class User extends OaModel {
         'token' => $this->token,
         'login_count' => $this->login_count,
         'logined_at' => $this->logined_at,
-        'roles' => array_map (function ($role) {
-          return $role->to_array ();
-        }, $this->roles),
+        'roles' => array_map (function ($role) { return $role->to_array (); }, $this->roles),
       );
   }
 }

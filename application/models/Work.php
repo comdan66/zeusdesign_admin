@@ -14,7 +14,7 @@ class Work extends OaModel {
 
   static $has_many = array (
     array ('mappings', 'class_name' => 'WorkTagMapping'),
-    array ('pictures', 'class_name' => 'WorkPicture'),
+    array ('images', 'class_name' => 'WorkImage'),
     array ('tags', 'class_name' => 'WorkTag', 'through' => 'mappings'),
     array ('blocks', 'class_name' => 'WorkBlock'),
   );
@@ -35,6 +35,10 @@ class Work extends OaModel {
     
     OrmImageUploader::bind ('cover', 'WorkCoverImageUploader');
   }
+  public function mini_title ($length = 50) {
+    if (!isset ($this->title)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->title), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
+  }
   public function mini_content ($length = 100) {
     if (!isset ($this->content)) return '';
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->content), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
@@ -48,9 +52,9 @@ class Work extends OaModel {
         if (!$block->destroy ())
           return false;
 
-    if ($this->pictures)
-      foreach ($this->pictures as $picture)
-        if (!$picture->destroy ())
+    if ($this->images)
+      foreach ($this->images as $image)
+        if (!$image->destroy ())
           return false;
 
     if ($this->mappings)

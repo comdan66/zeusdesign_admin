@@ -35,7 +35,7 @@
         <div class='row n2'>
           <label>分類</label>
           <div>
-      <?php $tag_ids = isset ($posts['tag_ids']) ? $posts['tag_ids'] : column_array ($obj->mappings, 'obj_tag_id');
+      <?php $tag_ids = isset ($posts['tag_ids']) ? $posts['tag_ids'] : column_array ($obj->mappings, 'article_tag_id');
             foreach ($tags as $tag) { ?>
               <label class='checkbox tag'><input type='checkbox' name='tag_ids[]' value='<?php echo $tag->id;?>'<?php echo $tag_ids && in_array ($tag->id, $tag_ids) ? ' checked' : '';?> /><span></span><?php echo $tag->name;?></label>
       <?php } ?>

@@ -42,8 +42,8 @@
       </div>
 
       <div class='tabs_title'>
-        <a href='<?php echo base_url ('users', $user->id, 'show', 'schedules');?>'<?php echo $type == 'schedules' ? " class='active'" : '';?>>今日行程</a>
-        <a href='<?php echo base_url ('users', $user->id, 'show', 'user_logs');?>'<?php echo $type == 'user_logs' ? " class='active'" : '';?>>活躍細節</a>
+        <a href='<?php echo base_url ('admin', 'users', $user->id, 'show', 'schedules');?>'<?php echo $type == 'schedules' ? " class='active'" : '';?>>今日行程</a>
+        <a href='<?php echo base_url ('admin', 'users', $user->id, 'show', 'user_logs');?>'<?php echo $type == 'user_logs' ? " class='active'" : '';?>>活躍細節</a>
       </div>
 
       <div class='tabs_content <?php echo $type;?>'>

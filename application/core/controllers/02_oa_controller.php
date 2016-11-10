@@ -23,8 +23,7 @@ class Oa_controller extends Root_controller {
 
   public function __construct () {
     parent::__construct ();
-    $this->add_meta (array ('http-equiv' => 'Content-type', 'content' => 'text/html; charset=utf-8'))
-         ->add_meta (array ('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui'));
+    $this->add_meta (array ('http-equiv' => 'Content-type', 'content' => 'text/html; charset=utf-8'));
   }
 
   protected function set_componemt_path () {

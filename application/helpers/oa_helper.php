@@ -5,6 +5,11 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
+if (!function_exists ('oa_url_encode')) {
+  function oa_url_encode ($str) {
+    return rawurlencode (preg_replace ('/[\/%]/', ' ', $str));
+  }
+}
 if (!function_exists ('remove_ckedit_tag')) {
   function remove_ckedit_tag ($text) {
     return preg_replace ("/\s+/", "", preg_replace ("/&#?[a-z0-9]+;/i", "", str_replace ('▼', '', str_replace ('▲', '', trim (strip_tags ($text))))));

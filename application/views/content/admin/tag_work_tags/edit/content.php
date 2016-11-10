@@ -1,6 +1,6 @@
 <div class='panel'>
   <header>
-    <h2>新增分類</h2>
+    <h2>修改分類</h2>
     <a href='<?php echo base_url ($uri_1, $parent->id, $uri_2);?>' class='icon-x'></a>
   </header>
 

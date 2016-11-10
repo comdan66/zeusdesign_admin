@@ -33,7 +33,7 @@
 
 <div class='panel'>
   <header>
-    <h2><a href='<?php echo base_url ('work-tags');?>'><?php echo $parent->name;?></a> 的子分類列表</h2>
+    <h2><a href='<?php echo base_url ('admin', 'work-tags');?>'><?php echo $parent->name;?></a> 的子分類列表</h2>
     <a href='<?php echo base_url ($uri_1, $parent->id, $uri_2, 'add');?>' class='icon-r'></a>
   </header>
 

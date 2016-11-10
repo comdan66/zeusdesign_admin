@@ -9,8 +9,8 @@ sass_dir = "../../application"
 add_import_path = "./imports"
 additional_import_paths = ["./imports"]
 
-images_dir = "res/img"
-images_path = "../../res/img/"
+images_dir = "res/image"
+images_path = "../../res/image/"
 
 fonts_dir = "res/font"
 fonts_path = "../../res/font/"

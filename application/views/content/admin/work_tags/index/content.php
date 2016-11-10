@@ -64,7 +64,7 @@
                 <a class='icon-td' href='<?php echo base_url ($uri_1, $obj->id, 'sort', 'down');?>' data-method='post'></a>
               </td>
               <td class='right'>
-                <a class='icon-i' href="<?php echo base_url ('tag', $obj->id, 'work-tags');?>"></a>
+                <a class='icon-i' href="<?php echo base_url ('admin', 'tag', $obj->id, 'work-tags');?>"></a>
                 /
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /

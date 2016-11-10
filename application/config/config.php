@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url'] = '';
+$config['base_url'] = ENVIRONMENT == 'production' ? 'http://dev.www.zeusdesign.com.tw/' : 'http://dev.www.zeusdesign.com.tw/';
 
 /*
 |--------------------------------------------------------------------------
