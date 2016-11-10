@@ -5,6 +5,7 @@
   </div>
 
   <form class='select'>
+    <button type='button' id='export' href='<?php echo base_url ('admin', 'invoices', 'export');?>' class='icon-p'></button>
     <button type='submit' class='icon-s'></button>
 
 <?php 
@@ -63,7 +64,7 @@
                 </label>
               </td>
               <td><?php echo $obj->user->name;?></td>
-              <td><?php echo $obj->contact ? $obj->contact->name : '-';?></td>
+              <td><?php echo $obj->contact && $obj->contact->parent ? $obj->contact->parent->name . ' - ' . $obj->contact->name : '-';?></td>
               <td><?php echo $obj->name;?></td>
               <td class='center'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>

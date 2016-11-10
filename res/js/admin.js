@@ -455,4 +455,10 @@ $(function () {
     removeButtons: 'Strike,Underline,Italic,Table,HorizontalRule,Smiley,Subscript,Superscript,Forms,Save,NewPage,Print,Preview,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Form,RemoveFormat,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Flash,PageBreak,Iframe,About,Styles'
   });
 
+  $('#export').click (function () {
+    $(this).parent ().attr ('action', $(this).attr ('href')).submit ();
+    $(this).parent ().attr ('action', '');
+    return false;
+  });
+
 });

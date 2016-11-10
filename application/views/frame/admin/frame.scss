@@ -765,11 +765,11 @@ $changeWidth: 768px;
     > * {
       display: inline-block;
       float: left;
-      width: 70%;
+      width: 80%;
       @include clearfix();
 
       &:first-child {
-        width: 30%;
+        width: 20%;
       }
     }
 
@@ -801,7 +801,7 @@ $changeWidth: 768px;
         margin: 0;
         padding: 0;
         + * {
-          margin-right: 10px;
+          margin-right: 10px !important;
         }
         max-width: 150px;
       }

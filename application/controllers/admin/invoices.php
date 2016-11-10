@@ -24,12 +24,7 @@ class Invoices extends Admin_controller {
     $this->add_param ('now_url', base_url ($this->uri_1));
   }
   public function index ($offset = 0) {
-    $columns = array ( 
-        array ('key' => 'name', 'title' => '專案名稱', 'sql' => 'name LIKE ?'), 
-        array ('key' => 'invoice_contact_id', 'title' => '窗口', 'sql' => 'invoice_contact_id = ?', 'select' => array_map (function ($contact) { return array ('value' => $contact->id, 'text' => $contact->parent->name . ' - ' . $contact->name);}, InvoiceContact::find ('all', array ('select' => 'id, name, invoice_contact_id', 'order' => 'invoice_contact_id ASC', 'conditions' => array ('invoice_contact_id != 0'))))),
-        array ('key' => 'is_finished', 'title' => '是否請款', 'sql' => 'is_finished = ?', 'select' => array_map (function ($key) { return array ('value' => $key, 'text' => Invoice::$finishNames[$key]);}, array_keys (Invoice::$finishNames))),
-        array ('key' => 'user_id', 'title' => '作者', 'sql' => 'user_id = ?', 'select' => array_map (function ($user) { return array ('value' => $user->id, 'text' => $user->name);}, User::all (array ('select' => 'id, name')))),
-      );
+    $columns = $this->_search_columns ();
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
     $conditions = conditions ($columns, $configs);
@@ -178,5 +173,110 @@ class Invoices extends Admin_controller {
     if (!isset ($posts['all_money'])) return '沒有填寫 總金額！';
     if (!isset ($posts['closing_at'])) return '沒有填寫 結案日期！';
     return '';
+  }
+
+
+  private function _search_columns () {
+    return array ( 
+        array ('key' => 'name', 'title' => '專案名稱', 'sql' => 'name LIKE ?'), 
+        array ('key' => 'invoice_contact_id', 'title' => '窗口', 'sql' => 'invoice_contact_id = ?', 'select' => array_map (function ($contact) { return array ('value' => $contact->id, 'text' => $contact->parent->name . ' - ' . $contact->name);}, InvoiceContact::find ('all', array ('select' => 'id, name, invoice_contact_id', 'order' => 'invoice_contact_id ASC', 'conditions' => array ('invoice_contact_id != 0'))))),
+        array ('key' => 'is_finished', 'title' => '是否請款', 'sql' => 'is_finished = ?', 'select' => array_map (function ($key) { return array ('value' => $key, 'text' => Invoice::$finishNames[$key]);}, array_keys (Invoice::$finishNames))),
+        array ('key' => 'user_id', 'title' => '作者', 'sql' => 'user_id = ?', 'select' => array_map (function ($user) { return array ('value' => $user->id, 'text' => $user->name);}, User::all (array ('select' => 'id, name')))),
+      );
+  }
+
+
+  private function _build_excel ($objs, $infos) {
+    $excel = new OAExcel ();
+    
+    $excel->getActiveSheet ()->getRowDimension (1)->setRowHeight (25);
+    $excel->getActiveSheet ()->getColumnDimension ('A')->setWidth (15);
+    $excel->getActiveSheet ()->getColumnDimension ('B')->setWidth (10);
+    $excel->getActiveSheet ()->getColumnDimension ('C')->setWidth (10);
+    $excel->getActiveSheet ()->getColumnDimension ('D')->setWidth (8);
+    $excel->getActiveSheet ()->getColumnDimension ('E')->setWidth (8);
+    $excel->getActiveSheet ()->getColumnDimension ('F')->setWidth (8);
+    $excel->getActiveSheet ()->getColumnDimension ('G')->setWidth (11);
+    $excel->getActiveSheet ()->getColumnDimension ('H')->setWidth (15);
+    $excel->getActiveSheet ()->freezePaneByColumnAndRow (0, 2);
+    $excel->getActiveSheet ()->getStyle ('G')->getAlignment ()->setWrapText (true); 
+
+    $excel->getActiveSheet ()->getStyle ('A1:H1')->applyFromArray (array (
+      'fill' => array (
+        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+        'color' => array('rgb' => 'fff3ca')
+      ),
+      'borders' => array (
+        'allborders' => array (
+          'style' => PHPExcel_Style_Border::BORDER_THIN,
+          'color' => array('rgb' => '888888')))));
+
+    foreach ($objs as $i => $obj) {
+      $j = 0;
+      foreach ($infos as $info) {
+        if ($i == 0) {
+          $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 1))->getAlignment ()->setVertical (PHPExcel_Style_Alignment::VERTICAL_TOP);
+          $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 1))->getAlignment ()->setHorizontal (PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+          $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 1))->getFont ()->setName ('新細明體');
+          $excel->getActiveSheet ()->SetCellValue (chr (65 + $j) . ($i + 1), $info['title']);
+        }
+        eval ('$val = ' . $info['exp'] . ';');
+        
+        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getAlignment ()->setVertical (PHPExcel_Style_Alignment::VERTICAL_TOP);
+        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getAlignment ()->setHorizontal (PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getFont ()->setName ("新細明體");
+        $excel->getActiveSheet ()->SetCellValue (chr (65 + $j) . ($i + 2), $val);
+        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getNumberFormat ()->setFormatCode ($info['format']);
+        $j++;
+      }
+    }
+    return $excel;
+  }
+
+  public function export () {
+    $columns = $this->_search_columns ();
+    $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
+    $conditions = conditions ($columns, $configs);
+
+    $objs = Invoice::find ('all', array (
+        'order' => 'id DESC',
+        'include' => array ('user', 'tag', 'contact'),
+        'conditions' => $conditions
+      ));
+
+    $this->load->library ('OAExcel');
+    $infos = array (array ('title' => '專案名稱', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->name'),
+                    array ('title' => '窗口',     'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->contact && $obj->contact->parent ? $obj->contact->parent->name . " - " . $obj->contact->name : "-"'),
+                    array ('title' => '數量',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->quantity'),
+                    array ('title' => '單價',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->single_money'),
+                    array ('title' => '總金額',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->all_money'),
+                    array ('title' => '分類',     'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->tag ? $obj->tag->name : "-"'),
+                    array ('title' => '結案日期', 'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2, 'exp' => '$obj->closing_at ? $obj->closing_at->format ("Y-m-d") : ""'),
+                    array ('title' => '備註',    'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,           'exp' => '$obj->memo'));
+
+    $excel = $this->_build_excel ($objs, $infos);
+    $excel->getActiveSheet ()->setTitle ('帳務列表');
+
+    // $excel->createSheet (1);
+    // $excel->setActiveSheetIndex (1)->setTitle ('圖片列表');
+
+    // $that = $this;
+
+    // $filepaths = array_filter ($this->_array_2d_to_1d (array_map (function ($invoice) use ($that, $excel, &$i) {
+    //   return array_merge (array ($that->_excel_add_image ($excel->getActiveSheet (), $invoice->cover, ($i = isset ($i) ? $i + 1 : 1))),
+    //     array_map (function ($picture) use ($that, $excel, &$i) {
+    //       return $that->_excel_add_image ($excel->getActiveSheet (), $picture->name, ++$i);
+    //     }, $invoice->pictures));
+    // }, $objs)));
+
+    $excel->setActiveSheetIndex (0);
+
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf8');
+    header('Content-Disposition: attachment; filename=宙思_帳務_' . date ('Ymd') . '.xlsx');
+
+    $objWriter = new PHPExcel_Writer_Excel2007 ($excel);
+    $objWriter->save ("php://output");
+    
+    // array_map (function ($filepath) {return @unlink ($filepath); }, $filepaths);
   }
 }
