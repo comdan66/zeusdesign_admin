@@ -1,10 +1,11 @@
 <header>
   <div class='title'>
-    <h1>請款分類</h1>
-    <p>請款類型分類</p>
+    <h1>帳務</h1>
+    <p>入帳 上稿管理</p>
   </div>
 
   <form class='select'>
+    <button type='button' class='icon-p' id='export' href='<?php echo base_url ('admin', 'billins', 'export');?>'></button>
     <button type='submit' class='icon-s'></button>
 
 <?php 
@@ -33,7 +34,7 @@
 
 <div class='panel'>
   <header>
-    <h2>分類列表</h2>
+    <h2>入帳 列表</h2>
     <a href='<?php echo base_url ($uri_1, 'add');?>' class='icon-r'></a>
   </header>
 
@@ -43,29 +44,46 @@
     <table class='table'>
       <thead>
         <tr>
-          <th width='80'>#</th>
-          <th >名稱</th>
-          <th width='100'>請款數</th>
-          <th width='85' class='right'>修改/刪除</th>
+          <th width='50' class='center'>#</th>
+          <th width='90'>負責人</th>
+          <th width='130'>專案名稱</th>
+          <th width='100'>總金額</th>
+          <th width='100'>％數標題</th>
+          <th width='50'>％數</th>
+          <th width='90'>宙思＄</th>
+          <th width='100'>小計</th>
+          <th>備註</th>
+          <th width='90'>日期</th>
+          <th width='85' class='center'>修改/刪除</th>
         </tr>
       </thead>
       <tbody>
   <?php if ($objs) {
           foreach ($objs as $obj) { ?>
             <tr>
-              <td><?php echo $obj->id;?></td>
+              <td class='center'><?php echo $obj->id;?></td>
+              
+              <td><?php echo $obj->user->name;?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo count ($obj->invoices);?></td>
-              <td class='right'>
+              <td><?php echo $obj->money;?></td>
+              <td><?php echo $obj->rate_name;?></td>
+              <td><?php echo $obj->rate;?>%</td>
+              <td><?php echo $obj->zeus_money;?></td>
+              <td><?php echo $obj->money - $obj->zeus_money;?></td>
+              <td><?php echo $obj->memo;?></td>
+              <td><?php echo $obj->date_at->format ('Y-m-d');?></td>
+
+              <td class='center'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
                 <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
               </td>
+
             </tr>
     <?php }
         } else { ?>
           <tr>
-            <td colspan='4' class='no_data'>沒有任何資料。</td>
+            <td colspan='10' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

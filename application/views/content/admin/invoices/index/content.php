@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>帳務</h1>
-    <p>帳務管理</p>
+    <h1>請款</h1>
+    <p>請款管理</p>
   </div>
 
   <form class='select'>
@@ -34,7 +34,7 @@
 
 <div class='panel'>
   <header>
-    <h2>帳務列表</h2>
+    <h2>請款列表</h2>
     <a href='<?php echo base_url ($uri_1, 'add');?>' class='icon-r'></a>
   </header>
 

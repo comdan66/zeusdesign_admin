@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>帳務公司</h1>
-    <p>帳務窗口公司</p>
+    <h1>請款公司</h1>
+    <p>請款窗口公司</p>
   </div>
 
   <form class='select'>

@@ -91,11 +91,22 @@
             <li>
               <label>
                 <input type='checkbox' />
-                <span class='icon-ti'>帳務管理</span>
+                <span class='icon-ti'>請款管理</span>
                 <ul>
                   <li><a href="<?php echo $url = base_url ('admin', 'invoice-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
                   <li><a href="<?php echo $url = base_url ('admin', 'invoice-contacts');?>" class='icon-ua<?php echo $now_url == $url ? ' active' : '';?>'>窗口設定</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'invoices');?>" class='icon-ti<?php echo $now_url == $url ? ' active' : '';?>'>帳務設定</a></li>
+                  <li><a href="<?php echo $url = base_url ('admin', 'invoices');?>" class='icon-ti<?php echo $now_url == $url ? ' active' : '';?>'>請款設定</a></li>
+                </ul>
+              </label>
+            </li>
+
+            <li>
+              <label>
+                <input type='checkbox' />
+                <span class='icon-bil'>帳務管理</span>
+                <ul>
+                  <li><a href="<?php echo $url = base_url ('admin', 'billins');?>" class='icon-ib<?php echo $now_url == $url ? ' active' : '';?>'>入帳設定</a></li>
+                  <li><a href="<?php echo $url = base_url ('admin', 'billous');?>" class='icon-ob<?php echo $now_url == $url ? ' active' : '';?>'>出帳設定</a></li>
                 </ul>
               </label>
             </li>

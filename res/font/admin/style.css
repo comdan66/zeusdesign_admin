@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?7arywf');
-  src:  url('fonts/icomoon.eot?7arywf#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?7arywf') format('truetype'),
-    url('fonts/icomoon.woff?7arywf') format('woff'),
-    url('fonts/icomoon.svg?7arywf#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?oovcot');
+  src:  url('fonts/icomoon.eot?oovcot#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?oovcot') format('truetype'),
+    url('fonts/icomoon.woff?oovcot') format('woff'),
+    url('fonts/icomoon.svg?oovcot#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -63,6 +63,12 @@
 .icon-u:before {
   content: "\e900";
 }
+.icon-bil:before {
+  content: "\e90f";
+}
+.icon-ma:before {
+  content: "\e90b";
+}
 .icon-i:before {
   content: "\e23e";
 }
@@ -83,6 +89,12 @@
 }
 .icon-m:before {
   content: "\e120";
+}
+.icon-ib:before {
+  content: "\e122";
+}
+.icon-ob:before {
+  content: "\e123";
 }
 .icon-fa:before {
   content: "\e125";
@@ -122,8 +134,5 @@
 }
 .icon-tu:before {
   content: "\e90a";
-}
-.icon-ma:before {
-  content: "\e90b";
 }
 

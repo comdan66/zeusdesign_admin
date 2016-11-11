@@ -460,5 +460,35 @@ $(function () {
     $(this).parent ().attr ('action', '');
     return false;
   });
+  if ($('#billin_rate').length) {
+    var $inp = $('input[name="rate_type"]');
+    var $m = $('#money').keyup (cm);
+    var $r = $('#rate').keyup (cm);
+    var $z = $('#zeus_money');
+    var $rn = $('#rate_name');
 
+    function cm () {
+      var m = $m.val ();
+      var r = $r.val ();
+
+      if (isNaN (m) || isNaN (r)) return ;
+      $z.val (Math.round ((r / 100) * m));
+    }
+    function setRate () {
+      var v = $inp.filter (':checked').val ();
+
+      if (v == 1) { $rn.val ('有發票'); $r.val (2); }
+      if (v == 2) { $rn.val ('無發票'); $r.val (10); }
+      
+      if (v == 3) { $rn.val ('其他').show (); }
+      else $rn.hide ();
+
+      cm ();
+    }
+    $inp.change (setRate);
+    if ($('#billin_rate .radios').data ('val') == '有發票') $('input[name="rate_type"][value="1"]').prop ('checked', true);
+    else if ($('#billin_rate .radios').data ('val') == '無發票') $('input[name="rate_type"][value="2"]').prop ('checked', true);
+    else { $('input[name="rate_type"][value="3"]').prop ('checked', true); $rn.val ($('#billin_rate .radios').data ('val')); }
+    setRate ();
+  }
 });

@@ -5,23 +5,32 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
-class Invoices extends Admin_controller {
+class Billins extends Admin_controller {
   private $uri_1 = null;
   private $obj = null;
 
   public function __construct () {
     parent::__construct ();
     
-    $this->uri_1 = 'admin/invoices';
+    $this->uri_1 = 'admin/billins';
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
-      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Invoice::find ('one', array ('conditions' => array ('id = ?', $id))))))
+      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Billin::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array (
             '_flash_danger' => '找不到該筆資料。'
           ));
 
     $this->add_param ('uri_1', $this->uri_1);
     $this->add_param ('now_url', base_url ($this->uri_1));
+  }
+
+  private function _search_columns () {
+    return array ( 
+        array ('key' => 'month', 'title' => '月份', 'sql' => 'MONTH(date_at) = ?', 'select' => array (array ('value' => '1', 'text' => '一月'), array ('value' => '2', 'text' => '二月'), array ('value' => '3', 'text' => '三月'), array ('value' => '4', 'text' => '四月'), array ('value' => '5', 'text' => '五月'), array ('value' => '6', 'text' => '六月'), array ('value' => '7', 'text' => '七月'), array ('value' => '8', 'text' => '八月'), array ('value' => '9', 'text' => '九月'), array ('value' => '10', 'text' => '十月'), array ('value' => '11', 'text' => '十一月'), array ('value' => '12', 'text' => '十二月'))), 
+        array ('key' => 'year', 'title' => '年份', 'sql' => 'YEAR(date_at) = ?', 'select' => array (array ('value' => '2014', 'text' => '2014 年'), array ('value' => '2015', 'text' => '2015 年'), array ('value' => '2016', 'text' => '2016 年'), array ('value' => '2017', 'text' => '2017 年'))), 
+        array ('key' => 'name', 'title' => '專案名稱', 'sql' => 'name LIKE ?'), 
+        array ('key' => 'user_id', 'title' => '負責人', 'sql' => 'user_id = ?', 'select' => array_map (function ($user) { return array ('value' => $user->id, 'text' => $user->name);}, User::all (array ('select' => 'id, name')))),
+      );
   }
   public function index ($offset = 0) {
     $columns = $this->_search_columns ();
@@ -30,16 +39,16 @@ class Invoices extends Admin_controller {
     $conditions = conditions ($columns, $configs);
 
     $limit = 10;
-    $total = Invoice::count (array ('conditions' => $conditions));
+    $total = Billin::count (array ('conditions' => $conditions));
     $offset = $offset < $total ? $offset : 0;
 
     $this->load->library ('pagination');
     $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $objs = Invoice::find ('all', array (
+    $objs = Billin::find ('all', array (
         'offset' => $offset,
         'limit' => $limit,
         'order' => 'id DESC',
-        'include' => array ('user', 'tag', 'contact'),
+        'include' => array ('user'),
         'conditions' => $conditions
       ));
 
@@ -52,10 +61,6 @@ class Invoices extends Admin_controller {
   public function add () {
     $posts = Session::getData ('posts', true);
 
-    $posts['sources'] = array_values (array_filter (isset ($posts['sources']) && $posts['sources'] ? $posts['sources'] : array (), function ($source) {
-      return (isset ($source['title']) && $source['title']) || (isset ($source['href']) && $source['href']);
-    }));
-
     return $this->load_view (array (
         'posts' => $posts
       ));
@@ -67,16 +72,14 @@ class Invoices extends Admin_controller {
         ));
 
     $posts = OAInput::post ();
-
+    
     if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
       return redirect_message (array ($this->uri_1, 'add'), array (
           '_flash_danger' => $msg,
           'posts' => $posts
         ));
 
-    $create = Invoice::transaction (function () use (&$obj, $posts) {
-      return verifyCreateOrm ($obj = Invoice::create (array_intersect_key ($posts, Invoice::table ()->columns)));
-    });
+    $create = Billin::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Billin::create (array_intersect_key ($posts, Billin::table ()->columns))); });
 
     if (!$create)
       return redirect_message (array ($this->uri_1, 'add'), array (
@@ -104,7 +107,7 @@ class Invoices extends Admin_controller {
 
     $posts = OAInput::post ();
     $is_api = isset ($posts['_type']) && ($posts['_type'] == 'api') ? true : false;
-    
+
     if ($msg = $this->_validation ($posts))
       return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
           '_flash_danger' => $msg,
@@ -114,11 +117,9 @@ class Invoices extends Admin_controller {
     if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
       foreach ($columns as $column => $value)
         $this->obj->$column = $value;
-
+    
     $obj = $this->obj;
-    $update = Invoice::transaction (function () use ($obj, $posts) {
-      return $obj->save ();
-    });
+    $update = Billin::transaction (function () use ($obj, $posts) { return $obj->save (); });
 
     if (!$update)
       return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
@@ -132,9 +133,7 @@ class Invoices extends Admin_controller {
   }
   public function destroy () {
     $obj = $this->obj;
-    $delete = Invoice::transaction (function () use ($obj) {
-      return $obj->destroy ();
-    });
+    $delete = Billin::transaction (function () use ($obj) { return $obj->destroy (); });
 
     if (!$delete)
       return redirect_message (array ($this->uri_1), array (
@@ -146,45 +145,31 @@ class Invoices extends Admin_controller {
       ));
   }
   private function _validation (&$posts) {
-    $keys = array ('invoice_tag_id', 'invoice_contact_id', 'user_id', 'name', 'quantity', 'single_money', 'all_money', 'closing_at', 'is_finished', 'memo');
+    $keys = array ('user_id', 'name', 'money', 'rate_name', 'rate', 'zeus_money', 'memo', 'date_at');
 
     $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
 
-    if (isset ($posts['user_id']) && !(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find_by_id ($posts['user_id']))) return '作者 ID 格式錯誤！';
-    if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '專案名稱格式錯誤！';
-    
-    if (isset ($posts['invoice_tag_id']) && ($posts['invoice_tag_id'] = trim ($posts['invoice_tag_id'])) && !(is_numeric ($posts['invoice_tag_id']) && InvoiceTag::find_by_id ($posts['invoice_tag_id']))) return '分類 ID 格式錯誤！';
-    if (isset ($posts['invoice_contact_id']) && ($posts['invoice_contact_id'] = trim ($posts['invoice_contact_id'])) && !(is_numeric ($posts['invoice_contact_id'])) && InvoiceContact::find_by_id ($posts['invoice_contact_id'], array ('conditions' => array ('invoice_contact_id != 0')))) return '窗口 ID 格式錯誤！';
-    if (isset ($posts['quantity']) && ($posts['quantity'] = trim ($posts['quantity'])) && !is_numeric ($posts['quantity'])) return '數量格式錯誤！';
-    if (isset ($posts['single_money']) && ($posts['single_money'] = trim ($posts['single_money'])) && !is_numeric ($posts['single_money'])) return '單價格式錯誤！';
+    if (isset ($posts['user_id']) && !(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find_by_id ($posts['user_id']))) return '負責人 ID 格式錯誤或未填寫！';
+    if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '專案名稱格式錯誤或未填寫！';
+    if (isset ($posts['money']) && !(is_numeric ($posts['money'] = trim ($posts['money'])) && $posts['money'] >= 0)) return '總金額格式錯誤或未填寫！';
+    if (isset ($posts['rate_name']) && !($posts['rate_name'] = trim ($posts['rate_name']))) return '%數名稱格式錯誤或未填寫！';
+    if (isset ($posts['rate']) && !(is_numeric ($posts['rate'] = trim ($posts['rate'])) && $posts['rate'] >= 0)) return '%數格式錯誤或未填寫！';
+    if (isset ($posts['zeus_money']) && !(is_numeric ($posts['zeus_money'] = trim ($posts['zeus_money'])) && $posts['zeus_money'] >= 0)) return '宙思獲得金額格式錯誤或未填寫！';
     if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
-    
-    if (isset ($posts['all_money']) && !is_numeric ($posts['all_money'] = trim ($posts['all_money']))) return '總金額格式錯誤！';
-    if (isset ($posts['closing_at']) && !($posts['closing_at'] = trim ($posts['closing_at']))) return '結案日期格式錯誤！';
-    if (isset ($posts['is_finished']) && !(is_numeric ($posts['is_finished'] = trim ($posts['is_finished'])) && in_array ($posts['is_finished'], array_keys (Invoice::$finishNames)))) return '請款狀態格式錯誤！';
+    if (isset ($posts['date_at']) && !($posts['date_at'] = trim ($posts['date_at']))) return '日期格式錯誤！';
     return '';
   }
   private function _validation_must (&$posts) {
-    if (!isset ($posts['invoice_tag_id'])) return '沒有選擇 分類！';
-    if (!isset ($posts['invoice_contact_id'])) return '沒有選擇 窗口！';
-    if (!isset ($posts['user_id'])) return '沒有選擇 負責人！';
+    if (!isset ($posts['user_id'])) return '沒有填寫 負責人！';
     if (!isset ($posts['name'])) return '沒有填寫 專案名稱！';
-    if (!isset ($posts['all_money'])) return '沒有填寫 總金額！';
-    if (!isset ($posts['closing_at'])) return '沒有填寫 結案日期！';
+    if (!isset ($posts['money'])) return '沒有填寫 總金額！';
+    if (!isset ($posts['rate_name'])) return '沒有填寫 %數名稱！';
+    if (!isset ($posts['rate'])) return '沒有填寫 %數！';
+    if (!isset ($posts['zeus_money'])) return '沒有填寫 宙思獲得金額！';
+    if (!isset ($posts['date_at'])) return '沒有填寫 日期！';
     return '';
   }
-
-
-  private function _search_columns () {
-    return array ( 
-        array ('key' => 'name', 'title' => '專案名稱', 'sql' => 'name LIKE ?'), 
-        array ('key' => 'invoice_contact_id', 'title' => '窗口', 'sql' => 'invoice_contact_id = ?', 'select' => array_map (function ($contact) { return array ('value' => $contact->id, 'text' => $contact->parent->name . ' - ' . $contact->name);}, InvoiceContact::find ('all', array ('select' => 'id, name, invoice_contact_id', 'order' => 'invoice_contact_id ASC', 'conditions' => array ('invoice_contact_id != 0'))))),
-        array ('key' => 'is_finished', 'title' => '是否請款', 'sql' => 'is_finished = ?', 'select' => array_map (function ($key) { return array ('value' => $key, 'text' => Invoice::$finishNames[$key]);}, array_keys (Invoice::$finishNames))),
-        array ('key' => 'user_id', 'title' => '作者', 'sql' => 'user_id = ?', 'select' => array_map (function ($user) { return array ('value' => $user->id, 'text' => $user->name);}, User::all (array ('select' => 'id, name')))),
-      );
-  }
-
 
   private function _build_excel ($objs, $infos) {
     $excel = new OAExcel ();
@@ -218,27 +203,27 @@ class Invoices extends Admin_controller {
     }
     return $excel;
   }
-
   public function export () {
     $columns = $this->_search_columns ();
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
     $conditions = conditions ($columns, $configs);
 
-    $objs = Invoice::find ('all', array (
+    $objs = Billin::find ('all', array (
         'order' => 'id DESC',
-        'include' => array ('user', 'tag', 'contact'),
+        'include' => array ('user'),
         'conditions' => $conditions
       ));
 
     $this->load->library ('OAExcel');
-    $infos = array (array ('title' => '專案名稱', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->name'),
-                    array ('title' => '窗口',     'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->contact && $obj->contact->parent ? $obj->contact->parent->name . " - " . $obj->contact->name : "-"'),
-                    array ('title' => '數量',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->quantity'),
-                    array ('title' => '單價',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->single_money'),
-                    array ('title' => '總金額',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->all_money'),
-                    array ('title' => '分類',     'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->tag ? $obj->tag->name : "-"'),
-                    array ('title' => '結案日期', 'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2, 'exp' => '$obj->closing_at ? $obj->closing_at->format ("Y-m-d") : ""'),
-                    array ('title' => '備註',    'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,           'exp' => '$obj->memo'));
+    $infos = array (array ('title' => '負責人',   'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->user->name'),
+                    array ('title' => '專案名稱',  'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->name'),
+                    array ('title' => '總金額',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->money'),
+                    array ('title' => '％數標題',  'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->rate_name'),
+                    array ('title' => '％數',     'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->rate;'),
+                    array ('title' => '宙思＄',    'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->zeus_money'),
+                    array ('title' => '小計',     'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,         'exp' => '$obj->money - $obj->zeus_money'),
+                    array ('title' => '備註',      'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->memo'),
+                    array ('title' => '日期',     'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2, 'exp' => '$obj->date_at->format ("Y-m-d")'));
 
     $excel = $this->_build_excel ($objs, $infos);
     $excel->getActiveSheet ()->setTitle ('帳務列表');
@@ -246,7 +231,7 @@ class Invoices extends Admin_controller {
     $excel->setActiveSheetIndex (0);
 
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf8');
-    header('Content-Disposition: attachment; filename=宙思_請款_' . date ('Ymd') . '.xlsx');
+    header('Content-Disposition: attachment; filename=宙思_帳務_' . date ('Ymd') . '.xlsx');
 
     $objWriter = new PHPExcel_Writer_Excel2007 ($excel);
     $objWriter->save ("php://output");

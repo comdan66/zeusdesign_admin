@@ -42,132 +42,43 @@ html {
 
   }
 }
-
-
-.icon-d:before {
-  content: "\e904";
-}
-.icon-b:before {
-  content: "\e907";
-}
-.icon-g:before {
-  content: "\e908";
-}
-.icon-e:before {
-  content: "\e906";
-}
-.icon-im:before {
-  content: "\e90d";
-}
-.icon-ims:before {
-  content: "\e90e";
-}
-.icon-s:before {
-  content: "\e986";
-}
-.icon-se:before {
-  content: "\e994";
-}
-.icon-t:before {
-  content: "\e9ac";
-}
-.icon-y:before {
-  content: "\e901";
-}
-.icon-ta:before {
-  content: "\e905";
-}
-.icon-bo:before {
-  content: "\e90c";
-}
-.icon-u:before {
-  content: "\e900";
-}
-.icon-i:before {
-  content: "\e23e";
-}
-.icon-p:before {
-  content: "\e8ad";
-}
-.icon-a:before {
-  content: "\e03b";
-}
-.icon-cl:before {
-  content: "\e014";
-}
-.icon-r:before {
-  content: "\e114";
-}
-.icon-x:before {
-  content: "\e117";
-}
-.icon-m:before {
-  content: "\e120";
-}
-.icon-fa:before {
-  content: "\e125";
-}
-.icon-c:before {
-  content: "\f00c";
-}
-.icon-o:before {
-  content: "\f011";
-}
-.icon-ca:before {
-  content: "\f073";
-}
-.icon-si:before {
-  content: "\f090";
-}
-.icon-f:before {
-  content: "\f0f6";
-}
-.icon-ti:before {
-  content: "\f145";
-}
-.icon-fb:before {
-  content: "\f230";
-}
-.icon-ua:before {
-  content: "\f234";
-}
-.icon-al:before {
-  content: "\e902";
-}
-.icon-ar:before {
-  content: "\e903";
-}
-.icon-td:before {
-  content: "\e909";
-}
-.icon-tu:before {
-  content: "\e90a";
-}
-.icon-ma:before {
-  content: "\e90b";
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.icon-d:before { content: "\e904"; }
+.icon-b:before { content: "\e907"; }
+.icon-g:before { content: "\e908"; }
+.icon-e:before { content: "\e906"; }
+.icon-im:before { content: "\e90d"; }
+.icon-ims:before { content: "\e90e"; }
+.icon-s:before { content: "\e986"; }
+.icon-se:before { content: "\e994"; }
+.icon-t:before { content: "\e9ac"; }
+.icon-y:before { content: "\e901"; }
+.icon-ta:before { content: "\e905"; }
+.icon-bo:before { content: "\e90c"; }
+.icon-u:before { content: "\e900"; }
+.icon-bil:before { content: "\e90f"; }
+.icon-ma:before { content: "\e90b"; }
+.icon-i:before { content: "\e23e"; }
+.icon-p:before { content: "\e8ad"; }
+.icon-a:before { content: "\e03b"; }
+.icon-cl:before { content: "\e014"; }
+.icon-r:before { content: "\e114"; }
+.icon-x:before { content: "\e117"; }
+.icon-m:before { content: "\e120"; }
+.icon-ib:before { content: "\e122"; }
+.icon-ob:before { content: "\e123"; }
+.icon-fa:before { content: "\e125"; }
+.icon-c:before { content: "\f00c"; }
+.icon-o:before { content: "\f011"; }
+.icon-ca:before { content: "\f073"; }
+.icon-si:before { content: "\f090"; }
+.icon-f:before { content: "\f0f6"; }
+.icon-ti:before { content: "\f145"; }
+.icon-fb:before { content: "\f230"; }
+.icon-ua:before { content: "\f234"; }
+.icon-al:before { content: "\e902"; }
+.icon-ar:before { content: "\e903"; }
+.icon-td:before { content: "\e909"; }
+.icon-tu:before { content: "\e90a"; }
 
 
 
@@ -765,11 +676,11 @@ $changeWidth: 768px;
     > * {
       display: inline-block;
       float: left;
-      width: 80%;
+      width: calc(100% - 220px);
       @include clearfix();
 
       &:first-child {
-        width: 20%;
+        width: 220px;
       }
     }
 
@@ -1757,4 +1668,26 @@ form.form {
 @include keyframes(schedulePromptWrapperShow) {
   0% { top: -50%; @include opacity(0); }
   100% { top: calc(10%); @include opacity(1); }
+}
+
+#billin_rate {
+  @include clearfix();
+  > * {
+    float: left;
+    display: inline-block;
+    width: 300px;
+  }
+  > div {
+    display: inline-block;
+    width: 100%;
+    float: left;
+    margin-top: 5px;
+    
+    input {
+      @include input;
+      display: block;
+      width: 300px;
+      max-width: 100%;
+    }
+  }
 }

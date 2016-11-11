@@ -1,6 +1,6 @@
 <div class='panel'>
   <header>
-    <h2>新增帳務</h2>
+    <h2>新增請款</h2>
     <a href='<?php echo base_url ($uri_1);?>' class='icon-x'></a>
   </header>
 
