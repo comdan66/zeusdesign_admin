@@ -241,12 +241,12 @@ class Invoices extends Admin_controller {
                     array ('title' => '備註',    'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,           'exp' => '$obj->memo'));
 
     $excel = $this->_build_excel ($objs, $infos);
-    $excel->getActiveSheet ()->setTitle ('帳務列表');
+    $excel->getActiveSheet ()->setTitle ('請款列表');
 
     $excel->setActiveSheetIndex (0);
 
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf8');
-    header('Content-Disposition: attachment; filename=宙思_請款_' . date ('Ymd') . '.xlsx');
+    header ('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf8');
+    header ('Content-Disposition: attachment; filename=宙思_請款_' . date ('Ymd') . '.xlsx');
 
     $objWriter = new PHPExcel_Writer_Excel2007 ($excel);
     $objWriter->save ("php://output");

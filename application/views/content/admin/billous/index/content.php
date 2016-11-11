@@ -1,11 +1,11 @@
 <header>
   <div class='title'>
     <h1>帳務</h1>
-    <p>入帳 上稿管理</p>
+    <p>出帳 上稿管理</p>
   </div>
 
   <form class='select'>
-    <button type='button' class='icon-p' id='export' href='<?php echo base_url ('admin', 'billins', 'export');?>'></button>
+    <button type='button' class='icon-p' id='export' href='<?php echo base_url ('admin', 'billous', 'export');?>'></button>
     <button type='submit' class='icon-s'></button>
 
 <?php 
@@ -34,26 +34,21 @@
 
 <div class='panel'>
   <header>
-    <h2>入帳 列表</h2>
+    <h2>出帳 列表</h2>
     <a href='<?php echo base_url ($uri_1, 'add');?>' class='icon-r'></a>
   </header>
 
   <div class='content'>
-
-
     <table class='table'>
       <thead>
         <tr>
           <th width='50' class='center'>#</th>
-          <th width='90'>負責人</th>
-          <th width='130'>專案名稱</th>
-          <th width='100'>總金額</th>
-          <th width='100'>％數標題</th>
-          <th width='50'>％數</th>
-          <th width='90'>宙思＄</th>
-          <th width='100'>小計</th>
+          <th width='100'>新增者</th>
+          <th width='150'>項目名稱</th>
+          <th width='100'>金額</th>
+          <th width='100'>是否有發票</th>
           <th>備註</th>
-          <th width='90'>日期</th>
+          <th width='100'>日期</th>
           <th width='85' class='center'>修改/刪除</th>
         </tr>
       </thead>
@@ -62,14 +57,11 @@
           foreach ($objs as $obj) { ?>
             <tr>
               <td class='center'><?php echo $obj->id;?></td>
-              
+             
               <td><?php echo $obj->user->name;?></td>
               <td><?php echo $obj->name;?></td>
               <td><?php echo $obj->money;?></td>
-              <td><?php echo $obj->rate_name;?></td>
-              <td><?php echo $obj->rate;?>%</td>
-              <td><?php echo $obj->zeus_money;?></td>
-              <td><?php echo $obj->money - $obj->zeus_money;?></td>
+              <td><?php echo Billou::$invoiceNames[$obj->is_invoice];?></td>
               <td><?php echo $obj->memo;?></td>
               <td><?php echo $obj->date_at->format ('Y-m-d');?></td>
 
@@ -83,7 +75,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='11' class='no_data'>沒有任何資料。</td>
+            <td colspan='8' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

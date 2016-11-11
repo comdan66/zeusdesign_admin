@@ -35,6 +35,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('users'), 'users');
   Route::resourcePagination (array ('banners'), 'banners');
   Route::resourcePagination (array ('billins'), 'billins');
+  Route::resourcePagination (array ('billous'), 'billous');
   Route::resourcePagination (array ('promos'), 'promos');
   Route::resourcePagination (array ('article_tags'), 'article_tags');
   Route::resourcePagination (array ('articles'), 'articles');
