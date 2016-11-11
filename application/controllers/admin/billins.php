@@ -217,11 +217,11 @@ class Billins extends Admin_controller {
     $this->load->library ('OAExcel');
     $infos = array (array ('title' => '負責人',   'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->user->name'),
                     array ('title' => '專案名稱',  'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->name'),
-                    array ('title' => '總金額',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->money'),
+                    array ('title' => '總金額',   'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->money'),
                     array ('title' => '％數標題',  'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->rate_name'),
                     array ('title' => '％數',     'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->rate;'),
-                    array ('title' => '宙思＄',    'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->zeus_money'),
-                    array ('title' => '小計',     'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,         'exp' => '$obj->money - $obj->zeus_money'),
+                    array ('title' => '宙思＄',    'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->zeus_money'),
+                    array ('title' => '小計',     'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,         'exp' => '$obj->money - $obj->zeus_money'),
                     array ('title' => '備註',      'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->memo'),
                     array ('title' => '日期',     'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2, 'exp' => '$obj->date_at->format ("Y-m-d")'));
 

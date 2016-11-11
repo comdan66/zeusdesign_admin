@@ -6,7 +6,7 @@
 
   <form class='form full' method='post' action='<?php echo base_url ($uri_1, $obj->id);?>' enctype='multipart/form-data'>
     <input type='hidden' name='_method' value='put' />
-
+    
     <div class='row n2'>
       <label>負責人</label>
       <div>

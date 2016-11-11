@@ -491,4 +491,13 @@ $(function () {
     else { $('input[name="rate_type"][value="3"]').prop ('checked', true); $rn.val ($('#billin_rate .radios').data ('val')); }
     setRate ();
   }
+
+
+
+
+  var $all_money = $('#all_money');
+  var $single_money = $('#single_money');
+  var $quantity = $('#quantity').keyup (function () { if (isNaN ($(this).val ()) || isNaN ($single_money.val ())) return; $all_money.val ($(this).val () * $single_money.val ()); });
+  $single_money.keyup (function () { if (isNaN ($(this).val ()) || isNaN ($quantity.val ())) return; $all_money.val ($(this).val () * $quantity.val ()); });
+
 });

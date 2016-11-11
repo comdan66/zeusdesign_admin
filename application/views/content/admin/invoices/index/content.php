@@ -45,10 +45,11 @@
       <thead>
         <tr>
           <th width='50' class='center'>#</th>
-          <th width='80' class='center'>請款</th>
+          <th width='90' class='center'>是否請款</th>
           <th width='150'>負責人</th>
-          <th width='150'>窗口</th>
           <th>專案名稱</th>
+          <th width='150'>窗口</th>
+          <th width='120'>總金額</th>
           <th width='80' class='center'>修改/刪除</th>
         </tr>
       </thead>
@@ -64,8 +65,9 @@
                 </label>
               </td>
               <td><?php echo $obj->user->name;?></td>
-              <td><?php echo $obj->contact && $obj->contact->parent ? $obj->contact->parent->name . ' - ' . $obj->contact->name : '-';?></td>
               <td><?php echo $obj->name;?></td>
+              <td><?php echo $obj->contact && $obj->contact->parent ? $obj->contact->parent->name . ' - ' . $obj->contact->name : '-';?></td>
+              <td><?php echo number_format ($obj->all_money);?></td>
               <td class='center'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /

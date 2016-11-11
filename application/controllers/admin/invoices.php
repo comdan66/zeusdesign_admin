@@ -234,8 +234,8 @@ class Invoices extends Admin_controller {
     $infos = array (array ('title' => '專案名稱', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->name'),
                     array ('title' => '窗口',     'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->contact && $obj->contact->parent ? $obj->contact->parent->name . " - " . $obj->contact->name : "-"'),
                     array ('title' => '數量',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->quantity'),
-                    array ('title' => '單價',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->single_money'),
-                    array ('title' => '總金額',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->all_money'),
+                    array ('title' => '單價',   'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->single_money'),
+                    array ('title' => '總金額',   'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->all_money'),
                     array ('title' => '分類',     'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->tag ? $obj->tag->name : "-"'),
                     array ('title' => '結案日期', 'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2, 'exp' => '$obj->closing_at ? $obj->closing_at->format ("Y-m-d") : ""'),
                     array ('title' => '備註',    'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,           'exp' => '$obj->memo'));

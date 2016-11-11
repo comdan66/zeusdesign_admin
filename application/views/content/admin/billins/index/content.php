@@ -65,11 +65,11 @@
               
               <td><?php echo $obj->user->name;?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo $obj->money;?></td>
+              <td><?php echo number_format ($obj->money);?></td>
               <td><?php echo $obj->rate_name;?></td>
               <td><?php echo $obj->rate;?>%</td>
-              <td><?php echo $obj->zeus_money;?></td>
-              <td><?php echo $obj->money - $obj->zeus_money;?></td>
+              <td><?php echo number_format ($obj->zeus_money);?></td>
+              <td><?php echo number_format ($obj->money - $obj->zeus_money);?></td>
               <td><?php echo $obj->memo;?></td>
               <td><?php echo $obj->date_at->format ('Y-m-d');?></td>
 

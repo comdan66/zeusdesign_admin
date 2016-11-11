@@ -78,21 +78,21 @@
     <div class='row n2'>
       <label>數量</label>
       <div>
-        <input type='number' name='quantity' value='<?php echo isset ($posts['quantity']) ? $posts['quantity'] : '';?>' placeholder='請輸入數量..' />
+        <input type='number' name='quantity' id='quantity' value='<?php echo isset ($posts['quantity']) ? $posts['quantity'] : '';?>' placeholder='請輸入數量..' />
       </div>
     </div>
 
     <div class='row n2'>
       <label>單價</label>
       <div>
-        <input type='number' name='single_money' value='<?php echo isset ($posts['single_money']) ? $posts['single_money'] : '';?>' placeholder='請輸入單價..' />
+        <input type='number' name='single_money' id='single_money' value='<?php echo isset ($posts['single_money']) ? $posts['single_money'] : '';?>' placeholder='請輸入單價..' />
       </div>
     </div>
 
     <div class='row n2'>
       <label>總金額</label>
       <div>
-        <input type='number' name='all_money' value='<?php echo isset ($posts['all_money']) ? $posts['all_money'] : '';?>' placeholder='請輸入總金額..' maxlength='200' pattern='.{1,200}' required title='輸入總金額!' />
+        <input type='number' name='all_money' id='all_money' value='<?php echo isset ($posts['all_money']) ? $posts['all_money'] : '';?>' placeholder='請輸入總金額..' maxlength='200' pattern='.{1,200}' required title='輸入總金額!' />
       </div>
     </div>
 

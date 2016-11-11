@@ -214,8 +214,8 @@ class Billous extends Admin_controller {
     $this->load->library ('OAExcel');
     $infos = array (array ('title' => '新增者',     'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,           'exp' => '$obj->user->name'),
                     array ('title' => '項目名稱',    'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,           'exp' => '$obj->name'),
-                    array ('title' => '金額',       'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,         'exp' => '$obj->money'),
-                    array ('title' => '是否有發票',  'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,         'exp' => 'Billou::$invoiceNames[$obj->is_invoice]'),
+                    array ('title' => '金額',       'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,         'exp' => '$obj->money'),
+                    array ('title' => '是否有發票',  'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,         'exp' => 'Billou::$invoiceNames[$obj->is_invoice]'),
                     array ('title' => '備註',       'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,           'exp' => '$obj->memo'),
                     array ('title' => '日期',       'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2, 'exp' => '$obj->date_at->format ("Y-m-d")'));
 
