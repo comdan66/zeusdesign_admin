@@ -86,6 +86,7 @@ class Billous extends Admin_controller {
           'posts' => $posts
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ob', 'content' => '新增一筆出帳。', 'desc' => '專案名稱為：「' . $obj->mini_name () . '」，金額為：「' . number_format ($obj->money) . '」。', 'backup' => json_encode ($obj->to_array ())));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '新增成功！'
       ));
@@ -126,21 +127,22 @@ class Billous extends Admin_controller {
           'posts' => $posts
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ob', 'content' => '修改一筆出帳。', 'desc' => '專案名稱為：「' . $obj->mini_name () . '」，金額為：「' . number_format ($obj->money) . '」。', 'backup' => json_encode ($obj->to_array ())));
     return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
         '_flash_info' => '更新成功！'
       ));
   }
   public function destroy () {
     $obj = $this->obj;
-    $delete = Billou::transaction (function () use ($obj) {
-      return $obj->destroy ();
-    });
+    $backup = json_encode ($obj->to_array ());
+    $delete = Billou::transaction (function () use ($obj) { return $obj->destroy (); });
 
     if (!$delete)
       return redirect_message (array ($this->uri_1), array (
           '_flash_danger' => '刪除失敗！',
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ob', 'content' => '刪除一筆出帳。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '刪除成功！'
       ));
@@ -224,10 +226,13 @@ class Billous extends Admin_controller {
 
     $excel->setActiveSheetIndex (0);
 
+    $filename = '宙思_出帳_' . date ('Ymd') . '.xlsx';
     header ('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf8');
-    header ('Content-Disposition: attachment; filename=宙思_出帳_' . date ('Ymd') . '.xlsx');
+    header ('Content-Disposition: attachment; filename=' . $filename);
 
     $objWriter = new PHPExcel_Writer_Excel2007 ($excel);
     $objWriter->save ("php://output");
+
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-p', 'content' => '匯出 ' . count ($objs) . ' 筆出帳。', 'desc' => '已經成功的匯出 ' . $filename . '，全部有 ' . count ($objs) . ' 筆出帳紀錄，細節可詢問工程師。', 'backup' => json_encode (array_map (function ($obj) { return $obj->to_array (); }, $objs))));
   }
 }

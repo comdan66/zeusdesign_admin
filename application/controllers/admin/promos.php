@@ -90,6 +90,7 @@ class Promos extends Admin_controller {
           'posts' => $posts
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-im', 'content' => '新增一項促銷（Promo）。', 'desc' => '標題名稱為：「' . $obj->title . '」，內容為：「' . $obj->mini_content () . '」，鏈結為：「' . $obj->mini_link () . '」。', 'backup' => json_encode ($obj->to_array ())));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '新增成功！'
       ));
@@ -145,21 +146,22 @@ class Promos extends Admin_controller {
           'posts' => $posts
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-im', 'content' => '修改一項促銷（Promo）。', 'desc' => '標題名稱為：「' . $obj->title . '」，內容為：「' . $obj->mini_content () . '」，鏈結為：「' . $obj->mini_link () . '」。', 'backup' => json_encode ($obj->to_array ())));
     return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
         '_flash_info' => '更新成功！'
       ));
   }
   public function destroy () {
     $obj = $this->obj;
-    $delete = Promo::transaction (function () use ($obj) {
-      return $obj->destroy ();
-    });
+    $backup = json_encode ($obj->to_array ());
+    $delete = Promo::transaction (function () use ($obj) { return $obj->destroy (); });
 
     if (!$delete)
       return redirect_message (array ($this->uri_1), array (
           '_flash_danger' => '刪除失敗！',
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-im', 'content' => '刪除一項促銷（Promo）。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '刪除成功！'
       ));
@@ -183,13 +185,19 @@ class Promos extends Admin_controller {
         $this->obj->sort = $this->obj->sort - 1 < 0 ? $total - 1 : $this->obj->sort - 1;
         break;
     }
+    $change = array ();
+    array_push ($change, array ('id' => $this->obj->id, 'old' => $sort, 'new' => $this->obj->sort));
 
     OaModel::addConditions ($conditions, 'sort = ?', $this->obj->sort);
 
     $obj = $this->obj;
-    $update = Promo::transaction (function () use ($conditions, $obj, $sort) {
-      if (($next = Promo::find ('one', array ('conditions' => $conditions))) && (($next->sort = $sort) || true))
+    $update = Promo::transaction (function () use ($conditions, $obj, $sort, &$change) {
+      if ($next = Promo::find ('one', array ('conditions' => $conditions))) {
+        array_push ($change, array ('id' => $next->id, 'old' => $next->sort, 'new' => $sort));
+        $next->sort = $sort;
         if (!$next->save ()) return false;
+      }
+
       if (!$obj->save ()) return false;
 
       return true;
@@ -200,6 +208,7 @@ class Promos extends Admin_controller {
           '_flash_danger' => '排序失敗！'
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-im', 'content' => '調整了促銷（Promo）順序。', 'desc' => '已經備份了調整紀錄，細節可詢問工程師。', 'backup' => json_encode ($change)));
     return redirect_message (array ($this->uri_1), array (
       '_flash_info' => '排序成功！'
     ));

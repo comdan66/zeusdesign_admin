@@ -25,6 +25,18 @@ class User extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
 
+  public function to_array () {
+    return array (
+        'id' => $this->id,
+        'uid' => $this->uid,
+        'name' => $this->name,
+        'email' => $this->email,
+        'token' => $this->token,
+        'login_count' => $this->login_count,
+        'logined_at' => $this->logined_at,
+        'roles' => array_map (function ($role) { return $role->to_array (); }, $this->roles),
+      );
+  }
   public static function current () {
     if (self::$current !== '') return self::$current;
     return self::$current = ($id = Session::getData ('user_id')) ? User::find_by_id ($id) : null;
@@ -55,17 +67,5 @@ class User extends OaModel {
     $size = array ();
     array_push ($size, isset ($w) && $w ? 'width=' . $w : ''); array_push ($size, isset ($h) && $h ? 'height=' . $h : '');
     return 'https://graph.facebook.com/' . $this->uid . '/picture' . (($size = implode ('&', array_filter ($size))) ? '?' . $size : '');
-  }
-  public function to_array () {
-    return array (
-        'id' => $this->id,
-        'uid' => $this->uid,
-        'name' => $this->name,
-        'email' => $this->email,
-        'token' => $this->token,
-        'login_count' => $this->login_count,
-        'logined_at' => $this->logined_at,
-        'roles' => array_map (function ($role) { return $role->to_array (); }, $this->roles),
-      );
   }
 }

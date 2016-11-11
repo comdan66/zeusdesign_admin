@@ -83,6 +83,7 @@ class Invoice_contacts extends Admin_controller {
           'posts' => $posts
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ua', 'content' => '新增一項請款公司。', 'desc' => '公司名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->to_array ())));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '新增成功！'
       ));
@@ -124,6 +125,7 @@ class Invoice_contacts extends Admin_controller {
           'posts' => $posts
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ua', 'content' => '修改一項請款公司。', 'desc' => '公司名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->to_array ())));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '更新成功！'
       ));
@@ -131,15 +133,15 @@ class Invoice_contacts extends Admin_controller {
 
   public function destroy () {
     $obj = $this->obj;
-    $delete = InvoiceContact::transaction (function () use ($obj) {
-      return $obj->destroy ();
-    });
+    $backup = json_encode ($obj->to_array ());
+    $delete = InvoiceContact::transaction (function () use ($obj) { return $obj->destroy (); });
 
     if (!$delete)
       return redirect_message (array ($this->uri_1), array (
           '_flash_danger' => '刪除失敗！',
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ua', 'content' => '刪除一項請款公司。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '刪除成功！'
       ));

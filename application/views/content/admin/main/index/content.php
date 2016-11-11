@@ -5,8 +5,8 @@
 
   <div class='person'>
     <div class='info'>
-      <figure class='avatar _it' href='<?php echo $user->avatar (200, 200);?>'>
-        <img src='<?php echo $user->avatar (200, 200);?>' />
+      <figure class='avatar _it' href='<?php echo $user->avatar (400, 400);?>'>
+        <img src='<?php echo $user->avatar (400, 400);?>' />
         <figcaption data-description='<?php echo $user->name;?>'><?php echo $user->name;?></figcaption>
       </figure>
       <h1><?php echo $user->name;?></h1>
@@ -32,6 +32,19 @@
         <div class='titles'>
     <?php foreach (array_keys ($chart) as $data) { ?>
             <div title="<?php echo $data;?>"><?php echo date ('m/d', strtotime ($data));?></div>
+    <?php } ?>
+        </div>
+      </div>
+
+      <div id='year_calendar'>
+        <div>
+    <?php for ($i = 52; $i > 0; $i--) { ?>
+            <div>
+      <?php for ($j = 7; $j > 0; $j--) {
+              $date = date ('Y-m-d', strtotime (date ('Y-m-d') . ' -' . (($i - 1) * 7 + ($j - 1) - (6 - date ('w'))) . ' days' )); ?>
+              <div title='<?php echo $date;?> 操作了 <?php echo isset ($logs[$date]) ? $logs[$date]->cnt : 0;?> 次' data-cnt="<?php echo isset ($logs[$date]) ? $logs[$date]->cnt : 0;?>"></div>
+      <?php } ?>
+            </div>
     <?php } ?>
         </div>
       </div>
@@ -74,7 +87,7 @@
               <span<?php echo !$schedule->description ? ' class="no"' : '';?>><?php echo $schedule->description;?></span>
               <a class='delete icon-t' data-id='<?php echo $schedule->id;?>'></a>
               <a class='edit icon-e' data-id='<?php echo $schedule->id;?>'></a>
-              <label class='checkbox' data-column='finish' data-url='<?php echo base_url ('admin', 'api', 'schedules', $schedule->id);?>'>
+              <label class='checkbox' data-column='finish' data-url='<?php echo base_url ('api', 'schedules', $schedule->id);?>'>
                 <input type='checkbox'<?php echo $schedule->finish ? ' checked' : '';?> />
                 <span></span>
               </label>

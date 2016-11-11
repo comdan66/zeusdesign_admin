@@ -31,8 +31,23 @@ class Billou extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
   
+  public function mini_name ($length = 50) {
+    if (!isset ($this->name)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->name), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
+  }
   public function destroy () {
     if (!isset ($this->id)) return false;
     return $this->delete ();
+  }
+  public function to_array () {
+    return array (
+        'id' => $this->id,
+        'user' => $this->user->to_array (),
+        'name' => $this->name,
+        'money' => $this->money,
+        'is_invoice' => $this->is_invoice,
+        'memo' => $this->memo,
+        'date_at' => $this->date_at->format ('Y-m-d'),
+      );
   }
 }

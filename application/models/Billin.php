@@ -27,4 +27,21 @@ class Billin extends OaModel {
     if (!isset ($this->id)) return false;
     return $this->delete ();
   }
+  public function mini_name ($length = 50) {
+    if (!isset ($this->name)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->name), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
+  }
+  public function to_array () {
+    return array (
+        'id' => $this->id,
+        'user' => $this->user->to_array (),
+        'name' => $this->name,
+        'money' => $this->money,
+        'rate_name' => $this->rate_name,
+        'rate' => $this->rate,
+        'zeus_money' => $this->zeus_money,
+        'memo' => $this->memo,
+        'date_at' => $this->date_at->format ('Y-m-d'),
+      );
+  }
 }

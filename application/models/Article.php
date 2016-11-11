@@ -34,6 +34,28 @@ class Article extends OaModel {
 
     OrmImageUploader::bind ('cover', 'ArticleCoverImageUploader');
   }
+  public function to_array () {
+    return array (
+      'id' => $this->id,
+      'user' => $this->user->to_array (),
+      'tags' => array_map (function ($tag) {
+        return $tag->to_array ();
+      }, ArticleTag::find ('all', array ('conditions' => array ('id IN (?)', ($tag_ids = column_array ($this->mappings, 'article_tag_id')) ? $tag_ids : array (0))))),
+      'title' => $this->title,
+      'cover' => array (
+          'c450' => $this->cover->url ('450x180c'),
+          'c1200' => $this->cover->url ('1200x630c'),
+        ),
+      'content' => $this->content,
+      'pv' => $this->pv,
+      'sources' => array_map (function ($source) {
+        return $source->to_array ();
+      }, $this->sources),
+      'is_enabled' => $this->is_enabled,
+      'updated_at' => $this->updated_at->format ('Y-m-d H:i:s'),
+      'created_at' => $this->created_at->format ('Y-m-d H:i:s'),
+    );
+  }
   public function destroy () {
     if ($this->mappings)
       foreach ($this->mappings as $mapping)

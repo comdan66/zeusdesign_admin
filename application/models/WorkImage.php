@@ -23,6 +23,14 @@ class WorkImage extends OaModel {
 
     OrmImageUploader::bind ('name', 'WorkImageNameImageUploader');
   }
+  public function to_array () {
+    return array (
+        'id' => $this->id,
+        'ori' => $image->name->url (),
+        'w800' => $image->name->url ('800w'),
+      );
+
+  }
   public function destroy () {
     if (!(isset ($this->name) && isset ($this->id)))
       return false;

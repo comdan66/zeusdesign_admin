@@ -140,6 +140,7 @@ class Works extends Admin_controller {
                 return verifyCreateOrm (WorkBlockItem::create (array_intersect_key (array_merge ($item, array ('work_block_id' => $b->id)), WorkBlockItem::table ()->columns)));
               });
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-g', 'content' => '新增一項作品。', 'desc' => '標題名稱為：「' . $obj->mini_title () . '」，內容為：「' . $obj->mini_content () . '」。', 'backup' => json_encode ($obj->to_array ())));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '新增成功！'
       ));
@@ -220,12 +221,8 @@ class Works extends Admin_controller {
     
     $obj = $this->obj;
     $update = Work::transaction (function () use ($obj, $posts, $cover) {
-      if (!$obj->save ())
-        return false;
-
-      if ($cover && !$obj->cover->put ($cover))
-        return false;
-
+      if (!$obj->save ()) return false;
+      if ($cover && !$obj->cover->put ($cover)) return false;
       return true;
     });
 
@@ -259,12 +256,7 @@ class Works extends Admin_controller {
           return verifyCreateOrm ($img = WorkImage::create (array_intersect_key (array ('work_id' => $obj->id), WorkImage::table ()->columns))) && $img->name->put ($image);
         });
 
-    $clean_blocks = WorkBlock::transaction (function () use ($obj) {
-      foreach ($obj->blocks as $block)
-        if (!$block->destroy ())
-          return false;
-      return true;
-    });
+    $clean_blocks = WorkBlock::transaction (function () use ($obj) { foreach ($obj->blocks as $block) if (!$block->destroy ()) return false; return true; });
 
     if ($blocks)
       foreach ($blocks as $block)
@@ -275,21 +267,22 @@ class Works extends Admin_controller {
                 return verifyCreateOrm (WorkBlockItem::create (array_intersect_key (array_merge ($item, array ('work_block_id' => $b->id)), WorkBlockItem::table ()->columns)));
               });
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-g', 'content' => '修改一項作品。', 'desc' => '標題名稱為：「' . $obj->mini_title () . '」，內容為：「' . $obj->mini_content () . '」。', 'backup' => json_encode ($obj->to_array ())));
     return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
         '_flash_info' => '更新成功！'
       ));
   }
   public function destroy () {
     $obj = $this->obj;
-    $delete = Work::transaction (function () use ($obj) {
-      return $obj->destroy ();
-    });
+    $backup = json_encode ($obj->to_array ());
+    $delete = Work::transaction (function () use ($obj) { return $obj->destroy (); });
 
     if (!$delete)
       return redirect_message (array ($this->uri_1), array (
           '_flash_danger' => '刪除失敗！',
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-g', 'content' => '刪除一項作品。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '刪除成功！'
       ));

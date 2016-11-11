@@ -43,6 +43,14 @@ class Schedule extends OaModel {
         'tag' => $this->tag ? $this->tag->to_array () : array ()
       );
   }
+  public function mini_title ($length = 20) {
+    if (!isset ($this->title)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->title), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->title);
+  }
+  public function mini_description ($length = 100) {
+    if (!isset ($this->description)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->description), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->description);
+  }
   public function destroy () {
     if (!isset ($this->id)) return false;
     return $this->delete ();

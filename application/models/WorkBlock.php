@@ -22,6 +22,15 @@ class WorkBlock extends OaModel {
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
+  public function to_array () {
+    return array (
+      'id' => $this->id,
+      'title' => $this->title,
+      'items' => array_map (function ($item) {
+        return $item->to_array ();
+      }, $this->items),
+    );
+  }
   public function destroy () {
     if ($this->items)
       foreach ($this->items as $item)

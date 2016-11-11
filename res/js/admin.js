@@ -266,6 +266,9 @@ $(function () {
 
   setTimeout (function () { window.vars.$container.addClass ('ani'); }, 500);
 
+  $('form.form button[type="reset"]').click (function () {
+    window.history.back ();
+  });
   $('form.form').submit (function () {
     $(this).find ('input[type="checkbox"]:not([name="tag_ids[]"])').each (function () {
       $(this).val ($(this).prop ('checked') ? 1 : 0).prop ('checked', true).parent ().addClass ('loading');

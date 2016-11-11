@@ -55,6 +55,7 @@ class Schedules extends Api_controller {
 
     if (!$create) return $this->output_error_json ('新增失敗！');
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ca', 'content' => '新增一項行程。', 'desc' => '內容是「' . $schedule->mini_description () . '」。', 'backup' => json_encode ($schedule->to_array ())));
     return $this->output_json ($schedule->to_array ());
   }
 
@@ -74,15 +75,18 @@ class Schedules extends Api_controller {
 
     if (!$update) return $this->output_error_json ('更新失敗！');
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ca', 'content' => '修改一項行程。', 'desc' => '內容是「' . $schedule->mini_description () . '」。', 'backup' => json_encode ($schedule->to_array ())));
     return $this->output_json ($schedule->to_array ());
   }
 
   public function destroy () {
     $schedule = $this->schedule;
+    $backup = json_encode ($schedule->to_array ());
     $delete = Schedule::transaction (function () use ($schedule) { return $schedule->destroy (); });
 
     if (!$delete) return $this->output_error_json ('刪除失敗！');
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ca', 'content' => '刪除一項行程。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
     return $this->output_json (array ('message' => '刪除成功！'));
   }
   public function sort ($id = 0) {
@@ -104,15 +108,19 @@ class Schedules extends Api_controller {
           }))
       return $this->output_error_json ('更新失敗！');
 
-    if (!$datas = array_filter ($datas, function ($data) {
+    $change = array ();
+    if (!$datas = array_filter ($datas, function ($data) use (&$change) {
           foreach ($data as $key => $value)
-            if ($key != 'schedule')
+            if ($key != 'schedule') {
+              if ($data['schedule']->$key != $value) array_push ($change, array ('column' => $key, 'value' => array ('old' => $data['schedule']->$key, 'new' => $value)));
               $data['schedule']->$key = $value;
+            }
 
           return Schedule::transaction (function () use ($data) { return $data['schedule']->save (); });
         }))
       return $this->output_error_json ('更新失敗！');
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ca', 'content' => '調整一項行程順序。', 'desc' => '已經備份紀錄，細節可詢問工程師。', 'backup' => json_encode ($change)));
     return $this->output_json (array_map (function ($data) {
         return array (
             'id' => $data['schedule']->id,

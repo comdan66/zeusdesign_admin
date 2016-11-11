@@ -96,6 +96,7 @@ class Tag_work_tags extends Admin_controller {
           'posts' => $posts
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ta', 'content' => '新增一項作品分類內的子分類。', 'desc' => '在作品分類 “' . $this->parent->name . '” 下新增了一項子分類，其名稱為「' . $tag->name . '」。', 'backup' => json_encode ($tag->to_array ())));
     return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2), array (
         '_flash_info' => '新增成功！'
       ));
@@ -137,6 +138,7 @@ class Tag_work_tags extends Admin_controller {
           'posts' => $posts
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ta', 'content' => '修改一項作品分類內的子分類。', 'desc' => '在作品分類 “' . $this->parent->name . '” 下修改了一項子分類，其名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->to_array ())));
     return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2), array (
         '_flash_info' => '更新成功！'
       ));
@@ -144,15 +146,15 @@ class Tag_work_tags extends Admin_controller {
 
   public function destroy () {
     $obj = $this->obj;
-    $delete = WorkTag::transaction (function () use ($obj) {
-      return $obj->destroy ();
-    });
+    $backup = json_encode ($obj->to_array ());
+    $delete = WorkTag::transaction (function () use ($obj) { return $obj->destroy (); });
 
     if (!$delete)
       return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2), array (
           '_flash_danger' => '刪除失敗！',
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ta', 'content' => '刪除一項作品分類內的子分類。', 'desc' => '在作品分類 “' . $this->parent->name . '” 下刪除了一項子分類，已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
     return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2), array (
         '_flash_info' => '刪除成功！'
       ));
@@ -178,13 +180,18 @@ class Tag_work_tags extends Admin_controller {
         $this->obj->sort = $this->obj->sort - 1 < 0 ? $total - 1 : $this->obj->sort - 1;
         break;
     }
+    $change = array ();
+    array_push ($change, array ('id' => $this->obj->id, 'old' => $sort, 'new' => $this->obj->sort));
 
     OaModel::addConditions ($conditions, 'sort = ?', $this->obj->sort);
 
     $obj = $this->obj;
-    $update = WorkTag::transaction (function () use ($conditions, $obj, $sort) {
-      if (($next = WorkTag::find ('one', array ('conditions' => $conditions))) && (($next->sort = $sort) || true))
+    $update = WorkTag::transaction (function () use ($conditions, $obj, $sort, &$change) {
+      if ($next = WorkTag::find ('one', array ('conditions' => $conditions))) {
+        array_push ($change, array ('id' => $next->id, 'old' => $next->sort, 'new' => $sort));
+        $next->sort = $sort;
         if (!$next->save ()) return false;
+      }
       if (!$obj->save ()) return false;
 
       return true;
@@ -195,6 +202,7 @@ class Tag_work_tags extends Admin_controller {
           '_flash_danger' => '排序失敗！'
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ta', 'content' => '調整了一項作品分類下子分類的順序。', 'desc' => '已經備份了調整紀錄，細節可詢問工程師。', 'backup' => json_encode ($change)));
     return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2), array (
       '_flash_info' => '排序成功！'
     ));

@@ -97,7 +97,7 @@ class Users extends Admin_controller {
 
     $logs = UserLog::find ('all', array (
       'select' => 'count(id) AS cnt, created_at, DATE(`created_at`) AS date',
-      'limit' => 12,
+      'limit' => 365,
       'group' => 'date',
       'order' => 'date DESC',
       'conditions' => array ('user_id = ?', $this->obj->id)));
@@ -112,6 +112,7 @@ class Users extends Admin_controller {
     return $this->load_view (array (
         'user' => $this->obj,
         'chart' => $chart,
+        'logs' => $logs,
         'type' => $type,
         'user_logs' => $user_logs,
         'schedules' => $schedules,
@@ -166,9 +167,12 @@ class Users extends Admin_controller {
           'posts' => $posts
         ));
 
-    if ($roles)
+    if ($roles) {
       foreach ($roles as $key => $bool)
         $bool ? (!UserRole::find ('one', array ('conditions' => array ('user_id = ? AND name = ?', $obj->id, $key))) && UserRole::transaction (function () use ($obj, $key) { return verifyCreateOrm (UserRole::create (array ('user_id' => $obj->id, 'name' => $key))); })) : (($role = UserRole::find ('one', array ('conditions' => array ('user_id = ? AND name = ?', $obj->id, $key)))) && UserRole::transaction (function () use ($role) { return $role->destroy (); }));
+      UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-bo', 'content' => '調整了人員權限。', 'desc' => '已經備份了修改紀錄，細節可詢問工程師。', 'backup' => json_encode ($obj->to_array ())));
+    }
+
 
     return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
         '_flash_info' => '更新成功！'

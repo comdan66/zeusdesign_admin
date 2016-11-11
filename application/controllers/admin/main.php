@@ -67,7 +67,7 @@ class Main extends Admin_controller {
 
     $logs = UserLog::find ('all', array (
       'select' => 'count(id) AS cnt, created_at, DATE(`created_at`) AS date',
-      'limit' => 12,
+      'limit' => 365,
       'group' => 'date',
       'order' => 'date DESC',
       'conditions' => array ('user_id = ?', User::current ()->id)));
@@ -76,13 +76,13 @@ class Main extends Admin_controller {
     $chart = array ();
     for ($i = 0; $i < 12; $i++) $chart[$date = date ('Y-m-d', strtotime (date ('Y-m-d') . $i ? '-' . $i . ' day' : ''))] = isset ($logs[$date]) ? $logs[$date]->cnt : 0;
     $chart = array_reverse ($chart);
-    
 
     return $this->add_param ('now_url', base_url ('admin', 'my'))
                 ->load_view (array (
         'user' => User::current (),
         'chart' => $chart,
         'type' => $type,
+        'logs' => $logs,
         'user_logs' => $user_logs,
         'schedules' => $schedules,
         'pagination' => $pagination

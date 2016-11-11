@@ -113,6 +113,7 @@ class Articles extends Admin_controller {
             )), ArticleSource::table ()->columns)));
         });
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-f', 'content' => '新增一篇文章。', 'desc' => '標題名稱為：「' . $obj->mini_title () . '」，內容為：「' . $obj->mini_content () . '」。', 'backup' => json_encode ($obj->to_array ())));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '新增成功！'
       ));
@@ -160,15 +161,11 @@ class Articles extends Admin_controller {
     if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
       foreach ($columns as $column => $value)
         $this->obj->$column = $value;
-    
+
     $obj = $this->obj;
     $update = Article::transaction (function () use ($obj, $posts, $cover) {
-      if (!$obj->save ())
-        return false;
-
-      if ($cover && !$obj->cover->put ($cover))
-        return false;
-
+      if (!$obj->save ()) return false;
+      if ($cover && !$obj->cover->put ($cover)) return false;
       return true;
     });
 
@@ -207,21 +204,22 @@ class Articles extends Admin_controller {
             )), ArticleSource::table ()->columns)));
         });
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-f', 'content' => '修改一篇文章。', 'desc' => '標題名稱為：「' . $obj->mini_title () . '」，內容為：「' . $obj->mini_content () . '」。', 'backup' => json_encode ($obj->to_array ())));
     return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
         '_flash_info' => '更新成功！'
       ));
   }
   public function destroy () {
     $obj = $this->obj;
-    $delete = Article::transaction (function () use ($obj) {
-      return $obj->destroy ();
-    });
+    $backup = json_encode ($obj->to_array ());
+    $delete = Article::transaction (function () use ($obj) { return $obj->destroy (); });
 
     if (!$delete)
       return redirect_message (array ($this->uri_1), array (
           '_flash_danger' => '刪除失敗！',
         ));
 
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-f', 'content' => '刪除一篇文章。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
     return redirect_message (array ($this->uri_1), array (
         '_flash_info' => '刪除成功！'
       ));

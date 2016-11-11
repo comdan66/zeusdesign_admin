@@ -32,10 +32,12 @@ class Platform extends Site_controller {
       return redirect_message (array (), array ('_flash_danger' => 'Facebook 登入錯誤，請通知程式設計人員!(3)'));
 
     Session::setData ('user_id', $user->id);
+    UserLog::create (array ('user_id' => $user->id, 'icon' => 'icon-si', 'content' => '登入後台', 'desc' => '', 'backup' => ''));
     return redirect_message (func_get_args (), array ('_flash_info' => '使用 Facebook 登入成功!'));
   }
 
   public function logout () {
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-o', 'content' => '登出後台', 'desc' => '', 'backup' => ''));
     Session::setData ('user_id', 0);
     return redirect_message (func_get_args (), array ('_flash_info' => '登出成功!'));
   }

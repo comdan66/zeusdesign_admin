@@ -3,19 +3,26 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
+
 $(function () {
-  var max = $('.chart div[data-count]').map (function () {
-    return $(this).data ('count');
-  }).toArray ().max ();
-  
+
+
+  var max = $('#year_calendar > div > div > div[data-cnt]').map (function () { return $(this).data ('cnt'); }).toArray ().max () / 5;
+  $('#year_calendar > div > div > div[data-cnt!="0"]').each (function () {
+    var v = Math.floor ($(this).data ('cnt') / max);
+    $(this).addClass ('s' + (v ? v > 5 ? 5 : v : 1));
+  });
+
   setTimeout (function () {
+    var max = $('.chart div[data-count]').map (function () { return $(this).data ('count'); }).toArray ().max ();
     $('.chart div[data-count]').each (function (i) {
       setTimeout (function () { $(this).attr ('title', $(this).data ('count') + '次').attr ('class', 'n' + parseInt ($(this).data ('count') / max * 100, 10)); }.bind ($(this)), i * 50);
     });
   }, 300);
+  
 
   function initSchedule (t) {
-    var $checkbox = $('<label />').addClass ('checkbox').data ('column', 'finish').data ('url', 'api/schedules/' + t.id).append (
+    var $checkbox = $('<label />').addClass ('checkbox').data ('column', 'finish').data ('url', '/api/schedules/' + t.id).append (
       $('<input />').attr ('type', 'checkbox').prop ('checked', t.finish ? true : false)).append (
       $('<span />'));
     

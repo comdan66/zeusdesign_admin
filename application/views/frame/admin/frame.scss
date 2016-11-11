@@ -1691,3 +1691,67 @@ form.form {
     }
   }
 }
+#export {
+  font-weight: normal;
+}
+
+#year_calendar {
+  $h: 10px;
+  $s: 2px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  display: inline-block;
+  width: 100%;
+  overflow: auto;
+  text-align: center;
+
+  > div {
+    margin: 0 auto;
+    display: inline-block;
+    overflow: hidden;
+    width: 100%;
+    max-width: 800px;
+    @include clearfix();
+
+    > div {
+      float: left;
+      display: inline-block;
+      line-height: 0;
+      font-size: 0;
+
+      width: calc((100% + #{$s}) / 52 - #{$s});
+      height: ($h + $s) * 7 - $s;
+
+      + div {
+        margin-left: $s;
+      }
+
+      > div {
+        position: relative;
+        z-index: 1;
+        line-height: 0;
+        display: inline-block;
+        background-color: rgba(238, 238, 238, 1.00);
+        cursor: pointer;
+        @include border-radius(2px);
+        @include transition(background-color .3s);
+        
+        width: 100%;
+        height: $h;
+
+        + div {
+          margin-top: $s;
+        }
+        &:hover {
+          background-color: rgba(200, 200, 200, 1.00);
+          z-index: 2;
+        }
+        &.s5 { background-color: rgba(31, 92, 35, 1.00); }
+        &.s4 { background-color: rgba(45, 135, 51, 1.00); }
+        &.s3 { background-color: rgba(81, 180, 77, 1.00); }
+        &.s2 { background-color: rgba(157, 215, 118, 1.00); }
+        &.s1 { background-color: rgba(214, 230, 133, 1.00); }
+      }
+    }
+  }
+}
