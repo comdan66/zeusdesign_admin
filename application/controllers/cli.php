@@ -7,7 +7,7 @@
 
 class Cli extends Oa_controller {
 
-  public function clean_query ($psw) {
+  public function clean_query () {
     $this->load->helper ('file');
     write_file (FCPATH . 'application/logs/query.log', '', FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
   }
