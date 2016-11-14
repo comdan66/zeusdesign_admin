@@ -21,6 +21,7 @@ application/config/database.php
 /api/*
 
 /cmd
+/index.php
 
 system/cmd/.sass-cache/*
 system/cmd/node_modules/*
