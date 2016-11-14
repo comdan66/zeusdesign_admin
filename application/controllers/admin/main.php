@@ -68,8 +68,8 @@ class Main extends Admin_controller {
     $logs = UserLog::find ('all', array (
       'select' => 'count(id) AS cnt, created_at, DATE(`created_at`) AS date',
       'limit' => 365,
-      'group' => 'date',
-      'order' => 'date DESC',
+      'group' => 'user_logs.date',
+      'order' => 'user_logs.date DESC',
       'conditions' => array ('user_id = ?', User::current ()->id)));
     $logs = array_combine (column_array ($logs, 'date'), $logs);
 
