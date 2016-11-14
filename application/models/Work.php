@@ -35,7 +35,7 @@ class Work extends OaModel {
     
     OrmImageUploader::bind ('cover', 'WorkCoverImageUploader');
   }
-  public function to_array ($opt = array ()) {
+  public function to_array (array $opt = array ()) {
     return array (
       'id' => $this->id,
       'user' => $this->user->to_array (),

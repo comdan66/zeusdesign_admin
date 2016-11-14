@@ -30,7 +30,7 @@ class Invoice extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
 
-  public function to_array ($opt = array ()) {
+  public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,
         'user' => $this->user->to_array (),

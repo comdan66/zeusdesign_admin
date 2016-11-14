@@ -39,7 +39,7 @@ class Promo extends OaModel {
 
     OrmImageUploader::bind ('cover', 'PromoCoverImageUploader');
   }
-  public function to_array ($opt = array ()) {
+  public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,
         'title' => $this->title,

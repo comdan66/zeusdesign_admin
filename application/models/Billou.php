@@ -39,7 +39,7 @@ class Billou extends OaModel {
     if (!isset ($this->id)) return false;
     return $this->delete ();
   }
-  public function to_array ($opt = array ()) {
+  public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,
         'user' => $this->user->to_array (),
