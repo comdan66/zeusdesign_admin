@@ -25,7 +25,7 @@ class WorkTag extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
 
-  public function to_array () {
+  public function to_array ($opt = array ()) {
     return array (
         'id' => $this->id,
         'name' => $this->name,

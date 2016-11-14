@@ -31,7 +31,7 @@ class Billin extends OaModel {
     if (!isset ($this->name)) return '';
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->name), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
-  public function to_array () {
+  public function to_array ($opt = array ()) {
     return array (
         'id' => $this->id,
         'user' => $this->user->to_array (),

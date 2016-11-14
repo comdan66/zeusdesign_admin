@@ -31,7 +31,7 @@ class Contact extends OaModel {
   public function destroy () {
     return $this->delete ();
   }
-  public function to_array () {
+  public function to_array ($opt = array ()) {
     return array (
         'id' => $this->id,
         'name' => $this->name,

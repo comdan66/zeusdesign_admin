@@ -27,7 +27,7 @@ class UserRole extends OaModel {
   public function destroy () {
     return $this->delete ();
   }
-  public function to_array () {
+  public function to_array ($opt = array ()) {
     return array (
         'key' => $this->name,
         'name' => Cfg::setting('role', 'role_names', $this->name)

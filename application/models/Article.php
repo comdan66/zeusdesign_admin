@@ -34,7 +34,7 @@ class Article extends OaModel {
 
     OrmImageUploader::bind ('cover', 'ArticleCoverImageUploader');
   }
-  public function to_array () {
+  public function to_array ($opt = array ()) {
     return array (
       'id' => $this->id,
       'user' => $this->user->to_array (),
