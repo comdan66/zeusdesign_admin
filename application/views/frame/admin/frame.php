@@ -64,8 +64,7 @@
                   <li><a href="<?php echo $url = base_url ('admin', 'banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>旗幟設定</a></li>
                   <li><a href="<?php echo $url = base_url ('admin', 'promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>促銷設定</a></li>
                   <li data-cnt='<?php echo $contact_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'contacts');?>" class='icon-em<?php echo $now_url == $url ? ' active' : '';?>'>聯絡我們</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'builds');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>更新網站</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'billins');?>" class='icon-cs<?php echo $now_url == $url ? ' active' : '';?>'>上傳雲端</a></li>
+                  <li><a href="<?php echo $url = base_url ('admin', 'deploys');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>部署網站</a></li>
                 </ul>
               </label>
             </li>

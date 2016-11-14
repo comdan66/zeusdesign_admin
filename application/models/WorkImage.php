@@ -26,8 +26,8 @@ class WorkImage extends OaModel {
   public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,
-        'ori' => $image->name->url (),
-        'w800' => $image->name->url ('800w'),
+        'ori' => $this->name->url (),
+        'w800' => $this->name->url ('800w'),
       );
 
   }

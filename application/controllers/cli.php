@@ -7,6 +7,14 @@
 
 class Cli extends Oa_controller {
 
+  public function __construct () {
+    parent::__construct ();
+    
+    if (!$this->input->is_cli_request ()) {
+      echo 'Request 錯誤！';
+      exit ();
+    }
+  }
   public function clean_query () {
     $this->load->helper ('file');
     write_file (FCPATH . 'application/logs/query.log', '', FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
