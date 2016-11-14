@@ -45,10 +45,11 @@
         <div>
     <?php for ($i = 52; $i > 0; $i--) { ?>
             <div>
-      <?php for ($j = 7; $j > 0; $j--) {
-              $date = date ('Y-m-d', strtotime (date ('Y-m-d') . ' -' . (($i - 1) * 7 + ($j - 1) - (6 - date ('w'))) . ' days' )); ?>
-              <div title='<?php echo $date;?> 操作了 <?php echo isset ($logs[$date]) ? $logs[$date]->cnt : 0;?> 次' data-cnt="<?php echo isset ($logs[$date]) ? $logs[$date]->cnt : 0;?>"></div>
-      <?php } ?>
+        <?php for ($j = 7; $j > 0; $j--) {
+                $day = ($i - 1) * 7 + ($j - 1) - (6 - date ('w'));
+                $date = date ('Y-m-d', strtotime (date ('Y-m-d') . ' -' . $day . ' days' )); ?>
+                <div class='<?php echo $day < 0 || $day > 365 ? 'z' : '';?>' title='<?php echo $date;?> 操作了 <?php echo isset ($logs[$date]) ? $logs[$date]->cnt : 0;?> 次' data-cnt="<?php echo isset ($logs[$date]) ? $logs[$date]->cnt : 0;?>"></div>
+        <?php } ?>
             </div>
     <?php } ?>
         </div>

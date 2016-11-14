@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?oovcot');
-  src:  url('fonts/icomoon.eot?oovcot#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?oovcot') format('truetype'),
-    url('fonts/icomoon.woff?oovcot') format('woff'),
-    url('fonts/icomoon.svg?oovcot#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?zijk27');
+  src:  url('fonts/icomoon.eot?zijk27#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?zijk27') format('truetype'),
+    url('fonts/icomoon.woff?zijk27') format('woff'),
+    url('fonts/icomoon.svg?zijk27#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -42,6 +42,9 @@
 .icon-ims:before {
   content: "\e90e";
 }
+.icon-em:before {
+  content: "\e945";
+}
 .icon-s:before {
   content: "\e986";
 }
@@ -50,6 +53,9 @@
 }
 .icon-t:before {
   content: "\e9ac";
+}
+.icon-ea:before {
+  content: "\e9ca";
 }
 .icon-y:before {
   content: "\e901";
@@ -68,6 +74,15 @@
 }
 .icon-ma:before {
   content: "\e90b";
+}
+.icon-cs:before {
+  content: "\e910";
+}
+.icon-pi:before {
+  content: "\e911";
+}
+.icon-bug:before {
+  content: "\e868";
 }
 .icon-i:before {
   content: "\e23e";

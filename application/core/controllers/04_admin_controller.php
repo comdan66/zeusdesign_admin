@@ -29,7 +29,8 @@ class Admin_controller extends Oa_controller {
   }
 
   private function _add_meta () {
-    return $this;
+    return $this->add_meta (array ('name' => 'robots', 'content' => 'noindex,nofollow'))
+                ;
   }
 
   private function _add_css () {

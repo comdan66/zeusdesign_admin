@@ -34,6 +34,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('schedule_tags'), 'schedule_tags');
   Route::resourcePagination (array ('users'), 'users');
   Route::resourcePagination (array ('banners'), 'banners');
+  Route::resourcePagination (array ('contacts'), 'contacts');
   Route::resourcePagination (array ('billins'), 'billins');
   Route::resourcePagination (array ('billous'), 'billous');
   Route::resourcePagination (array ('promos'), 'promos');
@@ -52,9 +53,11 @@ Route::group ('admin', function () {
 
 Route::group ('api', function () {
   Route::get ('/pv/(:any)/(:id)', 'pv@index($1, $2)');
+  Route::post ('/contacts', 'contacts@create');
 
   Route::resource (array ('schedules'), 'schedules');
   Route::resource (array ('schedule_tags'), 'schedule_tags');
+  
 });
 
 

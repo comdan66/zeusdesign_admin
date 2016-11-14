@@ -34,13 +34,13 @@
 
           <ul id='main_menu'>
             <li>
-              <label>
+              <label data-cnt='<?php echo ($schedule_cnt = Schedule::count (array ('conditions' => array ('user_id = ? AND finish = ? AND year = ? AND month = ? AND day = ?', User::current ()->id, Schedule::NO_FINISHED, date ('Y'), date ('m'), date ('d')))));?>'>
                 <input type='checkbox' />
                 <span class='icon-se'>個人管理</span>
                 <ul>
                   <li><a href="<?php echo $url = base_url ('admin', 'my');?>" class='icon-u<?php echo $now_url == $url ? ' active' : '';?>'>基本資料</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'calendar');?>" class='icon-ca<?php echo $now_url == $url ? ' active' : '';?>'>個人行程</a></li>
                   <li><a href="<?php echo $url = base_url ('admin', 'schedule-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>行程分類</a></li>
+                  <li data-cnt='<?php echo $schedule_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'calendar');?>" class='icon-ca<?php echo $now_url == $url ? ' active' : '';?>'>個人行程</a></li>
                 </ul>
               </label>
             </li>
@@ -55,13 +55,17 @@
               </label>
             </li>
 
+
             <li>
-              <label>
+              <label data-cnt='<?php echo ($contact_cnt = Contact::count (array ('conditions' => array ('is_readed = ?', Contact::READ_NO))));?>'>
                 <input type='checkbox' />
-                <span class='icon-ims'>首頁上搞</span>
+                <span class='icon-ea'>網站功能</span>
                 <ul>
                   <li><a href="<?php echo $url = base_url ('admin', 'banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>旗幟設定</a></li>
                   <li><a href="<?php echo $url = base_url ('admin', 'promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>促銷設定</a></li>
+                  <li data-cnt='<?php echo $contact_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'contacts');?>" class='icon-em<?php echo $now_url == $url ? ' active' : '';?>'>聯絡我們</a></li>
+                  <li><a href="<?php echo $url = base_url ('admin', 'builds');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>更新網站</a></li>
+                  <li><a href="<?php echo $url = base_url ('admin', 'billins');?>" class='icon-cs<?php echo $now_url == $url ? ' active' : '';?>'>上傳雲端</a></li>
                 </ul>
               </label>
             </li>
@@ -110,6 +114,7 @@
                 </ul>
               </label>
             </li>
+
           </ul>
 
         </div>

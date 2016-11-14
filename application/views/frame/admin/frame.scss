@@ -42,43 +42,136 @@ html {
 
   }
 }
-.icon-d:before { content: "\e904"; }
-.icon-b:before { content: "\e907"; }
-.icon-g:before { content: "\e908"; }
-.icon-e:before { content: "\e906"; }
-.icon-im:before { content: "\e90d"; }
-.icon-ims:before { content: "\e90e"; }
-.icon-s:before { content: "\e986"; }
-.icon-se:before { content: "\e994"; }
-.icon-t:before { content: "\e9ac"; }
-.icon-y:before { content: "\e901"; }
-.icon-ta:before { content: "\e905"; }
-.icon-bo:before { content: "\e90c"; }
-.icon-u:before { content: "\e900"; }
-.icon-bil:before { content: "\e90f"; }
-.icon-ma:before { content: "\e90b"; }
-.icon-i:before { content: "\e23e"; }
-.icon-p:before { content: "\e8ad"; }
-.icon-a:before { content: "\e03b"; }
-.icon-cl:before { content: "\e014"; }
-.icon-r:before { content: "\e114"; }
-.icon-x:before { content: "\e117"; }
-.icon-m:before { content: "\e120"; }
-.icon-ib:before { content: "\e122"; }
-.icon-ob:before { content: "\e123"; }
-.icon-fa:before { content: "\e125"; }
-.icon-c:before { content: "\f00c"; }
-.icon-o:before { content: "\f011"; }
-.icon-ca:before { content: "\f073"; }
-.icon-si:before { content: "\f090"; }
-.icon-f:before { content: "\f0f6"; }
-.icon-ti:before { content: "\f145"; }
-.icon-fb:before { content: "\f230"; }
-.icon-ua:before { content: "\f234"; }
-.icon-al:before { content: "\e902"; }
-.icon-ar:before { content: "\e903"; }
-.icon-td:before { content: "\e909"; }
-.icon-tu:before { content: "\e90a"; }
+
+
+
+.icon-d:before {
+  content: "\e904";
+}
+.icon-b:before {
+  content: "\e907";
+}
+.icon-g:before {
+  content: "\e908";
+}
+.icon-e:before {
+  content: "\e906";
+}
+.icon-im:before {
+  content: "\e90d";
+}
+.icon-ims:before {
+  content: "\e90e";
+}
+.icon-em:before {
+  content: "\e945";
+}
+.icon-s:before {
+  content: "\e986";
+}
+.icon-se:before {
+  content: "\e994";
+}
+.icon-t:before {
+  content: "\e9ac";
+}
+.icon-ea:before {
+  content: "\e9ca";
+}
+.icon-y:before {
+  content: "\e901";
+}
+.icon-ta:before {
+  content: "\e905";
+}
+.icon-bo:before {
+  content: "\e90c";
+}
+.icon-u:before {
+  content: "\e900";
+}
+.icon-bil:before {
+  content: "\e90f";
+}
+.icon-ma:before {
+  content: "\e90b";
+}
+.icon-cs:before {
+  content: "\e910";
+}
+.icon-pi:before {
+  content: "\e911";
+}
+.icon-bug:before {
+  content: "\e868";
+}
+.icon-i:before {
+  content: "\e23e";
+}
+.icon-p:before {
+  content: "\e8ad";
+}
+.icon-a:before {
+  content: "\e03b";
+}
+.icon-cl:before {
+  content: "\e014";
+}
+.icon-r:before {
+  content: "\e114";
+}
+.icon-x:before {
+  content: "\e117";
+}
+.icon-m:before {
+  content: "\e120";
+}
+.icon-ib:before {
+  content: "\e122";
+}
+.icon-ob:before {
+  content: "\e123";
+}
+.icon-fa:before {
+  content: "\e125";
+}
+.icon-c:before {
+  content: "\f00c";
+}
+.icon-o:before {
+  content: "\f011";
+}
+.icon-ca:before {
+  content: "\f073";
+}
+.icon-si:before {
+  content: "\f090";
+}
+.icon-f:before {
+  content: "\f0f6";
+}
+.icon-ti:before {
+  content: "\f145";
+}
+.icon-fb:before {
+  content: "\f230";
+}
+.icon-ua:before {
+  content: "\f234";
+}
+.icon-al:before {
+  content: "\e902";
+}
+.icon-ar:before {
+  content: "\e903";
+}
+.icon-td:before {
+  content: "\e909";
+}
+.icon-tu:before {
+  content: "\e90a";
+}
+
 
 
 
@@ -1751,7 +1844,56 @@ form.form {
         &.s3 { background-color: rgba(81, 180, 77, 1.00); }
         &.s2 { background-color: rgba(157, 215, 118, 1.00); }
         &.s1 { background-color: rgba(214, 230, 133, 1.00); }
+        &.z {
+          @include opacity(0);
+          cursor: auto;
+        }
       }
+    }
+  }
+}
+
+
+#main_menu > li > label, #main_menu > li > label > ul > li {
+  position: relative;
+
+  &[data-cnt]:not([data-cnt="0"]):after {
+    content: attr(data-cnt);
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    display: inline-block;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 13px;
+    background-color: rgba(236, 83, 70, 1.00);
+    color: rgba(255, 255, 255, 1.00);
+    @include border-radius(10px);
+    z-index: 99;
+  }
+}
+
+#main_menu > li > label > ul > li {
+  &[data-cnt]:not([data-cnt="0"]):after {
+    top: 8px;    
+  }
+}
+#container.min {
+  #main_menu > li > label {
+    &[data-cnt]:not([data-cnt="0"]):after {
+      top: 4px;
+      right: auto;
+      left: calc(100% - 20px);
+    }
+  }
+  #main_menu > li > label > ul > li {
+    &[data-cnt]:not([data-cnt="0"]):after {
+      right: 3px;
+      top: 3px;
+      font-size: 10px;
     }
   }
 }
