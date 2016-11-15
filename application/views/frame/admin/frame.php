@@ -66,7 +66,7 @@
                     <li><a href="<?php echo $url = base_url ('admin', 'banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>旗幟設定</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>促銷設定</a></li>
                     <li data-cnt='<?php echo $contact_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'contacts');?>" class='icon-em<?php echo $now_url == $url ? ' active' : '';?>'>聯絡我們</a></li>
-                    <li><a href="<?php echo $url = base_url ('admin', 'deploys');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>部署網站</a></li>
+                    <!-- <li><a href="<?php echo $url = base_url ('admin', 'deploys');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>部署網站</a></li> -->
                   </ul>
                 </label>
               </li>
@@ -101,8 +101,8 @@
                   <input type='checkbox' />
                   <span class='icon-ti'>請款管理</span>
                   <ul>
-                    <li><a href="<?php echo $url = base_url ('admin', 'invoice-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'invoice-contacts');?>" class='icon-ua<?php echo $now_url == $url ? ' active' : '';?>'>窗口設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'invoice-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'invoices');?>" class='icon-ti<?php echo $now_url == $url ? ' active' : '';?>'>請款設定</a></li>
                   </ul>
                 </label>
