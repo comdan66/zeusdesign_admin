@@ -87,7 +87,7 @@ class Work extends OaModel {
         if (!$mapping->destroy ())
           return false;
 
-    return $this->cover->cleanAllFiles () && $this->delete ();
+    return $this->delete ();
   }
   public function blocks () {
     return array_map (function ($block) {

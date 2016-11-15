@@ -61,7 +61,6 @@
                 <input type='checkbox' />
                 <span class='icon-ea'>網站功能</span>
                 <ul>
-                  <li><a href="<?php echo $url = base_url ('admin', 'siteconfs');?>" class='icon-se<?php echo $now_url == $url ? ' active' : '';?>'>基本設定</a></li>
                   <li><a href="<?php echo $url = base_url ('admin', 'banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>旗幟設定</a></li>
                   <li><a href="<?php echo $url = base_url ('admin', 'promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>促銷設定</a></li>
                   <li data-cnt='<?php echo $contact_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'contacts');?>" class='icon-em<?php echo $now_url == $url ? ' active' : '';?>'>聯絡我們</a></li>

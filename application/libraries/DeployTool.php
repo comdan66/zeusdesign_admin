@@ -12,10 +12,6 @@ class DeployTool {
     $api = FCPATH . 'api' . DIRECTORY_SEPARATOR;
     @directory_delete ($api, false);
 
-    $siteconfs = Siteconf::toArray ();
-    write_file ($api . 'siteconfs.json', json_encode ($siteconfs));
-    @chmod ($api . 'siteconfs.json', 0777);
-
     $banners = array_map (function ($banner) { return $banner->to_array (); }, Banner::find ('all', array ('order' => 'sort DESC', 'conditions' => array ('is_enabled = ?', Banner::ENABLE_YES))));
     write_file ($api . 'banners.json', json_encode ($banners));
     @chmod ($api . 'banners.json', 0777);

@@ -67,7 +67,7 @@ class Article extends OaModel {
         if (!$source->destroy ())
           return false;
 
-    return $this->cover->cleanAllFiles () && $this->delete ();
+    return $this->delete ();
   }
   public function mini_title ($length = 50) {
     if (!isset ($this->title)) return '';

@@ -1,6 +1,6 @@
 <div class='panel'>
   <header>
-    <h2>新增 Banner</h2>
+    <h2>執行部署網站</h2>
     <a href='<?php echo base_url ($uri_1);?>' class='icon-x'></a>
   </header>
 

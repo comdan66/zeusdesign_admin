@@ -35,6 +35,6 @@ class WorkImage extends OaModel {
     if (!(isset ($this->name) && isset ($this->id)))
       return false;
 
-    return $this->name->cleanAllFiles () && $this->delete ();
+    return $this->delete ();
   }
 }

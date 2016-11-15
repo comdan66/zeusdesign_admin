@@ -45,7 +45,8 @@
           <th width='50' class='center'>#</th>
           <th width='70' class='center'>照片</th>
           <th width='150'>名稱</th>
-          <th>郵件</th>
+          <th width='250'>郵件</th>
+          <th>權限</th>
           <th width='50' class='center'>設定</th>
         </tr>
       </thead>
@@ -63,12 +64,11 @@
               </td>
               <td><?php echo $obj->name;?></td>
               <td><?php echo $obj->email;?></td>
-
+              <td><?php echo implode (', ', $obj->role_names ());?></td>
 
               <td class='center'>
                 <a class='icon-se' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
               </td>
-
             </tr>
     <?php }
         } else { ?>

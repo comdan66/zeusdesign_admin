@@ -66,6 +66,6 @@ class Promo extends OaModel {
     if (!(isset ($this->cover) && isset ($this->id)))
       return false;
 
-    return $this->cover->cleanAllFiles () && $this->delete ();
+    return $this->delete ();
   }
 }
