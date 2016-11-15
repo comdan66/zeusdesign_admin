@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>文章</h1>
-    <p>文章管理</p>
+    <h1>作品</h1>
+    <p>作品管理</p>
   </div>
 
   <form class='select'>
@@ -33,7 +33,7 @@
 
 <div class='panel'>
   <header>
-    <h2>文章列表</h2>
+    <h2>作品列表</h2>
     <a href='<?php echo base_url ($uri_1, 'add');?>' class='icon-r'></a>
   </header>
 
