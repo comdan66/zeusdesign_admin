@@ -15,6 +15,8 @@ application/config/database.php
 application/config/setting/deploy.php
 application/config/setting/facebook.php
 application/config/setting/role.php
+application/config/system/s3.php
+application/config/system/orm_uploader.php
 
 
 /temp/*

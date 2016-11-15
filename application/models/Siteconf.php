@@ -5,9 +5,9 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
-class Deploy extends OaModel {
+class Siteconf extends OaModel {
 
-  static $table_name = 'deploys';
+  static $table_name = 'siteconfs';
 
   static $has_one = array (
   );
@@ -16,25 +16,20 @@ class Deploy extends OaModel {
   );
 
   static $belongs_to = array (
-    array ('user', 'class_name' => 'User'),
   );
 
-  const SUCCESS_NO  = 0;
-  const SUCCESS_YES = 1;
-
-  static $successNames = array(
-    self::SUCCESS_NO  => '失敗',
-    self::SUCCESS_YES => '成功',
-  );
-
-  const TYPE_BUILD    = 1;
-  const TYPE_UPLOAD   = 2;
-
-  static $typeNames = array(
-    self::TYPE_BUILD    => '編譯',
-    self::TYPE_UPLOAD   => '上傳（編譯完後上傳）',
-  );
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
+  }
+
+  public static function toArray () {
+    $ss = Siteconf::find ('all', array ('select' => '`key`, val'));
+    return array_combine (column_array ($ss, 'key'), column_array ($ss, 'val'));
+  }
+  public static function getVal ($key) {
+    return ($s = Siteconf::find ('one', array ('conditions' => array ('`key` = ?', $key)))) ? $s->val : '';
+  }
+  public function destroy () {
+    return $this->delete ();
   }
 }

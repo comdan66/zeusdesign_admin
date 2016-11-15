@@ -57,7 +57,7 @@
               <td><?php echo $obj->name;?></td>
               <td><?php echo count ($obj->subs);?></td>
               <td class='right'>
-                <a class='icon-i' href="<?php echo base_url ('admin', 'contact', $obj->id, 'invoice-contacts');?>"></a>
+                <a class='icon-r' href="<?php echo base_url ('admin', 'contact', $obj->id, 'invoice-contacts');?>"></a>
                 /
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /

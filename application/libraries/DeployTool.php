@@ -12,6 +12,10 @@ class DeployTool {
     $api = FCPATH . 'api' . DIRECTORY_SEPARATOR;
     @directory_delete ($api, false);
 
+    $siteconfs = Siteconf::toArray ();
+    write_file ($api . 'siteconfs.json', json_encode ($siteconfs));
+    @chmod ($api . 'siteconfs.json', 0777);
+
     $banners = array_map (function ($banner) { return $banner->to_array (); }, Banner::find ('all', array ('order' => 'sort DESC', 'conditions' => array ('is_enabled = ?', Banner::ENABLE_YES))));
     write_file ($api . 'banners.json', json_encode ($banners));
     @chmod ($api . 'banners.json', 0777);
@@ -30,9 +34,7 @@ class DeployTool {
 
     return true;
   }
-  public static function callBuild () {
-    $url = Cfg::setting ('deploy', 'upload', ENVIRONMENT);
-
+  public static function crud ($url) {
     $options = array (
       CURLOPT_URL => $url, CURLOPT_TIMEOUT => 120, CURLOPT_HEADER => false, CURLOPT_MAXREDIRS => 10,
       CURLOPT_AUTOREFERER => true, CURLOPT_CONNECTTIMEOUT => 30, CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => true,
@@ -46,5 +48,19 @@ class DeployTool {
 
     if ($data && ($data = json_decode ($data, true)) && ($data['result'] === 'success')) return true;
     else false;
+  }
+  public static function callBuild () {
+    $url = Cfg::setting ('deploy', 'build', ENVIRONMENT) . '?' . http_build_query (array (
+          'env' => ENVIRONMENT,
+          'psw' => Cfg::setting ('deploy', 'psw', ENVIRONMENT)
+        ));
+    return self::crud ($url);
+  }
+  public static function callUpload () {
+    $url = Cfg::setting ('deploy', 'upload', ENVIRONMENT) . '?' . http_build_query (array (
+          'env' => ENVIRONMENT,
+          'psw' => Cfg::setting ('deploy', 'psw', ENVIRONMENT)
+        ));
+    return self::crud ($url);
   }
 }

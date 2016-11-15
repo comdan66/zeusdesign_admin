@@ -45,7 +45,8 @@
           <th width='150'>執行者</th>
           <th width='150'>類型</th>
           <th >狀態</th>
-          <th width='150' class='center'>執行時間</th>
+          <th width='70' class='center'>檢視</th>
+          <th width='140' class='center'>執行時間</th>
         </tr>
       </thead>
       <tbody>
@@ -56,6 +57,9 @@
               <td><?php echo $obj->user->name;?></td>
               <td><?php echo Deploy::$typeNames[$obj->type];?></td>
               <td<?php echo $obj->is_success == Deploy::SUCCESS_NO ? ' class="red"' : ' class="green"';?>><?php echo Deploy::$successNames[$obj->is_success];?></td>
+              <td class='center'>
+                <a class='icon-y' href='<?php echo Cfg::setting ('deploy', 'view', ENVIRONMENT);?>' target='_blank'></a>
+              </td>
               <td class='center'><?php echo $obj->created_at->format ('Y-m-d H:i:s');?></td>
             </tr>
     <?php }
