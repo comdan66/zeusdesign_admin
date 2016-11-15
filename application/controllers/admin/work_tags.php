@@ -11,6 +11,11 @@ class Work_tags extends Admin_controller {
 
   public function __construct () {
     parent::__construct ();
+    
+    if (!User::current ()->in_roles (array ('work')))
+      return redirect_message (array ('admin'), array (
+            '_flash_danger' => '您的權限不足，或者頁面不存在。'
+          ));
 
     $this->uri_1 = 'admin/work-tags';
 

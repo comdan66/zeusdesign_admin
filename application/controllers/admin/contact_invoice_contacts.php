@@ -14,6 +14,11 @@ class Contact_invoice_contacts extends Admin_controller {
   public function __construct () {
     parent::__construct ();
 
+    if (!User::current ()->in_roles (array ('invoice')))
+      return redirect_message (array ('admin'), array (
+            '_flash_danger' => '您的權限不足，或者頁面不存在。'
+          ));
+
     $this->uri_1     = 'admin/contact';
     $this->uri_2     = 'invoice-contacts';
 

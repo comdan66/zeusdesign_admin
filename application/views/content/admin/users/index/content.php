@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>使用者</h1>
-    <p>使用者權限管理</p>
+    <h1>會員</h1>
+    <p>會員權限管理</p>
   </div>
 
   <form class='select'>
@@ -33,7 +33,7 @@
 
 <div class='panel'>
   <header>
-    <h2>使用者 列表</h2>
+    <h2>會員 列表</h2>
   </header>
 
   <div class='content'>

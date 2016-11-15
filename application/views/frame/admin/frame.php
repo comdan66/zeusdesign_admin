@@ -33,86 +33,93 @@
           </div>
 
           <ul id='main_menu'>
-            <li>
-              <label data-cnt='<?php echo ($schedule_cnt = Schedule::count (array ('conditions' => array ('user_id = ? AND finish = ? AND year = ? AND month = ? AND day = ?', User::current ()->id, Schedule::NO_FINISHED, date ('Y'), date ('m'), date ('d')))));?>'>
-                <input type='checkbox' />
-                <span class='icon-se'>個人管理</span>
-                <ul>
-                  <li><a href="<?php echo $url = base_url ('admin', 'my');?>" class='icon-u<?php echo $now_url == $url ? ' active' : '';?>'>基本資料</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'schedule-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>行程分類</a></li>
-                  <li data-cnt='<?php echo $schedule_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'calendar');?>" class='icon-ca<?php echo $now_url == $url ? ' active' : '';?>'>個人行程</a></li>
-                </ul>
-              </label>
-            </li>
-
-            <li>
-              <label>
-                <input type='checkbox' />
-                <span class='icon-u'>人員管理</span>
-                <ul>
-                  <li><a href="<?php echo $url = base_url ('admin', 'users');?>" class='icon-ua<?php echo $now_url == $url ? ' active' : '';?>'>權限設定</a></li>
-                </ul>
-              </label>
-            </li>
-
-
-            <li>
-              <label data-cnt='<?php echo ($contact_cnt = Contact::count (array ('conditions' => array ('is_readed = ?', Contact::READ_NO))));?>'>
-                <input type='checkbox' />
-                <span class='icon-ea'>網站功能</span>
-                <ul>
-                  <li><a href="<?php echo $url = base_url ('admin', 'banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>旗幟設定</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>促銷設定</a></li>
-                  <li data-cnt='<?php echo $contact_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'contacts');?>" class='icon-em<?php echo $now_url == $url ? ' active' : '';?>'>聯絡我們</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'deploys');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>部署網站</a></li>
-                </ul>
-              </label>
-            </li>
-
-            <li>
-              <label>
-                <input type='checkbox' />
-                <span class='icon-f'>文章管理</span>
-                <ul>
-                  <li><a href="<?php echo $url = base_url ('admin', 'article-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'articles');?>" class='icon-fa<?php echo $now_url == $url ? ' active' : '';?>'>文章設定</a></li>
-                </ul>
-              </label>
-            </li>
-
-            <li>
-              <label>
-                <input type='checkbox' />
-                <span class='icon-g'>作品管理</span>
-                <ul>
-                  <li><a href="<?php echo $url = base_url ('admin', 'work-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'works');?>" class='icon-g<?php echo $now_url == $url ? ' active' : '';?>'>作品設定</a></li>
-                </ul>
-              </label>
-            </li>
-
-            <li>
-              <label>
-                <input type='checkbox' />
-                <span class='icon-ti'>請款管理</span>
-                <ul>
-                  <li><a href="<?php echo $url = base_url ('admin', 'invoice-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'invoice-contacts');?>" class='icon-ua<?php echo $now_url == $url ? ' active' : '';?>'>窗口設定</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'invoices');?>" class='icon-ti<?php echo $now_url == $url ? ' active' : '';?>'>請款設定</a></li>
-                </ul>
-              </label>
-            </li>
-
-            <li>
-              <label>
-                <input type='checkbox' />
-                <span class='icon-bil'>帳務管理</span>
-                <ul>
-                  <li><a href="<?php echo $url = base_url ('admin', 'billins');?>" class='icon-ib<?php echo $now_url == $url ? ' active' : '';?>'>入帳設定</a></li>
-                  <li><a href="<?php echo $url = base_url ('admin', 'billous');?>" class='icon-ob<?php echo $now_url == $url ? ' active' : '';?>'>出帳設定</a></li>
-                </ul>
-              </label>
-            </li>
+      <?php if (User::current ()->in_roles (array ('member'))) { ?>
+              <li>
+                <label data-cnt='<?php echo ($schedule_cnt = Schedule::count (array ('conditions' => array ('user_id = ? AND finish = ? AND year = ? AND month = ? AND day = ?', User::current ()->id, Schedule::NO_FINISHED, date ('Y'), date ('m'), date ('d')))));?>'>
+                  <input type='checkbox' />
+                  <span class='icon-se'>個人管理</span>
+                  <ul>
+                    <li><a href="<?php echo $url = base_url ('admin', 'my');?>" class='icon-u<?php echo $now_url == $url ? ' active' : '';?>'>基本資料</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'schedule-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>行程分類</a></li>
+                    <li data-cnt='<?php echo $schedule_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'calendar');?>" class='icon-ca<?php echo $now_url == $url ? ' active' : '';?>'>個人行程</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php }
+            if (User::current ()->in_roles (array ('user'))) { ?>
+              <li>
+                <label>
+                  <input type='checkbox' />
+                  <span class='icon-u'>會員管理</span>
+                  <ul>
+                    <li><a href="<?php echo $url = base_url ('admin', 'users');?>" class='icon-ua<?php echo $now_url == $url ? ' active' : '';?>'>權限設定</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php }
+            if (User::current ()->in_roles (array ('site'))) { ?>
+              <li>
+                <label data-cnt='<?php echo ($contact_cnt = Contact::count (array ('conditions' => array ('is_readed = ?', Contact::READ_NO))));?>'>
+                  <input type='checkbox' />
+                  <span class='icon-ea'>網站功能</span>
+                  <ul>
+                    <li><a href="<?php echo $url = base_url ('admin', 'banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>旗幟設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>促銷設定</a></li>
+                    <li data-cnt='<?php echo $contact_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'contacts');?>" class='icon-em<?php echo $now_url == $url ? ' active' : '';?>'>聯絡我們</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'deploys');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>部署網站</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php }
+            if (User::current ()->in_roles (array ('article'))) { ?>
+              <li>
+                <label>
+                  <input type='checkbox' />
+                  <span class='icon-f'>文章管理</span>
+                  <ul>
+                    <li><a href="<?php echo $url = base_url ('admin', 'article-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'articles');?>" class='icon-fa<?php echo $now_url == $url ? ' active' : '';?>'>文章設定</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php }
+            if (User::current ()->in_roles (array ('work'))) { ?>
+              <li>
+                <label>
+                  <input type='checkbox' />
+                  <span class='icon-g'>作品管理</span>
+                  <ul>
+                    <li><a href="<?php echo $url = base_url ('admin', 'work-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'works');?>" class='icon-g<?php echo $now_url == $url ? ' active' : '';?>'>作品設定</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php }
+            if (User::current ()->in_roles (array ('invoice'))) { ?>
+              <li>
+                <label>
+                  <input type='checkbox' />
+                  <span class='icon-ti'>請款管理</span>
+                  <ul>
+                    <li><a href="<?php echo $url = base_url ('admin', 'invoice-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'invoice-contacts');?>" class='icon-ua<?php echo $now_url == $url ? ' active' : '';?>'>窗口設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'invoices');?>" class='icon-ti<?php echo $now_url == $url ? ' active' : '';?>'>請款設定</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php } 
+            if (User::current ()->in_roles (array ('bills'))) { ?>
+              <li>
+                <label>
+                  <input type='checkbox' />
+                  <span class='icon-bil'>帳務管理</span>
+                  <ul>
+                    <li><a href="<?php echo $url = base_url ('admin', 'billins');?>" class='icon-ib<?php echo $now_url == $url ? ' active' : '';?>'>入帳設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'billous');?>" class='icon-ob<?php echo $now_url == $url ? ' active' : '';?>'>出帳設定</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php } ?>
 
           </ul>
 

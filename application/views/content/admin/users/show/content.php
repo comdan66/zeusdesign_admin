@@ -1,6 +1,6 @@
 <div class='panel'>
   <header>
-    <h2>使用者資料</h2>
+    <h2>會員資料</h2>
     <a href='<?php echo base_url ($uri_1);?>' class='icon-x'></a>
   </header>
 

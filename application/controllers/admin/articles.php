@@ -12,6 +12,11 @@ class Articles extends Admin_controller {
   public function __construct () {
     parent::__construct ();
     
+    if (!User::current ()->in_roles (array ('article')))
+      return redirect_message (array ('admin'), array (
+            '_flash_danger' => '您的權限不足，或者頁面不存在。'
+          ));
+    
     $this->uri_1 = 'admin/articles';
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
