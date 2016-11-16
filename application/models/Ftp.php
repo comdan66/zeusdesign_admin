@@ -26,14 +26,23 @@ class Ftp extends OaModel {
         'id' => $this->id,
         'name' => $this->name,
         'url' => $this->url,
-        'host' => $this->host,
-        'account' => $this->account,
-        'password' => $this->password,
+        
+        'host' => $this->ftp_url,
+        'account' => $this->ftp_account,
+        'password' => $this->ftp_password,
+        
         'admin_url' => $this->admin_url,
+        'admin_account' => $this->admin_account,
+        'admin_password' => $this->admin_password,
+        
         'memo' => $this->memo,
       );
   }
   public function destroy () {
     return $this->delete ();
+  }
+  public function mini_memo ($length = 100) {
+    if (!isset ($this->memo)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->memo), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->memo);
   }
 }

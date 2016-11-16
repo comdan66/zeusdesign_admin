@@ -43,13 +43,10 @@
         <tr>
           <th width='50' class='center'>#</th>
           <th width='100'>專案名稱</th>
-          <th width='150'>網站網址</th>
-          <th width='130'>FTP 主機</th>
-          <th width='100'>FTP 帳號</th>
-          <th width='100'>FTP 密碼</th>
-          <th width='150'>Server 管理頁面</th>
-          <th>備註</th>
-          <th width='85' class='center'>修改/刪除</th>
+          <th>網站網址</th>
+          <th width='250'>FTP</th>
+          <th width='250'>管理頁</th>
+          <th width='90' class='center'>修改/刪除</th>
         </tr>
       </thead>
       <tbody>
@@ -60,11 +57,14 @@
              
               <td><?php echo $obj->name;?></td>
               <td><?php echo $obj->url;?></td>
-              <td><?php echo $obj->host;?></td>
-              <td><?php echo $obj->account;?></td>
-              <td><?php echo $obj->password;?></td>
-              <td><?php echo $obj->admin_url;?></td>
-              <td><?php echo $obj->memo;?></td>
+              
+              <td><div class='munit'><?php echo $obj->ftp_url;?></div>
+                  <div class='munit'><?php echo $obj->ftp_account;?></div>
+                  <div class='munit'><?php echo $obj->ftp_password;?></div></td>
+
+              <td><div class='munit'><?php echo $obj->admin_url;?></div>
+                  <div class='munit'><?php echo $obj->admin_account;?></div>
+                  <div class='munit'><?php echo $obj->admin_password;?></div></td>
 
               <td class='center'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
@@ -76,7 +76,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='8' class='no_data'>沒有任何資料。</td>
+            <td colspan='4' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

@@ -14,11 +14,13 @@ class Migration_Add_ftps extends CI_Migration {
         `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '專案名稱',
         `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '網站網址',
         
-        `host` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'FTP 主機',
-        `account` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'FTP 帳號',
-        `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'FTP 密碼',
+        `ftp_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'FTP 主機網址',
+        `ftp_account` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'FTP 帳號',
+        `ftp_password` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'FTP 密碼',
 
-        `admin_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Server 管理頁面',
+        `admin_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '管理頁 網址',
+        `admin_account` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '管理頁 帳號',
+        `admin_password` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '管理頁 密碼',
 
         `memo` text NOT NULL COMMENT '備註',
         

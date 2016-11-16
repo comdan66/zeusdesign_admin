@@ -31,7 +31,8 @@ class Ftps extends Admin_controller {
 
   private function _search_columns () {
     return array ( 
-        array ('key' => 'host', 'title' => 'FTP 主機', 'sql' => 'host LIKE ?'), 
+        array ('key' => 'admin_url', 'title' => '管理頁網址', 'sql' => 'admin_url LIKE ?'), 
+        array ('key' => 'ftp_url', 'title' => 'FTP 主機', 'sql' => 'ftp_url LIKE ?'), 
         array ('key' => 'url',  'title' => '網站網址', 'sql' => 'url LIKE ?'), 
         array ('key' => 'name', 'title' => '專案名稱', 'sql' => 'name LIKE ?'), 
       );
@@ -152,18 +153,22 @@ class Ftps extends Admin_controller {
       ));
   }
   private function _validation (&$posts) {
-    $keys = array ('name', 'url', 'host', 'account', 'password', 'admin_url', 'memo');
+    $keys = array ('name', 'url', 'ftp_url', 'ftp_account', 'ftp_password', 'admin_url', 'admin_account', 'admin_password', 'memo');
 
     $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
 
     if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '專案名稱格式錯誤或未填寫！';
     if (isset ($posts['url']) && !($posts['url'] = trim ($posts['url']))) return '網站網址格式錯誤或未填寫！';
-    if (isset ($posts['host']) && !($posts['host'] = trim ($posts['host']))) return 'FTP 主機格式錯誤或未填寫！';
     
-    if (isset ($posts['account']) && ($posts['account'] = trim ($posts['account'])) && !is_string ($posts['account'])) return 'FTP 帳號格式錯誤！';
-    if (isset ($posts['password']) && ($posts['password'] = trim ($posts['password'])) && !is_string ($posts['password'])) return 'FTP 密碼格式錯誤！';
-    if (isset ($posts['admin_url']) && ($posts['admin_url'] = trim ($posts['admin_url'])) && !is_string ($posts['admin_url'])) return 'Server 管理頁網址格式錯誤！';
+    if (isset ($posts['ftp_url']) && ($posts['ftp_url'] = trim ($posts['ftp_url'])) && !is_string ($posts['ftp_url'])) return 'FTP 主機格式錯誤！';
+    if (isset ($posts['ftp_account']) && ($posts['ftp_account'] = trim ($posts['ftp_account'])) && !is_string ($posts['ftp_account'])) return 'FTP 帳號格式錯誤！';
+    if (isset ($posts['ftp_password']) && ($posts['ftp_password'] = trim ($posts['ftp_password'])) && !is_string ($posts['ftp_password'])) return 'FTP 密碼格式錯誤！';
+    
+    if (isset ($posts['admin_url']) && ($posts['admin_url'] = trim ($posts['admin_url'])) && !is_string ($posts['admin_url'])) return '管理頁網址格式錯誤！';
+    if (isset ($posts['admin_account']) && ($posts['admin_account'] = trim ($posts['admin_account'])) && !is_string ($posts['admin_account'])) return '管理頁帳號格式錯誤！';
+    if (isset ($posts['admin_password']) && ($posts['admin_password'] = trim ($posts['admin_password'])) && !is_string ($posts['admin_password'])) return '管理頁密碼格式錯誤！';
+    
     if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
     
     return '';
@@ -171,7 +176,6 @@ class Ftps extends Admin_controller {
   private function _validation_must (&$posts) {
     if (!isset ($posts['name'])) return '沒有填寫 專案名稱！';
     if (!isset ($posts['url'])) return '沒有填寫 網站網址！';
-    if (!isset ($posts['host'])) return '沒有填寫 FTP 主機！';
     return '';
   }
 }

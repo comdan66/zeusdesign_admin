@@ -4,9 +4,7 @@
     <a href='<?php echo base_url ($uri_1);?>' class='icon-x'></a>
   </header>
 
-  <form class='form full' method='post' action='<?php echo base_url ($uri_1);?>' enctype='multipart/form-data'>
-    
-
+  <form class='form' method='post' action='<?php echo base_url ($uri_1);?>' enctype='multipart/form-data'>
 
     <div class='row n2'>
       <label>請款</label>

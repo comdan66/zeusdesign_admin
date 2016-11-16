@@ -4,7 +4,7 @@
     <a href='<?php echo base_url ($uri_1);?>' class='icon-x'></a>
   </header>
 
-  <form class='form full' method='post' action='<?php echo base_url ($uri_1, $obj->id);?>' enctype='multipart/form-data'>
+  <form class='form' method='post' action='<?php echo base_url ($uri_1, $obj->id);?>' enctype='multipart/form-data'>
     <input type='hidden' name='_method' value='put' />
     
     <div class='row n2'>
@@ -20,35 +20,52 @@
         <input type='text' name='url' value='<?php echo isset ($posts['url']) ? $posts['url'] : $obj->url;?>' placeholder='請輸入網站網址..' maxlength='200' pattern='.{1,200}' required title='輸入網站網址!' />
       </div>
     </div>
-
+    
+    <div title='FTP 資訊' class='line'></div>
     <div class='row n2'>
-      <label>* FTP 主機</label>
+      <label>主機</label>
       <div>
-        <input type='text' name='host' value='<?php echo isset ($posts['host']) ? $posts['host'] : $obj->host;?>' placeholder='請輸入FTP 主機..' maxlength='200' pattern='.{1,200}' required title='輸入FTP 主機!' />
+        <input type='text' name='ftp_url' value='<?php echo isset ($posts['ftp_url']) ? $posts['ftp_url'] : $obj->ftp_url;?>' placeholder='請輸入 FTP 主機..' maxlength='200' />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>FTP 帳號</label>
+      <label>帳號</label>
       <div>
-        <input type='text' name='account' value='<?php echo isset ($posts['account']) ? $posts['account'] : $obj->account;?>' placeholder='請輸入FTP 帳號..' maxlength='200' />
+        <input type='text' name='ftp_account' value='<?php echo isset ($posts['ftp_account']) ? $posts['ftp_account'] : $obj->ftp_account;?>' placeholder='請輸入 FTP 帳號..' maxlength='200' />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>FTP 密碼</label>
+      <label>密碼</label>
       <div>
-        <input type='text' name='password' value='<?php echo isset ($posts['password']) ? $posts['password'] : $obj->password;?>' placeholder='請輸入FTP 密碼..' maxlength='200' />
+        <input type='text' name='ftp_password' value='<?php echo isset ($posts['ftp_password']) ? $posts['ftp_password'] : $obj->ftp_password;?>' placeholder='請輸入 FTP 密碼..' maxlength='200' />
+      </div>
+    </div>
+    
+    <div title='管理頁資訊' class='line'></div>
+    <div class='row n2'>
+      <label>網址</label>
+      <div>
+        <input type='text' name='admin_url' value='<?php echo isset ($posts['admin_url']) ? $posts['admin_url'] : $obj->admin_url;?>' placeholder='請輸入管理頁網址..' maxlength='200' />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>Server 管理頁網址</label>
+      <label>帳號</label>
       <div>
-        <input type='text' name='admin_url' value='<?php echo isset ($posts['admin_url']) ? $posts['admin_url'] : $obj->admin_url;?>' placeholder='請輸入Server 管理頁網址..' maxlength='200' />
+        <input type='text' name='admin_account' value='<?php echo isset ($posts['admin_account']) ? $posts['admin_account'] : $obj->admin_account;?>' placeholder='請輸入管理頁帳號..' maxlength='200' />
       </div>
     </div>
 
+    <div class='row n2'>
+      <label>密碼</label>
+      <div>
+        <input type='text' name='admin_password' value='<?php echo isset ($posts['admin_password']) ? $posts['admin_password'] : $obj->admin_password;?>' placeholder='請輸入管理頁密碼..' maxlength='200' />
+      </div>
+    </div>
+
+    <div title='其他資訊' class='line'></div>
     <div class='row n2'>
       <label>備註</label>
       <div>
