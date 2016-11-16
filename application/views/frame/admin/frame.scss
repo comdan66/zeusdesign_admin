@@ -1964,3 +1964,10 @@ form.form {
     }
   }
 }
+
+.sort_btns {
+  @include clearfix();
+  > * {
+    float: center;
+  }
+}
