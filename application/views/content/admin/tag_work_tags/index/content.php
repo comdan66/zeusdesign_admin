@@ -46,7 +46,7 @@
           <th width='80'>#</th>
           <th >名稱</th>
           <th width='100'>作品數</th>
-          <th width='50' class='center'>排序</th>
+          <th width='50' class='right'>排序</th>
           <th width='85' class='right'>修改/刪除</th>
         </tr>
       </thead>
@@ -57,7 +57,7 @@
               <td><?php echo $obj->id;?></td>
               <td><?php echo $obj->name;?></td>
               <td><?php echo count ($obj->mappings);?></td>
-              <td class='center'>
+              <td class='right'>
                 <a class='icon-tu' href='<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id, 'sort', 'up');?>' data-method='post'></a>
                 <a class='icon-td' href='<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id, 'sort', 'down');?>' data-method='post'></a>
               </td>

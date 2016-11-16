@@ -49,8 +49,8 @@
           <th width='150'>標題</th>
           <th>內容</th>
           <th width='150'>鏈結</th>
-          <th width='50' class='center'>排序</th>
-          <th width='85' class='center'>修改/刪除</th>
+          <th width='50' class='right'>排序</th>
+          <th width='85' class='right'>修改/刪除</th>
         </tr>
       </thead>
       <tbody>
@@ -75,11 +75,11 @@
               <td><?php echo mini_link ($obj->link, 25);?></td>
 
 
-              <td class='center'>
+              <td class='right'>
                 <a class='icon-tu' href='<?php echo base_url ($uri_1, $obj->id, 'sort', 'up');?>' data-method='post'></a>
                 <a class='icon-td' href='<?php echo base_url ($uri_1, $obj->id, 'sort', 'down');?>' data-method='post'></a>
               </td>
-              <td class='center'>
+              <td class='right'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
                 <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
