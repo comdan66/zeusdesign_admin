@@ -8,7 +8,7 @@
   <form class='form' method='post' action='<?php echo base_url ($uri_1, $obj->id);?>'>
     <input type='hidden' name='_method' value='put' />
     <div class='row n2'>
-      <label>公司</label>
+      <label>* 公司</label>
       <div>
         <select name='company_id'>
           <option value='0' selected>請選擇公司</option>
