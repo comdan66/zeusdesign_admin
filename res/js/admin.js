@@ -386,7 +386,9 @@ $(function () {
 
       if (title) window.vars.$schedulePrompt.get (0).vars.$title.text (title);
       if (inputText) window.vars.$schedulePrompt.get (0).vars.$input.val (inputText);
-      if (textareaText) window.vars.$schedulePrompt.get (0).vars.$textarea.val (textareaText);
+      if (textareaText) setTimeout (function () {
+        window.vars.$schedulePrompt.get (0).vars.$textarea.val (textareaText);
+      }, 500);
       if (radioVal) window.vars.$schedulePrompt.get (0).vars.$radios.find ('input[value="' + radioVal + '"]').prop ('checked', true);
 
       if (okCallback) window.vars.$schedulePrompt.get (0).vars.$ok.unbind ('click').click (okCallback.bind (
