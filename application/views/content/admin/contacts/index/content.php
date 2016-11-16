@@ -34,7 +34,6 @@
 <div class='panel'>
   <header>
     <h2>聯絡列表</h2>
-    <a href='<?php echo base_url ($uri_1, 'add');?>' class='icon-r'></a>
   </header>
 
   <div class='content'>
