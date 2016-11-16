@@ -18,7 +18,7 @@
     </div>
 
     <div class='row n2'>
-      <label>負責人</label>
+      <label>* 負責人</label>
       <div>
         <select name='user_id'>
     <?php if ($users = User::all (array ('select' => 'id, name'))) {
@@ -31,27 +31,34 @@
     </div>
 
     <div class='row n2'>
-      <label>窗口</label>
+      <label>* 聯絡人</label>
       <div>
-        <select name='invoice_contact_id'>
-          <option value='0' selected>請選擇窗口</option>
-    <?php if ($coms = InvoiceContact::all (array ('select' => 'id, name', 'conditions' => array ('invoice_contact_id = 0')))) {
-            foreach ($coms as $com) { ?>
-              <optgroup label='<?php echo $com->name;?>'>
-          <?php if ($com->subs) {
-                  foreach ($com->subs as $sub) { ?>
-                    <option value='<?php echo $sub->id;?>'<?php echo (isset ($posts['invoice_contact_id']) ? $posts['invoice_contact_id'] : $obj->invoice_contact_id) == $sub->id ? ' selected': '';?>><?php echo $sub->name;?></option>
+        <select name='customer_id'>
+          <option value='0' selected>請選擇聯絡人</option>
+    <?php if ($companies = Company::all (array ('select' => 'id, name'))) {
+            foreach ($companies as $company) { ?>
+              <optgroup label='<?php echo $company->name;?>'>
+          <?php if ($company->customers) {
+                  foreach ($company->customers as $customer) { ?>
+                    <option value='<?php echo $customer->id;?>'<?php echo (isset ($posts['customer_id']) ? $posts['customer_id'] : $obj->customer_id) == $customer->id ? ' selected': '';?>><?php echo $customer->name;?></option>
             <?php }
                 } ?>
               </optgroup>
       <?php }
-          }?>
+          }
+          if ($customers = Customer::find ('all', array ('select' => 'id, name', 'conditions' => array ('company_id = 0')))) { ?>
+            <optgroup label='其他'>
+        <?php foreach ($customers as $customer) { ?>
+                <option value='<?php echo $customer->id;?>'<?php echo (isset ($posts['customer_id']) ? $posts['customer_id'] : $obj->customer_id) == $customer->id ? ' selected': '';?>><?php echo $customer->name;?></option>
+        <?php } ?>
+            </optgroup>
+      <?php } ?>
         </select>
       </div>
     </div>
 
     <div class='row n2'>
-      <label>分類</label>
+      <label>* 分類</label>
       <div>
         <select name='invoice_tag_id'>
           <option value='0' selected>請選擇分類</option>
@@ -89,7 +96,7 @@
     </div>
 
     <div class='row n2'>
-      <label>總金額</label>
+      <label>* 總金額</label>
       <div>
         <input type='number' name='all_money' id='all_money' value='<?php echo isset ($posts['all_money']) ? $posts['all_money'] : $obj->all_money;?>' placeholder='請輸入總金額..' maxlength='200' pattern='.{1,200}' required title='輸入總金額!' />
       </div>
@@ -105,7 +112,7 @@
     <div class='row n2'>
       <label>結案日期</label>
       <div>
-        <input type='date' name='closing_at' value='<?php echo isset ($posts['closing_at']) ? $posts['closing_at'] : $obj->closing_at->format ('Y-m-d');?>' placeholder='請輸入結案日期..' maxlength='200' pattern='.{1,200}' required title='輸入結案日期!' />
+        <input type='date' name='closing_at' value='<?php echo isset ($posts['closing_at']) ? $posts['closing_at'] : ($obj->closing_at ? $obj->closing_at->format ('Y-m-d') : '');?>' placeholder='請輸入結案日期..' maxlength='200' />
       </div>
     </div>
 

@@ -44,7 +44,6 @@ html {
 }
 
 
-
 .icon-d:before {
   content: "\e904";
 }
@@ -93,6 +92,9 @@ html {
 .icon-bil:before {
   content: "\e90f";
 }
+.icon-ab:before {
+  content: "\e913";
+}
 .icon-ma:before {
   content: "\e90b";
 }
@@ -135,6 +137,9 @@ html {
 .icon-fa:before {
   content: "\e125";
 }
+.icon-settings:before {
+  content: "\e912";
+}
 .icon-c:before {
   content: "\f00c";
 }
@@ -146,6 +151,9 @@ html {
 }
 .icon-si:before {
   content: "\f090";
+}
+.icon-br:before {
+  content: "\f0b1";
 }
 .icon-f:before {
   content: "\f0f6";
@@ -1785,7 +1793,7 @@ form.form {
   }
 }
 #export {
-  font-weight: normal;
+  font-weight: normal !important;
 }
 
 #year_calendar {

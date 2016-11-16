@@ -33,12 +33,18 @@ Route::group ('admin', function () {
 
   Route::resourcePagination (array ('schedule_tags'), 'schedule_tags');
   Route::resourcePagination (array ('users'), 'users');
-  Route::resourcePagination (array ('banners'), 'banners');
   Route::resourcePagination (array ('contacts'), 'contacts');
   Route::resourcePagination (array ('deploys'), 'deploys');
+
   Route::resourcePagination (array ('billins'), 'billins');
   Route::resourcePagination (array ('billous'), 'billous');
+
+  Route::resourcePagination (array ('banners'), 'banners');
   Route::resourcePagination (array ('promos'), 'promos');
+
+  Route::resourcePagination (array ('companies'), 'companies');
+  Route::resourcePagination (array ('customers'), 'customers');
+  
   Route::resourcePagination (array ('article_tags'), 'article_tags');
   Route::resourcePagination (array ('articles'), 'articles');
 
@@ -47,8 +53,6 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('works'), 'works');
   
   Route::resourcePagination (array ('invoice_tags'), 'invoice_tags');
-  Route::resourcePagination (array ('invoice_contacts'), 'invoice_contacts');
-  Route::resourcePagination (array ('contact', 'invoice_contacts'), 'contact_invoice_contacts');
   Route::resourcePagination (array ('invoices'), 'invoices');
 });
 

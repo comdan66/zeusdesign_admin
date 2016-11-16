@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>請款公司</h1>
-    <p>請款窗口公司</p>
+    <h1>公司</h1>
+    <p>公司管理</p>
   </div>
 
   <form class='select'>
@@ -45,8 +45,8 @@
         <tr>
           <th width='80'>#</th>
           <th >名稱</th>
-          <th width='100'>窗口數</th>
-          <th width='105' class='right'>子項/修改/刪除</th>
+          <th width='150'>聯絡人數</th>
+          <th width='85' class='right'>修改/刪除</th>
         </tr>
       </thead>
       <tbody>
@@ -55,10 +55,8 @@
             <tr>
               <td><?php echo $obj->id;?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo count ($obj->subs);?></td>
+              <td><?php echo count ($obj->customers);?></td>
               <td class='right'>
-                <a class='icon-r' href="<?php echo base_url ('admin', 'contact', $obj->id, 'invoice-contacts');?>"></a>
-                /
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
                 <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
@@ -67,7 +65,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='3' class='no_data'>沒有任何資料。</td>
+            <td colspan='4' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

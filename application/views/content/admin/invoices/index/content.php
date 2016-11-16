@@ -14,9 +14,20 @@
         if (isset ($column['select']) && $column['select']) { ?>
           <select name='<?php echo $column['key'];?>'>
             <option value=''>請選擇 <?php echo $column['title'];?>..</option>
-      <?php foreach ($column['select'] as $option) { ?>
-              <option value='<?php echo $option['value'];?>'<?php echo (is_numeric ($column['value']) && ($column['value'] == $option['value'])) || ($option['value'] === $column['value']) ? ' selected' : '';?>><?php echo $option['text'];?></option>
-      <?php } ?>
+      <?php $options = $column['select']; $groups = array ('' => array ()); foreach ($options as $option) if (!isset ($option['group'])) array_push ($groups[''], $option); else if (isset ($groups[$option['group']])) array_push ($groups[$option['group']], $option); else $groups[$option['group']] = array ($option);
+            $optgroup = array_filter (array_keys ($groups)) ? true : false;
+
+            foreach (array_reverse ($groups) as $label => $group) {
+              if ($optgroup) { ?>
+                <optgroup label='<?php echo $label === '' ? '其他' : $label;?>'>
+        <?php } 
+                foreach ($group as $option) { ?>
+                  <option value='<?php echo $option['value'];?>'<?php echo (is_numeric ($column['value']) && ($column['value'] == $option['value'])) || ($option['value'] === $column['value']) ? ' selected' : '';?>><?php echo $option['text'];?></option>
+          <?php }
+              if ($optgroup) { ?>
+                </optgroup>
+        <?php }
+            } ?>
           </select>
   <?php } else { ?>
           <label>
@@ -46,10 +57,11 @@
         <tr>
           <th width='50' class='center'>#</th>
           <th width='90' class='center'>是否請款</th>
-          <th width='150'>負責人</th>
+          <th width='120'>負責人</th>
+          <th width='120'>聯絡人</th>
+          <th width='150'>聯絡電話</th>
           <th>專案名稱</th>
-          <th width='150'>窗口</th>
-          <th width='120'>總金額</th>
+          <th width='100'>總金額</th>
           <th width='80' class='center'>修改/刪除</th>
         </tr>
       </thead>
@@ -65,8 +77,9 @@
                 </label>
               </td>
               <td><?php echo $obj->user->name;?></td>
+              <td><?php echo $obj->customer ? $obj->customer->name . ($obj->customer->company ? '(' . $obj->customer->company->name . ')' : '') : '-';?></td>
+              <td><?php echo $obj->customer && $obj->customer->telephone ? $obj->customer->telephone . ' #' . trim ($obj->customer->extension, '#') : '-';?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo $obj->contact && $obj->contact->parent ? $obj->contact->parent->name . ' - ' . $obj->contact->name : '-';?></td>
               <td><?php echo number_format ($obj->all_money);?></td>
               <td class='center'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>

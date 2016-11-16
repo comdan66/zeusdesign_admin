@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?zijk27');
-  src:  url('fonts/icomoon.eot?zijk27#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?zijk27') format('truetype'),
-    url('fonts/icomoon.woff?zijk27') format('woff'),
-    url('fonts/icomoon.svg?zijk27#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?jxjpb4');
+  src:  url('fonts/icomoon.eot?jxjpb4#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?jxjpb4') format('truetype'),
+    url('fonts/icomoon.woff?jxjpb4') format('woff'),
+    url('fonts/icomoon.svg?jxjpb4#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -72,6 +72,9 @@
 .icon-bil:before {
   content: "\e90f";
 }
+.icon-ab:before {
+  content: "\e913";
+}
 .icon-ma:before {
   content: "\e90b";
 }
@@ -114,6 +117,9 @@
 .icon-fa:before {
   content: "\e125";
 }
+.icon-settings:before {
+  content: "\e912";
+}
 .icon-c:before {
   content: "\f00c";
 }
@@ -125,6 +131,9 @@
 }
 .icon-si:before {
   content: "\f090";
+}
+.icon-br:before {
+  content: "\f0b1";
 }
 .icon-f:before {
   content: "\f0f6";

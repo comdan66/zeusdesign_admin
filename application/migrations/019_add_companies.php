@@ -5,13 +5,12 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
-class Migration_Add_invoice_contacts extends CI_Migration {
+class Migration_Add_companies extends CI_Migration {
   public function up () {
     $this->db->query (
-      "CREATE TABLE `invoice_contacts` (
+      "CREATE TABLE `companies` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
         `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '名稱',
-        `invoice_contact_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'Parent ID',
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',
         PRIMARY KEY (`id`)
@@ -20,7 +19,7 @@ class Migration_Add_invoice_contacts extends CI_Migration {
   }
   public function down () {
     $this->db->query (
-      "DROP TABLE `invoice_contacts`;"
+      "DROP TABLE `companies`;"
     );
   }
 }

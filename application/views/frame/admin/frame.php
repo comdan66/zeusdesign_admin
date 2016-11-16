@@ -95,13 +95,24 @@
                 </label>
               </li>
       <?php }
+            if (User::current ()->in_roles (array ('customer'))) { ?>
+              <li>
+                <label>
+                  <input type='checkbox' />
+                  <span class='icon-b'>客戶資訊</span>
+                  <ul>
+                    <li><a href="<?php echo $url = base_url ('admin', 'companies');?>" class='icon-br<?php echo $now_url == $url ? ' active' : '';?>'>公司設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'customers');?>" class='icon-ab<?php echo $now_url == $url ? ' active' : '';?>'>聯絡人設定</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php } 
             if (User::current ()->in_roles (array ('invoice'))) { ?>
               <li>
                 <label>
                   <input type='checkbox' />
                   <span class='icon-ti'>請款管理</span>
                   <ul>
-                    <li><a href="<?php echo $url = base_url ('admin', 'invoice-contacts');?>" class='icon-ua<?php echo $now_url == $url ? ' active' : '';?>'>窗口設定</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'invoice-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'invoices');?>" class='icon-ti<?php echo $now_url == $url ? ' active' : '';?>'>請款設定</a></li>
                   </ul>

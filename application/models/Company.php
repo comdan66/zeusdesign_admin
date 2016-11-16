@@ -5,42 +5,33 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
-class InvoiceContact extends OaModel {
+class Company extends OaModel {
 
-  static $table_name = 'invoice_contacts';
+  static $table_name = 'companies';
 
   static $has_one = array (
   );
 
   static $has_many = array (
-    array ('invoices', 'class_name' => 'Invoice'),
-    array ('subs', 'class_name' => 'InvoiceContact')
+    array ('customers', 'class_name' => 'Customer'),
   );
 
   static $belongs_to = array (
-    array ('parent', 'class_name' => 'InvoiceContact')
   );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
-  
   public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,
         'name' => $this->name,
-        'par_id' => $this->invoice_contact_id
       );
   }
   public function destroy () {
-    if ($this->invoices)
-      foreach ($this->invoices as $invoice)
-        if (!($invoice->invoice_contact_id = 0) && !$invoice->save ())
-          return false;
-    
-    if ($this->subs)
-      foreach ($this->subs as $sub)
-        if (!($sub->invoice_contact_id = 0) && !$sub->save ())
+    if ($this->customers)
+      foreach ($this->customers as $customer)
+        if (!($customer->company_id = 0) && $customer->save ())
           return false;
 
     return $this->delete ();

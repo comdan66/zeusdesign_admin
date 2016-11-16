@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>窗口列表</h1>
-    <p><?php echo $parent->name;?></a> 的窗口</p>
+    <h1>聯絡人</h1>
+    <p>聯絡人管理</p>
   </div>
 
   <form class='select'>
@@ -33,8 +33,8 @@
 
 <div class='panel'>
   <header>
-    <h2><a href='<?php echo base_url ('admin', 'invoice-contacts');?>'><?php echo $parent->name;?></a> 的聯絡窗口</h2>
-    <a href='<?php echo base_url ($uri_1, $parent->id, $uri_2, 'add');?>' class='icon-r'></a>
+    <h2>聯絡人列表</h2>
+    <a href='<?php echo base_url ($uri_1, 'add');?>' class='icon-r'></a>
   </header>
 
   <div class='content'>
@@ -43,9 +43,15 @@
     <table class='table'>
       <thead>
         <tr>
-          <th width='80'>#</th>
-          <th >名稱</th>
-          <th width='100'>帳務數</th>
+          <th width='60'>#</th>
+          <th width='100'>公司</th>
+          <th width='110'>名稱</th>
+          <th width='200'>電子郵件</th>
+          <th width='110'>電話</th>
+          <th width='60'>分機</th>
+          <th width='110'>手機</th>
+          <th width='130'>住址</th>
+          <th >備註</th>
           <th width='85' class='right'>修改/刪除</th>
         </tr>
       </thead>
@@ -54,18 +60,24 @@
           foreach ($objs as $obj) { ?>
             <tr>
               <td><?php echo $obj->id;?></td>
+              <td><?php echo $obj->company ? $obj->company->name : '-';?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo count ($obj->invoices);?></td>
+              <td><?php echo $obj->email ? $obj->email : '-';?></td>
+              <td><?php echo $obj->telephone ? $obj->telephone : '-';?></td>
+              <td><?php echo $obj->extension ? '#' . $obj->extension : '-';?></td>
+              <td><?php echo $obj->cellphone ? $obj->cellphone : '-';?></td>
+              <td><?php echo $obj->address ? $obj->address : '-';?></td>
+              <td><?php echo $obj->memo ? $obj->memo : '-';?></td>
               <td class='right'>
-                <a class='icon-e' href="<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id, 'edit');?>"></a>
+                <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
-                <a class='icon-t' href="<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id);?>" data-method='delete'></a>
+                <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
               </td>
             </tr>
     <?php }
         } else { ?>
           <tr>
-            <td colspan='4' class='no_data'>沒有任何資料。</td>
+            <td colspan='10' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

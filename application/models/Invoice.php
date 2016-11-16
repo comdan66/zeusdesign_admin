@@ -14,7 +14,7 @@ class Invoice extends OaModel {
 
   static $belongs_to = array (
     array ('tag', 'class_name' => 'InvoiceTag'),
-    array ('contact', 'class_name' => 'InvoiceContact'),
+    array ('customer', 'class_name' => 'Customer'),
     array ('user', 'class_name' => 'User'),
   );
 
@@ -35,14 +35,14 @@ class Invoice extends OaModel {
         'id' => $this->id,
         'user' => $this->user->to_array (),
         'tag' => $this->tag ? $this->tag->to_array () : array (),
-        'contact' => $this->contact ? $this->contact->to_array () : '',
+        'customer' => $this->customer ? $this->customer->to_array () : '',
         'name' => $this->name,
         'quantity' => $this->quantity,
         'single_money' => $this->single_money,
         'all_money' => $this->all_money,
         'memo' => $this->memo,
         'is_finished' => $this->is_finished,
-        'closing_at' => $this->closing_at->format ('Y-m-d'),
+        'closing_at' => $this->closing_at ? $this->closing_at->format ('Y-m-d') : '-',
       );
   }
   public function mini_name ($length = 50) {
