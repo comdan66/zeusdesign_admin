@@ -69,7 +69,7 @@
     <div class='row n2'>
       <label>備註</label>
       <div>
-        <textarea name='memo' placeholder='請輸入備註..'><?php echo isset ($posts['memo']) ? $posts['memo'] : $obj->memo;?></textarea>
+        <textarea name='memo' placeholder='請輸入備註..' class='pure autosize'><?php echo isset ($posts['memo']) ? $posts['memo'] : $obj->memo;?></textarea>
       </div>
     </div>
 
