@@ -56,7 +56,7 @@
               <td class='center'><?php echo $obj->id;?></td>
              
               <td><?php echo $obj->name;?></td>
-              <td><?php echo $obj->url;?></td>
+              <td><?php echo $obj->url ? anchor ($obj->url, $obj->url, 'target="_blank"') : '';?></td>
               
               <td><div class='munit'><?php echo $obj->ftp_url;?></div>
                   <div class='munit'><?php echo $obj->ftp_account;?></div>
