@@ -77,8 +77,8 @@
                 </label>
               </td>
               <td><?php echo $obj->user->name;?></td>
-              <td><?php echo $obj->customer ? $obj->customer->name . ($obj->customer->company ? '(' . $obj->customer->company->name . ')' : '') : '-';?></td>
-              <td><?php echo $obj->customer && $obj->customer->telephone ? $obj->customer->telephone . ' #' . trim ($obj->customer->extension, '#') : '-';?></td>
+              <td><?php echo $obj->customer ? $obj->customer->name . ($obj->customer->company ? '(' . $obj->customer->company->name . ')' : '') : '';?></td>
+              <td><?php echo $obj->customer && $obj->customer->telephone ? $obj->customer->telephone . ' #' . trim ($obj->customer->extension, '#') : '';?></td>
               <td><?php echo $obj->name;?></td>
               <td><?php echo number_format ($obj->all_money);?></td>
               <td class='center'>

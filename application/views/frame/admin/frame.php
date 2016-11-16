@@ -50,7 +50,7 @@
               <li>
                 <label>
                   <input type='checkbox' />
-                  <span class='icon-u'>會員管理</span>
+                  <span class='icon-u'>會員系統</span>
                   <ul>
                     <li><a href="<?php echo $url = base_url ('admin', 'users');?>" class='icon-ua<?php echo $now_url == $url ? ' active' : '';?>'>權限設定</a></li>
                   </ul>
@@ -61,12 +61,12 @@
               <li>
                 <label data-cnt='<?php echo ($contact_cnt = Contact::count (array ('conditions' => array ('is_readed = ?', Contact::READ_NO))));?>'>
                   <input type='checkbox' />
-                  <span class='icon-ea'>網站功能</span>
+                  <span class='icon-ea'>前台系統</span>
                   <ul>
-                    <li><a href="<?php echo $url = base_url ('admin', 'banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>旗幟設定</a></li>
-                    <li><a href="<?php echo $url = base_url ('admin', 'promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>促銷設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>旗幟管理</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>促銷管理</a></li>
                     <li data-cnt='<?php echo $contact_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'contacts');?>" class='icon-em<?php echo $now_url == $url ? ' active' : '';?>'>聯絡我們</a></li>
-                    <!-- <li><a href="<?php echo $url = base_url ('admin', 'deploys');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>部署網站</a></li> -->
+                    <!-- <li><a href="<?php echo $url = base_url ('admin', 'deploys');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>部署紀錄</a></li> -->
                   </ul>
                 </label>
               </li>
@@ -75,10 +75,10 @@
               <li>
                 <label>
                   <input type='checkbox' />
-                  <span class='icon-f'>文章管理</span>
+                  <span class='icon-f'>文章系統</span>
                   <ul>
-                    <li><a href="<?php echo $url = base_url ('admin', 'article-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
-                    <li><a href="<?php echo $url = base_url ('admin', 'articles');?>" class='icon-fa<?php echo $now_url == $url ? ' active' : '';?>'>文章設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'article-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>文章分類</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'articles');?>" class='icon-fa<?php echo $now_url == $url ? ' active' : '';?>'>文章管理</a></li>
                   </ul>
                 </label>
               </li>
@@ -87,10 +87,10 @@
               <li>
                 <label>
                   <input type='checkbox' />
-                  <span class='icon-g'>作品管理</span>
+                  <span class='icon-g'>作品系統</span>
                   <ul>
-                    <li><a href="<?php echo $url = base_url ('admin', 'work-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
-                    <li><a href="<?php echo $url = base_url ('admin', 'works');?>" class='icon-g<?php echo $now_url == $url ? ' active' : '';?>'>作品設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'work-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>作品分類</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'works');?>" class='icon-g<?php echo $now_url == $url ? ' active' : '';?>'>作品管理</a></li>
                   </ul>
                 </label>
               </li>
@@ -99,10 +99,10 @@
               <li>
                 <label>
                   <input type='checkbox' />
-                  <span class='icon-b'>客戶資訊</span>
+                  <span class='icon-b'>聯絡人系統</span>
                   <ul>
-                    <li><a href="<?php echo $url = base_url ('admin', 'companies');?>" class='icon-br<?php echo $now_url == $url ? ' active' : '';?>'>公司設定</a></li>
-                    <li><a href="<?php echo $url = base_url ('admin', 'customers');?>" class='icon-ab<?php echo $now_url == $url ? ' active' : '';?>'>聯絡人設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'companies');?>" class='icon-br<?php echo $now_url == $url ? ' active' : '';?>'>聯絡人公司</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'customers');?>" class='icon-ab<?php echo $now_url == $url ? ' active' : '';?>'>聯絡人管理</a></li>
                   </ul>
                 </label>
               </li>
@@ -111,10 +111,10 @@
               <li>
                 <label>
                   <input type='checkbox' />
-                  <span class='icon-ti'>請款管理</span>
+                  <span class='icon-ti'>請款系統</span>
                   <ul>
-                    <li><a href="<?php echo $url = base_url ('admin', 'invoice-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>分類設定</a></li>
-                    <li><a href="<?php echo $url = base_url ('admin', 'invoices');?>" class='icon-ti<?php echo $now_url == $url ? ' active' : '';?>'>請款設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'invoice-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>請款分類</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'invoices');?>" class='icon-ti<?php echo $now_url == $url ? ' active' : '';?>'>請款管理</a></li>
                   </ul>
                 </label>
               </li>
@@ -123,10 +123,21 @@
               <li>
                 <label>
                   <input type='checkbox' />
-                  <span class='icon-bil'>帳務管理</span>
+                  <span class='icon-bil'>帳務系統</span>
                   <ul>
-                    <li><a href="<?php echo $url = base_url ('admin', 'billins');?>" class='icon-ib<?php echo $now_url == $url ? ' active' : '';?>'>入帳設定</a></li>
-                    <li><a href="<?php echo $url = base_url ('admin', 'billous');?>" class='icon-ob<?php echo $now_url == $url ? ' active' : '';?>'>出帳設定</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'billins');?>" class='icon-ib<?php echo $now_url == $url ? ' active' : '';?>'>入帳管理</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'billous');?>" class='icon-ob<?php echo $now_url == $url ? ' active' : '';?>'>出帳管理</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php }
+            if (User::current ()->in_roles (array ('project'))) { ?>
+              <li>
+                <label>
+                  <input type='checkbox' />
+                  <span class='icon-fs'>專案系統</span>
+                  <ul>
+                    <li><a href="<?php echo $url = base_url ('admin', 'ftps');?>" class='icon-sev<?php echo $now_url == $url ? ' active' : '';?>'>FTP 管理</a></li>
                   </ul>
                 </label>
               </li>

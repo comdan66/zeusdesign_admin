@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>聯絡人</h1>
-    <p>聯絡人管理</p>
+    <h1>FTP</h1>
+    <p>FTP 管理</p>
   </div>
 
   <form class='select'>
@@ -33,51 +33,50 @@
 
 <div class='panel'>
   <header>
-    <h2>聯絡人列表</h2>
+    <h2>FTP 列表</h2>
     <a href='<?php echo base_url ($uri_1, 'add');?>' class='icon-r'></a>
   </header>
 
   <div class='content'>
-
-
     <table class='table'>
       <thead>
         <tr>
-          <th width='60'>#</th>
-          <th width='100'>公司</th>
-          <th width='110'>名稱</th>
-          <th width='200'>電子郵件</th>
-          <th width='110'>電話</th>
-          <th width='60'>分機</th>
-          <th width='110'>手機</th>
-          <th width='130'>住址</th>
-          <th >備註</th>
-          <th width='85' class='right'>修改/刪除</th>
+          <th width='50' class='center'>#</th>
+          <th width='100'>專案名稱</th>
+          <th width='150'>網站網址</th>
+          <th width='130'>FTP 主機</th>
+          <th width='100'>FTP 帳號</th>
+          <th width='100'>FTP 密碼</th>
+          <th width='150'>Server 管理頁面</th>
+          <th>備註</th>
+          <th width='85' class='center'>修改/刪除</th>
         </tr>
       </thead>
       <tbody>
   <?php if ($objs) {
           foreach ($objs as $obj) { ?>
             <tr>
-              <td><?php echo $obj->id;?></td>
-              <td><?php echo $obj->company ? $obj->company->name : '';?></td>
+              <td class='center'><?php echo $obj->id;?></td>
+             
               <td><?php echo $obj->name;?></td>
-              <td><?php echo $obj->email ? $obj->email : '';?></td>
-              <td><?php echo $obj->telephone ? $obj->telephone : '';?></td>
-              <td><?php echo $obj->extension ? '#' . $obj->extension : '';?></td>
-              <td><?php echo $obj->cellphone ? $obj->cellphone : '';?></td>
-              <td><?php echo $obj->address ? $obj->address : '';?></td>
-              <td><?php echo $obj->memo ? $obj->memo : '';?></td>
-              <td class='right'>
+              <td><?php echo $obj->url;?></td>
+              <td><?php echo $obj->host;?></td>
+              <td><?php echo $obj->account;?></td>
+              <td><?php echo $obj->password;?></td>
+              <td><?php echo $obj->admin_url;?></td>
+              <td><?php echo $obj->memo;?></td>
+
+              <td class='center'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
                 <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
               </td>
+
             </tr>
     <?php }
         } else { ?>
           <tr>
-            <td colspan='10' class='no_data'>沒有任何資料。</td>
+            <td colspan='8' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

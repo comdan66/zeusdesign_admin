@@ -43,7 +43,6 @@ html {
   }
 }
 
-
 .icon-d:before {
   content: "\e904";
 }
@@ -77,6 +76,9 @@ html {
 .icon-ea:before {
   content: "\e9ca";
 }
+.icon-sev:before {
+  content: "\e914";
+}
 .icon-y:before {
   content: "\e901";
 }
@@ -98,6 +100,9 @@ html {
 .icon-ma:before {
   content: "\e90b";
 }
+.icon-fs:before {
+  content: "\e915";
+}
 .icon-cs:before {
   content: "\e910";
 }
@@ -118,6 +123,9 @@ html {
 }
 .icon-cl:before {
   content: "\e014";
+}
+.icon-db:before {
+  content: "\e022";
 }
 .icon-r:before {
   content: "\e114";
@@ -179,6 +187,7 @@ html {
 .icon-tu:before {
   content: "\e90a";
 }
+
 
 
 
@@ -1328,6 +1337,12 @@ table.table {
     tr {
       td {
         border-top: 1px solid rgba(221, 221, 221, 1.00);
+
+        &:empty {
+          &:before {
+            content: '-';
+          }
+        }
       }
       &:nth-child(odd) {
         background-color: rgba(249, 249, 249, 1.00);

@@ -54,6 +54,8 @@ Route::group ('admin', function () {
   
   Route::resourcePagination (array ('invoice_tags'), 'invoice_tags');
   Route::resourcePagination (array ('invoices'), 'invoices');
+  
+  Route::resourcePagination (array ('ftps'), 'ftps');
 });
 
 Route::group ('api', function () {
