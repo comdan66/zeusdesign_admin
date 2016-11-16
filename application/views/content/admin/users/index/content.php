@@ -47,7 +47,7 @@
           <th width='150'>名稱</th>
           <th width='250'>郵件</th>
           <th>權限</th>
-          <th width='150'>登入時間</th>
+          <th width='150' class='center'>登入時間</th>
           <th width='50' class='center'>設定</th>
         </tr>
       </thead>
