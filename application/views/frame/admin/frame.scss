@@ -549,7 +549,7 @@ $changeWidth: 768px;
     width: 100%;
     overflow: hidden;
     // border: 1px solid rgba(255, 0, 0, .3);
-    background-color: rgba(40, 60, 80, 1.00);
+    background-color: rgba(40, 55, 71, 1.00);
     // padding-bottom: 3px;
     
     li {
@@ -566,7 +566,8 @@ $changeWidth: 768px;
         // padding-left: 11px;
         &.active {
           // border: 1px solid rgba(255, 0, 0, .3);
-          background-color: rgba(52, 72, 92, 1.00);
+          // background-color: rgba(52, 72, 92, 1.00);
+          color: rgba(38, 185, 154, 1.00);
         }
         &:before, &:after {
           position: absolute;
@@ -694,7 +695,8 @@ $changeWidth: 768px;
           // border-bottom: 1px solid rgba(0, 0, 0, .20);
         }
         ~ span {
-          color: rgba(255, 255, 255, 1.00);
+          color: rgba(38, 185, 154, 1.00);
+          
           &:after {
             display: inline-block;
           }
