@@ -76,7 +76,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='4' class='no_data'>沒有任何資料。</td>
+            <td colspan='6' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>
