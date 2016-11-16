@@ -66,7 +66,7 @@
                     <li><a href="<?php echo $url = base_url ('admin', 'banners');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>旗幟管理</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'promos');?>" class='icon-im<?php echo $now_url == $url ? ' active' : '';?>'>促銷管理</a></li>
                     <li data-cnt='<?php echo $contact_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'contacts');?>" class='icon-em<?php echo $now_url == $url ? ' active' : '';?>'>聯絡我們</a></li>
-                    <!-- <li><a href="<?php echo $url = base_url ('admin', 'deploys');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>部署紀錄</a></li> -->
+                    <li><a href="<?php echo $url = base_url ('admin', 'deploys');?>" class='icon-pi<?php echo $now_url == $url ? ' active' : '';?>'>部署紀錄</a></li>
                   </ul>
                 </label>
               </li>
