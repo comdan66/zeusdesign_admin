@@ -66,7 +66,7 @@
               <td><?php echo $obj->name;?></td>
               <td><?php echo $obj->email;?></td>
               <td><?php echo implode (', ', $obj->role_names ());?></td>
-              <td><time datetime='<?php echo $obj->logined_at->format ('Y-m-d H:i:s');?>'><?php echo $obj->logined_at->format ('Y-m-d H:i:s');?></time></td>
+              <td class='center'><time datetime='<?php echo $obj->logined_at->format ('Y-m-d H:i:s');?>'><?php echo $obj->logined_at->format ('Y-m-d H:i:s');?></time></td>
 
               <td class='center'>
                 <a class='icon-se' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
