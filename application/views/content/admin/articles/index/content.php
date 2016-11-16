@@ -49,7 +49,7 @@
           <th width='100'>作者</th>
           <th width='200'>標題</th>
           <th>內容</th>
-          <th width='80' class='center'>修改/刪除</th>
+          <th width='80' class='right'>修改/刪除</th>
         </tr>
       </thead>
       <tbody>
@@ -72,7 +72,7 @@
               <td><?php echo $obj->user->name;?></td>
               <td><?php echo $obj->mini_title (25);?></td>
               <td><?php echo $obj->mini_content (50);?></td>
-              <td class='center'>
+              <td class='right'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
                 <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>

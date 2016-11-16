@@ -46,7 +46,7 @@
           <th>網站網址</th>
           <th width='250'>FTP</th>
           <th width='250'>管理頁</th>
-          <th width='90' class='center'>修改/刪除</th>
+          <th width='90' class='right'>修改/刪除</th>
         </tr>
       </thead>
       <tbody>
@@ -66,7 +66,7 @@
                   <div class='munit'><?php echo $obj->admin_account;?></div>
                   <div class='munit'><?php echo $obj->admin_password;?></div></td>
 
-              <td class='center'>
+              <td class='right'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
                 <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>

@@ -47,8 +47,8 @@
           <th width='150'>名稱</th>
           <th width='250'>郵件</th>
           <th>權限</th>
-          <th width='150' class='center'>登入時間</th>
-          <th width='50' class='center'>設定</th>
+          <th width='150' class='right'>登入時間</th>
+          <th width='50' class='right'>設定</th>
         </tr>
       </thead>
       <tbody>
@@ -66,9 +66,9 @@
               <td><?php echo $obj->name;?></td>
               <td><?php echo $obj->email;?></td>
               <td><?php echo implode (', ', $obj->role_names ());?></td>
-              <td class='center'><time datetime='<?php echo $obj->logined_at->format ('Y-m-d H:i:s');?>'><?php echo $obj->logined_at->format ('Y-m-d H:i:s');?></time></td>
+              <td class='right'><time datetime='<?php echo $obj->logined_at->format ('Y-m-d H:i:s');?>'><?php echo $obj->logined_at->format ('Y-m-d H:i:s');?></time></td>
 
-              <td class='center'>
+              <td class='right'>
                 <a class='icon-se' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
               </td>
             </tr>

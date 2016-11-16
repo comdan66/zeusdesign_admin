@@ -49,7 +49,7 @@
           <th width='100'>是否有發票</th>
           <th>備註</th>
           <th width='100'>日期</th>
-          <th width='85' class='center'>修改/刪除</th>
+          <th width='85' class='right'>修改/刪除</th>
         </tr>
       </thead>
       <tbody>
@@ -65,7 +65,7 @@
               <td><?php echo $obj->memo;?></td>
               <td><?php echo $obj->date_at->format ('Y-m-d');?></td>
 
-              <td class='center'>
+              <td class='right'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
                 <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>

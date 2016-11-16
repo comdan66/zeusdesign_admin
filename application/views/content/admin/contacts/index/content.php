@@ -48,7 +48,7 @@
           <th width='200'>E-Mail</th>
           <th>內容</th>
           <th width='100'>IP</th>
-          <th width='65' class='center'>刪除</th>
+          <th width='65' class='right'>刪除</th>
         </tr>
       </thead>
       <tbody>
@@ -67,7 +67,7 @@
               <td><?php echo $obj->message;?></td>
               <td><?php echo $obj->ip;?></td>
 
-              <td class='center'>
+              <td class='right'>
                 <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
               </td>
 

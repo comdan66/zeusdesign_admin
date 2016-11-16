@@ -62,7 +62,7 @@
           <th width='150'>聯絡電話</th>
           <th>專案名稱</th>
           <th width='100'>總金額</th>
-          <th width='80' class='center'>修改/刪除</th>
+          <th width='80' class='right'>修改/刪除</th>
         </tr>
       </thead>
       <tbody>
@@ -81,7 +81,7 @@
               <td><?php echo $obj->customer && $obj->customer->telephone ? $obj->customer->telephone . ' #' . trim ($obj->customer->extension, '#') : '';?></td>
               <td><?php echo $obj->name;?></td>
               <td><?php echo number_format ($obj->all_money);?></td>
-              <td class='center'>
+              <td class='right'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
                 <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
