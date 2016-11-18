@@ -43,6 +43,7 @@
                     <li><a href="<?php echo $url = base_url ('admin', 'schedule-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>行程分類</a></li>
                     <li data-cnt='<?php echo $schedule_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'calendar');?>" class='icon-calendar2<?php echo $now_url == $url ? ' active' : '';?>'>個人行程</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'all-calendar');?>" class='icon-calendar<?php echo $now_url == $url ? ' active' : '';?>'>全部行程</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'my-salaries');?>" class='icon-moneybag<?php echo $now_url == $url ? ' active' : '';?>'>我的宙思幣</a></li>
                   </ul>
                 </label>
               </li>

@@ -41,8 +41,7 @@ html {
     font-weight: normal;
 
   }
-}
-.icon-d:before {
+}.icon-d:before {
   content: "\e904";
 }
 .icon-b:before {
@@ -126,6 +125,9 @@ html {
 .icon-i:before {
   content: "\e23e";
 }
+.icon-help_outline:before {
+  content: "\e8fd";
+}
 .icon-p:before {
   content: "\e8ad";
 }
@@ -198,6 +200,7 @@ html {
 .icon-tu:before {
   content: "\e90a";
 }
+
 
 
 $leftSideWidth: 230px;
