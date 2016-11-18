@@ -45,7 +45,7 @@
         <tr>
           <th width='50'>#</th>
           <th width='110'>名稱</th>
-          <th width='150'>公司</th>
+          <th width='170'>公司</th>
           <th width='120'>電話</th>
           <th width='60'>分機</th>
           <th width='130'>手機</th>
