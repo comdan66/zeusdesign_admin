@@ -245,7 +245,7 @@ $config['encryption_key'] = '%@*4dsa8V9Kbfsda5C7Rw*5(F|eiH599fOy,.';
 |
 */
 $config['sess_cookie_name']   = 'oaci_session';
-$config['sess_expiration']    = 7200;
+$config['sess_expiration']    = 28800;
 $config['sess_expire_on_close'] = FALSE;
 $config['sess_encrypt_cookie']  = true;
 $config['sess_use_database']    = FALSE;
