@@ -175,7 +175,7 @@
       <?php echo isset ($content) ? $content : ''; ?>
           </div>
           <div id='bottom_side'>
-            後台版型設計 by 宙斯 <a href='http://www.ioa.tw/' target='_blank'>OA Wu</a>
+            後台版型設計 by 宙思 <a href='http://www.ioa.tw/' target='_blank'>OA Wu</a>
           </div>
         </div>
       </div>

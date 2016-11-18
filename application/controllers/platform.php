@@ -39,6 +39,6 @@ class Platform extends Site_controller {
   public function logout () {
     UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-o', 'content' => '登出後台', 'desc' => '', 'backup' => ''));
     Session::setData ('user_id', 0);
-    return redirect_message (func_get_args (), array ('_flash_info' => '登出成功!'));
+    return redirect_message ('login', array ('_flash_info' => '登出成功!'));
   }
 }

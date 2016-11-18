@@ -33,6 +33,6 @@ class Site_controller extends Oa_controller {
   }
 
   private function _add_js () {
-    return $this;
+    return $this->add_js (res_url ('res', 'js', 'site.js'));
   }
 }
