@@ -5,9 +5,11 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
-class Customers extends Admin_controller {
-  private $uri_1 = null;
-  private $obj = null;
+class Company_customers extends Admin_controller {
+  private $uri_1     = null;
+  private $uri_2     = null;
+  private $parent    = null;
+  private $obj  = null;
 
   public function __construct () {
     parent::__construct ();
@@ -17,25 +19,34 @@ class Customers extends Admin_controller {
             '_flash_danger' => '您的權限不足，或者頁面不存在。'
           ));
 
-    $this->uri_1 = 'admin/customers';
+    $this->uri_1     = 'admin/company';
+    $this->uri_2     = 'customers';
+
+    if (!(($id = $this->uri->rsegments (3, 0)) && ($this->parent = CustomerCompany::find_by_id ($id))))
+      return redirect_message (array ('customer-companies'), array (
+          '_flash_danger' => '找不到該筆資料。'
+        ));
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
-      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Customer::find ('one', array ('conditions' => array ('id = ?', $id))))))
-        return redirect_message (array ($this->uri_1), array (
+      if (!(($id = $this->uri->rsegments (4, 0)) && ($this->obj = Customer::find_by_id ($id))))
+        return redirect_message (array ($this->uri_1, $this->parent_tag->id, $this->uri_2), array (
             '_flash_danger' => '找不到該筆資料。'
           ));
 
     $this->add_param ('uri_1', $this->uri_1);
-    $this->add_param ('now_url', base_url ($this->uri_1));
+    $this->add_param ('uri_2', $this->uri_2);
+
+    $this->add_param ('parent', $this->parent);
+    $this->add_param ('now_url', base_url ('admin', 'customer-companies'));
   }
-  public function index ($offset = 0) {
+  public function index ($id, $offset = 0) {
     $columns = array ( 
-        array ('key' => 'customer_company_id', 'title' => '公司名稱', 'sql' => 'customer_company_id = ?', 'select' => array_map (function ($company) { return array ('value' => $company->id, 'text' => $company->name);}, CustomerCompany::all (array ('select' => 'id, name')))),
         array ('key' => 'name', 'title' => '聯絡人名稱', 'sql' => 'name LIKE ?'), 
       );
 
-    $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
+    $configs = array_merge (explode ('/', $this->uri_1), array ($this->parent->id, $this->uri_2, '%s'));
     $conditions = conditions ($columns, $configs);
+    OaModel::addConditions ($conditions, 'customer_company_id = ?', $this->parent->id);
 
     $limit = 25;
     $total = Customer::count (array ('conditions' => $conditions));
@@ -69,19 +80,20 @@ class Customers extends Admin_controller {
   }
   public function create () {
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, 'add'), array (
+      return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2, 'add'), array (
           '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
         ));
 
     $posts = OAInput::post ();
     $post_emails = isset ($posts['emails']) ? $posts['emails'] : array ();
-
+    
     if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
-      return redirect_message (array ($this->uri_1, 'add'), array (
+      return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2, 'add'), array (
           '_flash_danger' => $msg,
           'posts' => $posts
         ));
 
+    $posts['customer_company_id'] = $this->parent->id;
     $create = Customer::transaction (function () use (&$obj, $posts) {
       return verifyCreateOrm ($obj = Customer::create (array_intersect_key ($posts, Customer::table ()->columns)));
     });
@@ -101,8 +113,8 @@ class Customers extends Admin_controller {
             )));
         });
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ab', 'content' => '新增一項聯絡人。', 'desc' => '聯絡人名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->to_array ())));
-    return redirect_message (array ($this->uri_1), array (
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ab', 'content' => '在 “' . $this->parent->name . '” 下新增一項聯絡人。', 'desc' => '聯絡人名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->to_array ())));
+    return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2), array (
         '_flash_info' => '新增成功！'
       ));
   }
@@ -122,7 +134,7 @@ class Customers extends Admin_controller {
   }
   public function update () {
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
+      return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2, $this->obj->id, 'edit'), array (
           '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
         ));
 
@@ -130,7 +142,7 @@ class Customers extends Admin_controller {
     $post_emails = isset ($posts['emails']) ? $posts['emails'] : array ();
 
     if ($msg = $this->_validation ($posts))
-      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
+      return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2, $this->obj->id, 'edit'), array (
           '_flash_danger' => $msg,
           'posts' => $posts
         ));
@@ -145,7 +157,7 @@ class Customers extends Admin_controller {
     });
 
     if (!$update)
-      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
+      return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2, $this->obj->id, 'edit'), array (
           '_flash_danger' => '更新失敗！',
           'posts' => $posts
         ));
@@ -165,8 +177,8 @@ class Customers extends Admin_controller {
             )));
         });
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ab', 'content' => '修改一項聯絡人。', 'desc' => '聯絡人名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->to_array ())));
-    return redirect_message (array ($this->uri_1), array (
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ab', 'content' => '修改了 “' . $this->parent->name . '” 下的一項聯絡人。', 'desc' => '聯絡人名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->to_array ())));
+    return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2), array (
         '_flash_info' => '更新成功！'
       ));
   }
@@ -175,26 +187,25 @@ class Customers extends Admin_controller {
     $obj = $this->obj;
     $backup = json_encode ($obj->to_array ());
     $delete = Customer::transaction (function () use ($obj) { return $obj->destroy (); });
-    
+
     if (!$delete)
-      return redirect_message (array ($this->uri_1), array (
+      return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2), array (
           '_flash_danger' => '刪除失敗！',
         ));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ab', 'content' => '刪除一項聯絡人。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
-    return redirect_message (array ($this->uri_1), array (
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ab', 'content' => '刪除了 “' . $this->parent->name . '” 下的一項聯絡人。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => json_encode ($obj->to_array ())));
+    return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2), array (
         '_flash_info' => '刪除成功！'
       ));
   }
 
   private function _validation (&$posts) {
-    $keys = array ('customer_company_id', 'name', 'extension', 'cellphone', 'experience', 'memo');
+    $keys = array ('name', 'extension', 'cellphone', 'experience', 'memo');
 
     $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
 
     if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '聯絡人名稱格式錯誤！';
-    if (isset ($posts['customer_company_id']) && !(($posts['customer_company_id'] = trim ($posts['customer_company_id'])) && CustomerCompany::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['customer_company_id']))))) return '聯絡人公司格式錯誤！';
     
     if (isset ($posts['extension']) && ($posts['extension'] = trim ($posts['extension'])) && ($posts['extension'] = trim ($posts['extension'], '#')) && !is_string ($posts['extension'])) return '公司分機格式錯誤！';
     if (isset ($posts['cellphone']) && ($posts['cellphone'] = trim ($posts['cellphone'])) && !is_string ($posts['cellphone'])) return '聯絡人手機格式錯誤！';
@@ -203,7 +214,6 @@ class Customers extends Admin_controller {
     return '';
   }
   private function _validation_must (&$posts) {
-    if (!isset ($posts['customer_company_id'])) return '沒有選擇 聯絡人公司！';
     if (!isset ($posts['name'])) return '沒有填寫 聯絡人名稱！';
     return '';
   }

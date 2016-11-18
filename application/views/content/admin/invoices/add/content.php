@@ -34,7 +34,7 @@
       <div>
         <select name='customer_id'>
           <option value='0' selected>請選擇聯絡人</option>
-    <?php if ($companies = Company::all (array ('select' => 'id, name'))) {
+    <?php if ($companies = CustomerCompany::all (array ('select' => 'id, name'))) {
             foreach ($companies as $company) { ?>
               <optgroup label='<?php echo $company->name;?>'>
           <?php if ($company->customers) {
@@ -45,7 +45,7 @@
               </optgroup>
       <?php }
           }
-          if ($customers = Customer::find ('all', array ('select' => 'id, name', 'conditions' => array ('company_id = 0')))) { ?>
+          if ($customers = Customer::find ('all', array ('select' => 'id, name', 'conditions' => array ('customer_company_id = 0')))) { ?>
             <optgroup label='其他'>
         <?php foreach ($customers as $customer) { ?>
                 <option value='<?php echo $customer->id;?>'<?php echo (isset ($posts['customer_id']) ? $posts['customer_id'] : '0') == $customer->id ? ' selected': '';?>><?php echo $customer->name;?></option>

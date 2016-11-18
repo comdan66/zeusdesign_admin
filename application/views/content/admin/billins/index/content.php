@@ -44,16 +44,17 @@
     <table class='table'>
       <thead>
         <tr>
-          <th width='50' class='center'>#</th>
+          <th width='40' class='center'>#</th>
+          <th width='90' class='center'>是否完成</th>
           <th width='90'>負責人</th>
-          <th width='130'>專案名稱</th>
-          <th width='100'>總金額</th>
-          <th width='100'>％數標題</th>
+          <th width='120'>專案名稱</th>
+          <th width='85'>總金額</th>
+          <th width='85'>％數標題</th>
           <th width='50'>％數</th>
-          <th width='90'>宙思＄</th>
+          <th width='80'>宙思＄</th>
           <th width='100'>小計</th>
           <th>備註</th>
-          <th width='90'>日期</th>
+          <th width='85' class='right'>日期</th>
           <th width='85' class='right'>修改/刪除</th>
         </tr>
       </thead>
@@ -62,6 +63,12 @@
           foreach ($objs as $obj) { ?>
             <tr>
               <td class='center'><?php echo $obj->id;?></td>
+              <td class='center'>
+                <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                  <input type='checkbox' name='is_finished'<?php echo $obj->is_finished == Billin::IS_FINISHED ? ' checked' : '';?> />
+                  <span></span>
+                </label>
+              </td>
               
               <td><?php echo $obj->user->name;?></td>
               <td><?php echo $obj->name;?></td>
@@ -71,7 +78,7 @@
               <td><?php echo number_format ($obj->zeus_money);?></td>
               <td><?php echo number_format ($obj->money - $obj->zeus_money);?></td>
               <td><?php echo $obj->memo;?></td>
-              <td><?php echo $obj->date_at->format ('Y-m-d');?></td>
+              <td class='right'><?php echo $obj->date_at->format ('Y-m-d');?></td>
 
               <td class='right'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
@@ -83,7 +90,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='11' class='no_data'>沒有任何資料。</td>
+            <td colspan='12' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

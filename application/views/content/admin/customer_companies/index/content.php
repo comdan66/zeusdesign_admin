@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>公司</h1>
-    <p>公司管理</p>
+    <h1>聯絡人公司</h1>
+    <p>聯絡人公司管理</p>
   </div>
 
   <form class='select'>
@@ -33,20 +33,21 @@
 
 <div class='panel'>
   <header>
-    <h2>公司列表</h2>
+    <h2>聯絡人公司列表</h2>
     <a href='<?php echo base_url ($uri_1, 'add');?>' class='icon-r'></a>
   </header>
 
   <div class='content'>
-
-
     <table class='table'>
       <thead>
         <tr>
           <th width='80'>#</th>
-          <th >名稱</th>
-          <th width='150'>聯絡人數</th>
-          <th width='85' class='right'>修改/刪除</th>
+          <th width='150'>公司名稱</th>
+          <th width='150'>公司地址</th>
+          <th width='150'>公司電話</th>
+          <th >公司備註</th>
+          <th width='100' class='right'>聯絡人數</th>
+          <th width='125' class='right'>聯絡人/修改/刪除</th>
         </tr>
       </thead>
       <tbody>
@@ -55,8 +56,13 @@
             <tr>
               <td><?php echo $obj->id;?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo count ($obj->customers);?></td>
+              <td><?php echo $obj->address;?></td>
+              <td><?php echo $obj->telephone;?></td>
+              <td><?php echo $obj->memo;?></td>
+              <td class='right'><?php echo count ($obj->customers);?></td>
               <td class='right'>
+                <a class='icon-r' href="<?php echo base_url ('admin', 'company', $obj->id, 'customers');?>"></a>
+                /
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
                 <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
@@ -65,7 +71,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='4' class='no_data'>沒有任何資料。</td>
+            <td colspan='7' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

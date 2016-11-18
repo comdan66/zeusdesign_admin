@@ -7,7 +7,7 @@
   <form class='form' method='post' action='<?php echo base_url ($uri_1);?>' enctype='multipart/form-data'>
     
     <div class='row n2'>
-      <label>新增者</label>
+      <label>* 新增者</label>
       <div>
         <select name='user_id'>
           <option value='' selected>請選擇新增者</option>
@@ -22,21 +22,21 @@
 
 
     <div class='row n2'>
-      <label>項目名稱</label>
+      <label>* 項目名稱</label>
       <div>
         <input type='text' name='name' value='<?php echo isset ($posts['name']) ? $posts['name'] : '';?>' placeholder='請輸入項目名稱..' maxlength='200' pattern='.{1,200}' required title='輸入項目名稱!' autofocus />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>金額</label>
+      <label>* 金額</label>
       <div>
         <input type='number' name='money' id='money' value='<?php echo isset ($posts['money']) ? $posts['money'] : '0';?>' placeholder='請輸入金額..' maxlength='200' pattern='.{1,200}' required title='輸入金額!' />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>日期</label>
+      <label>* 日期</label>
       <div>
         <input type='date' name='date_at' value='<?php echo isset ($posts['date_at']) ? $posts['date_at'] : date ('Y-m-d');?>' placeholder='請輸入日期..' maxlength='200' pattern='.{1,200}' required title='輸入日期!' />
       </div>
@@ -53,6 +53,16 @@
             </label>
     <?php } ?>
         </div>
+      </div>
+    </div>
+
+    <div class='row n2'>
+      <label>是否出帳</label>
+      <div>
+        <label class='switch'>
+          <input type='checkbox' name='is_finished'<?php echo isset ($posts['is_finished']) && ($posts['is_finished'] == Billou::IS_FINISHED) ? ' checked' : '';?> />
+          <span></span>
+        </label>
       </div>
     </div>
 

@@ -4,3 +4,10 @@
  */
 
 @import "_oa";
+
+#main>header>* {
+  width: calc(100% - 550px);
+}
+#main>header>*:first-child {
+  width: 550px;
+}

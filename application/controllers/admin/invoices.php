@@ -33,7 +33,7 @@ class Invoices extends Admin_controller {
   private function _search_columns () {
     return array ( 
         array ('key' => 'name', 'title' => '專案名稱', 'sql' => 'name LIKE ?'), 
-        array ('key' => 'customer_id', 'title' => '聯絡人', 'sql' => 'customer_id = ?', 'select' => array_map (function ($customer) { return array ('value' => $customer->id, 'text' => $customer->name, 'group' => $customer->company ? $customer->company->name : '');}, Customer::find ('all', array ('select' => 'id, name, company_id', 'order' => 'id ASC')))),
+        array ('key' => 'customer_id', 'title' => '聯絡人', 'sql' => 'customer_id = ?', 'select' => array_map (function ($customer) { return array ('value' => $customer->id, 'text' => $customer->name, 'group' => $customer->company ? $customer->company->name : '');}, Customer::find ('all', array ('select' => 'id, name, customer_company_id', 'order' => 'id ASC')))),
         array ('key' => 'is_finished', 'title' => '是否請款', 'sql' => 'is_finished = ?', 'select' => array_map (function ($key) { return array ('value' => $key, 'text' => Invoice::$finishNames[$key]);}, array_keys (Invoice::$finishNames))),
         array ('key' => 'user_id', 'title' => '作者', 'sql' => 'user_id = ?', 'select' => array_map (function ($user) { return array ('value' => $user->id, 'text' => $user->name);}, User::all (array ('select' => 'id, name')))),
       );
@@ -44,7 +44,7 @@ class Invoices extends Admin_controller {
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
     $conditions = conditions ($columns, $configs);
 
-    $limit = 10;
+    $limit = 25;
     $total = Invoice::count (array ('conditions' => $conditions));
     $offset = $offset < $total ? $offset : 0;
 
@@ -241,7 +241,7 @@ class Invoices extends Admin_controller {
 
     $this->load->library ('OAExcel');
     $infos = array (array ('title' => '專案名稱', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->name'),
-                    array ('title' => '聯絡人',  'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->customer ? $obj->customer->name . ($obj->customer->company ? "(" . $obj->customer->company->name . ")" : "") : "-"'),
+                    array ('title' => '聯絡人',  'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->customer && $obj->customer->company ? $obj->customer->company->telephone . (($e = trim ($obj->customer->extension, "#")) ? " #" . $e : "") : ""'),
                     array ('title' => '數量',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->quantity ? $obj->quantity : "-"'),
                     array ('title' => '單價',   'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->single_money ? $obj->single_money : "-"'),
                     array ('title' => '總金額',  'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->all_money'),

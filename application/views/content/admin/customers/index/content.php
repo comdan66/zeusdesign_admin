@@ -43,15 +43,14 @@
     <table class='table'>
       <thead>
         <tr>
-          <th width='60'>#</th>
-          <th width='100'>公司</th>
+          <th width='50'>#</th>
           <th width='110'>名稱</th>
-          <th width='200'>電子郵件</th>
-          <th width='110'>電話</th>
+          <th width='150'>公司</th>
+          <th width='120'>電話</th>
           <th width='60'>分機</th>
-          <th width='110'>手機</th>
-          <th width='130'>住址</th>
-          <th >備註</th>
+          <th width='130'>手機</th>
+          <th >E-mail</th>
+          <th width='85' class='right'>請款數</th>
           <th width='85' class='right'>修改/刪除</th>
         </tr>
       </thead>
@@ -60,14 +59,15 @@
           foreach ($objs as $obj) { ?>
             <tr>
               <td><?php echo $obj->id;?></td>
-              <td><?php echo $obj->company ? $obj->company->name : '';?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo $obj->email ? $obj->email : '';?></td>
-              <td><?php echo $obj->telephone ? $obj->telephone : '';?></td>
+              <td><?php echo $obj->company ? $obj->company->name : '';?></td>
+              <td><?php echo $obj->company ? $obj->company->telephone : '';?></td>
               <td><?php echo $obj->extension ? '#' . $obj->extension : '';?></td>
               <td><?php echo $obj->cellphone ? $obj->cellphone : '';?></td>
-              <td><?php echo $obj->address ? $obj->address : '';?></td>
-              <td><?php echo $obj->memo ? $obj->memo : '';?></td>
+              <td><?php echo $obj->emails ? implode ('', array_map (function ($email) {
+                return "<div class='munit'>" . $email->email . "</div>";
+              }, $obj->emails)) : '';?></td>
+              <td class='right'><?php echo count ($obj->invoices);?></td>
               <td class='right'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /
@@ -77,7 +77,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='10' class='no_data'>沒有任何資料。</td>
+            <td colspan='9' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

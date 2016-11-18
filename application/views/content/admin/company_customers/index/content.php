@@ -1,13 +1,11 @@
 <header>
   <div class='title'>
-    <h1>帳務</h1>
-    <p>出帳 上稿管理</p>
+    <h1><?php echo $parent->name;?></h1>
+    <p>聯絡人管理</p>
   </div>
 
   <form class='select'>
-    <button type='button' class='icon-p' id='export' href='<?php echo base_url ('admin', 'billous', 'export');?>'></button>
     <button type='submit' class='icon-s'></button>
-
 <?php 
     if ($columns) { ?>
 <?php foreach ($columns as $column) {
@@ -34,22 +32,24 @@
 
 <div class='panel'>
   <header>
-    <h2>出帳 列表</h2>
-    <a href='<?php echo base_url ($uri_1, 'add');?>' class='icon-r'></a>
+    <h2>聯絡人列表</h2>
+    <a href='<?php echo base_url ($uri_1, $parent->id, $uri_2, 'add');?>' class='icon-r'></a>
   </header>
 
   <div class='content'>
+
+
     <table class='table'>
       <thead>
         <tr>
-          <th width='50' class='center'>#</th>
-          <th width='90' class='center'>是否完成</th>
-          <th width='100'>新增者</th>
-          <th width='150'>項目名稱</th>
-          <th width='100'>金額</th>
-          <th width='100'>是否有發票</th>
-          <th>備註</th>
-          <th width='100'>日期</th>
+          <th width='50'>#</th>
+          <th width='110'>名稱</th>
+          <th width='150'>公司</th>
+          <th width='120'>電話</th>
+          <th width='60'>分機</th>
+          <th width='130'>手機</th>
+          <th >E-mail</th>
+          <th width='85' class='right'>請款數</th>
           <th width='85' class='right'>修改/刪除</th>
         </tr>
       </thead>
@@ -57,28 +57,21 @@
   <?php if ($objs) {
           foreach ($objs as $obj) { ?>
             <tr>
-              <td class='center'><?php echo $obj->id;?></td>
-             
-              <td class='center'>
-                <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
-                  <input type='checkbox' name='is_finished'<?php echo $obj->is_finished == Billin::IS_FINISHED ? ' checked' : '';?> />
-                  <span></span>
-                </label>
-              </td>
-
-              <td><?php echo $obj->user->name;?></td>
+              <td><?php echo $obj->id;?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo number_format ($obj->money);?></td>
-              <td><?php echo Billou::$invoiceNames[$obj->is_invoice];?></td>
-              <td><?php echo $obj->memo;?></td>
-              <td><?php echo $obj->date_at->format ('Y-m-d');?></td>
-
+              <td><?php echo $obj->company ? $obj->company->name : '';?></td>
+              <td><?php echo $obj->company ? $obj->company->telephone : '';?></td>
+              <td><?php echo $obj->extension ? '#' . $obj->extension : '';?></td>
+              <td><?php echo $obj->cellphone ? $obj->cellphone : '';?></td>
+              <td><?php echo $obj->emails ? implode ('', array_map (function ($email) {
+                return "<div class='munit'>" . $email->email . "</div>";
+              }, $obj->emails)) : '';?></td>
+              <td class='right'><?php echo count ($obj->invoices);?></td>
               <td class='right'>
-                <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
+                <a class='icon-e' href="<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id, 'edit');?>"></a>
                 /
-                <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
+                <a class='icon-t' href="<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id);?>" data-method='delete'></a>
               </td>
-
             </tr>
     <?php }
         } else { ?>

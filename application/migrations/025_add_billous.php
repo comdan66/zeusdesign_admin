@@ -17,7 +17,8 @@ class Migration_Add_billous extends CI_Migration {
 
         `memo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '備註',
         `is_invoice` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '是否有發票，1 有，0 沒有',
-        `date_at` date NOT NULL DEFAULT '" . date ('Y-m-d') . "' COMMENT '日期',
+        `is_finished` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '是否出帳，1 是，0 否',
+        `date_at` date DEFAULT NULL COMMENT '日期',
 
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',

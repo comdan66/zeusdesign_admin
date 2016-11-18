@@ -5,9 +5,9 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
-class Company extends OaModel {
+class CustomerCompany extends OaModel {
 
-  static $table_name = 'companies';
+  static $table_name = 'customer_companies';
 
   static $has_one = array (
   );
@@ -26,12 +26,18 @@ class Company extends OaModel {
     return array (
         'id' => $this->id,
         'name' => $this->name,
+        'address' => $this->address,
+        'telephone' => $this->telephone,
+        'memo' => $this->memo,
+        'customers' => array_map (function ($customer) {
+          return $customer->to_array ();
+        }, $this->customers),
       );
   }
   public function destroy () {
     if ($this->customers)
       foreach ($this->customers as $customer)
-        if (!($customer->company_id = 0) && $customer->save ())
+        if (!($customer->customer_company_id = 0) && $customer->save ())
           return false;
 
     return $this->delete ();

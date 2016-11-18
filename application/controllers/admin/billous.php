@@ -153,7 +153,7 @@ class Billous extends Admin_controller {
       ));
   }
   private function _validation (&$posts) {
-    $keys = array ('user_id', 'name', 'money', 'date_at', 'is_invoice', 'memo');
+    $keys = array ('user_id', 'name', 'money', 'date_at', 'is_invoice', 'memo', 'is_finished');
 
     $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
@@ -164,7 +164,8 @@ class Billous extends Admin_controller {
     if (isset ($posts['date_at']) && !($posts['date_at'] = trim ($posts['date_at']))) return '日期格式錯誤！';
     if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
     if (isset ($posts['is_invoice']) && !(is_numeric ($posts['is_invoice'] = trim ($posts['is_invoice'])) && in_array ($posts['is_invoice'], array_keys (Billou::$invoiceNames)))) return '是否有發票格式錯誤！';
-    
+    if (isset ($posts['is_finished']) && !(is_numeric ($posts['is_finished'] = trim ($posts['is_finished'])) && in_array ($posts['is_finished'], array_keys (Billou::$finishNames)))) return '是否出帳格式錯誤！';
+
     return '';
   }
   private function _validation_must (&$posts) {

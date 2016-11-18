@@ -8,7 +8,7 @@
     <input type='hidden' name='_method' value='put' />
     
     <div class='row n2'>
-      <label>負責人</label>
+      <label>* 負責人</label>
       <div>
         <select name='user_id'>
           <option value='' selected>請選擇負責人</option>
@@ -23,21 +23,21 @@
 
 
     <div class='row n2'>
-      <label>專案名稱</label>
+      <label>* 專案名稱</label>
       <div>
         <input type='text' name='name' value='<?php echo isset ($posts['name']) ? $posts['name'] : $obj->name;?>' placeholder='請輸入專案名稱..' maxlength='200' pattern='.{1,200}' required title='輸入專案名稱!' autofocus />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>總金額</label>
+      <label>* 總金額（含稅）</label>
       <div>
         <input type='number' name='money' id='money' value='<?php echo isset ($posts['money']) ? $posts['money'] : $obj->money;?>' placeholder='請輸入總金額..' maxlength='200' pattern='.{1,200}' required title='輸入總金額!' />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>％數標題</label>
+      <label>* ％數標題</label>
       <div id='billin_rate'>
         <div class='radios' data-val='<?php echo isset ($posts['rate_name']) ? $posts['rate_name'] : $obj->rate_name;?>'>
           <label>
@@ -59,23 +59,33 @@
     </div>
 
     <div class='row n2'>
-      <label>％數</label>
+      <label>* ％數</label>
       <div>
         <input type='number' name='rate' id='rate' value='<?php echo isset ($posts['rate']) ? $posts['rate'] : $obj->rate;?>' placeholder='請輸入％數..' maxlength='200' pattern='.{1,200}' required title='輸入％數' />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>宙思＄</label>
+      <label>* 宙思＄</label>
       <div>
         <input type='number' name='zeus_money' id='zeus_money' value='<?php echo isset ($posts['zeus_money']) ? $posts['zeus_money'] : $obj->zeus_money;?>' placeholder='請輸入宙思＄..' maxlength='200' pattern='.{1,200}' required title='輸入宙思＄!' />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>日期</label>
+      <label>* 日期</label>
       <div>
         <input type='date' name='date_at' value='<?php echo isset ($posts['date_at']) ? $posts['date_at'] : $obj->date_at->format ('Y-m-d');?>' placeholder='請輸入日期..' maxlength='200' pattern='.{1,200}' required title='輸入日期!' />
+      </div>
+    </div>
+
+    <div class='row n2'>
+      <label>是否入帳</label>
+      <div>
+        <label class='switch'>
+          <input type='checkbox' name='is_finished'<?php echo (isset ($posts['is_finished']) ? $posts['is_finished'] : $obj->is_finished) ? ' checked' : '';?> />
+          <span></span>
+        </label>
       </div>
     </div>
 

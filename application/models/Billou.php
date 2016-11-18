@@ -26,6 +26,13 @@ class Billou extends OaModel {
     self::INVOICE_NO  => '沒有發票',
     self::INVOICE_YES => '有開發票',
   );
+  const NO_FINISHED = 0;
+  const IS_FINISHED = 1;
+
+  static $finishNames = array(
+    self::NO_FINISHED => '未出帳',
+    self::IS_FINISHED => '已出帳',
+  );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
@@ -47,6 +54,7 @@ class Billou extends OaModel {
         'money' => $this->money,
         'is_invoice' => $this->is_invoice,
         'memo' => $this->memo,
+        'is_finished' => $this->is_finished,
         'date_at' => $this->date_at->format ('Y-m-d'),
       );
   }

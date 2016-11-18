@@ -432,6 +432,24 @@ $(function () {
   };
   window.funs.formAddSource ($('form.form .row.sources'));
 
+
+  window.funs.formAddEmail = function ($obj) {
+    $obj.each (function () {
+      var that = this, $emails = $(this), $addEmail = $emails.find ('.add_email');
+
+      that.fm = function (i, e) {
+        return $('<div />').addClass ('email').append (
+          $('<input />').attr ('type', 'text').attr ('name', 'emails[' + i + ']').attr ('placeholder', '請輸入聯絡人 E-Mail..').val (e ? e : '')).append (
+          $('<button />').attr ('type', 'button').addClass ('icon-t').click (function () { $(this).parents ('.email').remove (); })
+        );
+      };
+
+      if ($emails.data ('emails')) $emails.data ('emails').forEach (function (t) { that.fm ($emails.data ('i'), t).insertBefore ($addEmail); $emails.data ('i', $emails.data ('i') + 1); });
+      $addEmail.find ('.add').click (function () { that.fm ($emails.data ('i')).insertBefore ($addEmail); $emails.data ('i', $emails.data ('i') + 1); }).click ();
+    });
+  };
+  window.funs.formAddEmail ($('form.form .row.emails'));
+
   window.funs.mutiImg = function ($obj) {
     if ($obj.length <= 0) return;
     $obj.on ('click', '.icon-t', function () { var $parent = $(this).parent (); $parent.remove (); });
@@ -471,6 +489,7 @@ $(function () {
     var $r = $('#rate').keyup (cm);
     var $z = $('#zeus_money');
     var $rn = $('#rate_name');
+    var $rt = $('#money_title');
 
     function cm () {
       var m = $m.val ();
@@ -482,10 +501,10 @@ $(function () {
     function setRate () {
       var v = $inp.filter (':checked').val ();
 
-      if (v == 1) { $rn.val ('有發票'); $r.val (2); }
-      if (v == 2) { $rn.val ('無發票'); $r.val (10); }
+      if (v == 1) { $rn.val ('有發票'); $r.val (20); $rt.text ('* 總金額（含稅）'); }
+      if (v == 2) { $rn.val ('無發票'); $r.val (10); $rt.text ('* 總金額（未稅）'); }
       
-      if (v == 3) { $rn.val ('其他').show (); }
+      if (v == 3) { $rn.val ('其他').show (); $rt.text ('* 總金額'); }
       else $rn.hide ();
 
       cm ();

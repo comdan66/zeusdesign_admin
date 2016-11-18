@@ -1,25 +1,12 @@
 <div class='panel'>
   <header>
     <h2>修改聯絡人</h2>
-    <a href='<?php echo base_url ($uri_1);?>' class='icon-x'></a>
+    <a href='<?php echo base_url ($uri_1, $parent->id, $uri_2);?>' class='icon-x'></a>
   </header>
 
 
-  <form class='form' method='post' action='<?php echo base_url ($uri_1, $obj->id);?>'>
+  <form class='form' method='post' action='<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id);?>'>
     <input type='hidden' name='_method' value='put' />
-    <div class='row n2'>
-      <label>* 聯絡人公司</label>
-      <div>
-        <select name='customer_company_id'>
-          <option data-telephone='' value='0' selected>請選擇公司</option>
-    <?php if ($companies = CustomerCompany::all (array ('select' => 'id, name, telephone'))) {
-            foreach ($companies as $company) { ?>
-              <option data-telephone='<?php echo $company->telephone;?>' value='<?php echo $company->id;?>'<?php echo (isset ($posts['customer_company_id']) ? $posts['customer_company_id'] : $obj->customer_company_id) == $company->id ? ' selected': '';?>><?php echo $company->name;?></option>
-      <?php }
-          }?>
-        </select>
-      </div>
-    </div>
 
     <div class='row n2'>
       <label>* 聯絡人名稱</label>
@@ -30,7 +17,7 @@
     
     <div class='row n2'>
       <label>公司電話</label>
-      <div id='telephone'></div>
+      <div id='telephone'><?php echo $parent->telephone;?></div>
     </div>
     
     <div class='row n2'>

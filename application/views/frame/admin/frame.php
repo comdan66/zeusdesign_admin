@@ -101,7 +101,7 @@
                   <input type='checkbox' />
                   <span class='icon-b'>聯絡人系統</span>
                   <ul>
-                    <li><a href="<?php echo $url = base_url ('admin', 'companies');?>" class='icon-br<?php echo $now_url == $url ? ' active' : '';?>'>聯絡人公司</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'customer-companies');?>" class='icon-br<?php echo $now_url == $url ? ' active' : '';?>'>聯絡人公司</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'customers');?>" class='icon-ab<?php echo $now_url == $url ? ' active' : '';?>'>聯絡人管理</a></li>
                   </ul>
                 </label>

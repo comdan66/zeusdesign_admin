@@ -19,6 +19,13 @@ class Billin extends OaModel {
     array ('user', 'class_name' => 'User'),
   );
 
+  const NO_FINISHED = 0;
+  const IS_FINISHED = 1;
+
+  static $finishNames = array(
+    self::NO_FINISHED => '未入帳',
+    self::IS_FINISHED => '已入帳',
+  );
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
@@ -41,6 +48,7 @@ class Billin extends OaModel {
         'rate' => $this->rate,
         'zeus_money' => $this->zeus_money,
         'memo' => $this->memo,
+        'is_finished' => $this->is_finished,
         'date_at' => $this->date_at->format ('Y-m-d'),
       );
   }
