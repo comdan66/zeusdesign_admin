@@ -42,7 +42,7 @@
       <thead>
         <tr>
           <th width='80'>#</th>
-          <th width='150'>公司名稱</th>
+          <th width='170'>公司名稱</th>
           <th width='150'>公司地址</th>
           <th width='150'>公司電話</th>
           <th >公司備註</th>
