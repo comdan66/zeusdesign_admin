@@ -43,7 +43,7 @@
       <thead>
         <tr>
           <th width='50' class='center'>#</th>
-          <th width='90' class='center'>是否完成</th>
+          <th width='90' class='center'>已經出帳</th>
           <th width='100'>新增者</th>
           <th width='150'>項目名稱</th>
           <th width='100'>金額</th>

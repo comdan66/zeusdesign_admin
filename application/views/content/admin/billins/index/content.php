@@ -45,7 +45,7 @@
       <thead>
         <tr>
           <th width='40' class='center'>#</th>
-          <th width='90' class='center'>是否完成</th>
+          <th width='90' class='center'>已經入帳</th>
           <th width='90'>負責人</th>
           <th width='120'>專案名稱</th>
           <th width='85'>總金額</th>
