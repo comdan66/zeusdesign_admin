@@ -20,6 +20,13 @@
         <input type='text' name='business_no' value='<?php echo isset ($posts['business_no']) ? $posts['business_no'] : '';?>' placeholder='請輸入公司統編..' maxlength='25' />
       </div>
     </div>
+
+    <div class='row n2'>
+      <label>公司電話</label>
+      <div>
+        <input type='text' name='telephone' value='<?php echo isset ($posts['telephone']) ? $posts['telephone'] : '';?>' placeholder='請輸入公司電話..' maxlength='15' />
+      </div>
+    </div>
     
     <div class='row n2'>
       <label>公司地址</label>
