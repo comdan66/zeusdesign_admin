@@ -11,8 +11,9 @@ class Migration_Add_customer_companies extends CI_Migration {
       "CREATE TABLE `customer_companies` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
         `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '名稱',
-        `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '地址',
+        `business_no` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '統一編號',
         `telephone` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '電話',
+        `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '地址',
         `memo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '備註',
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',

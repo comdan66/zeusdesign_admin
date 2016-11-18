@@ -14,16 +14,26 @@
         <input type='text' name='name' value='<?php echo isset ($posts['name']) ? $posts['name'] : $obj->name;?>' placeholder='請輸入名稱..' maxlength='200' pattern='.{1,200}' required title='輸入名稱!' autofocus />
       </div>
     </div>
+
+    
     <div class='row n2'>
-      <label>公司地址</label>
+      <label>公司統編</label>
       <div>
-        <input type='text' name='address' value='<?php echo isset ($posts['address']) ? $posts['address'] : $obj->address;?>' placeholder='請輸入公司住址..' maxlength='200' />
+        <input type='text' name='business_no' value='<?php echo isset ($posts['business_no']) ? $posts['business_no'] : $obj->business_no;?>' placeholder='請輸入公司統編..' maxlength='25' />
       </div>
     </div>
+
     <div class='row n2'>
       <label>公司電話</label>
       <div>
         <input type='text' name='telephone' value='<?php echo isset ($posts['telephone']) ? $posts['telephone'] : $obj->telephone;?>' placeholder='請輸入公司電話..' maxlength='15' />
+      </div>
+    </div>
+    
+    <div class='row n2'>
+      <label>公司地址</label>
+      <div>
+        <input type='text' name='address' value='<?php echo isset ($posts['address']) ? $posts['address'] : $obj->address;?>' placeholder='請輸入公司住址..' maxlength='200' />
       </div>
     </div>
 

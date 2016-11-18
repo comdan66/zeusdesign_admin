@@ -43,8 +43,9 @@
         <tr>
           <th width='80'>#</th>
           <th width='170'>公司名稱</th>
-          <th width='150'>公司地址</th>
+          <th width='150'>公司統編</th>
           <th width='150'>公司電話</th>
+          <th width='150'>公司地址</th>
           <th >公司備註</th>
           <th width='100' class='right'>聯絡人數</th>
           <th width='125' class='right'>聯絡人/修改/刪除</th>
@@ -56,8 +57,9 @@
             <tr>
               <td><?php echo $obj->id;?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo $obj->address;?></td>
+              <td><?php echo $obj->business_no;?></td>
               <td><?php echo $obj->telephone;?></td>
+              <td><?php echo $obj->address;?></td>
               <td><?php echo $obj->memo;?></td>
               <td class='right'><?php echo count ($obj->customers);?></td>
               <td class='right'>
@@ -71,7 +73,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='7' class='no_data'>沒有任何資料。</td>
+            <td colspan='8' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

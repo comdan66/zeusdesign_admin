@@ -154,14 +154,15 @@ class Customer_companies extends Admin_controller {
   }
 
   private function _validation (&$posts) {
-    $keys = array ('name', 'address', 'telephone', 'memo');
+    $keys = array ('name', 'business_no', 'telephone', 'address', 'memo');
 
     $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
 
     if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '公司名稱格式錯誤！';
-    if (isset ($posts['address']) && ($posts['address'] = trim ($posts['address'])) && !is_string ($posts['address'])) return '公司地址格式錯誤！';
+    if (isset ($posts['business_no']) && ($posts['business_no'] = trim ($posts['business_no'])) && !is_string ($posts['business_no'])) return '公司統編格式錯誤！';
     if (isset ($posts['telephone']) && ($posts['telephone'] = trim ($posts['telephone'])) && !is_string ($posts['telephone'])) return '公司電話格式錯誤！';
+    if (isset ($posts['address']) && ($posts['address'] = trim ($posts['address'])) && !is_string ($posts['address'])) return '公司地址格式錯誤！';
     if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
     return '';
   }
