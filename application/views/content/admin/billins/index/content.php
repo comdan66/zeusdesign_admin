@@ -1,11 +1,11 @@
 <header>
   <div class='title'>
     <h1>帳務</h1>
-    <p>入帳 上稿管理</p>
+    <p>入帳 管理</p>
   </div>
 
   <form class='select'>
-    <button type='button' class='icon-p' id='export' href='<?php echo base_url ('admin', 'billins', 'export');?>'></button>
+    <button type='button' class='icon-p' id='export' href='<?php echo base_url ($uri_1, 'export');?>'></button>
     <button type='submit' class='icon-s'></button>
 
 <?php 

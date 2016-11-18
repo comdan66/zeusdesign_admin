@@ -42,7 +42,6 @@ html {
 
   }
 }
-
 .icon-d:before {
   content: "\e904";
 }
@@ -91,11 +90,23 @@ html {
 .icon-u:before {
   content: "\e900";
 }
+.icon-calendar2:before {
+  content: "\e919";
+}
+.icon-wallet:before {
+  content: "\e916";
+}
+.icon-moneybag:before {
+  content: "\e917";
+}
 .icon-bil:before {
   content: "\e90f";
 }
 .icon-ab:before {
   content: "\e913";
+}
+.icon-calendar:before {
+  content: "\e918";
 }
 .icon-ma:before {
   content: "\e90b";
@@ -187,9 +198,6 @@ html {
 .icon-tu:before {
   content: "\e90a";
 }
-
-
-
 
 
 $leftSideWidth: 230px;

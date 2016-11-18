@@ -6,20 +6,15 @@
  */
 class Main extends Admin_controller {
 
-  public function calendar () {
-    $tags = ScheduleTag::find ('all', array ('select' => 'id, name, color', 'conditions' => array ('user_id = ?', User::current ()->id)));
-    $tags = array_map (function ($tag) {
-      return array (
-          'id' => $tag->id,
-          'name' => $tag->name,
-          'color' => $tag->color ()
-        );
-    }, $tags);
-
-    return $this->add_param ('now_url', base_url ('admin', 'calendar'))
+  public function all_calendar () {
+    return $this->add_param ('now_url', base_url ('admin', 'all-calendar'))
                 ->load_view (array (
-        'tags' => $tags
+                  'id' => User::current ()->id
       ));
+  }
+  public function calendar () {
+    return $this->add_param ('now_url', base_url ('admin', 'calendar'))
+                ->load_view ();
   }
   public function index ($type = 'schedules', $offset = 0) {
     $pagination = '';

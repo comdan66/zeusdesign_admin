@@ -21,8 +21,8 @@ class Schedules extends Api_controller {
   }
   public function index () {
     $gets = OAInput::get ();
-
-    OaModel::addConditions ($conditions, 'user_id = ?', $this->user->id);
+    if (!(isset ($gets['type']) && $gets['type'] == 'all'))
+      OaModel::addConditions ($conditions, 'user_id = ?', $this->user->id);
 
     if (isset ($gets['year']) && $gets['year'] && is_numeric ($gets['year'])) OaModel::addConditions ($conditions, 'year = ?', $gets['year']);
     if (isset ($gets['month']) && $gets['month'] && is_numeric ($gets['month'])) OaModel::addConditions ($conditions, 'month = ?', $gets['month']);
@@ -55,7 +55,7 @@ class Schedules extends Api_controller {
 
     if (!$create) return $this->output_error_json ('新增失敗！');
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ca', 'content' => '新增一項行程。', 'desc' => '內容是「' . $schedule->mini_description () . '」。', 'backup' => json_encode ($schedule->to_array ())));
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ca', 'content' => '新增一項行程。', 'desc' => '標題是 “' . $schedule->mini_title () . '”' . ($schedule->description ? '，內容是「' . $schedule->mini_description () . '」' : '') . '。', 'backup' => json_encode ($schedule->to_array ())));
     return $this->output_json ($schedule->to_array ());
   }
 
@@ -75,7 +75,7 @@ class Schedules extends Api_controller {
 
     if (!$update) return $this->output_error_json ('更新失敗！');
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ca', 'content' => '修改一項行程。', 'desc' => '內容是「' . $schedule->mini_description () . '」。', 'backup' => json_encode ($schedule->to_array ())));
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ca', 'content' => '修改一項行程。', 'desc' => '標題是 “' . $schedule->mini_title () . '”' . ($schedule->description ? '，內容是「' . $schedule->mini_description () . '」' : '') . '。', 'backup' => json_encode ($schedule->to_array ())));
     return $this->output_json ($schedule->to_array ());
   }
 

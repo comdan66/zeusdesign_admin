@@ -1,6 +1,7 @@
+<input type='hidden' id='my_id' value='<?php echo $id;?>' />
 <div class='panel'>
   <header>
-    <h2>個人行事曆</h2>
+    <h2>全部行事曆</h2>
   </header>
 
   <div class='calendar'>

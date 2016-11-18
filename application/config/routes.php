@@ -26,6 +26,7 @@ Route::group ('admin', function () {
   Route::get ('/users/(:id)/show/(:any)', 'users@show($1, $2)');
   Route::get ('/users/(:id)/show/(:any)/(:num)', 'users@show($1, $2, $3)');
 
+  Route::get ('/all_calendar', 'main@all_calendar');
   Route::get ('/calendar', 'main@calendar');
   Route::get ('/my', 'main@index');
   Route::get ('/my/(:any)', 'main@index($1)');
@@ -57,6 +58,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('invoices'), 'invoices');
   
   Route::resourcePagination (array ('ftps'), 'ftps');
+  Route::resourcePagination (array ('salaries'), 'salaries');
 });
 
 Route::group ('api', function () {

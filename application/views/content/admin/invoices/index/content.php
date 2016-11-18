@@ -5,7 +5,7 @@
   </div>
 
   <form class='select'>
-    <button type='button' id='export' href='<?php echo base_url ('admin', 'invoices', 'export');?>' class='icon-p'></button>
+    <button type='button' id='export' href='<?php echo base_url ($uri_1, 'export');?>' class='icon-p'></button>
     <button type='submit' class='icon-s'></button>
 
 <?php 

@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>帳務</h1>
-    <p>出帳 管理</p>
+    <h1>薪資</h1>
+    <p>薪資 管理</p>
   </div>
 
   <form class='select'>
@@ -34,7 +34,7 @@
 
 <div class='panel'>
   <header>
-    <h2>出帳 列表</h2>
+    <h2>薪資 列表</h2>
     <a href='<?php echo base_url ($uri_1, 'add');?>' class='icon-r'></a>
   </header>
 
@@ -43,13 +43,11 @@
       <thead>
         <tr>
           <th width='50' class='center'>#</th>
-          <th width='90' class='center'>已經出帳</th>
-          <th width='100'>新增者</th>
-          <th width='150'>項目名稱</th>
+          <th width='90' class='center'>是否已給付</th>
+          <th width='100'>受薪人員</th>
+          <th width='150'>專案名稱</th>
           <th width='100'>金額</th>
-          <th width='100'>是否有發票</th>
-          <th>備註</th>
-          <th width='100'>日期</th>
+          <th >備註</th>
           <th width='85' class='right'>修改/刪除</th>
         </tr>
       </thead>
@@ -61,7 +59,7 @@
              
               <td class='center'>
                 <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
-                  <input type='checkbox' name='is_finished'<?php echo $obj->is_finished == Billin::IS_FINISHED ? ' checked' : '';?> />
+                  <input type='checkbox' name='is_finished'<?php echo $obj->is_finished == Salary::IS_FINISHED ? ' checked' : '';?> />
                   <span></span>
                 </label>
               </td>
@@ -69,9 +67,7 @@
               <td><?php echo $obj->user->name;?></td>
               <td><?php echo $obj->name;?></td>
               <td><?php echo number_format ($obj->money);?></td>
-              <td><?php echo Billou::$invoiceNames[$obj->is_invoice];?></td>
               <td><?php echo $obj->memo;?></td>
-              <td><?php echo $obj->date_at->format ('Y-m-d');?></td>
 
               <td class='right'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
@@ -83,7 +79,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='9' class='no_data'>沒有任何資料。</td>
+            <td colspan='7' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

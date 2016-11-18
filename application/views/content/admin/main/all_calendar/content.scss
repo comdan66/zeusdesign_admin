@@ -214,22 +214,49 @@
               margin: 0 2px;
               width: calc(100% - 2px * 2);
               @include border-radius(2px);
-              @include overflow-docx3();
 
               margin-bottom: 3px;
+              word-break: break-all;
+              white-space:pre-wrap;
 
-              cursor: grab;
-              cursor: -moz-grab;
-              cursor: -webkit-grab;
-              
-              &:active {
-                cursor: grabbing;
-                cursor: -moz-grabbing;
-                cursor: -webkit-grabbing;
+              > span {
+                display: inline-block;
+                width: 100%;
+                @include overflow-docx3();
+
+                &:last-child {
+                  text-align: right;
+                  font-weight: normal;
+                  font-size: 10px;
+                  @include opacity(.75);
+                }
+              }
+              &.notmy {
+                cursor: not-allowed;
+              }
+              &.my {
+                border: 3px solid rgba(222, 91, 95, 1.00);
+                cursor: grab;
+                cursor: -moz-grab;
+                cursor: -webkit-grab;
+                
+                &:active {
+                  cursor: grabbing;
+                  cursor: -moz-grabbing;
+                  cursor: -webkit-grabbing;
+                }
+                &.finished {
+                  &, span {
+                    text-decoration: line-through !important;
+                  }
+                  @include opacity(.3);
+                }
               }
               &.finished {
-                text-decoration: line-through;
-                @include opacity(.3);
+                &, span {
+                  text-decoration: line-through !important;
+                }
+                @include opacity(.2);
               }
             }
           }

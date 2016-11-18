@@ -17,6 +17,7 @@ class Schedule extends OaModel {
 
   static $belongs_to = array (
     array ('tag', 'class_name' => 'ScheduleTag'),
+    array ('user', 'class_name' => 'User'),
   );
 
   const NO_FINISHED = 0;
@@ -33,6 +34,7 @@ class Schedule extends OaModel {
   public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,
+        'user' => $this->user->to_array (),
         'title' => $this->title,
         'description' => $this->description,
         'finish' => $this->finish,

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?jgr5mg');
-  src:  url('fonts/icomoon.eot?jgr5mg#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?jgr5mg') format('truetype'),
-    url('fonts/icomoon.woff?jgr5mg') format('woff'),
-    url('fonts/icomoon.svg?jgr5mg#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?kyiyyz');
+  src:  url('fonts/icomoon.eot?kyiyyz#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?kyiyyz') format('truetype'),
+    url('fonts/icomoon.woff?kyiyyz') format('woff'),
+    url('fonts/icomoon.svg?kyiyyz#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -72,11 +72,23 @@
 .icon-u:before {
   content: "\e900";
 }
+.icon-calendar2:before {
+  content: "\e919";
+}
+.icon-wallet:before {
+  content: "\e916";
+}
+.icon-moneybag:before {
+  content: "\e917";
+}
 .icon-bil:before {
   content: "\e90f";
 }
 .icon-ab:before {
   content: "\e913";
+}
+.icon-calendar:before {
+  content: "\e918";
 }
 .icon-ma:before {
   content: "\e90b";
