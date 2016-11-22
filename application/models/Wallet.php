@@ -7,7 +7,7 @@
 
 class Wallet extends OaModel {
 
-  static $table_name = 'Wallets';
+  static $table_name = 'wallets';
 
   static $has_one = array (
   );
