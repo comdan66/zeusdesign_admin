@@ -1,0 +1,139 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * @author      OA Wu <comdan66@gmail.com>
+ * @copyright   Copyright (c) 2016 OA Wu Design
+ */
+
+class Wallets extends Api_controller {
+  private $user = null;
+  private $wallet = null;
+
+  public function __construct () {
+    parent::__construct ();
+
+    if (User::current ()) $this->user = User::current ();
+    else $this->user = ($token = $this->input->get_request_header ('Token')) && ($user = User::find ('one', array ('conditions' => array ('token = ?', $token)))) ? $user : null;
+
+    if (!$this->user)
+        return $this->disable ($this->output_error_json ('Not found User!'));
+
+    if (in_array ($this->uri->rsegments (2, 0), array ('finish', 'update', 'destroy')))
+      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->wallet = Wallet::find ('one', array ('conditions' => array ('id = ? AND user_id = ?', $id, $this->user->id))))))
+        return $this->disable ($this->output_error_json ('Not found Data!'));
+  }
+  public function titles () {
+    $gets = OAInput::get ();
+    if (isset ($gets['title']) && $gets['title']) OaModel::addConditions ($conditions, 'title LIKE ?', '%' . $gets['title'] . '%');
+    OaModel::addConditions ($conditions, 'user_id = ?', $this->user->id);
+    $limit = isset ($gets['limit']) && ($gets['limit'] > 0) ? $gets['limit'] : 20;
+    $offset = isset ($gets['offset']) && ($gets['offset'] > 0) ? $gets['offset'] : 0;
+
+    return $this->output_json (array_map (function ($wallet) {
+      return array (
+          'title' => $wallet->title,
+          'count' => $wallet->cnt,
+        );
+    }, Wallet::find ('all', array (
+      'select' => 'title, COUNT(id) AS cnt',
+      'group' => 'title',
+      'order' => 'cnt DESC',
+      'limit' => $limit,
+      'offset' => $offset,
+      'conditions' => $conditions))));
+  }
+  public function index () {
+    $gets = OAInput::get ();
+    OaModel::addConditions ($conditions, 'user_id = ?', $this->user->id);
+
+    $wallets = Wallet::find ('all', array (
+      'select' => 'id, title, money, timed_at',
+      'order' => 'id DESC',
+      'conditions' => $conditions));
+
+    $wallets = array_map (function ($wallet) {
+      return array (
+          'id' => $wallet->id,
+          'title' => $wallet->title,
+          'money' => $wallet->money,
+          'timed_at' => $wallet->timed_at->format ('Y-m-d H:i:s'),
+        );
+    }, $wallets);
+
+    return $this->output_json ($wallets);
+  }
+  public function create () {
+
+    $posts = OAInput::post ();
+
+    if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
+      return $this->output_error_json ($msg);
+
+    $posts['user_id'] = $this->user->id;
+
+    $create = Wallet::transaction (function () use (&$wallet, $posts) {
+      return verifyCreateOrm ($wallet = Wallet::create (array_intersect_key ($posts, Wallet::table ()->columns)));
+    });
+
+    if (!$create) return $this->output_error_json ('新增失敗！');
+
+    UserLog::create (array ('user_id' => $this->user->id, 'icon' => 'icon-wallet', 'content' => '新增一項花費記錄。', 'desc' => '在 ' . $wallet->created_at->format ('Y-m-d H:i:s') . ' 新增了一項花費記錄。', 'backup' => json_encode ($wallet->to_array ())));
+    return $this->output_json ($wallet->to_array ());
+  }
+
+  public function update ($id = 0) {
+    $posts = OAInput::post ();
+
+    if ($msg = $this->_validation ($posts))
+      return $this->output_error_json ($msg);
+
+    if ($columns = array_intersect_key ($posts, $this->wallet->table ()->columns))
+      foreach ($columns as $column => $value)
+        $this->wallet->$column = $value;
+
+    $wallet = $this->wallet;
+    $update = Wallet::transaction (function () use ($wallet) { return $wallet->save (); });
+
+    if (!$update) return $this->output_error_json ('更新失敗！');
+
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-wallet', 'content' => '修改一項花費紀錄。', 'desc' => '在 ' . $wallet->updated_at->format ('Y-m-d H:i:s') . ' 修改了一項花費記錄。', 'backup' => json_encode ($wallet->to_array ())));
+    return $this->output_json ($wallet->to_array ());
+  }
+
+  public function destroy () {
+    $wallet = $this->wallet;
+    $backup = json_encode ($wallet->to_array ());
+    $delete = Wallet::transaction (function () use ($wallet) { return $wallet->destroy (); });
+
+    if (!$delete) return $this->output_error_json ('刪除失敗！');
+
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-wallet', 'content' => '刪除一項花費紀錄。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
+    return $this->output_json (array ('message' => '刪除成功！'));
+  }
+  private function _validation (&$posts) {
+    $keys = array ('title', 'money', 'memo', 'timed_at', 'lat', 'lng');
+
+    $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
+    $posts = $new_posts;
+
+    if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '標題格式錯誤或未填寫！';
+    if (isset ($posts['timed_at']) && !($posts['timed_at'] = trim ($posts['timed_at']))) return '時間格式錯誤或未填寫！';
+    if (isset ($posts['money']) && !(is_numeric ($posts['money'] = trim ($posts['money'])) && $posts['money'] >= 0)) return '金額格式錯誤或未填寫！';
+    if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
+    
+    if (isset ($posts['lat']) && !(is_numeric ($posts['lat'] = trim ($posts['lat'])) && ($posts['lat'] >= -90) && ($posts['lat'] <= 90))) return '緯度 格式錯誤！';
+    if (isset ($posts['lng']) && !(is_numeric ($posts['lng'] = trim ($posts['lng'])) && ($posts['lng'] >= -180) && ($posts['lng'] <= 180))) return '經度 格式錯誤！';
+    
+    return '';
+  }
+  private function _validation_must (&$posts) {
+    if (!isset ($posts['title'])) return '沒有填寫 標題！';
+    if (!isset ($posts['money'])) return '沒有填寫 金額！';
+    if (!isset ($posts['timed_at'])) return '沒有填寫 時間！';
+    
+    if (!isset ($posts['lat'])) return '沒有填寫 緯度！';
+    if (!isset ($posts['lng'])) return '沒有填寫 經度！';
+    
+    return '';
+  }
+}
