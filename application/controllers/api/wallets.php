@@ -33,17 +33,28 @@ class Wallets extends Api_controller {
           'order' => 'cnt DESC',
           'conditions' => $conditions));
 
+    
+
     $wallet_ids = column_array ($wallets, 'id');
     $wallet_ids = Wallet::find ('all', array ('select' => 'id, money', 'conditions' => array ('id IN (?)', $wallet_ids ? $wallet_ids : array (0))));
     $wallet_ids = array_combine (column_array ($wallet_ids, 'id'), column_array ($wallet_ids, 'money'));
-
-    return $this->output_json (array_map (function ($wallet) use ($wallet_ids) {
+    
+    $wallets = array_map (function ($wallet) use ($wallet_ids) {
       return array (
           'title' => $wallet->title,
           'count' => $wallet->cnt,
           'money' => isset ($wallet_ids[$wallet->id]) ? $wallet_ids[$wallet->id] : 0,
         );
-    }, $wallets));
+    }, $wallets);
+
+    if (isset ($gets['title']) && $gets['title'] && !in_array ($gets['title'], column_array ($wallets, 'title')))
+      array_unshift ($wallets, array (
+          'title' => $gets['title'],
+          'count' => 0,
+          'money' => 0,
+        ));
+
+    return $this->output_json ($wallets);
   }
   public function index () {
     $gets = OAInput::get ();
