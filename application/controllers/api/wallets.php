@@ -50,7 +50,7 @@ class Wallets extends Api_controller {
     OaModel::addConditions ($conditions, 'user_id = ?', $this->user->id);
 
     $wallets = Wallet::find ('all', array (
-      'select' => 'id, title, money, timed_at',
+      'select' => 'id, title, money, timed_at, cover',
       'order' => 'id DESC',
       'conditions' => $conditions));
 
