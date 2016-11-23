@@ -68,14 +68,17 @@ class Wallets extends Api_controller {
   public function create () {
 
     $posts = OAInput::post ();
+    $cover = OAInput::file ('cover');
 
     if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
       return $this->output_error_json ($msg);
 
     $posts['user_id'] = $this->user->id;
 
-    $create = Wallet::transaction (function () use (&$wallet, $posts) {
-      return verifyCreateOrm ($wallet = Wallet::create (array_intersect_key ($posts, Wallet::table ()->columns)));
+    $create = Wallet::transaction (function () use (&$wallet, $posts, $cover) {
+      if (!verifyCreateOrm ($wallet = Wallet::create (array_intersect_key ($posts, Wallet::table ()->columns))))
+        return false;
+      return !$cover || $wallet->cover->put ($cover);
     });
 
     if (!$create) return $this->output_error_json ('新增失敗！');
@@ -114,7 +117,7 @@ class Wallets extends Api_controller {
     return $this->output_json (array ('message' => '刪除成功！'));
   }
   private function _validation (&$posts) {
-    $keys = array ('title', 'money', 'memo', 'timed_at', 'lat', 'lng');
+    $keys = array ('title', 'money', 'address', 'memo', 'timed_at', 'lat', 'lng');
 
     $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
@@ -123,6 +126,7 @@ class Wallets extends Api_controller {
     if (isset ($posts['timed_at']) && !($posts['timed_at'] = trim ($posts['timed_at']))) return '時間格式錯誤或未填寫！';
     if (isset ($posts['money']) && !(is_numeric ($posts['money'] = trim ($posts['money'])) && $posts['money'] >= 0)) return '金額格式錯誤或未填寫！';
     if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
+    if (isset ($posts['address']) && ($posts['address'] = trim ($posts['address'])) && !is_string ($posts['address'])) return '地址格式錯誤！';
     
     if (isset ($posts['lat']) && !(is_numeric ($posts['lat'] = trim ($posts['lat'])) && ($posts['lat'] >= -90) && ($posts['lat'] <= 90))) return '緯度 格式錯誤！';
     if (isset ($posts['lng']) && !(is_numeric ($posts['lng'] = trim ($posts['lng'])) && ($posts['lng'] >= -180) && ($posts['lng'] <= 180))) return '經度 格式錯誤！';

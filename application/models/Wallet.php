@@ -21,11 +21,17 @@ class Wallet extends OaModel {
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
+   
+    OrmImageUploader::bind ('cover', 'WalletCoverImageUploader');
   }
   public function to_array (array $opt = array ()) {
     return array (
         'user' => $this->user->to_array (),
         'title' => $this->title,
+        'cover' => array (
+            'c100' => $this->cover->url ('100x100c'),
+            'c500' => $this->cover->url ('500x500c'),
+          ),
         'money' => $this->money,
         'memo' => $this->memo,
         'timed_at' => $this->timed_at->format ('Y-m-d H:i:s'),
