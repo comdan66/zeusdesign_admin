@@ -59,6 +59,7 @@ class Wallets extends Api_controller {
           'id' => $wallet->id,
           'title' => $wallet->title,
           'money' => $wallet->money,
+          'cover' => $wallet->cover->url ('100x100c'),
           'timed_at' => $wallet->timed_at->format ('Y-m-d H:i:s'),
         );
     }, $wallets);
