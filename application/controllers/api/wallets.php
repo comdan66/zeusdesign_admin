@@ -59,40 +59,17 @@ class Wallets extends Api_controller {
   public function index () {
     $gets = OAInput::get ();
     OaModel::addConditions ($conditions, 'user_id = ?', $this->user->id);
-    if (isset ($gets['timed_at']) && $gets['timed_at']) OaModel::addConditions ($conditions, 'timed_at < ?', $gets['timed_at']);
-    
-    $limit = 5;
+    if (isset ($gets['date']) && $gets['date']) $end = date ('Y-m-d 23:59:59', strtotime ($gets['date'] . ' -1 day'));
+    else $end = date ('Y-m-d 23:59:59');
 
-    $timed_ats = column_array (Wallet::find ('all', array (
-          'select' => 'DATE(timed_at) AS d',
-          'order' => 'd DESC',
-          'group' => 'd',
-          'limit' => $limit,
-          'conditions' => $conditions)), 'd');
+    $start = date ('Y-m-d 00:00:00', strtotime ($end . ' -5 day'));
+    OaModel::addConditions ($conditions, 'timed_at BETWEEN ? AND ?', $start, $end);
     
-    if (!$timed_ats)
-      $wallets = array ();
-    else
-      $wallets = Wallet::find ('all', array (
-          'select' => 'id,title,money,cover,timed_at,DATE(timed_at) AS d',
-          'conditions' => array ('timed_at BETWEEN ? AND ?', min ($timed_ats), max ($timed_ats))
-        ));
-    
-    $ws = array ();
-    foreach ($wallets as $wallet) {
-      if (!isset ($ws[$wallet->d])) $ws[$wallet->d] = array ($wallet);
-      else array_push ($ws[$wallet->d], $wallet);
-    }
-
-    $wallets = array_map (function ($wallet) {
-      return array (
-          'id' => $wallet->id,
-          'title' => $wallet->title,
-          'money' => $wallet->money,
-          'cover' => $wallet->cover->url ('100x100c'),
-          'timed_at' => $wallet->timed_at->format ('Y-m-d H:i:s'),
-        );
-    }, $ws);
+    $wallets = array ();
+    foreach (Wallet::find ('all', array ('select' => 'id,title,money,cover,timed_at,DATE(timed_at) AS date', 'order' => 'timed_at DESC', 'conditions' => $conditions)) as $w)
+      if ($d = array ('id' => $w->id, 'title' => $w->title, 'money' => $w->money, 'cover' => $w->cover->url ('100x100c'), 'timed_at' => $w->timed_at->format ('H點 i分 s秒')))
+        if (!isset ($wallets[$w->date])) $wallets[$w->date] = array ($d);
+        else array_push ($wallets[$w->date], $d);
 
     return $this->output_json ($wallets);
   }
