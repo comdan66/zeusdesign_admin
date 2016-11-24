@@ -16,6 +16,16 @@ if (!function_exists ('time_unit')) {
     return '半夜';
   }
 }
+if (!function_exists ('date_unit')) {
+  function date_unit ($date) {
+    if ($date == date ('Y-m-d', strtotime (date ('Y-m-d') . ' +1 day'))) return '明天';
+    if ($date == date ('Y-m-d', strtotime (date ('Y-m-d') . ' +2 day'))) return '後天';
+    if ($date == date ('Y-m-d')) return '今天';
+    if ($date == date ('Y-m-d', strtotime (date ('Y-m-d') . ' -1 day'))) return '昨天';
+    if ($date == date ('Y-m-d', strtotime (date ('Y-m-d') . ' -2 day'))) return '前天';
+    return $date;
+  }
+}
 if (!function_exists ('oa_url_encode')) {
   function oa_url_encode ($str) {
     return rawurlencode (preg_replace ('/[\/%]/', ' ', $str));
