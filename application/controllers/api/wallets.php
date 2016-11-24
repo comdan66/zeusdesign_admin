@@ -75,7 +75,7 @@ class Wallets extends Api_controller {
     foreach ($ws as $date => $w)
       array_push ($wallets, array (
           'date' => array (
-              'title' => $date,
+              'title' => date_unit ($date),
               'money' => array_sum (column_array ($w, 'money'))
             ),
           'wallets' => $w,
