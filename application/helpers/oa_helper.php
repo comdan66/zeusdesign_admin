@@ -5,6 +5,17 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
+if (!function_exists ('time_unit')) {
+  function time_unit ($h) {
+    if ($h >= 1 && $h <= 5) return '凌晨';
+    if ($h >= 6 && $h <= 10) return '早上';
+    if ($h >= 11 && $h <= 13) return '中午';
+    if ($h >= 14 && $h <= 18) return '下午';
+    if ($h >= 19 && $h <= 22) return '晚上';
+
+    return '半夜';
+  }
+}
 if (!function_exists ('oa_url_encode')) {
   function oa_url_encode ($str) {
     return rawurlencode (preg_replace ('/[\/%]/', ' ', $str));
