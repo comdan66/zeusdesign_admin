@@ -18,7 +18,7 @@
         <div id='left_side'>
           
           <header>
-            <a href='<?php echo base_url ('admin', 'index');?>'>Ｚ</a>
+            <a href='<?php echo base_url ();?>'>Ｚ</a>
             <span>Zeus Design Studio!</span>
           </header>
 
