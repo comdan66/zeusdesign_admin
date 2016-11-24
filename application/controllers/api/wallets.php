@@ -67,7 +67,7 @@ class Wallets extends Api_controller {
     
     $ws = array ();
     foreach (Wallet::find ('all', array ('select' => 'id,title,money,address,cover,timed_at,DATE(timed_at) AS date', 'order' => 'timed_at DESC', 'conditions' => $conditions)) as $w)
-      if ($d = array ('id' => $w->id, 'title' => $w->title, 'money' => $w->money, 'address' => $w->address, 'money_srt' => number_format ($w->money), 'cover' => $w->cover->url ('100x100c'), 'timed_at' => $w->timed_at->format ('H點 i分 s秒')))
+      if ($d = array ('id' => $w->id, 'title' => $w->title, 'money' => $w->money, 'address' => $w->address, 'money_srt' => number_format ($w->money), 'cover' => $w->cover->url ('100x100c'), 'timed_at' => ($w->timed_at->format ('H') > 12 ? '上午' : '下午') . $w->timed_at->format (' H點 i分')))
         if (!isset ($ws[$w->date])) $ws[$w->date] = array ($d);
         else array_push ($ws[$w->date], $d);
 
