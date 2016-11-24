@@ -44,7 +44,7 @@ class OrmUploader {
         break;
       
       case 's3':
-        return implode ('/', array_merge (array (rtrim ($this->configs['s3']['url'], '/')) , $this->path ($key)));
+        return $this->getValue () ? implode ('/', array_merge (array (rtrim ($this->configs['s3']['url'], '/')) , $this->path ($key))) : $this->d4Url ();
         break;
     }
 
