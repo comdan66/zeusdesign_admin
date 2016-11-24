@@ -65,11 +65,18 @@ class Wallets extends Api_controller {
     $start = date ('Y-m-d 00:00:00', strtotime ($end . ' -5 day'));
     OaModel::addConditions ($conditions, 'timed_at BETWEEN ? AND ?', $start, $end);
     
-    $wallets = array ();
+    $ws = array ();
     foreach (Wallet::find ('all', array ('select' => 'id,title,money,cover,timed_at,DATE(timed_at) AS date', 'order' => 'timed_at DESC', 'conditions' => $conditions)) as $w)
       if ($d = array ('id' => $w->id, 'title' => $w->title, 'money' => $w->money, 'cover' => $w->cover->url ('100x100c'), 'timed_at' => $w->timed_at->format ('H點 i分 s秒')))
-        if (!isset ($wallets[$w->date])) $wallets[$w->date] = array ($d);
-        else array_push ($wallets[$w->date], $d);
+        if (!isset ($ws[$w->date])) $ws[$w->date] = array ($d);
+        else array_push ($ws[$w->date], $d);
+
+    $wallets = array ();
+    foreach ($ws as $date => $w)
+      array_push ($wallets, array (
+          'date' => $date,
+          'wallets' => $w,
+        ));
 
     return $this->output_json ($wallets);
   }
