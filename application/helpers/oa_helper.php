@@ -23,7 +23,7 @@ if (!function_exists ('date_unit')) {
     if ($date == date ('Y-m-d')) return '今天';
     if ($date == date ('Y-m-d', strtotime (date ('Y-m-d') . ' -1 day'))) return '昨天';
     if ($date == date ('Y-m-d', strtotime (date ('Y-m-d') . ' -2 day'))) return '前天';
-    return $date;
+    return date ('Y年 m月 d日', strtotime ($date));
   }
 }
 if (!function_exists ('oa_url_encode')) {
