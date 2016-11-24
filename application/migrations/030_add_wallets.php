@@ -25,7 +25,8 @@ class Migration_Add_wallets extends CI_Migration {
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',
         PRIMARY KEY (`id`),
-        KEY `title_user_id_index` (`title`, `user_id`)
+        KEY `title_user_id_index` (`title`, `user_id`),
+        KEY `timed_at_index` (`timed_at`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
     );
   }

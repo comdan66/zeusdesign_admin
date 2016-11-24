@@ -59,11 +59,30 @@ class Wallets extends Api_controller {
   public function index () {
     $gets = OAInput::get ();
     OaModel::addConditions ($conditions, 'user_id = ?', $this->user->id);
+    if (isset ($gets['timed_at']) && $gets['timed_at']) OaModel::addConditions ($conditions, 'timed_at < ?', $gets['timed_at']);
+    
+    $limit = 5;
 
-    $wallets = Wallet::find ('all', array (
-      'select' => 'id, title, money, timed_at, cover',
-      'order' => 'id DESC',
-      'conditions' => $conditions));
+    $timed_ats = column_array (Wallet::find ('all', array (
+          'select' => 'DATE(timed_at) AS d',
+          'order' => 'd DESC',
+          'group' => 'd',
+          'limit' => $limit,
+          'conditions' => $conditions)), 'd');
+    
+    if (!$timed_ats)
+      $wallets = array ();
+    else
+      $wallets = Wallet::find ('all', array (
+          'select' => 'id,title,money,cover,timed_at,DATE(timed_at) AS d',
+          'conditions' => array ('timed_at BETWEEN ? AND ?', min ($timed_ats), max ($timed_ats))
+        ));
+    
+    $ws = array ();
+    foreach ($wallets as $wallet) {
+      if (!isset ($ws[$wallet->d])) $ws[$wallet->d] = array ($wallet);
+      else array_push ($ws[$wallet->d], $wallet);
+    }
 
     $wallets = array_map (function ($wallet) {
       return array (
@@ -73,7 +92,7 @@ class Wallets extends Api_controller {
           'cover' => $wallet->cover->url ('100x100c'),
           'timed_at' => $wallet->timed_at->format ('Y-m-d H:i:s'),
         );
-    }, $wallets);
+    }, $ws);
 
     return $this->output_json ($wallets);
   }

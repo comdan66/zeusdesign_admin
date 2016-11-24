@@ -223,6 +223,7 @@
                 display: inline-block;
                 width: 100%;
                 @include overflow-docx3();
+                color: rgba(255, 255, 255, 1.00) !important;
 
                 &:last-child {
                   text-align: right;
