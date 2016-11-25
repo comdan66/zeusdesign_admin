@@ -32,6 +32,7 @@ class User extends OaModel {
         'name' => $this->name,
         'email' => $this->email,
         'token' => $this->token,
+        'device_token' => $this->device_token,
         'login_count' => $this->login_count,
         'logined_at' => $this->logined_at ? $this->logined_at->format ('Y-m-d H:i:s') : '',
         'roles' => array_map (function ($role) { return $role->to_array (); }, $this->roles),

@@ -66,6 +66,7 @@ Route::group ('api', function () {
   Route::get ('/pv/(:any)/(:id)', 'pv@index($1, $2)');
   Route::post ('/contacts', 'contacts@create');
   Route::post ('/users/token', 'users@token');
+  Route::post ('/users/notification', 'users@notification');
 
   Route::resource (array ('schedules'), 'schedules');
   Route::resource (array ('schedule_tags'), 'schedule_tags');

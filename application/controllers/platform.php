@@ -20,7 +20,7 @@ class Platform extends Site_controller {
       return redirect_message (array (), array ('_flash_danger' => 'Facebook 登入錯誤，請通知程式設計人員!(1)'));
 
     if (!($user = User::find ('one', array ('conditions' => array ('uid = ?', $id)))))
-      if (!User::transaction (function () use (&$user, $id, $name, $email) { return verifyCreateOrm ($user = User::create (array_intersect_key (array ('uid' => $id, 'name' => $name, 'email' => $email, 'token' => md5 ($id . '_' . uniqid (rand () . '_'))), User::table ()->columns))); }))
+      if (!User::transaction (function () use (&$user, $id, $name, $email) { return verifyCreateOrm ($user = User::create (array_intersect_key (array ('uid' => $id, 'name' => $name, 'email' => $email, 'token' => token ($id)), User::table ()->columns))); }))
         return redirect_message (array (), array ('_flash_danger' => 'Facebook 登入錯誤，請通知程式設計人員!(2)'));
 
     $user->name = $name;

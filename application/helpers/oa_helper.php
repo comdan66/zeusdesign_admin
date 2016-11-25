@@ -5,6 +5,11 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
+if (!function_exists ('token')) {
+  function token ($id) {
+    return md5 ($id . '_' . uniqid (rand () . '_'));
+  }
+}
 if (!function_exists ('time_unit')) {
   function time_unit ($h) {
     if ($h >= 1 && $h <= 5) return '凌晨';
