@@ -5,7 +5,7 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
-class WalletCoverImageUploader extends OrmImageUploader {
+class SpendCoverImageUploader extends OrmImageUploader {
 
   public function getVersions () {
     return array (

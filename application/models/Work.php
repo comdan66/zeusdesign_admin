@@ -44,7 +44,7 @@ class Work extends OaModel {
       }, WorkTag::find ('all', array ('conditions' => array ('id IN (?)', ($tag_ids = column_array ($this->mappings, 'work_tag_id')) ? $tag_ids : array (0))))),
       'title' => $this->title,
       'cover' => array (
-          'c400' => $this->cover->url ('400x180c'),
+          'w300' => $this->cover->url ('300w'),
           'c1200' => $this->cover->url ('1200x630c'),
         ),
       'images' => array_map (function ($image) {

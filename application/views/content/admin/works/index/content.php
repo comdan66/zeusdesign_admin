@@ -63,7 +63,7 @@
               </td>
               <td class='center'>
                 <figure class='_i' href='<?php echo $obj->cover->url ();?>'>
-                  <img src='<?php echo $obj->cover->url ('400x180c');?>' />
+                  <img src='<?php echo $obj->cover->url ('300w');?>' />
                   <figcaption data-description='<?php echo $obj->mini_content ();?>'><?php echo $obj->title;?></figcaption>
                 </figure>
               </td>
