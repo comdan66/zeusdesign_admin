@@ -34,7 +34,7 @@
 <div class='panel'>
   <header>
     <h2>宙思幣 列表</h2>
-    <div>累計總金額：<span>NT$ <?php echo number_format ($money);?></span> 元</div>
+    <div>未領總金額：<span>NT$ <?php echo number_format ($money1);?></span> 元 / 已領總金額：<span>NT$ <?php echo number_format ($money2);?></span> 元</div>
   </header>
 
   <div class='content'>
@@ -46,7 +46,8 @@
           <th width='150'>專案名稱</th>
           <th width='100'>金額</th>
           <th >備註</th>
-          <th width='100' class='right'>疑問</th>
+          <th width='120' class='center'>新增日期</th>
+          <th width='50' class='center'>疑問</th>
         </tr>
       </thead>
       <tbody>
@@ -55,18 +56,19 @@
             <tr>
               <td class='center'><?php echo $obj->id;?></td>
 
-              <td class='center'><?php echo Salary::$finishNames[$obj->is_finished];?></td>
+              <td class='center<?php echo $obj->is_finished != Salary::IS_FINISHED ? ' red' : '';?>'><?php echo Salary::$finishNames[$obj->is_finished];?></td>
               <td><?php echo $obj->name;?></td>
               <td><?php echo number_format ($obj->money);?></td>
               <td><?php echo $obj->memo;?></td>
-              <td class='right'>
+              <td class='center'><?php echo $obj->created_at->format ('Y-m-d');?></td>
+              <td class='center'>
                 <a class='icon-help_outline' href='mailto:teresa@zeusdesign.com.tw?subject=[宙思後台] 關於專案 “<?php echo $obj->name;?>” 的問題&body=Hi 管理員,%0D%0A%0D%0A 針對專案 <?php echo $obj->name;?> 我有一下問題..'></a>
               </td>
             </tr>
     <?php }
         } else { ?>
           <tr>
-            <td colspan='6' class='no_data'>沒有任何資料。</td>
+            <td colspan='7' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

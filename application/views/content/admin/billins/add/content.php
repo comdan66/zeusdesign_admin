@@ -89,6 +89,16 @@
     </div>
 
     <div class='row n2'>
+      <label>是否支付</label>
+      <div>
+        <label class='switch'>
+          <input type='checkbox' name='is_pay'<?php echo isset ($posts['is_pay']) && ($posts['is_pay'] == Billin::IS_PAY) ? ' checked' : '';?> />
+          <span></span>
+        </label>
+      </div>
+    </div>
+
+    <div class='row n2'>
       <label>備註</label>
       <div>
         <input type='text' name='memo' value='<?php echo isset ($posts['memo']) ? $posts['memo'] : '';?>' placeholder='請輸入備註..' maxlength='200' />

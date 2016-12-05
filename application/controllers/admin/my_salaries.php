@@ -30,6 +30,7 @@ class My_salaries extends Admin_controller {
   }
   private function _search_columns () {
     return array ( 
+        array ('key' => 'created_at', 'title' => '新增日期', 'sql' => 'YEAR(created_at) = ?', 'select' => array_map (function ($val) { return array ('value' => $val, 'text' => $val . '年');}, ['2017', '2016', '2015', '2014', '2013', '2012'])),
         array ('key' => 'is_finished', 'title' => '是否已給付', 'sql' => 'is_finished = ?', 'select' => array_map (function ($key) { return array ('value' => $key, 'text' => Salary::$finishNames[$key]);}, array_keys (Salary::$finishNames))),
         array ('key' => 'name',    'title' => '專案名稱', 'sql' => 'name LIKE ?'), 
       );
@@ -54,125 +55,20 @@ class My_salaries extends Admin_controller {
         'include' => array ('user'),
         'conditions' => $conditions
       ));
+    $conditions1 = array_values ($conditions);
+    $conditions2 = array_values ($conditions);
+    OaModel::addConditions ($conditions1, 'is_finished = ?', Salary::NO_FINISHED);
+    OaModel::addConditions ($conditions2, 'is_finished != ?', Salary::NO_FINISHED);
 
     return $this->load_view (array (
         'objs' => $objs,
-        'money' => array_sum (column_array (Salary::find ('all', array ('select' => 'money', 'conditions' => array ('user_id = ? AND is_finished = ?', User::current ()->id, Salary::NO_FINISHED))), 'money')),
+        'money1' => array_sum (column_array (Salary::find ('all', array ('select' => 'money', 'conditions' => $conditions1)), 'money')),
+        'money2' => array_sum (column_array (Salary::find ('all', array ('select' => 'money', 'conditions' => $conditions2)), 'money')),
         'pagination' => $pagination,
         'columns' => $columns
       ));
   }
-  public function add () {
-    $posts = Session::getData ('posts', true);
 
-    return $this->load_view (array (
-        'posts' => $posts
-      ));
-  }
-  public function create () {
-    if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
-        ));
-
-    $posts = OAInput::post ();
-
-    if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => $msg,
-          'posts' => $posts
-        ));
-
-    $create = Salary::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Salary::create (array_intersect_key ($posts, Salary::table ()->columns))); });
-
-    if (!$create)
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => '新增失敗！',
-          'posts' => $posts
-        ));
-
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-moneybag', 'content' => '新增一筆薪資。', 'desc' => '設定了一項給薪資。', 'backup' => json_encode ($obj->to_array ())));
-    return redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '新增成功！'
-      ));
-  }
-  public function edit () {
-    $posts = Session::getData ('posts', true);
-
-    return $this->load_view (array (
-                    'posts' => $posts,
-                    'obj' => $this->obj
-                  ));
-  }
-  public function update () {
-    if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
-        ));
-
-    $posts = OAInput::post ();
-    $is_api = isset ($posts['_type']) && ($posts['_type'] == 'api') ? true : false;
-
-    if ($msg = $this->_validation ($posts))
-      return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => $msg,
-          'posts' => $posts
-        ));
-
-    if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
-      foreach ($columns as $column => $value)
-        $this->obj->$column = $value;
-    
-    $obj = $this->obj;
-    $update = Salary::transaction (function () use ($obj, $posts) { return $obj->save (); });
-
-    if (!$update)
-      return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => '更新失敗！',
-          'posts' => $posts
-        ));
-
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-moneybag', 'content' => '修改一筆薪資。', 'desc' => '設定更新了一項給薪資。', 'backup' => json_encode ($obj->to_array ())));
-    return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '更新成功！'
-      ));
-  }
-  public function destroy () {
-    $obj = $this->obj;
-    $backup = json_encode ($obj->to_array ());
-    $delete = Salary::transaction (function () use ($obj) { return $obj->destroy (); });
-
-    if (!$delete)
-      return redirect_message (array ($this->uri_1), array (
-          '_flash_danger' => '刪除失敗！',
-        ));
-
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-moneybag', 'content' => '刪除一筆薪資。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
-    return redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '刪除成功！'
-      ));
-  }
-  private function _validation (&$posts) {
-    $keys = array ('user_id', 'name', 'money', 'date_at', 'is_invoice', 'memo', 'is_finished');
-
-    $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
-    $posts = $new_posts;
-
-    if (isset ($posts['user_id']) && !(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find_by_id ($posts['user_id']))) return '受薪人員 格式錯誤或未填寫！';
-    if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '專案名稱 格式錯誤或未填寫！';
-    if (isset ($posts['money']) && !(is_numeric ($posts['money'] = trim ($posts['money'])) && $posts['money'] >= 0)) return '金額 格式錯誤或未填寫！';
-    
-    if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
-    if (isset ($posts['is_finished']) && !(is_numeric ($posts['is_finished'] = trim ($posts['is_finished'])) && in_array ($posts['is_finished'], array_keys (Salary::$finishNames)))) return '是否已給付 格式錯誤！';
-
-    return '';
-  }
-  private function _validation_must (&$posts) {
-    if (!isset ($posts['user_id'])) return '沒有填寫 受薪人員！';
-    if (!isset ($posts['name'])) return '沒有填寫 專案名稱！';
-    if (!isset ($posts['money'])) return '沒有填寫 金額！';
-    return '';
-  }
   private function _build_excel ($objs, $infos) {
     $excel = new OAExcel ();
     

@@ -45,14 +45,15 @@
       <thead>
         <tr>
           <th width='40' class='center'>#</th>
-          <th width='90' class='center'>已經入帳</th>
-          <th width='90'>負責人</th>
-          <th width='120'>專案名稱</th>
-          <th width='85'>總金額</th>
-          <th width='85'>％數標題</th>
+          <th width='80' class='center'>已入帳</th>
+          <th width='80' class='center'>已支付</th>
+          <th width='80'>負責人</th>
+          <th width='110'>專案名稱</th>
+          <th width='75'>總金額</th>
+          <th width='75'>％數標題</th>
           <th width='50'>％數</th>
-          <th width='80'>宙思＄</th>
-          <th width='100'>小計</th>
+          <th width='70'>宙思＄</th>
+          <th width='90'>小計</th>
           <th>備註</th>
           <th width='85' class='right'>日期</th>
           <th width='85' class='right'>修改/刪除</th>
@@ -66,6 +67,12 @@
               <td class='center'>
                 <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
                   <input type='checkbox' name='is_finished'<?php echo $obj->is_finished == Billin::IS_FINISHED ? ' checked' : '';?> />
+                  <span></span>
+                </label>
+              </td>
+              <td class='center'>
+                <label class='switch' data-column='is_pay' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                  <input type='checkbox' name='is_pay'<?php echo $obj->is_pay == Billin::IS_PAY ? ' checked' : '';?> />
                   <span></span>
                 </label>
               </td>
@@ -90,7 +97,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='12' class='no_data'>沒有任何資料。</td>
+            <td colspan='13' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

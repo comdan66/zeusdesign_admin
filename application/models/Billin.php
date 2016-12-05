@@ -26,6 +26,13 @@ class Billin extends OaModel {
     self::NO_FINISHED => '未入帳',
     self::IS_FINISHED => '已入帳',
   );
+  const NO_PAY = 0;
+  const IS_PAY = 1;
+
+  static $payNames = array(
+    self::NO_PAY => '未支付',
+    self::IS_PAY => '已支付',
+  );
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
@@ -49,6 +56,7 @@ class Billin extends OaModel {
         'zeus_money' => $this->zeus_money,
         'memo' => $this->memo,
         'is_finished' => $this->is_finished,
+        'is_pay' => $this->is_pay,
         'date_at' => $this->date_at->format ('Y-m-d'),
       );
   }

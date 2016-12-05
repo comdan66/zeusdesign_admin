@@ -154,7 +154,7 @@ class Billins extends Admin_controller {
       ));
   }
   private function _validation (&$posts) {
-    $keys = array ('user_id', 'name', 'money', 'rate_name', 'rate', 'zeus_money', 'memo', 'date_at', 'is_finished');
+    $keys = array ('user_id', 'name', 'money', 'rate_name', 'rate', 'zeus_money', 'memo', 'date_at', 'is_finished', 'is_pay');
 
     $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
@@ -168,6 +168,7 @@ class Billins extends Admin_controller {
     if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
     if (isset ($posts['date_at']) && !($posts['date_at'] = trim ($posts['date_at']))) return '日期格式錯誤！';
     if (isset ($posts['is_finished']) && !(is_numeric ($posts['is_finished'] = trim ($posts['is_finished'])) && in_array ($posts['is_finished'], array_keys (Billin::$finishNames)))) return '是否入帳格式錯誤！';
+    if (isset ($posts['is_pay']) && !(is_numeric ($posts['is_pay'] = trim ($posts['is_pay'])) && in_array ($posts['is_pay'], array_keys (Billin::$payNames)))) return '是否支付格式錯誤！';
     return '';
   }
   private function _validation_must (&$posts) {
@@ -178,6 +179,8 @@ class Billins extends Admin_controller {
     if (!isset ($posts['rate'])) return '沒有填寫 %數！';
     if (!isset ($posts['zeus_money'])) return '沒有填寫 宙思獲得金額！';
     if (!isset ($posts['date_at'])) return '沒有填寫 日期！';
+    if (!isset ($posts['is_finished'])) return '沒有選擇 是否入帳！';
+    if (!isset ($posts['is_pay'])) return '沒有選擇 是否支付！';
     return '';
   }
 

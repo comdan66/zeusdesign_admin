@@ -747,6 +747,7 @@ $changeWidth: 768px;
       &[class^="icon-"], &[class*=" icon-"] {
         font-size: 16px;
       }
+
     }
     
     > header {
@@ -787,6 +788,9 @@ $changeWidth: 768px;
         &:focus {
           outline: 0;
         }
+      }
+      > .icon-r {
+        color: #2ba683;
       }
     }
   }

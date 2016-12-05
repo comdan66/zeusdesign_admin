@@ -21,6 +21,7 @@ class Migration_Add_billins extends CI_Migration {
 
         `memo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '備註',
         `is_finished` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '是否入帳，1 是，0 否',
+        `is_pay` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '是否支付，1 是，0 否',
         `date_at` date DEFAULT NULL COMMENT '日期',
 
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
