@@ -19,7 +19,7 @@ class Works extends Admin_controller {
 
     $this->uri_1 = 'admin/works';
 
-    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
+    if (in_array ($this->uri->rsegments (2, 0), array ('show', 'edit', 'update', 'destroy')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Work::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array (
             '_flash_danger' => '找不到該筆資料。'
@@ -27,6 +27,23 @@ class Works extends Admin_controller {
 
     $this->add_param ('uri_1', $this->uri_1);
     $this->add_param ('now_url', base_url ($this->uri_1));
+  }
+  public function show ($id) {
+    if ($this->obj->is_enabled != Work::ENABLE_YES)
+      return redirect_message (array ($this->uri_1), array (
+          '_flash_danger' => '請先上架後才可預覽！'
+        ));
+
+    $this->load->library ('DeployTool');
+
+    if (!(DeployTool::genApi () && DeployTool::callBuild ()))
+      return redirect_message (array ($this->uri_1), array (
+          '_flash_danger' => '預覽失敗！'
+        ));
+
+    return redirect_message (Cfg::setting ('deploy', 'view', ENVIRONMENT) . 'work/' . $this->obj->id . '-' . rawurlencode (preg_replace ('/[\/%]/u', ' ', $this->obj->title)) . '.html', array (
+      '_flash_info' => ''
+    ));
   }
   public function index ($offset = 0) {
     $columns = array ( 

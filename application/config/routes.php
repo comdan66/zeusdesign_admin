@@ -76,7 +76,9 @@ Route::group ('api', function () {
   Route::resource (array ('spends'), 'spends');
   Route::resource (array ('spend_items'), 'spend_items');
 });
-
+// echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+// var_dump (Route::getRoute ());
+// exit ();
 
 // $route['main/index/(:num)/(:num)'] = "main/aaa/$1/$2";
 // Route::get ('main/index/(:num)/(:num)', 'main@aaa($1, $2)');
