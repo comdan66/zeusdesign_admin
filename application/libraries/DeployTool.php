@@ -6,7 +6,7 @@
  */
 
 class DeployTool {
-  public static function genApi () {
+  public static function genApi ($is_test = false) {
     $CI =& get_instance ();
     $CI->load->helper ('directory_helper');
     $api = FCPATH . 'api' . DIRECTORY_SEPARATOR;
@@ -20,11 +20,11 @@ class DeployTool {
     write_file ($api . 'promos.json', json_encode ($promos));
     @chmod ($api . 'promos.json', 0777);
 
-    $articles = array_map (function ($article) { return $article->to_array (); }, Article::find ('all', array ('include' => array ('user', 'tags', 'sources'), 'order' => 'id DESC', 'conditions' => array ('is_enabled = ?', Article::ENABLE_YES))));
+    $articles = array_map (function ($article) { return $article->to_array (); }, Article::find ('all', array ('include' => array ('user', 'tags', 'sources'), 'order' => 'id DESC', 'conditions' => $is_test ? array () : array ('is_enabled = ?', Article::ENABLE_YES))));
     write_file ($api . 'articles.json', json_encode ($articles));
     @chmod ($api . 'articles.json', 0777);
 
-    $works = array_map (function ($work) { return $work->to_array (); }, Work::find ('all', array ('include' => array ('user', 'images', 'tags', 'blocks'), 'order' => 'id DESC', 'conditions' => array ('is_enabled = ?', Work::ENABLE_YES))));
+    $works = array_map (function ($work) { return $work->to_array (); }, Work::find ('all', array ('include' => array ('user', 'images', 'tags', 'blocks'), 'order' => 'id DESC', 'conditions' => $is_test ? array () : array ('is_enabled = ?', Work::ENABLE_YES))));
     write_file ($api . 'works.json', json_encode ($works));
     @chmod ($api . 'works.json', 0777);
 

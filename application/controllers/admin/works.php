@@ -29,14 +29,14 @@ class Works extends Admin_controller {
     $this->add_param ('now_url', base_url ($this->uri_1));
   }
   public function show ($id) {
-    if ($this->obj->is_enabled != Work::ENABLE_YES)
-      return redirect_message (array ($this->uri_1), array (
-          '_flash_danger' => '請先上架後才可預覽！'
-        ));
+    // if ($this->obj->is_enabled != Work::ENABLE_YES)
+    //   return redirect_message (array ($this->uri_1), array (
+    //       '_flash_danger' => '請先上架後才可預覽！'
+    //     ));
 
     $this->load->library ('DeployTool');
 
-    if (!(DeployTool::genApi () && DeployTool::callBuild ()))
+    if (!(DeployTool::genApi (true) && DeployTool::callBuild ()))
       return redirect_message (array ($this->uri_1), array (
           '_flash_danger' => '預覽失敗！'
         ));
@@ -254,6 +254,10 @@ class Works extends Admin_controller {
           'posts' => $posts
         ));
 
+    if ($is_api)
+      return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
+          '_flash_info' => '更新成功！'
+        ));
     $ori_ids = column_array ($obj->mappings, 'work_tag_id');
 
     if (($del_ids = array_diff ($ori_ids, $post_tag_ids)) && ($mappings = WorkTagMapping::find ('all', array ('select' => 'id, work_tag_id', 'conditions' => array ('work_id = ? AND work_tag_id IN (?)', $obj->id, $del_ids)))))
