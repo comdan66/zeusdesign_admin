@@ -43,4 +43,12 @@ class Spend extends OaModel {
         'timed_at' => $this->timed_at->format ('Y-m-d'),
       );
   }
+  public function destroy () {
+    if ($this->items)
+      foreach ($this->items as $item)
+        if (!$item->destroy ())
+          return false;
+
+    return $this->delete ();
+  }
 }

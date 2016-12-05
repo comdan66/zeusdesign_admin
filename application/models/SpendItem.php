@@ -27,4 +27,7 @@ class SpendItem extends OaModel {
         'money' => $this->money,
       );
   }
+  public function destroy () {
+    return $this->delete ();
+  }
 }
