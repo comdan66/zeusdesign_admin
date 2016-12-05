@@ -71,8 +71,6 @@ Route::group ('api', function () {
   Route::resource (array ('schedules'), 'schedules');
   Route::resource (array ('schedule_tags'), 'schedule_tags');
   
-  Route::resource (array ('wallets'), 'wallets');
-  
   Route::resource (array ('spends'), 'spends');
   Route::resource (array ('spend_items'), 'spend_items');
 });
