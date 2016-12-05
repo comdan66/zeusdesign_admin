@@ -49,7 +49,7 @@ class Works extends Admin_controller {
     $columns = array ( 
         array ('key' => 'title', 'title' => '標題', 'sql' => 'title LIKE ?'), 
         array ('key' => 'user_id', 'title' => '作者', 'sql' => 'user_id = ?', 'select' => array_map (function ($user) { return array ('value' => $user->id, 'text' => $user->name);}, User::all (array ('select' => 'id, name')))),
-        array ('key' => 'tag_id', 'title' => '分類', 'sql' => 'id IN (?)', 'values' => "column_array (WorkTagMapping::find ('all' , array ('select' => 'work_id', 'conditions' => array ('work_tag_id = ?', " . '$val' . "))), 'work_id')", 'select' => array_map (function ($user) { return array ('value' => $user->id, 'text' => $user->name);}, WorkTag::all (array ('select' => 'id, name')))),
+        array ('key' => 'tag_id', 'title' => '分類', 'sql' => 'id IN (?)', 'values' => "column_array (WorkTagMapping::find ('all' , array ('select' => 'work_id', 'conditions' => array ('work_tag_id = ?', " . '$val' . "))), 'work_id')", 'select' => array_map (function ($tag) { return array ('value' => $tag->id, 'text' => $tag->name);}, WorkTag::all (array ('select' => 'id, name')))),
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));

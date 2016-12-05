@@ -13,9 +13,20 @@
         if (isset ($column['select']) && $column['select']) { ?>
           <select name='<?php echo $column['key'];?>'>
             <option value=''>請選擇 <?php echo $column['title'];?>..</option>
-      <?php foreach ($column['select'] as $option) { ?>
-              <option value='<?php echo $option['value'];?>'<?php echo (is_numeric ($column['value']) && ($column['value'] == $option['value'])) || ($option['value'] === $column['value']) ? ' selected' : '';?>><?php echo $option['text'];?></option>
-      <?php } ?>
+      <?php $options = $column['select']; $groups = array ('' => array ()); foreach ($options as $option) if (!isset ($option['group'])) array_push ($groups[''], $option); else if (isset ($groups[$option['group']])) array_push ($groups[$option['group']], $option); else $groups[$option['group']] = array ($option);
+            $optgroup = array_filter (array_keys ($groups)) ? true : false;
+
+            foreach (array_reverse ($groups) as $label => $group) {
+              if ($optgroup) { ?>
+                <optgroup label='<?php echo $label === '' ? '其他' : $label;?>'>
+        <?php } 
+                foreach ($group as $option) { ?>
+                  <option value='<?php echo $option['value'];?>'<?php echo (is_numeric ($column['value']) && ($column['value'] == $option['value'])) || ($option['value'] === $column['value']) ? ' selected' : '';?>><?php echo $option['text'];?></option>
+          <?php }
+              if ($optgroup) { ?>
+                </optgroup>
+        <?php }
+            } ?>
           </select>
   <?php } else { ?>
           <label>
