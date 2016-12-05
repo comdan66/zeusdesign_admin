@@ -59,7 +59,12 @@ if (!function_exists ('conditions')) {
     foreach ($columns as &$column)
       if ((isset ($inputs[$column['key']]) && ($inputs[$column['key']] !== '') && (($column['value'] = $inputs[$column['key']]) || (is_numeric ($column['value']) ? ($column['value'] = (int)$column['value']) || true : true))) || ($column['value'] = ''))
         if (array_push ($qs, array ($column['key'], $column['value'])))
-          OaModel::addConditions ($conditions, $column['sql'], strpos (strtolower ($column['sql']), ' like ') !== false ? '%' . $column['value'] . '%' : $inputs[$column['key']]);
+          if (isset ($column['values'])) {
+            $val = $inputs[$column['key']];
+            eval('$val = ' . $column['values'] . ';');
+            OaModel::addConditions ($conditions, $column['sql'], $val ? $val : array (0));
+          } else
+            OaModel::addConditions ($conditions, $column['sql'], strpos (strtolower ($column['sql']), ' like ') !== false ? '%' . $column['value'] . '%' : $inputs[$column['key']]);
 
     $qs = implode ('&amp;', array_map (function ($q) { return $q[0] . '=' . $q[1]; }, $qs));
 
