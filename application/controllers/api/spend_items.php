@@ -41,6 +41,7 @@ class Spend_items extends Api_controller {
           'title' => $item->title,
           'count' => $item->cnt,
           'money' => $item->money,
+          'money_str' => number_format ($item->money),
         );
     }, $items);
 
@@ -49,6 +50,7 @@ class Spend_items extends Api_controller {
           'title' => $gets['title'],
           'count' => 0,
           'money' => 0,
+          'money_str' => number_format (0),
         ));
 
     return $this->output_json ($limit ? array_slice ($items, 0, $limit) : $items);
