@@ -142,12 +142,13 @@ class Spends extends Api_controller {
     return $this->output_json (array ('message' => '刪除成功！'));
   }
   private function _validation (&$posts) {
-    $keys = array ('number', 'timed_at', 'address', 'memo', 'lat', 'lng');
+    $keys = array ('number', 'money', 'timed_at', 'address', 'memo', 'lat', 'lng');
 
     $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
     $posts = $new_posts;
 
     if (isset ($posts['number']) && ($posts['number'] = trim ($posts['number'])) && !is_string ($posts['number'])) return '號碼格式錯誤！';
+    if (isset ($posts['money']) && !is_numeric ($posts['money'] = trim ($posts['money']))) return '總金額格式錯誤！';
     if (isset ($posts['timed_at']) && !($posts['timed_at'] = trim ($posts['timed_at']))) return '時間格式錯誤或未填寫！';
     if (isset ($posts['address']) && ($posts['address'] = trim ($posts['address'])) && !is_string ($posts['address'])) return '地址格式錯誤！';
     if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
@@ -159,6 +160,7 @@ class Spends extends Api_controller {
   }
   private function _validation_must (&$posts) {
     if (!isset ($posts['timed_at'])) return '沒有填寫 時間！';
+    if (!isset ($posts['money'])) return '沒有填寫 總金額！';
     if (!isset ($posts['lat'])) return '沒有填寫 緯度！';
     if (!isset ($posts['lng'])) return '沒有填寫 經度！';
 

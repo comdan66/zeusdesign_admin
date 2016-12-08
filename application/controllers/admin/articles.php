@@ -94,7 +94,9 @@ class Articles extends Admin_controller {
 
     $posts = OAInput::post ();
     $post_tag_ids = isset ($posts['tag_ids']) ? $posts['tag_ids'] : array ();
-    $post_sources = isset ($posts['sources']) ? $posts['sources'] : array ();
+    $post_sources = isset ($posts['sources']) ? array_filter ($posts['sources'], function ($source) {
+      return isset ($source['title']) && isset ($source['href']) && $source['title'] && $source['href'];
+    }) : array ();
     if (isset ($posts['content'])) $posts['content'] = OAInput::post ('content', false);
     $cover = OAInput::file ('cover');
 
@@ -165,7 +167,9 @@ class Articles extends Admin_controller {
     if (isset ($posts['content'])) $posts['content'] = OAInput::post ('content', false);
     $is_api = isset ($posts['_type']) && ($posts['_type'] == 'api') ? true : false;
     $post_tag_ids = isset ($posts['tag_ids']) ? $posts['tag_ids'] : array ();
-    $post_sources = isset ($posts['sources']) ? $posts['sources'] : array ();
+    $post_sources = isset ($posts['sources']) ? array_filter ($posts['sources'], function ($source) {
+      return isset ($source['title']) && isset ($source['href']) && $source['title'] && $source['href'];
+    }) : array ();
     $cover = OAInput::file ('cover');
 
     if (!((string)$this->obj->cover || $cover))

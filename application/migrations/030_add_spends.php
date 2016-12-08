@@ -15,6 +15,7 @@ class Migration_Add_spends extends CI_Migration {
         `cover` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '封面',
         `number` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '發票號碼',
         `timed_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '時間',
+        `money` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '總金額',
 
         `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '地址',
         `lat` DOUBLE NOT NULL COMMENT '緯度',
