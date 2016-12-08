@@ -40,6 +40,7 @@ Route::group ('admin', function () {
 
   Route::resourcePagination (array ('billins'), 'billins');
   Route::resourcePagination (array ('billous'), 'billous');
+  Route::resourcePagination (array ('bills'), 'bills');
 
   Route::resourcePagination (array ('banners'), 'banners');
   Route::resourcePagination (array ('promos'), 'promos');

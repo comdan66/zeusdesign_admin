@@ -32,7 +32,7 @@ class Billins extends Admin_controller {
   private function _search_columns () {
     return array ( 
         array ('key' => 'month',   'title' => '月份',    'sql' => 'MONTH(date_at) = ?', 'select' => array (array ('value' => '1', 'text' => '一月'), array ('value' => '2', 'text' => '二月'), array ('value' => '3', 'text' => '三月'), array ('value' => '4', 'text' => '四月'), array ('value' => '5', 'text' => '五月'), array ('value' => '6', 'text' => '六月'), array ('value' => '7', 'text' => '七月'), array ('value' => '8', 'text' => '八月'), array ('value' => '9', 'text' => '九月'), array ('value' => '10', 'text' => '十月'), array ('value' => '11', 'text' => '十一月'), array ('value' => '12', 'text' => '十二月'))), 
-        array ('key' => 'year',    'title' => '年份',    'sql' => 'YEAR(date_at) = ?', 'select' => array (array ('value' => '2014', 'text' => '2014 年'), array ('value' => '2015', 'text' => '2015 年'), array ('value' => '2016', 'text' => '2016 年'), array ('value' => '2017', 'text' => '2017 年'))), 
+        array ('key' => 'year',    'title' => '年份',    'sql' => 'YEAR(date_at) = ?', 'select' => array_reverse (array (array ('value' => '2014', 'text' => '2014 年'), array ('value' => '2015', 'text' => '2015 年'), array ('value' => '2016', 'text' => '2016 年'), array ('value' => '2017', 'text' => '2017 年')))), 
         array ('key' => 'name',    'title' => '專案名稱', 'sql' => 'name LIKE ?'), 
         array ('key' => 'user_id', 'title' => '負責人',   'sql' => 'user_id = ?', 'select' => array_map (function ($user) { return array ('value' => $user->id, 'text' => $user->name);}, User::all (array ('select' => 'id, name')))),
       );

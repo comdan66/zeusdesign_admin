@@ -129,6 +129,7 @@
                   <ul>
                     <li><a href="<?php echo $url = base_url ('admin', 'billins');?>" class='icon-ib<?php echo $now_url == $url ? ' active' : '';?>'>入帳管理</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'billous');?>" class='icon-ob<?php echo $now_url == $url ? ' active' : '';?>'>出帳管理</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'bills');?>" class='icon-moneybag<?php echo $now_url == $url ? ' active' : '';?>'>盈餘管理</a></li>
                   </ul>
                 </label>
               </li>
