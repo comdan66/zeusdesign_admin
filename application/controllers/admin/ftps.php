@@ -76,6 +76,12 @@ class Ftps extends Admin_controller {
         ));
 
     $posts = OAInput::post ();
+    if (isset ($posts['ftp_url'])) $posts['ftp_url'] = OAInput::post ('ftp_url', false);
+    if (isset ($posts['ftp_account'])) $posts['ftp_account'] = OAInput::post ('ftp_account', false);
+    if (isset ($posts['ftp_password'])) $posts['ftp_password'] = OAInput::post ('ftp_password', false);
+    if (isset ($posts['admin_url'])) $posts['admin_url'] = OAInput::post ('admin_url', false);
+    if (isset ($posts['admin_account'])) $posts['admin_account'] = OAInput::post ('admin_account', false);
+    if (isset ($posts['admin_password'])) $posts['admin_password'] = OAInput::post ('admin_password', false);
     
     if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
       return redirect_message (array ($this->uri_1, 'add'), array (
@@ -111,6 +117,12 @@ class Ftps extends Admin_controller {
         ));
 
     $posts = OAInput::post ();
+    if (isset ($posts['ftp_url'])) $posts['ftp_url'] = OAInput::post ('ftp_url', false);
+    if (isset ($posts['ftp_account'])) $posts['ftp_account'] = OAInput::post ('ftp_account', false);
+    if (isset ($posts['ftp_password'])) $posts['ftp_password'] = OAInput::post ('ftp_password', false);
+    if (isset ($posts['admin_url'])) $posts['admin_url'] = OAInput::post ('admin_url', false);
+    if (isset ($posts['admin_account'])) $posts['admin_account'] = OAInput::post ('admin_account', false);
+    if (isset ($posts['admin_password'])) $posts['admin_password'] = OAInput::post ('admin_password', false);
     $is_api = isset ($posts['_type']) && ($posts['_type'] == 'api') ? true : false;
 
     if ($msg = $this->_validation ($posts))
