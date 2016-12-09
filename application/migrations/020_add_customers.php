@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined ('BASEPATH') OR exit ('No direct script access allowed');
 
 /**
  * @author      OA Wu <comdan66@gmail.com>

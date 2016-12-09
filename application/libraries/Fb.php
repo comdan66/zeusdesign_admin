@@ -3,7 +3,7 @@ require FCPATH . 'vendor/autoload.php';
 use Facebook\FacebookApp;
 use Facebook\SignedRequest;
 
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+defined ('BASEPATH') OR exit ('No direct script access allowed');
 
 /**
  * @author      OA Wu <comdan66@gmail.com>

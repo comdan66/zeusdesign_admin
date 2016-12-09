@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined ('BASEPATH') OR exit ('No direct script access allowed');
 
 /**
  * @author      OA Wu <comdan66@gmail.com>
@@ -48,6 +48,7 @@ class Schedules extends Api_controller {
     if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
       return $this->output_error_json ($msg);
 
+    $posts['task_id'] = 0;
     $posts['user_id'] = $this->user->id;
     $create = Schedule::transaction (function () use (&$schedule, $posts) {
       return verifyCreateOrm ($schedule = Schedule::create (array_intersect_key ($posts, Schedule::table ()->columns)));
