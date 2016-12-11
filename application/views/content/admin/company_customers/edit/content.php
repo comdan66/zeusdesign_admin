@@ -11,7 +11,7 @@
     <div class='row n2'>
       <label>* 聯絡人名稱</label>
       <div>
-        <input type='text' name='name' value='<?php echo isset ($posts['name']) ? $posts['name'] : $obj->name;?>' placeholder='請輸入名稱..' maxlength='200' pattern='.{1,200}' required title='輸入名稱!' autofocus />
+        <input type='text' name='name' value='<?php echo isset ($posts['name']) ? $posts['name'] : $obj->name;?>' placeholder='請輸入聯絡人名稱..' maxlength='200' pattern='.{1,200}' required title='輸入聯絡人名稱!' autofocus />
       </div>
     </div>
     
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div class='row n2 emails' data-i='0' data-emails='<?php echo json_encode ($posts['emails']);?>'>
+    <div class='row n2 emails' data-i='0' data-emails='<?php echo json_encode ($emails);?>'>
       <label>聯絡 E-Mail</label>
       <div>
         <div class='add_email'>

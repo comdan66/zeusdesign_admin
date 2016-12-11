@@ -13,17 +13,13 @@ class Customer_companies extends Admin_controller {
     parent::__construct ();
     
     if (!User::current ()->in_roles (array ('customer')))
-      return redirect_message (array ('admin'), array (
-            '_flash_danger' => '您的權限不足，或者頁面不存在。'
-          ));
+      return redirect_message (array ('admin'), array ('_flash_danger' => '您的權限不足，或者頁面不存在。'));
 
     $this->uri_1 = 'admin/customer-companies';
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = CustomerCompany::find ('one', array ('conditions' => array ('id = ?', $id))))))
-        return redirect_message (array ($this->uri_1), array (
-            '_flash_danger' => '找不到該筆資料。'
-          ));
+        return redirect_message (array ($this->uri_1), array ('_flash_danger' => '找不到該筆資料。'));
 
     $this->add_param ('uri_1', $this->uri_1);
     $this->add_param ('now_url', base_url ($this->uri_1));
@@ -67,107 +63,77 @@ class Customer_companies extends Admin_controller {
   }
   public function create () {
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
-        ));
+      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
     
-    if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => $msg,
-          'posts' => $posts
-        ));
+    if ($msg = $this->_validation_create ($posts))
+      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
-    $create = CustomerCompany::transaction (function () use (&$obj, $posts) {
-      return verifyCreateOrm ($obj = CustomerCompany::create (array_intersect_key ($posts, CustomerCompany::table ()->columns)));
-    });
+    if (!CustomerCompany::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = CustomerCompany::create (array_intersect_key ($posts, CustomerCompany::table ()->columns))); }))
+      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
 
-    if (!$create)
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => '新增失敗！',
-          'posts' => $posts
-        ));
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-br', 'content' => '新增一項聯絡人公司。', 'desc' => '公司名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->columns_val ())));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-br', 'content' => '新增一項聯絡人公司。', 'desc' => '分類名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->to_array ())));
-    return redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '新增成功！'
-      ));
+    return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
   public function edit () {
     $posts = Session::getData ('posts', true);
 
     return $this->load_view (array (
-                    'posts' => $posts,
-                    'obj' => $this->obj
-                  ));
+        'posts' => $posts,
+        'obj' => $this->obj
+      ));
   }
   public function update () {
+    $obj = $this->obj;
+
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
-        ));
+      return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
+    $backup = $obj->columns_val (true);
 
-    if ($msg = $this->_validation ($posts))
-      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => $msg,
-          'posts' => $posts
-        ));
+    if ($msg = $this->_validation_update ($posts))
+      return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
-    if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
+    if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
       foreach ($columns as $column => $value)
-        $this->obj->$column = $value;
+        $obj->$column = $value;
     
-    $obj = $this->obj;
-    $update = CustomerCompany::transaction (function () use ($obj, $posts) {
-      return $obj->save ();
-    });
+    if (!CustomerCompany::transaction (function () use ($obj, $posts) { return $obj->save (); }))
+      return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '更新失敗！', 'posts' => $posts));
 
-    if (!$update)
-      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => '更新失敗！',
-          'posts' => $posts
-        ));
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-br', 'content' => '修改一項聯絡人公司。', 'desc' => '公司名稱為「' . $obj->name . '」。', 'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-br', 'content' => '修改一項聯絡人公司。', 'desc' => '分類名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->to_array ())));
-    return redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '更新成功！'
-      ));
+    return redirect_message (array ($this->uri_1), array ('_flash_info' => '更新成功！'));
   }
 
   public function destroy () {
     $obj = $this->obj;
-    $backup = json_encode ($obj->to_array ());
-    $delete = CustomerCompany::transaction (function () use ($obj) { return $obj->destroy (); });
-    
-    if (!$delete)
-      return redirect_message (array ($this->uri_1), array (
-          '_flash_danger' => '刪除失敗！',
-        ));
+    $backup = $obj->columns_val (true);
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-br', 'content' => '刪除一項聯絡人公司。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
-    return redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '刪除成功！'
-      ));
+    if (!CustomerCompany::transaction (function () use ($obj) { return $obj->destroy (); }))
+      return redirect_message (array ($this->uri_1), array ('_flash_danger' => '刪除失敗！'));
+
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-br', 'content' => '刪除一項聯絡人公司。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup'  => json_encode ($backup)));
+
+    return redirect_message (array ($this->uri_1), array ('_flash_info' => '刪除成功！'));
   }
 
-  private function _validation (&$posts) {
-    $keys = array ('name', 'business_no', 'telephone', 'address', 'memo');
-
-    $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
-    $posts = $new_posts;
-
-    if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '公司名稱格式錯誤！';
-    if (isset ($posts['business_no']) && ($posts['business_no'] = trim ($posts['business_no'])) && !is_string ($posts['business_no'])) return '公司統編格式錯誤！';
-    if (isset ($posts['telephone']) && ($posts['telephone'] = trim ($posts['telephone'])) && !is_string ($posts['telephone'])) return '公司電話格式錯誤！';
-    if (isset ($posts['address']) && ($posts['address'] = trim ($posts['address'])) && !is_string ($posts['address'])) return '公司地址格式錯誤！';
-    if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
-    return '';
-  }
-  private function _validation_must (&$posts) {
+  private function _validation_create (&$posts) {
     if (!isset ($posts['name'])) return '沒有填寫 公司名稱！';
+
+    if (!(($posts['name'] = trim ($posts['name'])) && is_string ($posts['name']))) return '公司名稱 格式錯誤！';
+
+    $posts['business_no'] = isset ($posts['business_no']) && ($posts['business_no'] = trim ($posts['business_no'])) && is_string ($posts['business_no']) ? $posts['business_no'] : '';
+    $posts['telephone'] = isset ($posts['telephone']) && ($posts['telephone'] = trim ($posts['telephone'])) && is_string ($posts['telephone']) ? $posts['telephone'] : '';
+    $posts['address'] = isset ($posts['address']) && ($posts['address'] = trim ($posts['address'])) && is_string ($posts['address']) ? $posts['address'] : '';
+    $posts['memo'] = isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && is_string ($posts['memo']) ? $posts['memo'] : '';
+
     return '';
+  }
+  private function _validation_update (&$posts) {
+    return $this->_validation_create ($posts);
   }
 }

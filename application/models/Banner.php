@@ -39,6 +39,21 @@ class Banner extends OaModel {
 
     OrmImageUploader::bind ('cover', 'BannerCoverImageUploader');
   }
+  public function columns_val ($has = false) {
+    $var = array (
+      'id'         => isset ($this->id) ? $this->id : '',
+      'title'      => isset ($this->title) ? $this->title : '',
+      'content'    => isset ($this->content) ? $this->content : '',
+      'link'       => isset ($this->link) ? $this->link : '',
+      'cover'      => isset ($this->cover) ? $this->cover : '',
+      'target'     => isset ($this->target) ? $this->target : '',
+      'sort'       => isset ($this->sort) ? $this->sort : '',
+      'is_enabled' => isset ($this->is_enabled) ? $this->is_enabled : '',
+      'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+    return $has ? array ('this' => $var) : $var;
+  }
   public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,
@@ -53,6 +68,10 @@ class Banner extends OaModel {
             'w800' => $this->cover->url ('800w'),
           ),
       );
+  }
+  public function mini_title ($length = 50) {
+    if (!isset ($this->title)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->title), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
   public function mini_content ($length = 100) {
     if (!isset ($this->content)) return '';

@@ -13,17 +13,13 @@ class Deploys extends Admin_controller {
     parent::__construct ();
     
     if (!User::current ()->in_roles (array ('site')))
-      return redirect_message (array ('admin'), array (
-            '_flash_danger' => '您的權限不足，或者頁面不存在。'
-          ));
+      return redirect_message (array ('admin'), array ('_flash_danger' => '您的權限不足，或者頁面不存在。'));
 
     $this->uri_1 = 'admin/deploys';
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Deploy::find ('one', array ('conditions' => array ('id = ?', $id))))))
-        return redirect_message (array ($this->uri_1), array (
-            '_flash_danger' => '找不到該筆資料。'
-          ));
+        return redirect_message (array ($this->uri_1), array ('_flash_danger' => '找不到該筆資料。'));
 
     $this->add_param ('uri_1', $this->uri_1);
     $this->add_param ('now_url', base_url ($this->uri_1));
@@ -66,69 +62,39 @@ class Deploys extends Admin_controller {
   }
   public function create () {
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
-        ));
+      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
 
-    if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => $msg,
-          'posts' => $posts
-        ));
+    if ($msg = $this->_validation_create ($posts))
+      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
     $posts['user_id'] = User::current ()->id;
-
-    $create = Deploy::transaction (function () use (&$obj, $posts) {
-      return verifyCreateOrm ($obj = Deploy::create (array_intersect_key ($posts, Deploy::table ()->columns)));
-    });
-
-    if (!$create)
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => '新增失敗！',
-          'posts' => $posts
-        ));
-
+    if (!Deploy::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Deploy::create (array_intersect_key ($posts, Deploy::table ()->columns))); }))
+      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
 
     $this->load->library ('DeployTool');
 
     if ($obj->type == Deploy::TYPE_BUILD)
       if (!(DeployTool::genApi () && DeployTool::callBuild ()))
-        return redirect_message (array ($this->uri_1), array (
-            '_flash_danger' => '新增失敗！'
-          ));
+        return redirect_message (array ($this->uri_1), array ('_flash_danger' => '新增失敗！'));
 
     if ($obj->type == Deploy::TYPE_UPLOAD)
       if (!(DeployTool::genApi () && DeployTool::callUpload ()))
-        return redirect_message (array ($this->uri_1), array (
-            '_flash_danger' => '新增失敗！'
-          ));
+        return redirect_message (array ($this->uri_1), array ('_flash_danger' => '新增失敗！'));
 
     DeployTool::callBuild ();
 
     $obj->is_success = Deploy::SUCCESS_YES;
-    if (!$update = Article::transaction (function () use ($obj) { return $obj->save (); }))
-      return redirect_message (array ($this->uri_1), array (
-          '_flash_danger' => '新增失敗！'
-        ));
+    if (!Deploy::transaction (function () use ($obj) { return $obj->save (); }))
+      return redirect_message (array ($this->uri_1), array ('_flash_danger' => '新增失敗！'));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-pi', 'content' => '執行了一次部署。', 'desc' => '時間點是：「' . $obj->created_at->format ('Y-m-d H:i:s') . '」，狀態為「' . Deploy::$successNames[$obj->is_success] . '」。', 'backup' => json_encode ($obj->to_array ())));
-    return redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '新增成功！'
-      ));
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-pi', 'content' => '執行了一次部署。', 'desc' => '在 ”' . $obj->created_at->format ('Y-m-d H:i:s') . '“ 執行一次部署，其類型為「' . Deploy::$typeNames[$obj->type] . '」，執行後狀態「' . Deploy::$successNames[$obj->is_success] . '」。', 'backup' => json_encode ($obj->columns_val ())));
+
+    return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
-  private function _validation (&$posts) {
-    $keys = array ('type');
-
-    $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
-    $posts = $new_posts;
-
-    if (isset ($posts['type']) && !(is_numeric ($posts['type'] = trim ($posts['type'])) && in_array ($posts['type'], array_keys (Deploy::$typeNames)))) return '類型格式錯誤！';
-    return '';
-  }
-  private function _validation_must (&$posts) {
-    if (!isset ($posts['type'])) return '沒有填寫 類型！';
-    return '';
+  private function _validation_create (&$posts) {
+    if (!isset ($posts['type'])) return '沒有選擇 類型！';
+    if (!(is_numeric ($posts['type'] = trim ($posts['type'])) && in_array ($posts['type'], array_keys (Deploy::$typeNames)))) return '類型 格式錯誤！';
   }
 }

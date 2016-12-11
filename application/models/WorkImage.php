@@ -23,6 +23,15 @@ class WorkImage extends OaModel {
 
     OrmImageUploader::bind ('name', 'WorkImageNameImageUploader');
   }
+  public function columns_val () {
+    return array (
+      'id'         => isset ($this->id) ? $this->id : '',
+      'work_id'    => isset ($this->work_id) ? $this->work_id : '',
+      'name'       => isset ($this->name) ? $this->name : '',
+      'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+  }
   public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,

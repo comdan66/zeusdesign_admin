@@ -13,17 +13,13 @@ class Billins extends Admin_controller {
     parent::__construct ();
 
     if (!User::current ()->in_roles (array ('bills')))
-      return redirect_message (array ('admin'), array (
-            '_flash_danger' => '您的權限不足，或者頁面不存在。'
-          ));
+      return redirect_message (array ('admin'), array ('_flash_danger' => '您的權限不足，或者頁面不存在。'));
 
     $this->uri_1 = 'admin/billins';
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Billin::find ('one', array ('conditions' => array ('id = ?', $id))))))
-        return redirect_message (array ($this->uri_1), array (
-            '_flash_danger' => '找不到該筆資料。'
-          ));
+        return redirect_message (array ($this->uri_1), array ('_flash_danger' => '找不到該筆資料。'));
 
     $this->add_param ('uri_1', $this->uri_1);
     $this->add_param ('now_url', base_url ($this->uri_1));
@@ -72,150 +68,94 @@ class Billins extends Admin_controller {
   }
   public function create () {
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
-        ));
+      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
     
-    if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => $msg,
-          'posts' => $posts
-        ));
+    if ($msg = $this->_validation_create ($posts))
+      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
-    $create = Billin::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Billin::create (array_intersect_key ($posts, Billin::table ()->columns))); });
+    if (!Billin::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Billin::create (array_intersect_key ($posts, Billin::table ()->columns))); }))
+      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
 
-    if (!$create)
-      return redirect_message (array ($this->uri_1, 'add'), array (
-          '_flash_danger' => '新增失敗！',
-          'posts' => $posts
-        ));
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ib', 'content' => '新增一筆入帳。', 'desc' => '專案名稱為：「' . $obj->mini_name () . '」。', 'backup' => json_encode ($obj->columns_val ())));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ib', 'content' => '新增一筆入帳。', 'desc' => '專案名稱為：「' . $obj->mini_name () . '」，總金額為：「' . number_format ($obj->money) . '」。', 'backup' => json_encode ($obj->to_array ())));
-    return redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '新增成功！'
-      ));
+    return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
   public function edit () {
     $posts = Session::getData ('posts', true);
 
     return $this->load_view (array (
-                    'posts' => $posts,
-                    'obj' => $this->obj
-                  ));
+        'posts' => $posts,
+        'obj' => $this->obj
+      ));
   }
   public function update () {
+    $obj = $this->obj;
+
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
-        ));
+      return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
-    $is_api = isset ($posts['_type']) && ($posts['_type'] == 'api') ? true : false;
+    $backup = $obj->columns_val (true);
 
-    if ($msg = $this->_validation ($posts))
-      return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => $msg,
-          'posts' => $posts
-        ));
+    if ($msg = $this->_validation_update ($posts))
+      return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
-    if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
+    if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
       foreach ($columns as $column => $value)
-        $this->obj->$column = $value;
+        $obj->$column = $value;
     
-    $obj = $this->obj;
-    $update = Billin::transaction (function () use ($obj, $posts) { return $obj->save (); });
+    if (!Billin::transaction (function () use ($obj, $posts) { return $obj->save (); }))
+      return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '更新失敗！', 'posts' => $posts));
 
-    if (!$update)
-      return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => '更新失敗！',
-          'posts' => $posts
-        ));
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ib', 'content' => '修改一筆入帳。', 'desc' => '專案名稱為：「' . $obj->mini_name () . '」。', 'backup'  => json_encode (array (
+          'ori' => $backup,
+          'now' => $obj->columns_val (true)
+        ))));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ib', 'content' => '修改一筆入帳。', 'desc' => '專案名稱為：「' . $obj->mini_name () . '」，總金額為：「' . number_format ($obj->money) . '」。', 'backup' => json_encode ($obj->to_array ())));
-    return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '更新成功！'
-      ));
+    return redirect_message (array ($this->uri_1), array ('_flash_info' => '更新成功！'));
   }
   public function destroy () {
     $obj = $this->obj;
-    $backup = json_encode ($obj->to_array ());
-    $delete = Billin::transaction (function () use ($obj) { return $obj->destroy (); });
+    $backup = $obj->columns_val (true);
 
-    if (!$delete)
-      return redirect_message (array ($this->uri_1), array (
-          '_flash_danger' => '刪除失敗！',
-        ));
+    if (!Billin::transaction (function () use ($obj) { return $obj->destroy (); }))
+      return redirect_message (array ($this->uri_1), array ('_flash_danger' => '刪除失敗！'));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ib', 'content' => '刪除一筆入帳。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
-    return redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '刪除成功！'
-      ));
-  }
-  private function _validation (&$posts) {
-    $keys = array ('user_id', 'name', 'money', 'rate_name', 'rate', 'zeus_money', 'memo', 'date_at', 'is_finished', 'is_pay');
-
-    $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
-    $posts = $new_posts;
-
-    if (isset ($posts['user_id']) && !(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find_by_id ($posts['user_id']))) return '負責人 ID 格式錯誤或未填寫！';
-    if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '專案名稱格式錯誤或未填寫！';
-    if (isset ($posts['money']) && !(is_numeric ($posts['money'] = trim ($posts['money'])) && $posts['money'] >= 0)) return '總金額格式錯誤或未填寫！';
-    if (isset ($posts['rate_name']) && !($posts['rate_name'] = trim ($posts['rate_name']))) return '%數名稱格式錯誤或未填寫！';
-    if (isset ($posts['rate']) && !(is_numeric ($posts['rate'] = trim ($posts['rate'])) && $posts['rate'] >= 0)) return '%數格式錯誤或未填寫！';
-    if (isset ($posts['zeus_money']) && !(is_numeric ($posts['zeus_money'] = trim ($posts['zeus_money'])) && $posts['zeus_money'] >= 0)) return '宙思獲得金額格式錯誤或未填寫！';
-    if (isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && !is_string ($posts['memo'])) return '備註格式錯誤！';
-    if (isset ($posts['date_at']) && !($posts['date_at'] = trim ($posts['date_at']))) return '日期格式錯誤！';
-    if (isset ($posts['is_finished']) && !(is_numeric ($posts['is_finished'] = trim ($posts['is_finished'])) && in_array ($posts['is_finished'], array_keys (Billin::$finishNames)))) return '是否入帳格式錯誤！';
-    if (isset ($posts['is_pay']) && !(is_numeric ($posts['is_pay'] = trim ($posts['is_pay'])) && in_array ($posts['is_pay'], array_keys (Billin::$payNames)))) return '是否支付格式錯誤！';
-    return '';
-  }
-  private function _validation_must (&$posts) {
-    if (!isset ($posts['user_id'])) return '沒有填寫 負責人！';
-    if (!isset ($posts['name'])) return '沒有填寫 專案名稱！';
-    if (!isset ($posts['money'])) return '沒有填寫 總金額！';
-    if (!isset ($posts['rate_name'])) return '沒有填寫 %數名稱！';
-    if (!isset ($posts['rate'])) return '沒有填寫 %數！';
-    if (!isset ($posts['zeus_money'])) return '沒有填寫 宙思獲得金額！';
-    if (!isset ($posts['date_at'])) return '沒有填寫 日期！';
-    if (!isset ($posts['is_finished'])) return '沒有選擇 是否入帳！';
-    if (!isset ($posts['is_pay'])) return '沒有選擇 是否支付！';
-    return '';
-  }
-
-  private function _build_excel ($objs, $infos) {
-    $excel = new OAExcel ();
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ib', 'content' => '刪除一筆入帳。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup'  => json_encode ($backup)));
     
-    $excel->getActiveSheet ()->getRowDimension (1)->setRowHeight (20);
-    $excel->getActiveSheet ()->freezePaneByColumnAndRow (0, 2);
-    $excel->getActiveSheet ()->getStyle ('A1:' . chr (65 + count ($infos) - 1) . '1')->applyFromArray (array (
-      'fill' => array (
-        'type' => PHPExcel_Style_Fill::FILL_SOLID,
-        'color' => array('rgb' => 'fff3ca')
-      ),));
-
-    foreach ($objs as $i => $obj) {
-      $j = 0;
-      foreach ($infos as $info) {
-        if ($i == 0) {
-          $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 1))->getAlignment ()->setVertical (PHPExcel_Style_Alignment::VERTICAL_TOP);
-          $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 1))->getAlignment ()->setHorizontal (PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-          $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 1))->getFont ()->setName ('新細明體');
-          $excel->getActiveSheet ()->SetCellValue (chr (65 + $j) . ($i + 1), $info['title']);
-        }
-        eval ('$val = ' . $info['exp'] . ';');
-        
-        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getAlignment ()->setVertical (PHPExcel_Style_Alignment::VERTICAL_TOP);
-        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getAlignment ()->setHorizontal (PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getFont ()->setName ("新細明體");
-        $excel->getActiveSheet ()->SetCellValue (chr (65 + $j) . ($i + 2), $val);
-        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getNumberFormat ()->setFormatCode ($info['format']);
-        $j++;
-      }
-    }
-    return $excel;
+    return redirect_message (array ($this->uri_1), array ('_flash_info' => '刪除成功！'));
   }
+  private function _validation_create (&$posts) {
+    if (!isset ($posts['user_id']))     return '沒有選擇 負責人！';
+    if (!isset ($posts['name']))        return '沒有填寫 專案名稱！';
+    if (!isset ($posts['money']))       return '沒有填寫 總金額！';
+    if (!isset ($posts['rate_name']))   return '沒有填寫 類型！';
+    if (!isset ($posts['rate']))        return '沒有填寫 扣款百分比！';
+    if (!isset ($posts['zeus_money']))  return '沒有填寫 宙思獲得！';
+    if (!isset ($posts['date_at']))     return '沒有選擇 日期！';
+    if (!isset ($posts['is_finished'])) return '沒有選擇 是否入帳！';
+    if (!isset ($posts['is_pay']))      return '沒有選擇 是否支付！';
+
+    if (!(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['user_id']))))) return '負責人 不存在！';
+    if (!(($posts['name'] = trim ($posts['name'])) && is_string ($posts['name']))) return '專案名稱 格式錯誤！';
+    if (!(is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] >= 0))) return '總金額 格式錯誤！';
+    if (!(($posts['rate_name'] = trim ($posts['rate_name'])) && is_string ($posts['rate_name']))) return '類型 格式錯誤！';
+    if (!(is_numeric ($posts['rate'] = trim ($posts['rate'])) && ($posts['rate'] >= 0))) return '扣款百分比 格式錯誤！';
+    if (!(is_numeric ($posts['zeus_money'] = trim ($posts['zeus_money'])) && ($posts['zeus_money'] >= 0))) return '宙思獲得 格式錯誤！';
+    if (!(($posts['date_at'] = trim ($posts['date_at'])) && is_date ($posts['date_at']))) return '日期 格式錯誤！';
+    if (!(is_numeric ($posts['is_finished'] = trim ($posts['is_finished'])) && in_array ($posts['is_finished'], array_keys (Billin::$finishNames)))) return '是否入帳 格式錯誤！';
+    if (!(is_numeric ($posts['is_pay'] = trim ($posts['is_pay'])) && in_array ($posts['is_pay'], array_keys (Billin::$payNames)))) return '是否支付 格式錯誤！';
+
+    $posts['memo'] = isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && is_string ($posts['memo']) ? $posts['memo'] : '';
+
+    return '';
+  }
+  private function _validation_update (&$posts) {
+    return $this->_validation_create ($posts);
+  }
+
   public function export () {
     $columns = $this->_search_columns ();
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
@@ -228,27 +168,28 @@ class Billins extends Admin_controller {
       ));
 
     $this->load->library ('OAExcel');
-    $infos = array (array ('title' => '負責人',   'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->user->name'),
-                    array ('title' => '專案名稱',  'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->name'),
-                    array ('title' => '總金額',   'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->money'),
-                    array ('title' => '％數標題',  'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->rate_name'),
-                    array ('title' => '％數',     'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->rate;'),
-                    array ('title' => '宙思＄',    'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->zeus_money'),
-                    array ('title' => '小計',     'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,         'exp' => '$obj->money - $obj->zeus_money'),
-                    array ('title' => '備註',      'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->memo'),
-                    array ('title' => '日期',     'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2, 'exp' => '$obj->date_at->format ("Y-m-d")'));
+    $infos = array (
+      array ('title' => '負責人',       'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->user->name'),
+      array ('title' => '專案名稱',      'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->name'),
+      array ('title' => '總金額',       'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->money'),
+      array ('title' => '類型',         'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->rate_name'),
+      array ('title' => '扣款百分比(%)', 'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->rate;'),
+      array ('title' => '宙思獲得',      'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->zeus_money'),
+      array ('title' => '小計',         'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,         'exp' => '$obj->money - $obj->zeus_money'),
+      array ('title' => '備註',         'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->memo'),
+      array ('title' => '日期',         'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2, 'exp' => '$obj->date_at->format ("Y-m-d")'));
 
     $excel = $this->_build_excel ($objs, $infos);
     $excel->getActiveSheet ()->setTitle ('入帳列表');
     $excel->setActiveSheetIndex (0);
 
-    $filename = '宙思_入帳_' . date ('Ymd') . '.xlsx';
+    $filename = '宙思入帳_' . date ('Ymd') . '.xlsx';
     header ('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf8');
     header ('Content-Disposition: attachment; filename=' . $filename);
 
     $objWriter = new PHPExcel_Writer_Excel2007 ($excel);
     $objWriter->save ("php://output");
    
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-p', 'content' => '匯出 ' . count ($objs) . ' 筆入帳。', 'desc' => '已經成功的匯出 ' . $filename . '，全部有 ' . count ($objs) . ' 筆入帳紀錄，細節可詢問工程師。', 'backup' => json_encode (array_map (function ($obj) { return $obj->to_array (); }, $objs))));
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-p', 'content' => '匯出 ' . count ($objs) . ' 筆入帳。', 'desc' => '已經成功的匯出 ' . $filename . '，全部有 ' . count ($objs) . ' 筆入帳紀錄。', 'backup' => json_encode (array_map (function ($obj) { return $obj->columns_val (); }, $objs))));
   }
 }

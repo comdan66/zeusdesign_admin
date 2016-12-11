@@ -22,6 +22,17 @@ class CustomerEmail extends OaModel {
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
+  public function columns_val ($has = false) {
+    $var = array (
+      'id'          => isset ($this->id) ? $this->id : '',
+      'customer_id' => isset ($this->customer_id) ? $this->customer_id : '',
+      'email'       => isset ($this->email) ? $this->email : '',
+      'updated_at'  => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at'  => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+
+    return $has ? array ('this' => $var) : $var;
+  }
   public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,

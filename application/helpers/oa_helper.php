@@ -5,6 +5,41 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
+if ( !function_exists ('is_datetime')) {
+  function is_datetime ($date) {
+    return (DateTime::createFromFormat('Y-m-d H:i:s', $date) !== false);
+  }
+}
+
+if ( !function_exists ('is_date')) {
+  function is_date ($date) {
+    return (DateTime::createFromFormat('Y-m-d', $date) !== false);
+  }
+}
+
+if (!function_exists ('is_upload_file_format')) {
+  function is_upload_file_format ($file, $check_size = 0, $types = array ()) {
+    if (!(isset ($file['name']) && isset ($file['type']) && isset ($file['tmp_name']) && isset ($file['error']) && isset ($file['size'])))
+      return false;
+
+    if ($check_size && !(is_numeric ($file['size']) && $file['size'] > 0)) return false;
+    if (!$types) return true;
+
+    $CI =& get_instance ();
+    $CI->config->load ('mimes');
+    $mimes = $CI->config->item ('mimes');
+    foreach ($types as $type)
+      if (isset ($mimes[$type]))
+        if (is_string ($mimes[$type])) {
+          if ($mimes[$type] == $file['type']) return true;
+        } else if (is_array ($mimes[$type])) {
+          foreach ($mimes[$type] as $mime)
+            if ($mime == $file['type']) return true;
+        }
+
+    return false;
+  }
+}
 if (!function_exists ('token')) {
   function token ($id) {
     return md5 ($id . '_' . uniqid (rand () . '_'));

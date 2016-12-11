@@ -24,4 +24,13 @@ class WorkTagMapping extends OaModel {
   public function destroy () {
     return $this->delete ();
   }
+  public function columns_val () {
+    return array (
+      'id'          => isset ($this->id) ? $this->id : '',
+      'work_id'     => isset ($this->work_id) ? $this->work_id : '',
+      'work_tag_id' => isset ($this->work_tag_id) ? $this->work_tag_id : '',
+      'updated_at'  => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at'  => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+  }
 }

@@ -37,7 +37,7 @@
     </div>
 
     <div class='row n2'>
-      <label>* ％數標題</label>
+      <label>* 類型</label>
       <div id='billin_rate'>
         <div class='radios' data-val='<?php echo isset ($posts['rate_name']) ? $posts['rate_name'] : $obj->rate_name;?>'>
           <label>
@@ -59,14 +59,14 @@
     </div>
 
     <div class='row n2'>
-      <label>* ％數</label>
+      <label>* 扣款百分比(%)</label>
       <div>
         <input type='number' name='rate' id='rate' value='<?php echo isset ($posts['rate']) ? $posts['rate'] : $obj->rate;?>' placeholder='請輸入％數..' maxlength='200' pattern='.{1,200}' required title='輸入％數' />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>* 宙思＄</label>
+      <label>* 宙思獲得</label>
       <div>
         <input type='number' name='zeus_money' id='zeus_money' value='<?php echo isset ($posts['zeus_money']) ? $posts['zeus_money'] : $obj->zeus_money;?>' placeholder='請輸入宙思＄..' maxlength='200' pattern='.{1,200}' required title='輸入宙思＄!' />
       </div>
@@ -80,7 +80,7 @@
     </div>
 
     <div class='row n2'>
-      <label>是否入帳</label>
+      <label>* 是否入帳</label>
       <div>
         <label class='switch'>
           <input type='checkbox' name='is_finished'<?php echo (isset ($posts['is_finished']) ? $posts['is_finished'] : $obj->is_finished) == Billin::IS_FINISHED ? ' checked' : '';?> />
@@ -90,7 +90,7 @@
     </div>
 
     <div class='row n2'>
-      <label>是否支付</label>
+      <label>* 是否支付</label>
       <div>
         <label class='switch'>
           <input type='checkbox' name='is_pay'<?php echo (isset ($posts['is_pay']) ? $posts['is_pay'] : $obj->is_pay) == Billin::IS_PAY ? ' checked' : '';?> />

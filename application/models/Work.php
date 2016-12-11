@@ -35,6 +35,19 @@ class Work extends OaModel {
     
     OrmImageUploader::bind ('cover', 'WorkCoverImageUploader');
   }
+  public function columns_val () {
+    return array (
+      'id'         => isset ($this->id) ? $this->id : '',
+      'user_id'    => isset ($this->user_id) ? $this->user_id : '',
+      'title'      => isset ($this->title) ? $this->title : '',
+      'cover'      => isset ($this->cover) ? $this->cover : '',
+      'content'    => isset ($this->content) ? $this->content : '',
+      'is_enabled' => isset ($this->is_enabled) ? $this->is_enabled : '',
+      'pv'         => isset ($this->pv) ? $this->pv : '',
+      'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+  }
   public function to_array (array $opt = array ()) {
     return array (
       'id' => $this->id,

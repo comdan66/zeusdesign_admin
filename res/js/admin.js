@@ -177,7 +177,7 @@ $(function () {
           $input = $(this).find ('input'),
           url = $(this).data ('url'),
           column = $(this).data ('column'),
-          data = { _method: 'put', _type: 'api' };
+          data = {};
 
       if ($input.attr ('type') == 'checkbox') $that.get (0).oriVal = $input.prop ('checked');
       else if ($input.attr ('type') == 'radio') $that.get (0).oriVal = $input.filter (':checked').val ();
@@ -196,23 +196,23 @@ $(function () {
             beforeSend: function () { $(this).prop ('disabled', true); $that.addClass ('loading'); }.bind ($(this))
           })
           .done (function (result) {
-            $(this).prop ('checked', result[column] ? true : false).prop ('disabled', false);
+            $(this).prop ('checked', result ? true : false).prop ('disabled', false);
             $that.removeClass ('loading').get (0).oriVal = $(this).prop ('checked');
-            callback && callback.bind ($that, result[column] ? true : false) ();
+            callback && callback.bind ($that, result ? true : false) ();
           }.bind ($(this)))
           .fail (function (result) { $(this).prop ('checked', $that.removeClass ('loading').get (0).oriVal).prop ('disabled', false); }.bind ($(this)));
         } else if ($input.attr ('type') == 'radio') {
-          if (!(url && column)) {
-            setTimeout (function () { $input.filter ('[value="' + $that.removeClass ('loading').get (0).oriVal + '"]').prop ('checked', true); }.bind ($(this)), 100);
-            return false;
-          }
+          // if (!(url && column)) {
+          //   setTimeout (function () { $input.filter ('[value="' + $that.removeClass ('loading').get (0).oriVal + '"]').prop ('checked', true); }.bind ($(this)), 100);
+          //   return false;
+          // }
 
-          data[column] = $input.filter (':checked').val ();
-          $.ajax ({ url: url, data: data, async: true, cache: false, dataType: 'json', type: 'POST',
-            beforeSend: function () { $input.prop ('disabled', true); $that.addClass ('loading'); }
-          })
-          .done (function (result) { $input.prop ('disabled', false).filter ('[value="' + result[column] + '"]').prop ('checked', true); $that.removeClass ('loading').get (0).oriVal = $input.filter (':checked').val (); })
-          .fail (function (result) { $input.prop ('disabled', false).filter ('[value="' + $that.removeClass ('loading').get (0).oriVal + '"]').prop ('checked', true); });
+          // data[column] = $input.filter (':checked').val ();
+          // $.ajax ({ url: url, data: data, async: true, cache: false, dataType: 'json', type: 'POST',
+          //   beforeSend: function () { $input.prop ('disabled', true); $that.addClass ('loading'); }
+          // })
+          // .done (function (result) { $input.prop ('disabled', false).filter ('[value="' + result[column] + '"]').prop ('checked', true); $that.removeClass ('loading').get (0).oriVal = $input.filter (':checked').val (); })
+          // .fail (function (result) { $input.prop ('disabled', false).filter ('[value="' + $that.removeClass ('loading').get (0).oriVal + '"]').prop ('checked', true); });
         }
       });
     });

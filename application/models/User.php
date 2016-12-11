@@ -14,6 +14,7 @@ class User extends OaModel {
 
   static $has_many = array (
     array ('roles', 'class_name' => 'UserRole'),
+    array ('task_mappings', 'class_name' => 'TaskUserMapping'),
   );
 
   static $belongs_to = array (
@@ -25,6 +26,20 @@ class User extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
 
+  public function columns_val () {
+    return array (
+      'id'           => $this->id,
+      'uid'          => $this->uid,
+      'name'         => $this->name,
+      'email'        => $this->email,
+      'token'        => $this->token,
+      'device_token' => $this->device_token,
+      'login_count'  => $this->login_count,
+      'logined_at'   => isset ($this->logined_at) && $this->logined_at ? $this->logined_at->format ('Y-m-d H:i:s') : '',
+      'updated_at'   => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at'   => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+  }
   public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,

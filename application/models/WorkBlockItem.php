@@ -21,6 +21,16 @@ class WorkBlockItem extends OaModel {
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
+  public function columns_val () {
+    return array (
+      'id'            => isset ($this->id) ? $this->id : '',
+      'work_block_id' => isset ($this->work_block_id) ? $this->work_block_id : '',
+      'title'         => isset ($this->title) ? $this->title : '',
+      'link'          => isset ($this->link) ? $this->link : '',
+      'updated_at'    => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at'    => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+  }
   public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,

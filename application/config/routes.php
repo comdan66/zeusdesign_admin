@@ -55,6 +55,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('work_tags'), 'work_tags');
   Route::resourcePagination (array ('tag', 'work_tags'), 'tag_work_tags');
   Route::resourcePagination (array ('works'), 'works');
+  Route::resourcePagination (array ('tasks'), 'tasks');
   
   Route::resourcePagination (array ('invoice_tags'), 'invoice_tags');
   Route::resourcePagination (array ('invoices'), 'invoices');

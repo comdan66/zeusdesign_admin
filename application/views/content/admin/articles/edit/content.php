@@ -9,7 +9,7 @@
     <input type='hidden' name='_method' value='put' />
     
     <div class='row n2'>
-      <label>公開</label>
+      <label>* 是否公開</label>
       <div>
         <label class='switch'>
           <input type='checkbox' name='is_enabled'<?php echo (isset ($posts['is_enabled']) ? $posts['is_enabled'] : $obj->is_enabled) ? ' checked' : '';?> />
@@ -19,7 +19,7 @@
     </div>
 
     <div class='row n2'>
-      <label>作者</label>
+      <label>* 文章作者</label>
       <div>
         <select name='user_id'>
     <?php if ($users = User::all (array ('select' => 'id, name'))) {
@@ -33,10 +33,9 @@
 
 <?php if ($tags = ArticleTag::all ()) { ?>
         <div class='row n2'>
-          <label>分類</label>
+          <label>文章分類</label>
           <div>
-      <?php $tag_ids = isset ($posts['tag_ids']) ? $posts['tag_ids'] : column_array ($obj->mappings, 'article_tag_id');
-            foreach ($tags as $tag) { ?>
+      <?php foreach ($tags as $tag) { ?>
               <label class='checkbox tag'><input type='checkbox' name='tag_ids[]' value='<?php echo $tag->id;?>'<?php echo $tag_ids && in_array ($tag->id, $tag_ids) ? ' checked' : '';?> /><span></span><?php echo $tag->name;?></label>
       <?php } ?>
           </div>
@@ -45,14 +44,14 @@
 
 
     <div class='row n2'>
-      <label>標題</label>
+      <label>* 文章標題</label>
       <div>
-        <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : $obj->title;?>' placeholder='請輸入標題..' maxlength='200' pattern='.{1,200}' required title='輸入標題!' autofocus />
+        <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : $obj->title;?>' placeholder='請輸入文章標題..' maxlength='200' pattern='.{1,200}' required title='輸入文章標題!' autofocus />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>封面</label>
+      <label>* 文章封面</label>
       <div class='img_row'>
         <div class='drop_img no_cchoice'>
           <img src='<?php echo $obj->cover->url ();?>' />
@@ -63,14 +62,14 @@
 
 
     <div class='row n2'>
-      <label>內容</label>
+      <label>* 文章內容</label>
       <div>
-        <textarea name='content' class='pure autosize cke' placeholder='請輸入內容..'><?php echo htmlspecialchars (isset ($posts['content']) ? $posts['content'] : $obj->content);?></textarea>
+        <textarea name='content' class='pure autosize cke' placeholder='請輸入文章內容..'><?php echo htmlspecialchars (isset ($posts['content']) ? $posts['content'] : $obj->content);?></textarea>
       </div>
     </div>
 
-    <div class='row n2 sources' data-i='0' data-sources='<?php echo json_encode ($posts['sources']);?>'>
-      <label>參考</label>
+    <div class='row n2 sources' data-i='0' data-sources='<?php echo json_encode ($sources);?>'>
+      <label>內容參考</label>
       <div>
         <div class='add_source'>
           <button type='button' class='icon-r add'></button>

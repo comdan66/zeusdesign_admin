@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
     <h1>文章分類</h1>
-    <p>文章類型分類</p>
+    <p>上稿管理</p>
   </div>
 
   <form class='select'>

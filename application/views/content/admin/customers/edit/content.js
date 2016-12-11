@@ -6,11 +6,7 @@
 $(function () {
   var $select = $('select[name="customer_company_id"]');
   var $telephone = $('#telephone');
-  function telephone () {
-    $telephone.text ($select.find ('option:selected').data ('telephone'));
-  }
-  $select.change (function () {
-    telephone ();
-  });
+  function telephone () { $telephone.text ($select.find ('option:selected').data ('telephone')); }
+  $select.change (telephone);
   telephone ();
 });

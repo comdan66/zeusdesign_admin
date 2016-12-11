@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>帳務</h1>
-    <p>入帳 管理</p>
+    <h1>入帳</h1>
+    <p>管理系統</p>
   </div>
 
   <form class='select'>
@@ -44,15 +44,13 @@
     <table class='table'>
       <thead>
         <tr>
-          <th width='40' class='center'>#</th>
           <th width='80' class='center'>已入帳</th>
           <th width='80' class='center'>已支付</th>
           <th width='80'>負責人</th>
           <th width='110'>專案名稱</th>
           <th width='75'>總金額</th>
-          <th width='75'>％數標題</th>
-          <th width='50'>％數</th>
-          <th width='70'>宙思＄</th>
+          <th width='105'>類型</th>
+          <th width='70'>宙思獲得</th>
           <th width='90'>小計</th>
           <th>備註</th>
           <th width='85' class='right'>日期</th>
@@ -63,7 +61,6 @@
   <?php if ($objs) {
           foreach ($objs as $obj) { ?>
             <tr>
-              <td class='center'><?php echo $obj->id;?></td>
               <td class='center'>
                 <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
                   <input type='checkbox' name='is_finished'<?php echo $obj->is_finished == Billin::IS_FINISHED ? ' checked' : '';?> />
@@ -80,8 +77,7 @@
               <td><?php echo $obj->user->name;?></td>
               <td><?php echo $obj->name;?></td>
               <td><?php echo number_format ($obj->money);?></td>
-              <td><?php echo $obj->rate_name;?></td>
-              <td><?php echo $obj->rate;?>%</td>
+              <td><?php echo $obj->rate_name . '(' . ($obj->rate) . '%)';?></td>
               <td><?php echo number_format ($obj->zeus_money);?></td>
               <td><?php echo number_format ($obj->money - $obj->zeus_money);?></td>
               <td><?php echo $obj->memo;?></td>
@@ -97,7 +93,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='13' class='no_data'>沒有任何資料。</td>
+            <td colspan='12' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

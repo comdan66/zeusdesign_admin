@@ -34,6 +34,24 @@ class Article extends OaModel {
 
     OrmImageUploader::bind ('cover', 'ArticleCoverImageUploader');
   }
+  public function columns_val ($has = false) {
+    $var = array (
+      'id'         => isset ($this->id) ? $this->id : '',
+      'user_id'    => isset ($this->user_id) ? $this->user_id : '',
+      'title'      => isset ($this->title) ? $this->title : '',
+      'cover'      => isset ($this->cover) && (string)$this->cover ? (string)$this->cover : '',
+      'content'    => isset ($this->content) ? $this->content : '',
+      'is_enabled' => isset ($this->is_enabled) ? $this->is_enabled : '',
+      'pv'         => isset ($this->pv) ? $this->pv : '',
+      'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+    return $has ? array ('this' => $var, 'mappings' => array_map (function ($mapping) {
+      return $mapping->columns_val ();
+    }, ArticleTagMapping::find ('all', array ('conditions' => array ('article_id = ?', $this->id)))), 'sources' => array_map (function ($source) {
+      return $source->columns_val ();
+    }, ArticleSource::find ('all', array ('conditions' => array ('article_id = ?', $this->id))))) : $var;
+  }
   public function to_array (array $opt = array ()) {
     return array (
       'id' => $this->id,
@@ -77,7 +95,7 @@ class Article extends OaModel {
     if (!isset ($this->content)) return '';
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->content), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
-  public function site_show_page_last_uri () {
-    return $this->id . '-' . oa_url_encode ($this->title);
-  }
+  // public function site_show_page_last_uri () {
+  //   return $this->id . '-' . oa_url_encode ($this->title);
+  // }
 }

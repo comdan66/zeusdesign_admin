@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
     <h1>聯絡</h1>
-    <p>新客戶聯絡管理</p>
+    <p>留言管理</p>
   </div>
 
   <form class='select'>
@@ -33,7 +33,7 @@
 
 <div class='panel'>
   <header>
-    <h2>聯絡列表</h2>
+    <h2>留言列表</h2>
   </header>
 
   <div class='content'>
@@ -56,7 +56,7 @@
             <tr>
               <td class='center'><?php echo $obj->id;?></td>
               <td class='center'>
-                <label class='switch' data-column='is_readed' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                <label class='switch' data-column='is_readed' data-url='<?php echo base_url ($uri_1, 'is_readed', $obj->id);?>'>
                   <input type='checkbox' name='is_readed'<?php echo $obj->is_readed == Contact::READ_YES ? ' checked' : '';?> />
                   <span></span>
                 </label>

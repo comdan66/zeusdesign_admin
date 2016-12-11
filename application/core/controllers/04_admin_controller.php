@@ -28,6 +28,35 @@ class Admin_controller extends Oa_controller {
          ;
   }
 
+  protected function _build_excel ($objs, $infos) {
+    $excel = new OAExcel ();
+    
+    $excel->getActiveSheet ()->getRowDimension (1)->setRowHeight (20);
+    $excel->getActiveSheet ()->freezePaneByColumnAndRow (0, 2);
+    $excel->getActiveSheet ()->getStyle ('A1:' . chr (65 + count ($infos) - 1) . '1')->applyFromArray (array ('fill' => array ('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'fff3ca'))));
+
+    foreach ($objs as $i => $obj) {
+      $j = 0;
+      foreach ($infos as $info) {
+        if ($i == 0) {
+          $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 1))->getAlignment ()->setVertical (PHPExcel_Style_Alignment::VERTICAL_TOP);
+          $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 1))->getAlignment ()->setHorizontal (PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+          $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 1))->getFont ()->setName ('新細明體');
+          $excel->getActiveSheet ()->SetCellValue (chr (65 + $j) . ($i + 1), $info['title']);
+        }
+        eval ('$val = ' . $info['exp'] . ';');
+        
+        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getAlignment ()->setVertical (PHPExcel_Style_Alignment::VERTICAL_TOP);
+        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getAlignment ()->setHorizontal (PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getFont ()->setName ("新細明體");
+        $excel->getActiveSheet ()->SetCellValue (chr (65 + $j) . ($i + 2), $val);
+        $excel->getActiveSheet ()->getStyle (chr (65 + $j) . ($i + 2))->getNumberFormat ()->setFormatCode ($info['format']);
+        $j++;
+      }
+    }
+    return $excel;
+  }
+
   private function _add_meta () {
     return $this->add_meta (array ('name' => 'robots', 'content' => 'noindex,nofollow'))
                 ;

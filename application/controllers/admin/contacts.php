@@ -13,17 +13,13 @@ class Contacts extends Admin_controller {
     parent::__construct ();
     
     if (!User::current ()->in_roles (array ('site')))
-      return redirect_message (array ('admin'), array (
-            '_flash_danger' => '您的權限不足，或者頁面不存在。'
-          ));
+      return redirect_message (array ('admin'), array ('_flash_danger' => '您的權限不足，或者頁面不存在。'));
 
     $this->uri_1 = 'admin/contacts';
 
-    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
+    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'is_readed', 'destroy')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Contact::find ('one', array ('conditions' => array ('id = ?', $id))))))
-        return redirect_message (array ($this->uri_1), array (
-            '_flash_danger' => '找不到該筆資料。'
-          ));
+        return redirect_message (array ($this->uri_1), array ('_flash_danger' => '找不到該筆資料。'));
 
     $this->add_param ('uri_1', $this->uri_1);
     $this->add_param ('now_url', base_url ($this->uri_1));
@@ -58,72 +54,44 @@ class Contacts extends Admin_controller {
       ));
   }
 
-  public function edit () {
-    $posts = Session::getData ('posts', true);
-
-    return $this->load_view (array (
-                    'posts' => $posts,
-                    'obj' => $this->obj
-                  ));
-  }
-  public function update () {
-    if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
-        ));
-
-    $posts = OAInput::post ();
-    $is_api = isset ($posts['_type']) && ($posts['_type'] == 'api') ? true : false;
-    
-    if ($msg = $this->_validation ($posts))
-      return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => $msg,
-          'posts' => $posts
-        ));
-
-    if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
-      foreach ($columns as $column => $value)
-        $this->obj->$column = $value;
-    
-    $obj = $this->obj;
-    $update = Contact::transaction (function () use ($obj, $posts) {
-      return $obj->save ();
-    });
-
-    if (!$update)
-      return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => '更新失敗！',
-          'posts' => $posts
-        ));
-
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-em', 'content' => ($obj->is_readed ? '讀取了一項聯絡資訊' : '將一項聯絡資訊標示未讀取') . '。', 'desc' => '聯絡者名稱為：「' . $obj->name . '」，內容是為：「' . $obj->mini_message () . '」。', 'backup' => json_encode ($obj->to_array ())));
-    return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '更新成功！'
-      ));
-  }
   public function destroy () {
     $obj = $this->obj;
-    $backup = json_encode ($obj->to_array ());
-    $delete = Contact::transaction (function () use ($obj) { return $obj->destroy (); });
+    $backup = $obj->columns_val (true);
 
-    if (!$delete)
-      return redirect_message (array ($this->uri_1), array (
-          '_flash_danger' => '刪除失敗！',
-        ));
+    if (!Contact::transaction (function () use ($obj) { return $obj->destroy (); }))
+      return redirect_message (array ($this->uri_1), array ('_flash_danger' => '刪除失敗！'));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-em', 'content' => '刪除一項聯絡資訊。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => $backup));
-    return redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '刪除成功！'
-      ));
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-em', 'content' => '刪除一項聯絡資訊。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup'  => json_encode ($backup)));
+
+    return redirect_message (array ($this->uri_1), array ('_flash_info' => '刪除成功！'));
   }
+  public function is_readed () {
+    $obj = $this->obj;
 
-  private function _validation (&$posts) {
-    $keys = array ('is_readed');
+    if (!$this->has_post ())
+      return $this->output_error_json ('非 POST 方法，錯誤的頁面請求。');
 
-    $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
-    $posts = $new_posts;
+    $posts = OAInput::post ();
+    $backup = $obj->columns_val (true);
     
-    if (isset ($posts['is_readed']) && !(is_numeric ($posts['is_readed'] = trim ($posts['is_readed'])) && in_array ($posts['is_readed'], array_keys (Contact::$readNames)))) return '已讀格式錯誤！';
-    return '';
+    $validation = function (&$posts) {
+      if (!isset ($posts['is_readed'])) return '沒有選擇 是否已讀！';
+      if (!(is_numeric ($posts['is_readed'] = trim ($posts['is_readed'])) && in_array ($posts['is_readed'], array_keys (Contact::$readNames)))) return '是否公開 格式錯誤！';    
+      return '';
+    };
+
+    if ($msg = $validation ($posts))
+      return $this->output_error_json ($msg);
+
+    if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
+      foreach ($columns as $column => $value)
+        $obj->$column = $value;
+
+    if (!Contact::transaction (function () use ($obj, $posts) { return $obj->save (); }))
+      return $this->output_error_json ('更新失敗！');
+
+    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-em', 'content' => '將一則留言標示成 ' . Contact::$readNames[$obj->is_readed] . '。', 'desc' => '留言內容大略是 「' . $obj->mini_message () . '」。', 'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
+
+    return $this->output_json ($obj->is_readed == Contact::READ_YES);
   }
 }

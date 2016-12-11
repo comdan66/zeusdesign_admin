@@ -12,9 +12,7 @@ class Bills extends Admin_controller {
     parent::__construct ();
 
     if (!User::current ()->in_roles (array ('bills')))
-      return redirect_message (array ('admin'), array (
-            '_flash_danger' => '您的權限不足，或者頁面不存在。'
-          ));
+      return redirect_message (array ('admin'), array ('_flash_danger' => '您的權限不足，或者頁面不存在。'));
 
     $this->uri_1 = 'admin/bills';
 
@@ -37,10 +35,8 @@ class Bills extends Admin_controller {
 
     $m = $y = 0;
     foreach ($columns as $column) {
-      if ($column['key'] == 'month' && $column['value'])
-        $m = $column['value'];
-      if ($column['key'] == 'year' && $column['value'])
-        $y = $column['value'];
+      if ($column['key'] == 'month' && $column['value']) $m = $column['value'];
+      if ($column['key'] == 'year' && $column['value']) $y = $column['value'];
     }
 
     $objs = array ();

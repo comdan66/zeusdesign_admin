@@ -42,7 +42,6 @@
     <table class='table'>
       <thead>
         <tr>
-          <th width='50'>#</th>
           <th width='110'>名稱</th>
           <th width='170'>公司</th>
           <th width='120'>電話</th>
@@ -57,7 +56,6 @@
   <?php if ($objs) {
           foreach ($objs as $obj) { ?>
             <tr>
-              <td><?php echo $obj->id;?></td>
               <td><?php echo $obj->name;?></td>
               <td><?php echo $obj->company ? $obj->company->name : '';?></td>
               <td><?php echo $obj->company ? $obj->company->telephone : '';?></td>
@@ -76,7 +74,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='9' class='no_data'>沒有任何資料。</td>
+            <td colspan='8' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

@@ -43,7 +43,7 @@
     </div>
 
     <div class='row n2'>
-      <label>是否有開發票</label>
+      <label>* 是否有開發票</label>
       <div>
         <div class='radios'>
     <?php foreach (Billou::$invoiceNames as $key => $val) { ?>
@@ -57,7 +57,7 @@
     </div>
 
     <div class='row n2'>
-      <label>是否出帳</label>
+      <label>* 是否出帳</label>
       <div>
         <label class='switch'>
           <input type='checkbox' name='is_finished'<?php echo isset ($posts['is_finished']) && ($posts['is_finished'] == Billou::IS_FINISHED) ? ' checked' : '';?> />

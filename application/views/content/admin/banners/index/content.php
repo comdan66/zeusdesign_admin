@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>旗幟</h1>
-    <p>Banner 上稿管理</p>
+    <h1>Banner</h1>
+    <p>上稿管理</p>
   </div>
 
   <form class='select'>
@@ -59,7 +59,7 @@
             <tr>
               <td class='center'><?php echo $obj->id;?></td>
               <td class='center'>
-                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, 'is_enabled', $obj->id);?>'>
                   <input type='checkbox' name='is_enabled'<?php echo $obj->is_enabled == Banner::ENABLE_YES ? ' checked' : '';?> />
                   <span></span>
                 </label>

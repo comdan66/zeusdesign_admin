@@ -31,6 +31,19 @@ class Contact extends OaModel {
   public function destroy () {
     return $this->delete ();
   }
+  public function columns_val ($has = false) {
+    $var = array (
+      'id'         => isset ($this->id) ? $this->id : '',
+      'name'       => isset ($this->name) ? $this->name : '',
+      'email'      => isset ($this->email) ? $this->email : '',
+      'message'    => isset ($this->message) ? $this->message : '',
+      'ip'         => isset ($this->ip) ? $this->ip : '',
+      'is_readed'  => isset ($this->is_readed) ? $this->is_readed : '',
+      'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+    return $has ? array ('this' => $var) : $var;
+  }
   public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,

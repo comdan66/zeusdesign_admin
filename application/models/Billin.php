@@ -45,6 +45,24 @@ class Billin extends OaModel {
     if (!isset ($this->name)) return '';
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->name), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
+  public function columns_val ($has = false) {
+    $var = array (
+      'id'          => isset ($this->id) ? $this->id : '',
+      'user_id'     => isset ($this->user_id) ? $this->user_id : '',
+      'name'        => isset ($this->name) ? $this->name : '',
+      'money'       => isset ($this->money) ? $this->money : '',
+      'rate_name'   => isset ($this->rate_name) ? $this->rate_name : '',
+      'rate'        => isset ($this->rate) ? $this->rate : '',
+      'zeus_money'  => isset ($this->zeus_money) ? $this->zeus_money : '',
+      'memo'        => isset ($this->memo) ? $this->memo : '',
+      'is_finished' => isset ($this->is_finished) ? $this->is_finished : '',
+      'is_pay'      => isset ($this->is_pay) ? $this->is_pay : '',
+      'date_at'     => isset ($this->date_at) && $this->date_at ? $this->date_at->format ('Y-m-d') : '',
+      'updated_at'  => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at'  => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+    return $has ? array ('this' => $var) : $var;
+  }
   public function to_array (array $opt = array ()) {
     return array (
         'id' => $this->id,
