@@ -68,7 +68,7 @@ class Ftps extends Admin_controller {
     if ($msg = $this->_validation_create ($posts))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
-    if (! Ftp::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Ftp::create (array_intersect_key ($posts, Ftp::table ()->columns))); }))
+    if (!Ftp::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Ftp::create (array_intersect_key ($posts, Ftp::table ()->columns))); }))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
 
     UserLog::create (array (

@@ -42,16 +42,16 @@ class Banner extends OaModel {
   }
   public function columns_val ($has = false) {
     $var = array (
-      'id'         => isset ($this->id) ? $this->id : '',
-      'title'      => isset ($this->title) ? $this->title : '',
-      'content'    => isset ($this->content) ? $this->content : '',
-      'link'       => isset ($this->link) ? $this->link : '',
-      'cover'      => isset ($this->cover) ? $this->cover : '',
-      'target'     => isset ($this->target) ? $this->target : '',
-      'sort'       => isset ($this->sort) ? $this->sort : '',
-      'is_enabled' => isset ($this->is_enabled) ? $this->is_enabled : '',
-      'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+      'id'         => $this->id,
+      'title'      => $this->title,
+      'content'    => $this->content,
+      'link'       => $this->link,
+      'target'     => $this->target,
+      'sort'       => $this->sort,
+      'is_enabled' => $this->is_enabled,
+      'cover'      => (string)$this->cover ? (string)$this->cover : '',
+      'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
     return $has ? array ('this' => $var) : $var;
   }

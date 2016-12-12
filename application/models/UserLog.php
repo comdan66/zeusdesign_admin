@@ -24,14 +24,14 @@ class UserLog extends OaModel {
   }
   public function columns_val () {
     return array (
-      'id'         => isset ($this->id) ? $this->id : '',
-      'user_id'    => isset ($this->user_id) ? $this->user_id : '',
-      'icon'       => isset ($this->icon) ? $this->icon : '',
-      'content'    => isset ($this->content) ? $this->content : '',
-      'desc'       => isset ($this->desc) ? $this->desc : '',
-      'backup'     => isset ($this->backup) ? $this->backup : '',
-      'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+      'id'         => $this->id,
+      'user_id'    => $this->user_id,
+      'icon'       => $this->icon,
+      'content'    => $this->content,
+      'desc'       => $this->desc,
+      'backup'     => $this->backup,
+      'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
   }
 }

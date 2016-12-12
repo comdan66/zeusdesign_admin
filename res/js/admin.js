@@ -109,6 +109,7 @@ $(function () {
 
       var items = $obj.get (0).$objs.map (function () {
         var $img = $(this).find ('img'), $figcaption = $(this).find ('figcaption');
+          
           return {
             w: $img.get (0).width,
             h: $img.get (0).height,

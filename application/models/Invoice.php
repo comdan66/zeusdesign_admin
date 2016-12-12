@@ -33,19 +33,19 @@ class Invoice extends OaModel {
 
   public function columns_val ($has = false) {
     $var = array (
-      'id'             => isset ($this->id) ? $this->id : '',
-      'user_id'        => isset ($this->user_id) ? $this->user_id : '',
-      'customer_id'    => isset ($this->customer_id) ? $this->customer_id : '',
-      'invoice_tag_id' => isset ($this->invoice_tag_id) ? $this->invoice_tag_id : '',
-      'name'           => isset ($this->name) ? $this->name : '',
-      'quantity'       => isset ($this->quantity) ? $this->quantity : '',
-      'single_money'   => isset ($this->single_money) ? $this->single_money : '',
-      'all_money'      => isset ($this->all_money) ? $this->all_money : '',
-      'memo'           => isset ($this->memo) ? $this->memo : '',
-      'is_finished'    => isset ($this->is_finished) ? $this->is_finished : '',
-      'closing_at'     => isset ($this->closing_at) && $this->closing_at ? $this->closing_at->format ('Y-m-d') : '',
-      'updated_at'     => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at'     => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+      'id'             => $this->id,
+      'user_id'        => $this->user_id,
+      'customer_id'    => $this->customer_id,
+      'invoice_tag_id' => $this->invoice_tag_id,
+      'name'           => $this->name,
+      'quantity'       => $this->quantity,
+      'single_money'   => $this->single_money,
+      'all_money'      => $this->all_money,
+      'memo'           => $this->memo,
+      'is_finished'    => $this->is_finished,
+      'closing_at'     => $this->closing_at ? $this->closing_at->format ('Y-m-d') : '',
+      'updated_at'     => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at'     => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
     return $has ? array ('this' => $var) : $var;
   }

@@ -36,9 +36,9 @@ class User extends OaModel {
       'token'        => $this->token,
       'device_token' => $this->device_token,
       'login_count'  => $this->login_count,
-      'logined_at'   => isset ($this->logined_at) && $this->logined_at ? $this->logined_at->format ('Y-m-d H:i:s') : '',
-      'updated_at'   => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at'   => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+      'logined_at'   => $this->logined_at ? $this->logined_at->format ('Y-m-d H:i:s') : '',
+      'updated_at'   => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at'   => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
     return $has ? array ('this' => $var) : $var;
   }

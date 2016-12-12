@@ -40,11 +40,12 @@
                   <span class='icon-se'>個人管理</span>
                   <ul>
                     <li><a href="<?php echo $url = base_url ('admin', 'my');?>" class='icon-u<?php echo $now_url == $url ? ' active' : '';?>'>基本資料</a></li>
-                    <li><a href="<?php echo $url = base_url ('admin', 'notifications');?>" class='icon-no_a<?php echo $now_url == $url ? ' active' : '';?>'>系統通知</a></li>
+                    <!-- <li><a href="<?php echo $url = base_url ('admin', 'notifications');?>" class='icon-no_a<?php echo $now_url == $url ? ' active' : '';?>'>系統通知</a></li> -->
                     <li><a href="<?php echo $url = base_url ('admin', 'schedule-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>行程分類</a></li>
                     <li data-cnt='<?php echo $schedule_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'calendar');?>" class='icon-calendar2<?php echo $now_url == $url ? ' active' : '';?>'>個人行程</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'all-calendar');?>" class='icon-calendar<?php echo $now_url == $url ? ' active' : '';?>'>全部行程</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'my-salaries');?>" class='icon-moneybag<?php echo $now_url == $url ? ' active' : '';?>'>我的宙思幣</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'my-weights');?>" class='icon-balance-scale<?php echo $now_url == $url ? ' active' : '';?>'>體重記錄</a></li>
                   </ul>
                 </label>
               </li>
@@ -142,7 +143,7 @@
                   <span class='icon-fs'>專案系統</span>
                   <ul>
                     <li><a href="<?php echo $url = base_url ('admin', 'ftps');?>" class='icon-sev<?php echo $now_url == $url ? ' active' : '';?>'>FTP 管理</a></li>
-                    <li><a href="<?php echo $url = base_url ('admin', 'tasks');?>" class='icon-ruler<?php echo $now_url == $url ? ' active' : '';?>'>任務 管理</a></li>
+                    <!-- <li><a href="<?php echo $url = base_url ('admin', 'tasks');?>" class='icon-ruler<?php echo $now_url == $url ? ' active' : '';?>'>任務 管理</a></li> -->
                   </ul>
                 </label>
               </li>

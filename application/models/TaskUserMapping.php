@@ -27,11 +27,11 @@ class TaskUserMapping extends OaModel {
   }
   public function columns_val () {
     return array (
-      'id'         => isset ($this->id) ? $this->id : '',
-      'user_id'    => isset ($this->user_id) ? $this->user_id : '',
-      'task_id'    => isset ($this->task_id) ? $this->task_id : '',
-      'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+      'id'         => $this->id,
+      'user_id'    => $this->user_id,
+      'task_id'    => $this->task_id,
+      'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
   }
 }

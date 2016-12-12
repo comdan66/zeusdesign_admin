@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?xnx62n');
-  src:  url('fonts/icomoon.eot?xnx62n#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?xnx62n') format('truetype'),
-    url('fonts/icomoon.woff?xnx62n') format('woff'),
-    url('fonts/icomoon.svg?xnx62n#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?iv0u4d');
+  src:  url('fonts/icomoon.eot?iv0u4d#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?iv0u4d') format('truetype'),
+    url('fonts/icomoon.woff?iv0u4d') format('woff'),
+    url('fonts/icomoon.svg?iv0u4d#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -123,24 +123,6 @@
 .icon-u:before {
   content: "\e900";
 }
-.icon-u:before {
-  content: "\e900";
-}
-.icon-calendar2:before {
-  content: "\e919";
-}
-.icon-wallet:before {
-  content: "\e916";
-}
-.icon-moneybag:before {
-  content: "\e917";
-}
-.icon-bil:before {
-  content: "\e90f";
-}
-.icon-ab:before {
-  content: "\e913";
-}
 .icon-calendar2:before {
   content: "\e919";
 }
@@ -194,6 +176,9 @@
 }
 .icon-ua:before {
   content: "\f234";
+}
+.icon-balance-scale:before {
+  content: "\f24e";
 }
 .icon-al:before {
   content: "\e902";

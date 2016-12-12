@@ -38,15 +38,15 @@ class Work extends OaModel {
   }
   public function columns_val ($has = false) {
     $var = array (
-      'id'         => isset ($this->id) ? $this->id : '',
-      'user_id'    => isset ($this->user_id) ? $this->user_id : '',
-      'title'      => isset ($this->title) ? $this->title : '',
-      'cover'      => isset ($this->cover) ? $this->cover : '',
-      'content'    => isset ($this->content) ? $this->content : '',
-      'is_enabled' => isset ($this->is_enabled) ? $this->is_enabled : '',
-      'pv'         => isset ($this->pv) ? $this->pv : '',
-      'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+      'id'         => $this->id,
+      'user_id'    => $this->user_id,
+      'title'      => $this->title,
+      'cover'      => (string)$this->cover ? (string)$this->cover : '',
+      'content'    => $this->content,
+      'is_enabled' => $this->is_enabled,
+      'pv'         => $this->pv,
+      'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
     return $has ? array (
       'this' => $var,

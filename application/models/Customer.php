@@ -27,15 +27,15 @@ class Customer extends OaModel {
   }
   public function columns_val ($has = false) {
     $var = array (
-      'id'                  => isset ($this->id) ? $this->id : '',
-      'customer_company_id' => isset ($this->customer_company_id) ? $this->customer_company_id : '',
-      'name'                => isset ($this->name) ? $this->name : '',
-      'extension'           => isset ($this->extension) ? $this->extension : '',
-      'cellphone'           => isset ($this->cellphone) ? $this->cellphone : '',
-      'experience'          => isset ($this->experience) ? $this->experience : '',
-      'memo'                => isset ($this->memo) ? $this->memo : '',
-      'updated_at'          => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at'          => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+      'id'                  => $this->id,
+      'customer_company_id' => $this->customer_company_id,
+      'name'                => $this->name,
+      'extension'           => $this->extension,
+      'cellphone'           => $this->cellphone,
+      'experience'          => $this->experience,
+      'memo'                => $this->memo,
+      'updated_at'          => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at'          => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
     return $has ? array ('this' => $var, 'emails' => array_map (function ($email) {
       return $email->columns_val ();

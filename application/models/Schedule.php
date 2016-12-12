@@ -34,19 +34,19 @@ class Schedule extends OaModel {
   }
   public function columns_val ($has = false) {
     $var = array (
-      'id'              => isset ($this->id) ? $this->id : '',
-      'user_id'         => isset ($this->user_id) ? $this->user_id : '',
-      'schedule_tag_id' => isset ($this->schedule_tag_id) ? $this->schedule_tag_id : '',
-      'task_id'         => isset ($this->task_id) ? $this->task_id : '',
-      'title'           => isset ($this->title) ? $this->title : '',
-      'description'     => isset ($this->description) ? $this->description : '',
-      'finish'          => isset ($this->finish) ? $this->finish : '',
-      'year'            => isset ($this->year) ? $this->year : '',
-      'month'           => isset ($this->month) ? $this->month : '',
-      'day'             => isset ($this->day) ? $this->day : '',
-      'sort'            => isset ($this->sort) ? $this->sort : '',
-      'updated_at'      => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at'      => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+      'id'              => $this->id,
+      'user_id'         => $this->user_id,
+      'schedule_tag_id' => $this->schedule_tag_id,
+      'task_id'         => $this->task_id,
+      'title'           => $this->title,
+      'description'     => $this->description,
+      'finish'          => $this->finish,
+      'year'            => $this->year,
+      'month'           => $this->month,
+      'day'             => $this->day,
+      'sort'            => $this->sort,
+      'updated_at'      => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at'      => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
     return $has ? array ('this' => $var) : $var;
   }
