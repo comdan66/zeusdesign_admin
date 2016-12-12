@@ -3,6 +3,7 @@
 /**
  * @author      OA Wu <comdan66@gmail.com>
  * @copyright   Copyright (c) 2016 OA Wu Design
+ * @link        http://www.ioa.tw/
  */
 
 class Migration_<?php echo ucfirst ($action);?>_<?php echo pluralize ($name);?> extends CI_Migration {

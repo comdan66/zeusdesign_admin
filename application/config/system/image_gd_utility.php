@@ -3,6 +3,7 @@
 /**
  * @author      OA Wu <comdan66@gmail.com>
  * @copyright   Copyright (c) 2016 OA Wu Design
+ * @link        http://www.ioa.tw/
  */
 
 $image_gd_utility['allow_formats'] = array ('gif', 'jpg', 'png');
