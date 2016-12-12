@@ -10,7 +10,7 @@ class Tag_work_tags extends Admin_controller {
   private $uri_2 = null;
   private $parent = null;
   private $obj = null;
-  private $icon = 'icon-ta';
+  private $icon = null;
 
   public function __construct () {
     parent::__construct ();
@@ -20,6 +20,7 @@ class Tag_work_tags extends Admin_controller {
 
     $this->uri_1 = 'admin/tag';
     $this->uri_2 = 'work-tags';
+    $this->icon = 'icon-ta';
 
     if (!(($id = $this->uri->rsegments (3, 0)) && ($this->parent = WorkTag::find_by_id ($id))))
       return redirect_message (array ('work-tags'), array ('_flash_danger' => '找不到該筆資料。'));
@@ -28,10 +29,10 @@ class Tag_work_tags extends Admin_controller {
       if (!(($id = $this->uri->rsegments (4, 0)) && ($this->obj = WorkTag::find_by_id ($id))))
         return redirect_message (array ($this->uri_1, $this->parent_tag->id, $this->uri_2), array ('_flash_danger' => '找不到該筆資料。'));
 
-    $this->add_param ('uri_1', $this->uri_1);
-    $this->add_param ('uri_2', $this->uri_2);
-    $this->add_param ('parent', $this->parent);
-    $this->add_param ('now_url', base_url ('admin', 'work-tags'));
+    $this->add_param ('uri_1', $this->uri_1)
+         ->add_param ('uri_2', $this->uri_2)
+         ->add_param ('parent', $this->parent)
+         ->add_param ('now_url', base_url ('admin', 'work-tags'));
   }
   public function index ($id, $offset = 0) {
     $columns = array ( 
@@ -44,16 +45,12 @@ class Tag_work_tags extends Admin_controller {
 
     $limit = 25;
     $total = WorkTag::count (array ('conditions' => $conditions));
-    $offset = $offset < $total ? $offset : 0;
-
-    $this->load->library ('pagination');
-    $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $objs = WorkTag::find ('all', array ('offset' => $offset, 'limit' => $limit, 'order' => 'sort DESC', 'include' => array ('mappings'), 'conditions' => $conditions));
+    $objs = WorkTag::find ('all', array ('offset' => $offset < $total ? $offset : 0, 'limit' => $limit, 'order' => 'sort DESC', 'include' => array ('mappings'), 'conditions' => $conditions));
 
     return $this->load_view (array (
         'objs' => $objs,
-        'pagination' => $pagination,
-        'columns' => $columns
+        'columns' => $columns,
+        'pagination' => $this->_get_pagination ($limit, $total, $configs),
       ));
   }
   public function add () {

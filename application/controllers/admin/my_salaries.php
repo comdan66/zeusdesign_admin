@@ -21,8 +21,8 @@ class My_salaries extends Admin_controller {
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Salary::find ('one', array ('conditions' => array ('id = ? AND user_id = ?', $id, User::current ()->id))))))
         return redirect_message (array ($this->uri_1), array ('_flash_danger' => '找不到該筆資料。'));
 
-    $this->add_param ('uri_1', $this->uri_1);
-    $this->add_param ('now_url', base_url ($this->uri_1));
+    $this->add_param ('uri_1', $this->uri_1)
+         ->add_param ('now_url', base_url ($this->uri_1));
   }
   private function _search_columns () {
     return array ( 
@@ -40,11 +40,7 @@ class My_salaries extends Admin_controller {
 
     $limit = 10;
     $total = Salary::count (array ('conditions' => $conditions));
-    $offset = $offset < $total ? $offset : 0;
-
-    $this->load->library ('pagination');
-    $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $objs = Salary::find ('all', array ('offset' => $offset, 'limit' => $limit, 'order' => 'is_finished ASC, id DESC', 'include' => array ('user'), 'conditions' => $conditions));
+    $objs = Salary::find ('all', array ('offset' => $offset < $total ? $offset : 0, 'limit' => $limit, 'order' => 'is_finished ASC, id DESC', 'include' => array ('user'), 'conditions' => $conditions));
 
     $conditions1 = array_values ($conditions);
     $conditions2 = array_values ($conditions);
@@ -55,8 +51,9 @@ class My_salaries extends Admin_controller {
         'objs' => $objs,
         'money1' => array_sum (column_array (Salary::find ('all', array ('select' => 'money', 'conditions' => $conditions1)), 'money')),
         'money2' => array_sum (column_array (Salary::find ('all', array ('select' => 'money', 'conditions' => $conditions2)), 'money')),
-        'pagination' => $pagination,
-        'columns' => $columns
+        
+        'columns' => $columns,
+        'pagination' => $this->_get_pagination ($limit, $total, $configs),
       ));
   }
 }
