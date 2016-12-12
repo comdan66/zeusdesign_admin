@@ -26,8 +26,8 @@ class ScheduleTag extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
 
-  public function columns_val () {
-    return array (
+  public function columns_val ($has = false) {
+    $var = array (
       'id'         => isset ($this->id) ? $this->id : '',
       'user_id'    => isset ($this->user_id) ? $this->user_id : '',
       'name'       => isset ($this->name) ? $this->name : '',
@@ -35,6 +35,11 @@ class ScheduleTag extends OaModel {
       'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
+    return $has ? array (
+      'this' => $var,
+      'schedules' => array_map (function ($schedule) {
+        return $schedule->columns_val ();
+      }, Schedule::find ('all', array ('conditions' => array ('schedule_tag_id = ?', $this->id))))) : $var;
   }
   public function to_array (array $opt = array ()) {
     return array (
@@ -49,11 +54,10 @@ class ScheduleTag extends OaModel {
   public function destroy () {
     if (!isset ($this->id)) return false;
 
-    if ($schedule_ids = column_array ($this->schedules, 'id'))
-      Schedule::update_all (array (
-          'set' => 'schedule_tag_id = NULL',
-          'conditions' => array ('id IN (?)', $schedule_ids)
-        ));
+    if ($this->schedules)
+      foreach ($this->schedules as $schedule)
+        if (!(!($schedule->schedule_tag_id = 0) && $schedule->save ()))
+          return false;
 
     return $this->delete ();
   }

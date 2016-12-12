@@ -36,7 +36,7 @@
     </div>
 
     <div class='row n2'>
-      <label>是否已給付</label>
+      <label>* 是否已給付</label>
       <div>
         <label class='switch'>
           <input type='checkbox' name='is_finished'<?php echo isset ($posts['is_finished']) && ($posts['is_finished'] == Salary::IS_FINISHED) ? ' checked' : '';?> />

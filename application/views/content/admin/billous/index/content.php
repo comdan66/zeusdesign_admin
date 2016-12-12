@@ -60,7 +60,7 @@
               <td class='center'><?php echo $obj->id;?></td>
              
               <td class='center'>
-                <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, 'is_finished', $obj->id);?>'>
                   <input type='checkbox' name='is_finished'<?php echo $obj->is_finished == Billin::IS_FINISHED ? ' checked' : '';?> />
                   <span></span>
                 </label>

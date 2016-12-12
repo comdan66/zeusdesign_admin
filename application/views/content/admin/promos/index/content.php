@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>促銷</h1>
-    <p>Promo 上稿管理</p>
+    <h1>Promo</h1>
+    <p>上稿管理</p>
   </div>
 
   <form class='select'>

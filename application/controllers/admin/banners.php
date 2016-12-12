@@ -8,6 +8,7 @@
 class Banners extends Admin_controller {
   private $uri_1 = null;
   private $obj = null;
+  private $icon = 'icon-im';
 
   public function __construct () {
     parent::__construct ();
@@ -39,12 +40,7 @@ class Banners extends Admin_controller {
 
     $this->load->library ('pagination');
     $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $objs = Banner::find ('all', array (
-        'offset' => $offset,
-        'limit' => $limit,
-        'order' => 'sort DESC',
-        'conditions' => $conditions
-      ));
+    $objs = Banner::find ('all', array ('offset' => $offset, 'limit' => $limit, 'order' => 'sort DESC', 'conditions' => $conditions));
 
     return $this->load_view (array (
         'objs' => $objs,
@@ -76,7 +72,7 @@ class Banners extends Admin_controller {
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
-      'icon' => 'icon-im',
+      'icon' => $this->icon,
       'content' => '新增一項 Banner。',
       'desc' => '標題名稱為：「' . $obj->mini_title () . '」，內容是：「' . $obj->mini_content () . '」，點擊 Banner 後使用 ”' . Banner::$targetNames[$obj->target] . '“ 的方式開啟 ”' . $obj->mini_link () . '“。',
       'backup'  => json_encode ($obj->columns_val ())));
@@ -113,13 +109,10 @@ class Banners extends Admin_controller {
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
-      'icon' => 'icon-im',
+      'icon' => $this->icon,
       'content' => '修改一項 Banner。',
       'desc' => '標題名稱為：「' . $obj->mini_title () . '」，內容是：「' . $obj->mini_content () . '」，點擊 Banner 後使用 ”' . Banner::$targetNames[$obj->target] . '“ 的方式開啟 ”' . $obj->mini_link () . '“。',
-      'backup'  => json_encode (array (
-          'ori' => $backup,
-          'now' => $obj->columns_val (true)
-        ))));
+      'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '更新成功！'));
   }
@@ -132,7 +125,7 @@ class Banners extends Admin_controller {
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
-      'icon' => 'icon-im',
+      'icon' => $this->icon,
       'content' => '刪除一項 Banner。',
       'desc' => '已經備份了刪除紀錄，細節可詢問工程師。',
       'backup'  => json_encode ($backup)));
@@ -156,12 +149,12 @@ class Banners extends Admin_controller {
     array_push ($change, array ('id' => $obj->id, 'old' => $sort, 'new' => $obj->sort));
     OaModel::addConditions ($conditions, 'sort = ?', $obj->sort);
 
-    if (!Banner::transaction (function () use ($conditions, $obj, $sort, &$change) { if (($next = Banner::find ('one', array ('conditions' => $conditions))) && array_push ($change, array ('id' => $next->id, 'old' => $next->sort, 'new' => $sort))) { $next->sort = $sort; return $next->save (); } return $obj->save (); }))
+    if (!Banner::transaction (function () use ($conditions, $obj, $sort, &$change) { if (($next = Banner::find ('one', array ('conditions' => $conditions))) && array_push ($change, array ('id' => $next->id, 'old' => $next->sort, 'new' => $sort))) { $next->sort = $sort; if (!$next->save ()) return false; } return $obj->save (); }))
       return redirect_message (array ($this->uri_1), array ('_flash_danger' => '排序失敗！'));
     
     UserLog::create (array (
       'user_id' => User::current ()->id,
-      'icon' => 'icon-im',
+      'icon' => $this->icon,
       'content' => '調整了 Banner 順序。',
       'desc' => '已經備份了調整紀錄，細節可詢問工程師。',
       'backup' => json_encode ($change)));
@@ -195,27 +188,24 @@ class Banners extends Admin_controller {
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
-      'icon' => 'icon-f',
-      'content' => Banner::$enableNames[$obj->is_enabled] . '一篇文章。',
-      'desc' => '將文章 “' . $obj->mini_title () . '” ' . Banner::$enableNames[$obj->is_enabled] . '。',
-      'backup'  => json_encode (array (
-          'ori' => $backup,
-          'now' => $obj->columns_val (true)
-        ))));
+      'icon' => $this->icon,
+      'content' => Banner::$enableNames[$obj->is_enabled] . '一項 Banner。',
+      'desc' => '將 Banner “' . $obj->mini_title () . '” ' . Banner::$enableNames[$obj->is_enabled] . '。',
+      'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
 
     return $this->output_json ($obj->is_enabled == Banner::ENABLE_YES);
   }
   private function _validation_create (&$posts, &$cover) {
-    if (!isset ($posts['title']))      return '沒有填寫 標題！';
-    if (!isset ($posts['content']))    return '沒有填寫 內容！';
-    if (!isset ($posts['link']))       return '沒有填寫 鏈結！';
-    if (!isset ($cover))               return '沒有選擇 封面！';
-    if (!isset ($posts['target']))     return '沒有選擇 開啟方式！';
+    if (!isset ($posts['title'])) return '沒有填寫 標題！';
+    if (!isset ($posts['content'])) return '沒有填寫 內容！';
+    if (!isset ($posts['link'])) return '沒有填寫 鏈結！';
+    if (!isset ($cover)) return '沒有選擇 封面！';
+    if (!isset ($posts['target'])) return '沒有選擇 開啟方式！';
     if (!isset ($posts['is_enabled'])) return '沒有選擇 是否公開！';
     
-    if (!(($posts['title'] = trim ($posts['title'])) && is_string ($posts['title']))) return '標題 格式錯誤！';
-    if (!(($posts['content'] = trim ($posts['content'])) && is_string ($posts['content']))) return '內容 格式錯誤！';
-    if (!(($posts['link'] = trim ($posts['link'])) && is_string ($posts['link']))) return '鏈結 格式錯誤！';
+    if (!(is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '標題 格式錯誤！';
+    if (!(is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '內容 格式錯誤！';
+    if (!(is_string ($posts['link']) && ($posts['link'] = trim ($posts['link'])))) return '鏈結 格式錯誤！';
     if (!is_upload_file_format ($cover, 2 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '文章封面 格式錯誤！';
     if (!(is_numeric ($posts['is_enabled'] = trim ($posts['is_enabled'])) && in_array ($posts['is_enabled'], array_keys (Banner::$enableNames)))) return '是否公開 格式錯誤！';
     if (!(is_numeric ($posts['target'] = trim ($posts['target'])) && in_array ($posts['target'], array_keys (Banner::$targetNames)))) return '開啟方式 格式錯誤！';
@@ -223,16 +213,16 @@ class Banners extends Admin_controller {
     return '';
   }
   private function _validation_update (&$posts, &$cover, $obj) {
-    if (!isset ($posts['title']))                 return '沒有填寫 標題！';
-    if (!isset ($posts['content']))               return '沒有填寫 內容！';
-    if (!isset ($posts['link']))                  return '沒有填寫 鏈結！';
+    if (!isset ($posts['title'])) return '沒有填寫 標題！';
+    if (!isset ($posts['content'])) return '沒有填寫 內容！';
+    if (!isset ($posts['link'])) return '沒有填寫 鏈結！';
     if (!((string)$obj->cover || isset ($cover))) return '沒有選擇 文章封面！';
-    if (!isset ($posts['target']))                return '沒有選擇 開啟方式！';
-    if (!isset ($posts['is_enabled']))            return '沒有選擇 是否公開！';
+    if (!isset ($posts['target'])) return '沒有選擇 開啟方式！';
+    if (!isset ($posts['is_enabled'])) return '沒有選擇 是否公開！';
     
-    if (!(($posts['title'] = trim ($posts['title'])) && is_string ($posts['title']))) return '標題 格式錯誤！';
-    if (!(($posts['content'] = trim ($posts['content'])) && is_string ($posts['content']))) return '內容 格式錯誤！';
-    if (!(($posts['link'] = trim ($posts['link'])) && is_string ($posts['link']))) return '鏈結 格式錯誤！';
+    if (!(is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '標題 格式錯誤！';
+    if (!(is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '內容 格式錯誤！';
+    if (!(is_string ($posts['link']) && ($posts['link'] = trim ($posts['link'])))) return '鏈結 格式錯誤！';
     if ($cover && !is_upload_file_format ($cover, 2 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '文章封面 格式錯誤！';
     if (!(is_numeric ($posts['is_enabled'] = trim ($posts['is_enabled'])) && in_array ($posts['is_enabled'], array_keys (Banner::$enableNames)))) return '是否公開 格式錯誤！';
     if (!(is_numeric ($posts['target'] = trim ($posts['target'])) && in_array ($posts['target'], array_keys (Banner::$targetNames)))) return '開啟方式 格式錯誤！';

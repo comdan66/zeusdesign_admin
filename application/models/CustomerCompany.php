@@ -33,9 +33,11 @@ class CustomerCompany extends OaModel {
       'updated_at'  => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at'  => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
-    return $has ? array ('this' => $var, 'customers' => array_map (function ($customer) {
-      return $customer->columns_val ();
-    }, Customer::find ('all', array ('conditions' => array ('customer_company_id = ?', $this->id))))) : $var;
+    return $has ? array (
+      'this' => $var,
+      'customers' => array_map (function ($customer) {
+        return $customer->columns_val ();
+      }, Customer::find ('all', array ('conditions' => array ('customer_company_id = ?', $this->id))))) : $var;
   }
   public function to_array (array $opt = array ()) {
     return array (

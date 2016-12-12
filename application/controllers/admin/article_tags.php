@@ -8,6 +8,7 @@
 class Article_tags extends Admin_controller {
   private $uri_1 = null;
   private $obj = null;
+  private $icon = 'icon-ta';
 
   public function __construct () {
     parent::__construct ();
@@ -38,13 +39,7 @@ class Article_tags extends Admin_controller {
 
     $this->load->library ('pagination');
     $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $objs = ArticleTag::find ('all', array (
-        'offset' => $offset,
-        'limit' => $limit,
-        'order' => 'id DESC',
-        'include' => array ('mappings'),
-        'conditions' => $conditions
-      ));
+    $objs = ArticleTag::find ('all', array ('offset' => $offset, 'limit' => $limit, 'order' => 'id DESC', 'include' => array ('mappings'), 'conditions' => $conditions));
 
     return $this->load_view (array (
         'objs' => $objs,
@@ -71,7 +66,12 @@ class Article_tags extends Admin_controller {
     if (!ArticleTag::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = ArticleTag::create (array_intersect_key ($posts, ArticleTag::table ()->columns))); }))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ta', 'content' => '新增一項文章分類。', 'desc' => '分類名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->columns_val ())));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '新增一項文章分類。',
+      'desc' => '分類名稱為「' . $obj->name . '」。',
+      'backup' => json_encode ($obj->columns_val ())));
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
@@ -90,7 +90,7 @@ class Article_tags extends Admin_controller {
       return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
-    $backup = $obj->columns_val ();
+    $backup = $obj->columns_val (true);
 
     if ($msg = $this->_validation_update ($posts))
       return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => $msg, 'posts' => $posts));
@@ -102,7 +102,12 @@ class Article_tags extends Admin_controller {
     if (!ArticleTag::transaction (function () use ($obj, $posts) { return $obj->save (); }))
       return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '更新失敗！', 'posts' => $posts));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ta', 'content' => '修改一項文章分類。', 'desc' => '分類名稱為「' . $obj->name . '」。', 'backup' => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val ()))));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '修改一項文章分類。',
+      'desc' => '分類名稱為「' . $obj->name . '」。',
+      'backup' => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '更新成功！'));
   }
@@ -114,19 +119,22 @@ class Article_tags extends Admin_controller {
     if (!ArticleTag::transaction (function () use ($obj) { return $obj->destroy (); }))
       return redirect_message (array ($this->uri_1), array ('_flash_danger' => '刪除失敗！'));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ta', 'content' => '刪除一項文章分類。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup' => json_encode ($backup)));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '刪除一項文章分類。',
+      'desc' => '已經備份了刪除紀錄，細節可詢問工程師。',
+      'backup' => json_encode ($backup)));
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '刪除成功！'));
   }
-
-  private function _validation_update (&$posts) {
-    if (!isset ($posts['name'])) return '沒有填寫 分類名稱！';
-    if (!(($posts['name'] = trim ($posts['name'])) && is_string ($posts['name']))) return '分類名稱 格式錯誤！';
-    return '';
-  }
   private function _validation_create (&$posts) {
     if (!isset ($posts['name'])) return '沒有填寫 分類名稱！';
-    if (!(($posts['name'] = trim ($posts['name'])) && is_string ($posts['name']))) return '分類名稱 格式錯誤！';
+    if (!(is_string ($posts['name']) && ($posts['name'] = trim ($posts['name'])))) return '分類名稱 格式錯誤！';
     return '';
+  }
+
+  private function _validation_update (&$posts) {
+    return $this->_validation_create ($posts);
   }
 }

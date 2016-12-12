@@ -43,7 +43,6 @@
     <table class='table'>
       <thead>
         <tr>
-          <th width='80'>#</th>
           <th width='100'>顏色</th>
           <th width='100'>行程數</th>
           <th>名稱</th>
@@ -54,7 +53,6 @@
   <?php if ($objs) {
           foreach ($objs as $obj) { ?>
             <tr>
-              <td><?php echo $obj->id;?></td>
               <td>
                 <div class='color' style='background-color: #<?php echo $obj->color;?>;'></div>
               </td>

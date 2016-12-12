@@ -8,7 +8,7 @@
     <input type='hidden' name='_method' value='put' />
     
     <div class='row n2'>
-      <label>公開</label>
+      <label>* 是否公開</label>
       <div>
         <label class='switch'>
           <input type='checkbox' name='is_enabled'<?php echo (isset ($posts['is_enabled']) ? $posts['is_enabled'] : $obj->is_enabled) ? ' checked' : '';?> />
@@ -18,7 +18,7 @@
     </div>
 
     <div class='row n2'>
-      <label>作者</label>
+      <label>* 作品作者</label>
       <div>
         <select name='user_id'>
     <?php if ($users = User::all (array ('select' => 'id, name'))) {
@@ -32,14 +32,14 @@
 
 
     <div class='row n2'>
-      <label>標題</label>
+      <label>* 作品標題</label>
       <div>
-        <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : $obj->title;?>' placeholder='請輸入標題..' maxlength='200' pattern='.{1,200}' required title='輸入標題!' autofocus />
+        <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : $obj->title;?>' placeholder='請輸入作品標題..' maxlength='200' pattern='.{1,200}' required title='輸入作品標題!' autofocus />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>封面</label>
+      <label>* 作品封面</label>
       <div class='img_row'>
         <div class='drop_img no_cchoice'>
           <img src='<?php echo $obj->cover->url ();?>' />
@@ -72,10 +72,9 @@
     </div>
 
 
-<?php if ($tags = WorkTag::find ('all', array ('include' => array ('tags'), 'conditions' => array ('work_tag_id = ?', 0)))) {
-        $tag_ids = isset ($posts['tag_ids']) ? $posts['tag_ids'] : column_array ($obj->mappings, 'work_tag_id'); ?>
+<?php if ($tags = WorkTag::find ('all', array ('include' => array ('tags'), 'conditions' => array ('work_tag_id = ?', 0)))) { ?>
         <div class='row n2'>
-          <label style='margin-top: 7px;'>分類</label>
+          <label style='margin-top: 7px;'>作品分類</label>
           <div class='tags'>
       <?php foreach ($tags as $i => $tag) { ?>
               <div class='tag'>
@@ -93,17 +92,17 @@
 
 
     <div class='row n2'>
-      <label>內容</label>
+      <label>* 作品內容</label>
       <div>
-        <textarea name='content' class='pure autosize cke' placeholder='請輸入內容..'><?php echo htmlspecialchars (isset ($posts['content']) ? $posts['content'] : $obj->content);?></textarea>
+        <textarea name='content' class='pure autosize cke' placeholder='請輸入作品內容..'><?php echo htmlspecialchars (isset ($posts['content']) ? $posts['content'] : $obj->content);?></textarea>
       </div>
     </div>
 
 
     <div class='row n2'>
-      <label>說明</label>
+      <label>作品說明</label>
       <div>
-        <button type='button' data-i='0' class='icon-r add_block' data-blocks='<?php echo json_encode ($blocks);?>'>新增說明</button>
+        <button type='button' data-i='0' class='icon-r add_block' data-blocks='<?php echo json_encode ($blocks);?>'> 新增作品說明</button>
       </div>
     </div>
 

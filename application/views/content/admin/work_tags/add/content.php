@@ -7,9 +7,9 @@
 
   <form class='form' method='post' action='<?php echo base_url ($uri_1);?>'>
     <div class='row n2'>
-      <label>名稱</label>
+      <label>* 分類名稱</label>
       <div>
-        <input type='text' name='name' value='<?php echo isset ($posts['name']) ? $posts['name'] : '';?>' placeholder='請輸入名稱..' maxlength='200' pattern='.{1,200}' required title='輸入名稱!' autofocus />
+        <input type='text' name='name' value='<?php echo isset ($posts['name']) ? $posts['name'] : '';?>' placeholder='請輸入分類名稱..' maxlength='200' pattern='.{1,200}' required title='輸入分類名稱!' autofocus />
       </div>
     </div>
 

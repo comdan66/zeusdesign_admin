@@ -8,6 +8,7 @@
 class Billins extends Admin_controller {
   private $uri_1 = null;
   private $obj = null;
+  private $icon = 'icon-ib';
 
   public function __construct () {
     parent::__construct ();
@@ -17,7 +18,7 @@ class Billins extends Admin_controller {
 
     $this->uri_1 = 'admin/billins';
 
-    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
+    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy', 'is_finished', 'is_pay')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Billin::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array ('_flash_danger' => '找不到該筆資料。'));
 
@@ -45,13 +46,7 @@ class Billins extends Admin_controller {
 
     $this->load->library ('pagination');
     $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $objs = Billin::find ('all', array (
-        'offset' => $offset,
-        'limit' => $limit,
-        'order' => 'id DESC',
-        'include' => array ('user'),
-        'conditions' => $conditions
-      ));
+    $objs = Billin::find ('all', array ('offset' => $offset, 'limit' => $limit, 'order' => 'id DESC', 'include' => array ('user'), 'conditions' => $conditions));
 
     return $this->load_view (array (
         'objs' => $objs,
@@ -78,7 +73,12 @@ class Billins extends Admin_controller {
     if (!Billin::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Billin::create (array_intersect_key ($posts, Billin::table ()->columns))); }))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ib', 'content' => '新增一筆入帳。', 'desc' => '專案名稱為：「' . $obj->mini_name () . '」。', 'backup' => json_encode ($obj->columns_val ())));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '新增一筆入帳。',
+      'desc' => '專案名稱為：「' . $obj->mini_name () . '」。',
+      'backup' => json_encode ($obj->columns_val ())));
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
@@ -109,10 +109,11 @@ class Billins extends Admin_controller {
     if (!Billin::transaction (function () use ($obj, $posts) { return $obj->save (); }))
       return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '更新失敗！', 'posts' => $posts));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ib', 'content' => '修改一筆入帳。', 'desc' => '專案名稱為：「' . $obj->mini_name () . '」。', 'backup'  => json_encode (array (
-          'ori' => $backup,
-          'now' => $obj->columns_val (true)
-        ))));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '修改一筆入帳。',
+      'desc' => '專案名稱為：「' . $obj->mini_name () . '」。', 'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '更新成功！'));
   }
@@ -123,49 +124,117 @@ class Billins extends Admin_controller {
     if (!Billin::transaction (function () use ($obj) { return $obj->destroy (); }))
       return redirect_message (array ($this->uri_1), array ('_flash_danger' => '刪除失敗！'));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ib', 'content' => '刪除一筆入帳。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup'  => json_encode ($backup)));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '刪除一筆入帳。',
+      'desc' => '已經備份了刪除紀錄，細節可詢問工程師。',
+      'backup'  => json_encode ($backup)));
     
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '刪除成功！'));
   }
+  public function is_finished () {
+    $obj = $this->obj;
+
+    if (!$this->has_post ())
+      return $this->output_error_json ('非 POST 方法，錯誤的頁面請求。');
+
+    $posts = OAInput::post ();
+    $backup = $obj->columns_val (true);
+    
+    $validation = function (&$posts) {
+      if (!isset ($posts['is_pay']))      return '沒有選擇 是否支付！';
+      if (!(is_numeric ($posts['is_pay'] = trim ($posts['is_pay'])) && in_array ($posts['is_pay'], array_keys (Billin::$payNames)))) return '是否支付 格式錯誤！';
+      return '';
+    };
+
+    if ($msg = $validation ($posts))
+      return $this->output_error_json ($msg);
+
+    if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
+      foreach ($columns as $column => $value)
+        $obj->$column = $value;
+
+    if (!Billin::transaction (function () use ($obj, $posts) { return $obj->save (); }))
+      return $this->output_error_json ('更新失敗！');
+
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '將一筆入帳標示為「' . Billin::$finishNames[$obj->is_finished] . '」。',
+      'desc' => '將入帳 “' . $obj->name . '” 標示為 「' . Billin::$finishNames[$obj->is_finished] . '」。',
+      'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
+
+    return $this->output_json ($obj->is_finished == Billin::IS_FINISHED);
+  }
+  public function is_pay () {
+    $obj = $this->obj;
+
+    if (!$this->has_post ())
+      return $this->output_error_json ('非 POST 方法，錯誤的頁面請求。');
+
+    $posts = OAInput::post ();
+    $backup = $obj->columns_val (true);
+    
+    $validation = function (&$posts) {
+      if (!isset ($posts['is_pay'])) return '沒有選擇 是否入帳！';
+      if (!(is_numeric ($posts['is_pay'] = trim ($posts['is_pay'])) && in_array ($posts['is_pay'], array_keys (Billin::$finishNames)))) return '是否入帳 格式錯誤！';
+      return '';
+    };
+
+    if ($msg = $validation ($posts))
+      return $this->output_error_json ($msg);
+
+    if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
+      foreach ($columns as $column => $value)
+        $obj->$column = $value;
+
+    if (!Billin::transaction (function () use ($obj, $posts) { return $obj->save (); }))
+      return $this->output_error_json ('更新失敗！');
+
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '將一筆入帳標示為「' . Billin::$payNames[$obj->is_pay] . '」。',
+      'desc' => '將入帳 “' . $obj->name . '” 標示為 「' . Billin::$payNames[$obj->is_pay] . '」。',
+      'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
+
+    return $this->output_json ($obj->is_pay == Billin::IS_FINISHED);
+  }
   private function _validation_create (&$posts) {
-    if (!isset ($posts['user_id']))     return '沒有選擇 負責人！';
-    if (!isset ($posts['name']))        return '沒有填寫 專案名稱！';
-    if (!isset ($posts['money']))       return '沒有填寫 總金額！';
-    if (!isset ($posts['rate_name']))   return '沒有填寫 類型！';
-    if (!isset ($posts['rate']))        return '沒有填寫 扣款百分比！';
-    if (!isset ($posts['zeus_money']))  return '沒有填寫 宙思獲得！';
-    if (!isset ($posts['date_at']))     return '沒有選擇 日期！';
+    if (!isset ($posts['user_id'])) return '沒有選擇 負責人！';
+    if (!isset ($posts['name'])) return '沒有填寫 專案名稱！';
+    if (!isset ($posts['money'])) return '沒有填寫 總金額！';
+    if (!isset ($posts['rate_name'])) return '沒有填寫 類型！';
+    if (!isset ($posts['rate'])) return '沒有填寫 扣款百分比！';
+    if (!isset ($posts['zeus_money'])) return '沒有填寫 宙思獲得！';
+    if (!isset ($posts['date_at'])) return '沒有選擇 日期！';
     if (!isset ($posts['is_finished'])) return '沒有選擇 是否入帳！';
-    if (!isset ($posts['is_pay']))      return '沒有選擇 是否支付！';
+    if (!isset ($posts['is_pay'])) return '沒有選擇 是否支付！';
 
     if (!(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['user_id']))))) return '負責人 不存在！';
-    if (!(($posts['name'] = trim ($posts['name'])) && is_string ($posts['name']))) return '專案名稱 格式錯誤！';
+    if (!(is_string ($posts['name']) && ($posts['name'] = trim ($posts['name'])))) return '專案名稱 格式錯誤！';
     if (!(is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] >= 0))) return '總金額 格式錯誤！';
-    if (!(($posts['rate_name'] = trim ($posts['rate_name'])) && is_string ($posts['rate_name']))) return '類型 格式錯誤！';
+    if (!(is_string ($posts['rate_name']) && ($posts['rate_name'] = trim ($posts['rate_name'])))) return '類型 格式錯誤！';
     if (!(is_numeric ($posts['rate'] = trim ($posts['rate'])) && ($posts['rate'] >= 0))) return '扣款百分比 格式錯誤！';
     if (!(is_numeric ($posts['zeus_money'] = trim ($posts['zeus_money'])) && ($posts['zeus_money'] >= 0))) return '宙思獲得 格式錯誤！';
     if (!(($posts['date_at'] = trim ($posts['date_at'])) && is_date ($posts['date_at']))) return '日期 格式錯誤！';
     if (!(is_numeric ($posts['is_finished'] = trim ($posts['is_finished'])) && in_array ($posts['is_finished'], array_keys (Billin::$finishNames)))) return '是否入帳 格式錯誤！';
     if (!(is_numeric ($posts['is_pay'] = trim ($posts['is_pay'])) && in_array ($posts['is_pay'], array_keys (Billin::$payNames)))) return '是否支付 格式錯誤！';
 
-    $posts['memo'] = isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && is_string ($posts['memo']) ? $posts['memo'] : '';
+    $posts['memo'] = isset ($posts['memo']) && is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) ? $posts['memo'] : '';
 
     return '';
   }
   private function _validation_update (&$posts) {
     return $this->_validation_create ($posts);
   }
-
   public function export () {
     $columns = $this->_search_columns ();
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
     $conditions = conditions ($columns, $configs);
 
-    $objs = Billin::find ('all', array (
-        'order' => 'id DESC',
-        'include' => array ('user'),
-        'conditions' => $conditions
-      ));
+    $objs = Billin::find ('all', array ('order' => 'id DESC', 'include' => array ('user'), 'conditions' => $conditions));
 
     $this->load->library ('OAExcel');
     $infos = array (

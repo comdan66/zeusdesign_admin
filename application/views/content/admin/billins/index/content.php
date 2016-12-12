@@ -62,13 +62,13 @@
           foreach ($objs as $obj) { ?>
             <tr>
               <td class='center'>
-                <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, 'is_finished', $obj->id);?>'>
                   <input type='checkbox' name='is_finished'<?php echo $obj->is_finished == Billin::IS_FINISHED ? ' checked' : '';?> />
                   <span></span>
                 </label>
               </td>
               <td class='center'>
-                <label class='switch' data-column='is_pay' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                <label class='switch' data-column='is_pay' data-url='<?php echo base_url ($uri_1, 'is_pay', $obj->id);?>'>
                   <input type='checkbox' name='is_pay'<?php echo $obj->is_pay == Billin::IS_PAY ? ' checked' : '';?> />
                   <span></span>
                 </label>

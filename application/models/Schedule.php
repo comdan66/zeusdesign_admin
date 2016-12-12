@@ -31,8 +31,8 @@ class Schedule extends OaModel {
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
-  public function columns_val () {
-    return array (
+  public function columns_val ($has = false) {
+    $var = array (
       'id'              => isset ($this->id) ? $this->id : '',
       'user_id'         => isset ($this->user_id) ? $this->user_id : '',
       'schedule_tag_id' => isset ($this->schedule_tag_id) ? $this->schedule_tag_id : '',
@@ -47,6 +47,7 @@ class Schedule extends OaModel {
       'updated_at'      => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at'      => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
+    return $has ? array ('this' => $var) : $var;
   }
   public function to_array (array $opt = array ()) {
     return array (

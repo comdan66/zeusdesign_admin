@@ -8,6 +8,7 @@
 class Articles extends Admin_controller {
   private $uri_1 = null;
   private $obj = null;
+  private $icon = 'icon-f';
 
   public function __construct () {
     parent::__construct ();
@@ -48,13 +49,7 @@ class Articles extends Admin_controller {
 
     $this->load->library ('pagination');
     $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $objs = Article::find ('all', array (
-        'offset' => $offset,
-        'limit' => $limit,
-        'order' => 'id DESC',
-        'include' => array ('user'),
-        'conditions' => $conditions
-      ));
+    $objs = Article::find ('all', array ('offset' => $offset, 'limit' => $limit, 'order' => 'id DESC', 'include' => array ('user'), 'conditions' => $conditions));
 
     return $this->load_view (array (
         'objs' => $objs,
@@ -95,7 +90,12 @@ class Articles extends Admin_controller {
       foreach ($posts['sources'] as $i => $source)
         ArticleSource::transaction (function () use ($i, $source, $obj) { return verifyCreateOrm (ArticleSource::create (array_intersect_key (array_merge ($source, array ('sort' => $i, 'article_id' => $obj->id)), ArticleSource::table ()->columns))); });
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-f', 'content' => '新增一篇文章。', 'desc' => '標題名稱為：「' . $obj->mini_title () . '」，內容是：「' . $obj->mini_content () . '」。', 'backup'  => json_encode ($obj->columns_val ())));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '新增一篇文章。',
+      'desc' => '標題名稱為：「' . $obj->mini_title () . '」，內容是：「' . $obj->mini_content () . '」。',
+      'backup'  => json_encode ($obj->columns_val ())));
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
@@ -148,7 +148,12 @@ class Articles extends Admin_controller {
       foreach ($posts['sources'] as $i => $source)
         ArticleSource::transaction (function () use ($i, $source, $obj) { return verifyCreateOrm (ArticleSource::create (array_intersect_key (array_merge ($source, array ('sort' => $i, 'article_id' => $obj->id)), ArticleSource::table ()->columns))); });
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-f', 'content' => '修改一篇文章。', 'desc' => '標題名稱為：「' . $obj->mini_title () . '」，內容是：「' . $obj->mini_content () . '」。', 'backup'  => json_encode (array ( 'ori' => $backup, 'now' => $obj->columns_val (true) ))));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '修改一篇文章。',
+      'desc' => '標題名稱為：「' . $obj->mini_title () . '」，內容是：「' . $obj->mini_content () . '」。',
+      'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '更新成功！'));
   }
@@ -159,7 +164,12 @@ class Articles extends Admin_controller {
     if (!Article::transaction (function () use ($obj) { return $obj->destroy (); }))
       return redirect_message (array ($this->uri_1), array ('_flash_danger' => '刪除失敗！'));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-f', 'content' => '刪除一篇文章。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup'  => json_encode ($backup)));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '刪除一篇文章。',
+      'desc' => '已經備份了刪除紀錄，細節可詢問工程師。',
+      'backup'  => json_encode ($backup)));
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '刪除成功！'));
   }
@@ -188,44 +198,49 @@ class Articles extends Admin_controller {
     if (!Article::transaction (function () use ($obj, $posts) { return $obj->save (); }))
       return $this->output_error_json ('更新失敗！');
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-f', 'content' => Article::$enableNames[$obj->is_enabled] . '一篇文章。', 'desc' => '將文章 “' . $obj->mini_title () . '” ' . Article::$enableNames[$obj->is_enabled] . '。', 'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => Article::$enableNames[$obj->is_enabled] . '一篇文章。',
+      'desc' => '將文章 “' . $obj->mini_title () . '” 設定成 「' . Work::$enableNames[$obj->is_enabled] . '」。',
+      'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
 
     return $this->output_json ($obj->is_enabled == Article::ENABLE_YES);
   }
 
   private function _validation_create (&$posts, &$cover) {
     if (!isset ($posts['is_enabled'])) return '沒有選擇 是否公開！';
-    if (!isset ($posts['user_id']))    return '沒有選擇 文章作者！';
-    if (!isset ($posts['title']))      return '沒有填寫 文章標題！';
-    if (!isset ($posts['content']))    return '沒有填寫 文章內容！';
-    if (!isset ($cover))               return '沒有選擇 文章封面！';
+    if (!isset ($posts['user_id'])) return '沒有選擇 文章作者！';
+    if (!isset ($posts['title'])) return '沒有填寫 文章標題！';
+    if (!isset ($posts['content'])) return '沒有填寫 文章內容！';
+    if (!isset ($cover)) return '沒有選擇 文章封面！';
     
     if (!(is_numeric ($posts['is_enabled'] = trim ($posts['is_enabled'])) && in_array ($posts['is_enabled'], array_keys (Article::$enableNames)))) return '是否公開 格式錯誤！';
     if (!(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['user_id']))))) return '文章作者 不存在！';
-    if (!(($posts['title'] = trim ($posts['title'])) && is_string ($posts['title']))) return '文章標題 格式錯誤！';
+    if (!(is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '文章標題 格式錯誤！';
     if (!is_upload_file_format ($cover, 2 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '文章封面 格式錯誤！';
-    if (!(($posts['content'] = trim ($posts['content'])) && is_string ($posts['content']))) return '文章內容 格式錯誤！';
+    if (!(is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '文章內容 格式錯誤！';
 
-    $posts['sources'] = isset ($posts['sources']) && $posts['sources'] && is_array ($posts['sources']) ? array_values (array_filter ($posts['sources'], function ($source) { return isset ($source['href']) && ($source['href'] = trim ($source['href'])) && is_string ($source['href']); })) : array ();
-    $posts['tag_ids'] = isset ($posts['tag_ids']) && $posts['tag_ids'] && is_array ($posts['tag_ids']) ? column_array (ArticleTag::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['tag_ids']))), 'id') : array ();
+    $posts['sources'] = isset ($posts['sources']) && is_array ($posts['sources']) && $posts['sources'] ? array_values (array_filter ($posts['sources'], function ($source) { return isset ($source['href']) && is_string ($source['href']) && ($source['href'] = trim ($source['href'])); })) : array ();
+    $posts['tag_ids'] = isset ($posts['tag_ids']) && is_array ($posts['tag_ids']) && $posts['tag_ids'] ? column_array (ArticleTag::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['tag_ids']))), 'id') : array ();
     
     return '';
   }
   private function _validation_update (&$posts, &$cover, $obj) {
-    if (!isset ($posts['is_enabled']))            return '沒有選擇 是否公開！';
-    if (!isset ($posts['user_id']))               return '沒有選擇 文章作者！';
-    if (!isset ($posts['title']))                 return '沒有填寫 文章標題！';
-    if (!isset ($posts['content']))               return '沒有填寫 文章內容！';
+    if (!isset ($posts['is_enabled'])) return '沒有選擇 是否公開！';
+    if (!isset ($posts['user_id'])) return '沒有選擇 文章作者！';
+    if (!isset ($posts['title'])) return '沒有填寫 文章標題！';
+    if (!isset ($posts['content'])) return '沒有填寫 文章內容！';
     if (!((string)$obj->cover || isset ($cover))) return '沒有選擇 文章封面！';
 
     if (!(is_numeric ($posts['is_enabled'] = trim ($posts['is_enabled'])) && in_array ($posts['is_enabled'], array_keys (Article::$enableNames)))) return '是否公開 格式錯誤！';
     if (!(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['user_id']))))) return '文章作者 不存在！';
-    if (!(($posts['title'] = trim ($posts['title'])) && is_string ($posts['title']))) return '文章標題 格式錯誤！';
+    if (!(is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '文章標題 格式錯誤！';
     if ($cover && !is_upload_file_format ($cover, 2 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '文章封面 格式錯誤！';
-    if (!(($posts['content'] = trim ($posts['content'])) && is_string ($posts['content']))) return '文章內容 格式錯誤！';
+    if (!(is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '文章內容 格式錯誤！';
 
-    $posts['sources'] = isset ($posts['sources']) && $posts['sources'] && is_array ($posts['sources']) ? array_values (array_filter ($posts['sources'], function ($source) { return isset ($source['href']) && ($source['href'] = trim ($source['href'])) && is_string ($source['href']); })) : array ();
-    $posts['tag_ids'] = isset ($posts['tag_ids']) && $posts['tag_ids'] && is_array ($posts['tag_ids']) ? column_array (ArticleTag::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['tag_ids']))), 'id') : array ();
+    $posts['sources'] = isset ($posts['sources']) && is_array ($posts['sources']) && $posts['sources'] ? array_values (array_filter ($posts['sources'], function ($source) { return isset ($source['href']) && is_string ($source['href']) && ($source['href'] = trim ($source['href'])); })) : array ();
+    $posts['tag_ids'] = isset ($posts['tag_ids']) && is_array ($posts['tag_ids']) && $posts['tag_ids'] ? column_array (ArticleTag::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['tag_ids']))), 'id') : array ();
     
     return '';
   }

@@ -42,7 +42,6 @@
     <table class='table'>
       <thead>
         <tr>
-          <th width='50' class='center'>#</th>
           <th width='90' class='center'>是否已給付</th>
           <th width='100'>受薪人員</th>
           <th width='150'>專案名稱</th>
@@ -55,10 +54,9 @@
   <?php if ($objs) {
           foreach ($objs as $obj) { ?>
             <tr>
-              <td class='center'><?php echo $obj->id;?></td>
              
               <td class='center'>
-                <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                <label class='switch' data-column='is_finished' data-url='<?php echo base_url ($uri_1, 'is_finished', $obj->id);?>'>
                   <input type='checkbox' name='is_finished'<?php echo $obj->is_finished == Salary::IS_FINISHED ? ' checked' : '';?> />
                   <span></span>
                 </label>
@@ -79,7 +77,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='7' class='no_data'>沒有任何資料。</td>
+            <td colspan='6' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

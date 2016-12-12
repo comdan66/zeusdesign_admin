@@ -9,7 +9,7 @@
     <input type='hidden' name='_method' value='put' />
 
     <div class='row n2'>
-      <label>名稱</label>
+      <label>* 名稱</label>
       <div>
         <input type='text' name='name' value='<?php echo isset ($posts['name']) ? $posts['name'] : $obj->name;?>' placeholder='請輸入名稱..' maxlength='200' pattern='.{1,200}' required title='輸入名稱!' autofocus />
       </div>

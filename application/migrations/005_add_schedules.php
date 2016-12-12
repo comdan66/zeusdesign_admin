@@ -11,7 +11,7 @@ class Migration_Add_schedules extends CI_Migration {
       "CREATE TABLE `schedules` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
         `user_id` int(11) unsigned NOT NULL COMMENT 'User ID',
-        `schedule_tag_id` int(11) unsigned DEFAULT NULL COMMENT 'Schedule Tag ID',
+        `schedule_tag_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'Tag ID',
 
         `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '標題',
         `description` text NOT NULL COMMENT '描述',

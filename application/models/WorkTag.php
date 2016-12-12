@@ -26,8 +26,8 @@ class WorkTag extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
 
-  public function columns_val () {
-    return array (
+  public function columns_val ($has = false) {
+    $var = array (
       'id'          => isset ($this->id) ? $this->id : '',
       'name'        => isset ($this->name) ? $this->name : '',
       'work_tag_id' => isset ($this->work_tag_id) ? $this->work_tag_id : '',
@@ -35,6 +35,14 @@ class WorkTag extends OaModel {
       'updated_at'  => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at'  => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
+    return $has ? array (
+      'this' => $var,
+      'mappings' => array_map (function ($mapping) {
+        return $mapping->columns_val ();
+      }, WorkTagMapping::find ('all', array ('conditions' => array ('work_tag_id = ?', $this->id)))),
+      'tags' => array_map (function ($tag) {
+        return $tag->columns_val ();
+      }, WorkTag::find ('all', array ('conditions' => array ('work_tag_id = ?', $this->id))))) : $var;
   }
   public function to_array (array $opt = array ()) {
     return array (
@@ -50,9 +58,10 @@ class WorkTag extends OaModel {
         if (!$mapping->destroy ())
           return false;
     
+    $sort = ($t = WorkTag::find ('one', array ('select' => 'sort', 'order' => 'sort DESC', 'conditions' => array ('work_tag_id = ?', $this->work_tag_id)))) ? $t->sort : 0;
     if ($this->tags)
       foreach ($this->tags as $tag)
-        if (!$tag->destroy ())
+        if (!(!($tag->work_tag_id = 0) && ($tag->sort = ++$sort) && $tag->save ()))
           return false;
 
     return $this->delete ();

@@ -67,8 +67,8 @@
             <tr>
               <td class='center'><?php echo $obj->id;?></td>
               <td class='center'>
-                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
-                  <input type='checkbox' name='is_enabled'<?php echo $obj->is_enabled == Article::ENABLE_YES ? ' checked' : '';?> />
+                <label class='switch' data-column='is_enabled' data-url='<?php echo base_url ($uri_1, 'is_enabled', $obj->id);?>'>
+                  <input type='checkbox' name='is_enabled'<?php echo $obj->is_enabled == Work::ENABLE_YES ? ' checked' : '';?> />
                   <span></span>
                 </label>
               </td>

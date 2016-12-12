@@ -1,6 +1,6 @@
 <div class='panel'>
   <header>
-    <h2>新增分類</h2>
+    <h2>修改行程分類</h2>
     <a href='<?php echo base_url ($uri_1);?>' class='icon-x'></a>
   </header>
 
@@ -9,13 +9,13 @@
     <input type='hidden' name='_method' value='put' />
 
     <div class='row n2'>
-      <label>名稱</label>
+      <label>* 名稱</label>
       <div>
         <input type='text' name='name' value='<?php echo isset ($posts['name']) ? $posts['name'] : $obj->name;?>' placeholder='請輸入名稱..' maxlength='200' pattern='.{1,200}' required title='輸入名稱!' autofocus />
       </div>
     </div>
     <div class='row n2'>
-      <label>顏色</label>
+      <label>* 顏色</label>
       <div>
         <input type='color' name='color' value='<?php echo '#' . (isset ($posts['color']) ? $posts['color'] : $obj->color);?>' />
       </div>

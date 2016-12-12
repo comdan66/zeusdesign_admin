@@ -8,7 +8,7 @@
     <input type='hidden' name='_method' value='put' />
 
     <div class='row n2'>
-      <label>請款</label>
+      <label>* 是否請款</label>
       <div>
         <label class='switch'>
           <input type='checkbox' name='is_finished'<?php echo (isset ($posts['is_finished']) ? $posts['is_finished'] : $obj->is_finished) ? ' checked' : '';?> />
@@ -58,7 +58,7 @@
     </div>
 
     <div class='row n2'>
-      <label>* 分類</label>
+      <label>* 請款分類</label>
       <div>
         <select name='invoice_tag_id'>
           <option value='0' selected>請選擇分類</option>

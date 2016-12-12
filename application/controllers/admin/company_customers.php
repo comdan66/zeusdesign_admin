@@ -10,6 +10,7 @@ class Company_customers extends Admin_controller {
   private $uri_2  = null;
   private $parent = null;
   private $obj    = null;
+  private $icon   = 'icon-ab';
 
   public function __construct () {
     parent::__construct ();
@@ -29,7 +30,6 @@ class Company_customers extends Admin_controller {
 
     $this->add_param ('uri_1', $this->uri_1);
     $this->add_param ('uri_2', $this->uri_2);
-
     $this->add_param ('parent', $this->parent);
     $this->add_param ('now_url', base_url ('admin', 'customer-companies'));
   }
@@ -48,13 +48,7 @@ class Company_customers extends Admin_controller {
 
     $this->load->library ('pagination');
     $pagination = $this->pagination->initialize (array_merge (array ('total_rows' => $total, 'num_links' => 3, 'per_page' => $limit, 'uri_segment' => 0, 'base_url' => '', 'page_query_string' => false, 'first_link' => '第一頁', 'last_link' => '最後頁', 'prev_link' => '上一頁', 'next_link' => '下一頁', 'full_tag_open' => '<ul>', 'full_tag_close' => '</ul>', 'first_tag_open' => '<li class="f">', 'first_tag_close' => '</li>', 'prev_tag_open' => '<li class="p">', 'prev_tag_close' => '</li>', 'num_tag_open' => '<li>', 'num_tag_close' => '</li>', 'cur_tag_open' => '<li class="active"><a href="#">', 'cur_tag_close' => '</a></li>', 'next_tag_open' => '<li class="n">', 'next_tag_close' => '</li>', 'last_tag_open' => '<li class="l">', 'last_tag_close' => '</li>'), $configs))->create_links ();
-    $objs = Customer::find ('all', array (
-        'offset' => $offset,
-        'limit' => $limit,
-        'order' => 'id DESC',
-        'include' => array ('invoices', 'emails', 'company'),
-        'conditions' => $conditions
-      ));
+    $objs = Customer::find ('all', array ('offset' => $offset, 'limit' => $limit, 'order' => 'id DESC', 'include' => array ('invoices', 'emails', 'company'), 'conditions' => $conditions));
 
     return $this->load_view (array (
         'objs' => $objs,
@@ -90,7 +84,12 @@ class Company_customers extends Admin_controller {
       foreach ($posts['emails'] as $email)
         CustomerEmail::transaction (function () use ($email, $obj) { return verifyCreateOrm (CustomerEmail::create (array_intersect_key (array ('customer_id' => $obj->id, 'email' => $email), CustomerEmail::table ()->columns))); });
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ab', 'content' => '在 “' . $parent->name . '” 下新增一項聯絡人。', 'desc' => '聯絡人名稱為「' . $obj->name . '」。', 'backup' => json_encode ($obj->columns_val ())));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '在 “' . $parent->name . '” 下新增一項聯絡人。',
+      'desc' => '聯絡人名稱為「' . $obj->name . '」。',
+      'backup' => json_encode ($obj->columns_val ())));
 
     return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_info' => '新增成功！'));
   }
@@ -131,11 +130,14 @@ class Company_customers extends Admin_controller {
       foreach ($posts['emails'] as $email)
         CustomerEmail::transaction (function () use ($email, $obj) { return verifyCreateOrm (CustomerEmail::create (array_intersect_key (array ('customer_id' => $obj->id, 'email' => $email), CustomerEmail::table ()->columns))); });
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ab', 'content' => '修改了 “' . $parent->name . '” 下的一項聯絡人。', 'desc' => '聯絡人名稱為「' . $obj->name . '」。', 'backup' => json_encode (array ( 'ori' => $backup, 'now' => $obj->columns_val (true) ))));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '修改了 “' . $parent->name . '” 下的一項聯絡人。',
+      'desc' => '聯絡人名稱為「' . $obj->name . '」。',
+      'backup' => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
 
-    return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array (
-        '_flash_info' => '更新成功！'
-      ));
+    return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_info' => '更新成功！'));
   }
 
   public function destroy () {
@@ -146,7 +148,12 @@ class Company_customers extends Admin_controller {
     if (!Customer::transaction (function () use ($obj) { return $obj->destroy (); }))
       return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_danger' => '刪除失敗！'));
 
-    UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-ab', 'content' => '刪除了 “' . $parent->name . '” 下的一項聯絡人。', 'desc' => '已經備份了刪除紀錄，細節可詢問工程師。', 'backup'  => json_encode ($backup)));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '刪除了 “' . $parent->name . '” 下的一項聯絡人。',
+      'desc' => '已經備份了刪除紀錄，細節可詢問工程師。',
+      'backup'  => json_encode ($backup)));
 
     return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_info' => '刪除成功！'));
   }
@@ -154,13 +161,13 @@ class Company_customers extends Admin_controller {
   private function _validation_create (&$posts) {
     if (!isset ($posts['name'])) return '沒有填寫 聯絡人名稱！';
 
-    if (!(($posts['name'] = trim ($posts['name'])) && is_string ($posts['name']))) return '聯絡人名稱 格式錯誤！';
+    if (!(is_string ($posts['name']) && ($posts['name'] = trim ($posts['name'])))) return '聯絡人名稱 格式錯誤！';
 
-    $posts['emails'] = isset ($posts['emails']) && $posts['emails'] && is_array ($posts['emails']) ? array_values (array_filter ($posts['emails'], function ($email) { return $email; })) : array ();
-    $posts['extension'] = isset ($posts['extension']) && ($posts['extension'] = trim ($posts['extension'])) && is_string ($posts['extension']) ? $posts['extension'] : '';
-    $posts['cellphone'] = isset ($posts['cellphone']) && ($posts['cellphone'] = trim ($posts['cellphone'])) && is_string ($posts['cellphone']) ? $posts['cellphone'] : '';
-    $posts['experience'] = isset ($posts['experience']) && ($posts['experience'] = trim ($posts['experience'])) && is_string ($posts['experience']) ? $posts['experience'] : '';
-    $posts['memo'] = isset ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) && is_string ($posts['memo']) ? $posts['memo'] : '';
+    $posts['emails'] = isset ($posts['emails']) && is_array ($posts['emails']) && $posts['emails'] ? array_values (array_filter ($posts['emails'], function ($email) { return $email; })) : array ();
+    $posts['extension'] = isset ($posts['extension']) && is_string ($posts['extension']) && ($posts['extension'] = trim ($posts['extension'])) ? $posts['extension'] : '';
+    $posts['cellphone'] = isset ($posts['cellphone']) && is_string ($posts['cellphone']) && ($posts['cellphone'] = trim ($posts['cellphone'])) ? $posts['cellphone'] : '';
+    $posts['experience'] = isset ($posts['experience']) && is_string ($posts['experience']) && ($posts['experience'] = trim ($posts['experience'])) ? $posts['experience'] : '';
+    $posts['memo'] = isset ($posts['memo']) && is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) ? $posts['memo'] : '';
     
     return '';
   }

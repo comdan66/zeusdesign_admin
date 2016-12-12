@@ -39,8 +39,8 @@ class Promo extends OaModel {
 
     OrmImageUploader::bind ('cover', 'PromoCoverImageUploader');
   }
-  public function columns_val () {
-    return array (
+  public function columns_val ($has = false) {
+    $var = array (
       'id'         => isset ($this->id) ? $this->id : '',
       'title'      => isset ($this->title) ? $this->title : '',
       'content'    => isset ($this->content) ? $this->content : '',
@@ -52,6 +52,7 @@ class Promo extends OaModel {
       'updated_at' => isset ($this->updated_at) && $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at' => isset ($this->created_at) && $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
+    return $has ? array ('this' => $var) : $var;
   }
   public function to_array (array $opt = array ()) {
     return array (
@@ -67,6 +68,10 @@ class Promo extends OaModel {
             'w500' => $this->cover->url ('500w'),
           ),
       );
+  }
+  public function mini_title ($length = 50) {
+    if (!isset ($this->title)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->title), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
   public function mini_content ($length = 100) {
     if (!isset ($this->content)) return '';

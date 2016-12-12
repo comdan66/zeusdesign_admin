@@ -174,9 +174,13 @@ class Users extends Admin_controller {
     if ($roles) {
       foreach ($roles as $key => $bool)
         $bool ? (!UserRole::find ('one', array ('conditions' => array ('user_id = ? AND name = ?', $obj->id, $key))) && UserRole::transaction (function () use ($obj, $key) { return verifyCreateOrm (UserRole::create (array ('user_id' => $obj->id, 'name' => $key))); })) : (($role = UserRole::find ('one', array ('conditions' => array ('user_id = ? AND name = ?', $obj->id, $key)))) && UserRole::transaction (function () use ($role) { return $role->destroy (); }));
-      UserLog::create (array ('user_id' => User::current ()->id, 'icon' => 'icon-bo', 'content' => '調整了人員權限。', 'desc' => '已經備份了修改紀錄，細節可詢問工程師。', 'backup' => json_encode ($obj->to_array ())));
+      UserLog::create (array (
+        'user_id' => User::current ()->id,
+        'icon' => 'icon-bo',
+        'content' => '調整了人員權限。',
+        'desc' => '已經備份了修改紀錄，細節可詢問工程師。',
+        'backup' => json_encode ($obj->columns_val ())));
     }
-
 
     return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
         '_flash_info' => '更新成功！'
