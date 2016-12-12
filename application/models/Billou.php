@@ -62,16 +62,4 @@ class Billou extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'id' => $this->id,
-        'user' => $this->user->to_array (),
-        'name' => $this->name,
-        'money' => $this->money,
-        'is_invoice' => $this->is_invoice,
-        'memo' => $this->memo,
-        'is_finished' => $this->is_finished,
-        'date_at' => $this->date_at->format ('Y-m-d'),
-      );
-  }
 }

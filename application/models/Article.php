@@ -56,12 +56,12 @@ class Article extends OaModel {
         return $source->columns_val ();
       }, ArticleSource::find ('all', array ('conditions' => array ('article_id = ?', $this->id))))) : $var;
   }
-  public function to_array (array $opt = array ()) {
+  public function to_api () {
     return array (
       'id' => $this->id,
-      'user' => $this->user->to_array (),
+      'user' => $this->user->to_api (),
       'tags' => array_map (function ($tag) {
-        return $tag->to_array ();
+        return $tag->to_api ();
       }, ArticleTag::find ('all', array ('conditions' => array ('id IN (?)', ($tag_ids = column_array ($this->mappings, 'article_tag_id')) ? $tag_ids : array (0))))),
       'title' => $this->title,
       'cover' => array (
@@ -71,7 +71,7 @@ class Article extends OaModel {
       'content' => $this->content,
       'pv' => $this->pv,
       'sources' => array_map (function ($source) {
-        return $source->to_array ();
+        return $source->to_api ();
       }, $this->sources),
       'is_enabled' => $this->is_enabled,
       'updated_at' => $this->updated_at->format ('Y-m-d H:i:s'),
@@ -99,7 +99,4 @@ class Article extends OaModel {
     if (!isset ($this->content)) return '';
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->content), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
-  // public function site_show_page_last_uri () {
-  //   return $this->id . '-' . oa_url_encode ($this->title);
-  // }
 }

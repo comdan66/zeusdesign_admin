@@ -19,7 +19,7 @@ class Users extends Admin_controller {
     
     $this->uri_1 = 'admin/users';
 
-    if (in_array ($this->uri->rsegments (2, 0), array ('update', 'show')))
+    if (in_array ($this->uri->rsegments (2, 0), array ('roles', 'update', 'show')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = User::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array (
             '_flash_danger' => '找不到該筆資料。'
@@ -102,66 +102,47 @@ class Users extends Admin_controller {
         'roles' => $roles
       ));
   }
-  private function _validation (&$posts) {
-    $keys = array ('roles', 'name');
+  public function roles () {
+    $obj = $this->obj;
 
-    $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
-    $posts = $new_posts;
-
-    if (isset ($posts['roles'])) {
-      $np = array ();
-      foreach ($posts['roles'] as $key => $bool) if (Cfg::setting ('role', 'role_names', $key)) $np[$key] = $bool;
-      if (!$np) return '權限格式錯誤！';
-      $posts['roles'] = $np;
-    }
-
-    if (isset ($posts['roles']) && !($posts['roles'] && 1 )) return '權限格式錯誤！';
-    if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '名稱格式錯誤！';
-    return '';
-  }
-  public function update () {
     if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => '非 POST 方法，錯誤的頁面請求。'
-        ));
+      return $this->output_error_json ('非 POST 方法，錯誤的頁面請求。');
 
     $posts = OAInput::post ();
-    $is_api = isset ($posts['_type']) && ($posts['_type'] == 'api') ? true : false;
+    $backup = $obj->columns_val (true);
 
-    if ($msg = $this->_validation ($posts))
-      return $is_api ? $this->output_error_json ($msg) : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => $msg,
-          'posts' => $posts
-        ));
+    $validation = function (&$posts) {
+      if (!isset ($posts['roles'])) return '權限格式錯誤！';
+      $np = array (); foreach ($posts['roles'] as $key => $bool) if (Cfg::setting ('role', 'role_names', $key)) $np[$key] = $bool; if (!$np) return '權限格式錯誤！'; $posts['roles'] = $np;
+      return '';
+    };
+
+    if ($msg = $validation ($posts))
+      return $this->output_error_json ($msg);
     
-    if (!($roles = array ()) && isset ($posts['roles']) && ($roles = $posts['roles'])) unset ($posts['roles']);
-
-    if ($columns = array_intersect_key ($posts, $this->obj->table ()->columns))
+    if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
       foreach ($columns as $column => $value)
-        $this->obj->$column = $value;
+        $obj->$column = $value;
     
-    $obj = $this->obj;
-    $update = User::transaction (function () use ($obj, $posts) { return $obj->save (); });
+    if (!User::transaction (function () use ($obj, $posts) { return $obj->save (); }))
+      return $this->output_error_json ('更新失敗！');
 
-    if (!$update)
-      return $is_api ? $this->output_error_json ('更新失敗！') : redirect_message (array ($this->uri_1, $this->obj->id, 'edit'), array (
-          '_flash_danger' => '更新失敗！',
-          'posts' => $posts
-        ));
-
-    if ($roles) {
-      foreach ($roles as $key => $bool)
+    if ($posts['roles'])
+      foreach ($posts['roles'] as $key => $bool)
         $bool ? (!UserRole::find ('one', array ('conditions' => array ('user_id = ? AND name = ?', $obj->id, $key))) && UserRole::transaction (function () use ($obj, $key) { return verifyCreateOrm (UserRole::create (array ('user_id' => $obj->id, 'name' => $key))); })) : (($role = UserRole::find ('one', array ('conditions' => array ('user_id = ? AND name = ?', $obj->id, $key)))) && UserRole::transaction (function () use ($role) { return $role->destroy (); }));
-      UserLog::create (array (
-        'user_id' => User::current ()->id,
-        'icon' => 'icon-bo',
-        'content' => '調整了人員權限。',
-        'desc' => '已經備份了修改紀錄，細節可詢問工程師。',
-        'backup' => json_encode ($obj->columns_val ())));
-    }
 
-    return $is_api ? $this->output_json ($obj->to_array ()) : redirect_message (array ($this->uri_1), array (
-        '_flash_info' => '更新成功！'
-      ));
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => 'icon-bo',
+      'content' => '調整了人員權限。',
+      'desc' => '已經備份了修改紀錄，細節可詢問工程師。',
+      'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
+
+    return $this->output_json (array (
+        'roles' => array_map (function ($role) { return array (
+            'key' => $role->name,
+            'name' => Cfg::setting('role', 'role_names', $role->name)
+          );
+      }, $obj->roles)));
   }
 }

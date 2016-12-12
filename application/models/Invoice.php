@@ -49,21 +49,6 @@ class Invoice extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'id' => $this->id,
-        'user' => $this->user->to_array (),
-        'tag' => $this->tag ? $this->tag->to_array () : array (),
-        'customer' => $this->customer ? $this->customer->to_array () : '',
-        'name' => $this->name,
-        'quantity' => $this->quantity,
-        'single_money' => $this->single_money,
-        'all_money' => $this->all_money,
-        'memo' => $this->memo,
-        'is_finished' => $this->is_finished,
-        'closing_at' => $this->closing_at ? $this->closing_at->format ('Y-m-d') : '-',
-      );
-  }
   public function mini_name ($length = 50) {
     if (!isset ($this->name)) return '';
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->name), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);

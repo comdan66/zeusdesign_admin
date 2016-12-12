@@ -30,7 +30,7 @@ $(function () {
       result.forEach (function (t, i) {
         $month.find ('td[data-y="' + t.year + '"][data-m="' + t.month + '"][data-d="' + t.day + '"]').append (
           $('<div />').data ('id', t.id).css ({'background-color': t.tag.color ? t.tag.color : '#000000'}).addClass (t.finish ? 'finished' : null).text (t.title));
-      })
+      });
     })
     .fail (function (result) { window.funs.ajaxError (result); })
     .complete (function (result) {});
@@ -137,7 +137,7 @@ $(function () {
       var title = $input.val ().trim ();
       var description = $textarea.val ().trim ();
       var prompt = $(this).get (0);
-      var tag_id = $radios.find ('input:checked').val ();
+      var schedule_tag_id = $radios.find ('input:checked').val ();
 
       if (!title) return prompt.close ();
 
@@ -148,7 +148,7 @@ $(function () {
         title: title,
         description: description,
       };
-      if (tag_id) data.tag_id = tag_id;
+      if (schedule_tag_id) data.schedule_tag_id = schedule_tag_id;
 
       $.ajax ({
         url: window.vars.apis.schedules.postItem (),
@@ -180,7 +180,7 @@ $(function () {
       var title = $input.val ().trim ();
       var description = $textarea.val ().trim ();
       var prompt = $(this).get (0);
-      var tag_id = $radios.find ('input:checked').val ();
+      var schedule_tag_id = $radios.find ('input:checked').val ();
 
       if (!title) return prompt.close ();
 
@@ -189,7 +189,7 @@ $(function () {
         title: title,
         description: description,
       };
-      if (tag_id) data.tag_id = tag_id;
+      if (schedule_tag_id) data.schedule_tag_id = schedule_tag_id;
 
       $.ajax ({
         url: window.vars.apis.schedules.putItem ($that.data ('id')),
@@ -229,7 +229,7 @@ $(function () {
     .complete (function (result) {});
   }
   function initSchedule (t) {
-    var $checkbox = $('<label />').addClass ('checkbox').addClass ('blue').data ('column', 'finish').data ('url', '/api/schedules/' + t.id).append (
+    var $checkbox = $('<label />').addClass ('checkbox').addClass ('blue').data ('column', 'finish').data ('url', '/api/schedules/finish/' + t.id).append (
       $('<input />').attr ('type', 'checkbox').prop ('checked', t.finish ? true : false)).append (
       $('<span />'));
     

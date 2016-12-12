@@ -37,12 +37,6 @@ class InvoiceTag extends OaModel {
         return $invoice->columns_val ();
       }, Invoice::find ('all', array ('conditions' => array ('invoice_tag_id = ?', $this->id))))) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'id' => $this->id,
-        'name' => $this->name,
-      );
-  }
   public function destroy () {
     if ($this->invoices)
       foreach ($this->invoices as $invoice)

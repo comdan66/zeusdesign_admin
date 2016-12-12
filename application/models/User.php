@@ -40,9 +40,13 @@ class User extends OaModel {
       'updated_at'   => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at'   => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
-    return $has ? array ('this' => $var) : $var;
+    return $has ? array (
+      'this' => $var,
+      'roles' => array_map (function ($role) {
+        return $role->columns_val ();
+      }, UserRole::find ('all', array ('conditions' => array ('user_id = ?', $this->id))))) : $var;
   }
-  public function to_array (array $opt = array ()) {
+  public function to_api (array $opt = array ()) {
     return array (
         'id' => $this->id,
         'uid' => $this->uid,

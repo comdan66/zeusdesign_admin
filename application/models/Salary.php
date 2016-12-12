@@ -45,16 +45,6 @@ class Salary extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'id' => $this->id,
-        'user' => $this->user->to_array (),
-        'name' => $this->name,
-        'money' => $this->money,
-        'memo' => $this->memo,
-        'is_finished' => $this->is_finished,
-      );
-  }
   public function destroy () {
     if (!isset ($this->id))
       return false;

@@ -34,12 +34,6 @@ class SpendItem extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'title' => $this->title,
-        'money' => $this->money,
-      );
-  }
   public function destroy () {
     return $this->delete ();
   }

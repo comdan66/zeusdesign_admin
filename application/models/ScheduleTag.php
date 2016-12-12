@@ -42,13 +42,6 @@ class ScheduleTag extends OaModel {
         return $schedule->columns_val ();
       }, Schedule::find ('all', array ('conditions' => array ('schedule_tag_id = ?', $this->id))))) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'id' => $this->id,
-        'name' => $this->name,
-        'color' => $this->color (),
-      );
-  }
   public function color () {
     return $this->color ? '#' . $this->color : ScheduleTag::DEFAULT_COLOR;
   }

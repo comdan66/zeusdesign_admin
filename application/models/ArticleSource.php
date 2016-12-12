@@ -34,7 +34,7 @@ class ArticleSource extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
+  public function to_api (array $opt = array ()) {
     return array (
         'id' => $this->id,
         'title' => $this->title,
@@ -43,9 +43,5 @@ class ArticleSource extends OaModel {
   }
   public function destroy () {
     return $this->delete ();
-  }
-  public function mini_href ($length = 80) {
-    if (!isset ($this->href)) return '';
-    return $length ? mb_strimwidth (remove_ckedit_tag ($this->href), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->href);
   }
 }

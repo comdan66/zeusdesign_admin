@@ -43,19 +43,6 @@ class Customer extends OaModel {
       return $invoice->columns_val ();
     }, Invoice::find ('all', array ('conditions' => array ('customer_id = ?', $this->id))))) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'id' => $this->id,
-        'name' => $this->name,
-        'extension' => $this->extension,
-        'cellphone' => $this->cellphone,
-        'experience' => $this->experience,
-        'memo' => $this->memo,
-        'emails' => array_map (function ($email) {
-          return $email->to_array ();
-        }, $this->emails),
-      );
-  }
   public function destroy () {
     if ($this->invoices)
       foreach ($this->invoices as $invoice)

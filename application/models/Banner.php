@@ -55,7 +55,7 @@ class Banner extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
+  public function to_api (array $opt = array ()) {
     return array (
         'id' => $this->id,
         'title' => $this->title,

@@ -42,24 +42,6 @@ class Spend extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'user' => $this->user->to_array (),
-        'cover' => array (
-            'c100' => $this->cover->url ('100x100c'),
-            'c500' => $this->cover->url ('500x500c'),
-          ),
-        'items' => array_map (function ($item) {
-          return $item->to_array ();
-        }, $this->items),
-        'number' => $this->number,
-        'address' => $this->address,
-        'lat' => $this->lat,
-        'lng' => $this->lng,
-        'memo' => $this->memo,
-        'timed_at' => $this->timed_at->format ('Y-m-d'),
-      );
-  }
   public function destroy () {
     if ($this->items)
       foreach ($this->items as $item)

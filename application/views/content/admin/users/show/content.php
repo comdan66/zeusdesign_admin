@@ -18,7 +18,7 @@
       <h2>後台權限</h2>
 
 <?php foreach ($roles as $key => $role) { ?>
-        <label class='checkbox' data-url='<?php echo base_url ($uri_1, $user->id);?>'>
+        <label class='checkbox' data-url='<?php echo base_url ($uri_1, 'roles', $user->id);?>'>
           <input type='checkbox' value='<?php echo $key;?>'<?php echo $user->roles && in_array ($key, column_array ($user->roles, 'name')) ? ' checked' : '';?> />
           <span></span>
           <?php echo $role;?>

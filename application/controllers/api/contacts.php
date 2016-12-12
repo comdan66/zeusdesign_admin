@@ -15,36 +15,24 @@ class Contacts extends Api_controller {
   public function create () {
     $posts = OAInput::post ();
 
-    if (($msg = $this->_validation_must ($posts)) || ($msg = $this->_validation ($posts)))
+    if ($msg = $this->_validation_create ($posts))
       return $this->output_error_json ($msg);
 
     $posts['ip'] = $this->input->ip_address ();
+    $posts['is_readed'] = Contact::READ_NO;
 
-    $create = Contact::transaction (function () use (&$contact, $posts) {
-      return verifyCreateOrm ($contact = Contact::create (array_intersect_key ($posts, Contact::table ()->columns)));
-    });
-
-    if (!$create) return $this->output_error_json ('新增失敗！');
-    return $this->output_json ($contact->to_array ());
+    if (!Contact::transaction (function () use (&$contact, $posts) { return verifyCreateOrm ($contact = Contact::create (array_intersect_key ($posts, Contact::table ()->columns))); })) return $this->output_error_json ('新增失敗！');
+    return $this->output_json ($contact->columns_val ());
   }
 
-  private function _validation (&$posts) {
-    $keys = array ('name', 'email', 'message', 'is_readed');
-
-    $new_posts = array (); foreach ($posts as $key => $value) if (in_array ($key, $keys)) $new_posts[$key] = $value;
-    $posts = $new_posts;
-
-    if (isset ($posts['name']) && !($posts['name'] = trim ($posts['name']))) return '稱呼 格式錯誤！';
-    if (isset ($posts['email']) && !($posts['email'] = trim ($posts['email']))) return 'E-Mail 格式錯誤！';
-    if (isset ($posts['message']) && !($posts['message'] = trim ($posts['message']))) return '留言內容 格式錯誤！';
-
-    if (isset ($posts['is_readed']) && !(is_numeric ($posts['is_readed'] = trim ($posts['is_readed'])) && in_array ($posts['is_readed'], array_keys (Contact::$readNames)))) return '已讀格式錯誤！';
-    return '';
-  }
-  private function _validation_must (&$posts) {
-    if (!isset ($posts['name'])) return '沒有填寫 稱呼！';
+  private function _validation_create (&$posts) {
     if (!isset ($posts['email'])) return '沒有填寫 E-Mail！';
     if (!isset ($posts['message'])) return '沒有填寫 留言內容！';
+
+    if (!(is_string ($posts['email']) && ($posts['email'] = trim ($posts['email'])))) return 'E-Mail 格式錯誤！';
+    if (!(is_string ($posts['message']) && ($posts['message'] = trim ($posts['message'])))) return '留言內容 格式錯誤！';
+    
+    $posts['name'] = isset ($posts['name']) && is_string ($posts['name']) && ($posts['name'] = trim ($posts['name'])) ? $posts['name'] : '';
     return '';
   }
 }

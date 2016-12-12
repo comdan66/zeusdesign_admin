@@ -6,8 +6,6 @@
 
 
 $(function () {
-
-
   var max = $('#year_calendar > div > div > div[data-cnt]').map (function () { return $(this).data ('cnt'); }).toArray ().max () / 5;
   $('#year_calendar > div > div > div[data-cnt!="0"]').each (function () {
     var v = Math.floor ($(this).data ('cnt') / max);
@@ -172,14 +170,4 @@ $(function () {
       }).toArray ());
     }
   });
-  // $('h1').click (function () {
-  //   window.funs.schedulePrompt (function ($input, $textarea, $radios) {
-  //     var title = $input.val ().trim ();
-  //     var description = $textarea.val ().trim ();
-  //     var prompt = $(this).get (0);
-  //     var $radio = $radios.find ('input:checked');
-
-  //   }, 'asd', 1, 2, 1);
-  // });
-
 });

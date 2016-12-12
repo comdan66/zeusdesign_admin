@@ -25,10 +25,12 @@ class Schedule_tags extends Api_controller {
       'order' => 'id DESC',
       'conditions' => array ('user_id = ?', $this->user->id)));
 
-    $tags = array_map (function ($tag) {
-      return $tag->to_array ();
-    }, $tags);
-
-    return $this->output_json ($tags);
+    return $this->output_json (array_map (function ($tag) {
+      return array (
+          'id' => $tag->id,
+          'name' => $tag->name,
+          'color' => $tag->color (),
+        );
+    }, $tags));
   }
 }

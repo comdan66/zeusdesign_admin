@@ -45,7 +45,7 @@ class WorkTag extends OaModel {
         return $tag->columns_val ();
       }, WorkTag::find ('all', array ('conditions' => array ('work_tag_id = ?', $this->id))))) : $var;
   }
-  public function to_array (array $opt = array ()) {
+  public function to_api (array $opt = array ()) {
     return array (
         'id' => $this->id,
         'name' => $this->name,
@@ -66,8 +66,5 @@ class WorkTag extends OaModel {
           return false;
 
     return $this->delete ();
-  }
-  public function site_show_page_last_uri () {
-    return $this->id . '-' . oa_url_encode ($this->name);
   }
 }

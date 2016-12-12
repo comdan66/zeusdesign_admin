@@ -37,7 +37,7 @@ class ArticleTag extends OaModel {
         return $mapping->columns_val ();
       }, ArticleTagMapping::find ('all', array ('conditions' => array ('article_tag_id = ?', $this->id))))) : $var;
   }
-  public function to_array (array $opt = array ()) {
+  public function to_api (array $opt = array ()) {
     return array (
         'id' => $this->id,
         'name' => $this->name,
@@ -50,8 +50,5 @@ class ArticleTag extends OaModel {
           return false;
 
     return $this->delete ();
-  }
-  public function site_show_page_last_uri () {
-    return oa_url_encode ($this->name);
   }
 }

@@ -25,13 +25,14 @@ class TaskUserMapping extends OaModel {
   public function destroy () {
     return $this->delete ();
   }
-  public function columns_val () {
-    return array (
+  public function columns_val ($has = false) {
+    $var = array (
       'id'         => $this->id,
       'user_id'    => $this->user_id,
       'task_id'    => $this->task_id,
       'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
+    return $has ? array ('this' => $var) : $var;
   }
 }

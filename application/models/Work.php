@@ -60,12 +60,12 @@ class Work extends OaModel {
         return $block->columns_val (true);
       }, WorkBlock::find ('all', array ('conditions' => array ('work_id = ?', $this->id))))) : $var;
   }
-  public function to_array (array $opt = array ()) {
+  public function to_api (array $opt = array ()) {
     return array (
       'id' => $this->id,
-      'user' => $this->user->to_array (),
+      'user' => $this->user->to_api (),
       'tags' => array_map (function ($tag) {
-        return $tag->to_array ();
+        return $tag->to_api ();
       }, WorkTag::find ('all', array ('conditions' => array ('id IN (?)', ($tag_ids = column_array ($this->mappings, 'work_tag_id')) ? $tag_ids : array (0))))),
       'title' => $this->title,
       'cover' => array (
@@ -73,11 +73,11 @@ class Work extends OaModel {
           'c1200' => $this->cover->url ('1200x630c'),
         ),
       'images' => array_map (function ($image) {
-        return $image->to_array ();
+        return $image->to_api ();
       }, $this->images),
       'content' => $this->content,
       'blocks' => array_map (function ($block) {
-        return $block->to_array ();
+        return $block->to_api ();
       }, $this->blocks),
       'pv' => $this->pv,
       'is_enabled' => $this->is_enabled,
@@ -125,9 +125,5 @@ class Work extends OaModel {
               );
           }, $block->items)
         );
-    }, $this->blocks);
-  }
-  public function site_show_page_last_uri () {
-    return $this->id . '-' . oa_url_encode ($this->title);
-  }
+    }, 
 }

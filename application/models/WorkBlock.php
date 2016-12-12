@@ -37,12 +37,12 @@ class WorkBlock extends OaModel {
         return $block->columns_val ();
       }, WorkBlockItem::find ('all', array ('conditions' => array ('work_block_id = ?', $this->id))))) : $var;
   }
-  public function to_array (array $opt = array ()) {
+  public function to_api (array $opt = array ()) {
     return array (
       'id' => $this->id,
       'title' => $this->title,
       'items' => array_map (function ($item) {
-        return $item->to_array ();
+        return $item->to_api ();
       }, $this->items),
     );
   }

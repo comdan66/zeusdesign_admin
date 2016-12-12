@@ -13,19 +13,19 @@ class DeployTool {
     $api = FCPATH . 'api' . DIRECTORY_SEPARATOR;
     @directory_delete ($api, false);
 
-    $banners = array_map (function ($banner) { return $banner->to_array (); }, Banner::find ('all', array ('order' => 'sort DESC', 'conditions' => array ('is_enabled = ?', Banner::ENABLE_YES))));
+    $banners = array_map (function ($banner) { return $banner->to_api (); }, Banner::find ('all', array ('order' => 'sort DESC', 'conditions' => array ('is_enabled = ?', Banner::ENABLE_YES))));
     write_file ($api . 'banners.json', json_encode ($banners));
     @chmod ($api . 'banners.json', 0777);
 
-    $promos = array_map (function ($promo) { return $promo->to_array (); }, Promo::find ('all', array ('order' => 'sort DESC', 'conditions' => array ('is_enabled = ?', Promo::ENABLE_YES))));
+    $promos = array_map (function ($promo) { return $promo->to_api (); }, Promo::find ('all', array ('order' => 'sort DESC', 'conditions' => array ('is_enabled = ?', Promo::ENABLE_YES))));
     write_file ($api . 'promos.json', json_encode ($promos));
     @chmod ($api . 'promos.json', 0777);
 
-    $articles = array_map (function ($article) { return $article->to_array (); }, Article::find ('all', array ('include' => array ('user', 'tags', 'sources'), 'order' => 'id DESC', 'conditions' => $is_test ? array () : array ('is_enabled = ?', Article::ENABLE_YES))));
+    $articles = array_map (function ($article) { return $article->to_api (); }, Article::find ('all', array ('include' => array ('user', 'tags', 'sources'), 'order' => 'id DESC', 'conditions' => $is_test ? array () : array ('is_enabled = ?', Article::ENABLE_YES))));
     write_file ($api . 'articles.json', json_encode ($articles));
     @chmod ($api . 'articles.json', 0777);
 
-    $works = array_map (function ($work) { return $work->to_array (); }, Work::find ('all', array ('include' => array ('user', 'images', 'tags', 'blocks'), 'order' => 'id DESC', 'conditions' => $is_test ? array () : array ('is_enabled = ?', Work::ENABLE_YES))));
+    $works = array_map (function ($work) { return $work->to_api (); }, Work::find ('all', array ('include' => array ('user', 'images', 'tags', 'blocks'), 'order' => 'id DESC', 'conditions' => $is_test ? array () : array ('is_enabled = ?', Work::ENABLE_YES))));
     write_file ($api . 'works.json', json_encode ($works));
     @chmod ($api . 'works.json', 0777);
 

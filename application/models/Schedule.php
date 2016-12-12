@@ -50,18 +50,11 @@ class Schedule extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'id' => $this->id,
-        'user' => $this->user->to_array (),
-        'title' => $this->title,
-        'description' => $this->description,
-        'finish' => $this->finish,
-        'year' => $this->year,
-        'month' => $this->month,
-        'day' => $this->day,
-        'sort' => $this->sort,
-        'tag' => $this->tag ? $this->tag->to_array () : array ()
+  public function tag () {
+    return $this->tag ? array (
+        'id' => $this->tag->id, 'color' => $this->tag->color (),
+      ) : array (
+        'id' => 0, 'color' => ScheduleTag::DEFAULT_COLOR,
       );
   }
   public function mini_title ($length = 20) {

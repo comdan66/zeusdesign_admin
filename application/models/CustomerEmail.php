@@ -33,12 +33,6 @@ class CustomerEmail extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'id' => $this->id,
-        'email' => $this->email,
-      );
-  }
   public function destroy () {
     return $this->delete ();
   }

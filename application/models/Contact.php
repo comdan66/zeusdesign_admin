@@ -45,16 +45,6 @@ class Contact extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'id' => $this->id,
-        'name' => $this->name,
-        'email' => $this->email,
-        'message' => $this->message,
-        'ip' => $this->ip,
-        'is_readed' => $this->is_readed,
-      );
-  }
   public function mini_message ($length = 100) {
     if (!isset ($this->message)) return '';
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->message), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->message);

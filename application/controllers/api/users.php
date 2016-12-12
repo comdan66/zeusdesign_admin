@@ -16,7 +16,9 @@ class Users extends Api_controller {
     if (!(($posts = OAInput::post ()) && isset ($posts['id']) && $posts['id'] && ($user = User::find ('one', array ('conditions' => array ('id = ?', $posts['id']))))))
       return $this->output_error_json ('錯誤，沒有該位使用者！');
 
-    return $this->output_json ($user->to_array ());
+    return $this->output_json (array (
+        'token' => $this->token,
+      ));
   }
   public function notification () {
     if (!(($posts = OAInput::post ()) && isset ($posts['id']) && $posts['id'] && isset ($posts['token']) && $posts['token'] && ($user = User::find ('one', array ('select' => 'id, device_token', 'conditions' => array ('id = ?', $posts['id']))))))

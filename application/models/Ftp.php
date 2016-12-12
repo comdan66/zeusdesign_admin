@@ -39,23 +39,6 @@ class Ftp extends OaModel {
     );
     return $has ? array ('this' => $var) : $var;
   }
-  public function to_array (array $opt = array ()) {
-    return array (
-        'id' => $this->id,
-        'name' => $this->name,
-        'url' => $this->url,
-        
-        'ftp_url' => $this->ftp_url,
-        'ftp_account' => $this->ftp_account,
-        'ftp_password' => $this->ftp_password,
-        
-        'admin_url' => $this->admin_url,
-        'admin_account' => $this->admin_account,
-        'admin_password' => $this->admin_password,
-        
-        'memo' => $this->memo,
-      );
-  }
   public function destroy () {
     return $this->delete ();
   }
