@@ -33,6 +33,7 @@ class My_weights extends Admin_controller {
 
   private function _search_columns () {
     return array ( 
+        array ('key' => 'date_at',   'title' => '日期', 'sql' => 'date_at = ?'), 
       );
   }
   public function index ($offset = 0) {
