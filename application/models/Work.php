@@ -125,5 +125,6 @@ class Work extends OaModel {
               );
           }, $block->items)
         );
-    }, 
+    }, $this->blocks);
+  }
 }
