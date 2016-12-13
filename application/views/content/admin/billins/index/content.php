@@ -68,7 +68,7 @@
                 </label>
               </td>
               <td class='center'>
-                <label class='switch' data-column='is_pay' data-url='<?php echo base_url ($uri_1, 'is_pay', $obj->id);?>'>
+                <label class='switch blue' data-column='is_pay' data-url='<?php echo base_url ($uri_1, 'is_pay', $obj->id);?>'>
                   <input type='checkbox' name='is_pay'<?php echo $obj->is_pay == Billin::IS_PAY ? ' checked' : '';?> />
                   <span></span>
                 </label>
