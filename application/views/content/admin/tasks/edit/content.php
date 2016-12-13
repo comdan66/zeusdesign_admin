@@ -20,7 +20,7 @@
       </div>
     </div>
 
-<?php if ($users = User::all ()) { ?>
+<?php if ($users = User::find ('all', array ('conditions' => array ('id != ?', User::current ()->id)))) { ?>
         <div class='row n2'>
           <label>* 指派會員</label>
           <div>
