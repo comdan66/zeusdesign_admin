@@ -20,7 +20,7 @@ class Invoices extends Admin_controller {
     $this->uri_1 = 'admin/invoices';
     $this->icon = 'icon-ti';
 
-    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy', 'is_finished')))
+    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy', 'is_finished', 'is_pay')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Invoice::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array ('_flash_danger' => '找不到該筆資料。'));
 
@@ -167,8 +167,43 @@ class Invoices extends Admin_controller {
 
     return $this->output_json ($obj->is_finished == Invoice::IS_FINISHED);
   }
+  public function is_pay () {
+    $obj = $this->obj;
+
+    if (!$this->has_post ())
+      return $this->output_error_json ('非 POST 方法，錯誤的頁面請求。');
+
+    $posts = OAInput::post ();
+    $backup = $obj->columns_val (true);
+    
+    $validation = function (&$posts) {
+      if (!isset ($posts['is_pay'])) return '沒有選擇 是否入帳！';
+      if (!(is_numeric ($posts['is_pay'] = trim ($posts['is_pay'])) && in_array ($posts['is_pay'], array_keys (Invoice::$payNames)))) return '是否入帳 格式錯誤！';
+      return '';
+    };
+
+    if ($msg = $validation ($posts))
+      return $this->output_error_json ($msg);
+
+    if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
+      foreach ($columns as $column => $value)
+        $obj->$column = $value;
+
+    if (!Invoice::transaction (function () use ($obj, $posts) { return $obj->save (); }))
+      return $this->output_error_json ('更新失敗！');
+
+    UserLog::create (array (
+      'user_id' => User::current ()->id,
+      'icon' => $this->icon,
+      'content' => '將一項請款標記成 ”' . Invoice::$payNames[$obj->is_pay] . '“。',
+      'desc' => '將請款 “' . $obj->name . '” 標記成 「' . Invoice::$payNames[$obj->is_pay] . '」。',
+      'backup'  => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
+
+    return $this->output_json ($obj->is_pay == Invoice::IS_PAY);
+  }
   private function _validation_create (&$posts) {
     if (!isset ($posts['is_finished'])) return '沒有選擇 是否請款！';
+    if (!isset ($posts['is_pay'])) return '沒有選擇 是否入帳！';
     if (!isset ($posts['user_id'])) return '沒有選擇 負責人！';
     if (!isset ($posts['customer_id'])) return '沒有選擇 聯絡人！';
     if (!isset ($posts['invoice_tag_id'])) return '沒有選擇 分類！';
@@ -176,6 +211,7 @@ class Invoices extends Admin_controller {
     if (!isset ($posts['all_money'])) return '沒有填寫 總金額！';
 
     if (!(is_numeric ($posts['is_finished'] = trim ($posts['is_finished'])) && in_array ($posts['is_finished'], array_keys (Invoice::$finishNames)))) return '是否請款 格式錯誤！';
+    if (!(is_numeric ($posts['is_pay'] = trim ($posts['is_pay'])) && in_array ($posts['is_pay'], array_keys (Invoice::$payNames)))) return '是否入帳 格式錯誤！';
     if (!(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['user_id']))))) return '負責人 不存在！';
     if (!(is_numeric ($posts['customer_id'] = trim ($posts['customer_id'])) && Customer::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['customer_id']))))) return '聯絡人 不存在！';
     if (!(is_numeric ($posts['invoice_tag_id'] = trim ($posts['invoice_tag_id'])) && InvoiceTag::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['invoice_tag_id']))))) return '請款分類 不存在！';

@@ -27,6 +27,14 @@ class Invoice extends OaModel {
     self::IS_FINISHED => '已請款',
   );
 
+  const NO_PAY = 0;
+  const IS_PAY = 1;
+
+  static $payNames = array(
+    self::NO_PAY => '尚未入帳',
+    self::IS_PAY => '已經入帳',
+  );
+
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }

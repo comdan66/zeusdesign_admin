@@ -11,7 +11,16 @@
       <label>* 是否請款</label>
       <div>
         <label class='switch'>
-          <input type='checkbox' name='is_finished'<?php echo (isset ($posts['is_finished']) ? $posts['is_finished'] : $obj->is_finished) ? ' checked' : '';?> />
+          <input type='checkbox' name='is_finished'<?php echo (isset ($posts['is_finished']) ? $posts['is_finished'] : $obj->is_finished) == Invoice::IS_FINISHED ? ' checked' : '';?> />
+          <span></span>
+        </label>
+      </div>
+    </div>
+    <div class='row n2'>
+      <label>* 是否入帳</label>
+      <div>
+        <label class='switch'>
+          <input type='checkbox' name='is_pay'<?php echo (isset ($posts['is_pay']) ? $posts['is_pay'] : $obj->is_pay) == Invoice::IS_PAY ? ' checked' : '';?> />
           <span></span>
         </label>
       </div>

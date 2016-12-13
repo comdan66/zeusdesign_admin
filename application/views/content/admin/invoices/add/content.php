@@ -15,6 +15,15 @@
         </label>
       </div>
     </div>
+    <div class='row n2'>
+      <label>* 是否入帳</label>
+      <div>
+        <label class='switch'>
+          <input type='checkbox' name='is_pay'<?php echo isset ($posts['is_pay']) && ($posts['is_pay'] == Invoice::IS_PAY) ? ' checked' : '';?> />
+          <span></span>
+        </label>
+      </div>
+    </div>
 
     <div class='row n2'>
       <label>* 負責人</label>

@@ -55,7 +55,8 @@
     <table class='table'>
       <thead>
         <tr>
-          <th width='90' class='center'>是否請款</th>
+          <th width='90' class='center'>已請款</th>
+          <th width='90' class='center'>已入帳</th>
           <th width='120'>負責人</th>
           <th width='120'>聯絡人</th>
           <th width='150'>聯絡電話</th>
@@ -74,6 +75,12 @@
                   <span></span>
                 </label>
               </td>
+              <td class='center'>
+                <label class='switch' data-column='is_pay' data-url='<?php echo base_url ($uri_1, 'is_pay', $obj->id);?>'>
+                  <input type='checkbox' name='is_pay'<?php echo $obj->is_pay == Invoice::IS_PAY ? ' checked' : '';?> />
+                  <span></span>
+                </label>
+              </td>
               <td><?php echo $obj->user->name;?></td>
               <td><?php echo $obj->customer ? $obj->customer->name . ($obj->customer->company ? '(' . $obj->customer->company->name . ')' : '') : '';?></td>
               <td><?php echo $obj->customer && $obj->customer->company ? $obj->customer->company->telephone . (($e = trim ($obj->customer->extension, '#')) ? ' #' . $e : '') : '';?></td>
@@ -88,7 +95,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='7' class='no_data'>沒有任何資料。</td>
+            <td colspan='8' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>
