@@ -206,7 +206,8 @@ class Invoices extends Admin_controller {
 
     $this->load->library ('OAExcel');
     $infos = array (array ('title' => '專案名稱', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->name'),
-                    array ('title' => '聯絡人',  'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->customer && $obj->customer->company ? $obj->customer->company->telephone . (($e = trim ($obj->customer->extension, "#")) ? " #" . $e : "") : ""'),
+                    array ('title' => '聯絡人',  'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->customer && $obj->customer->company ? $obj->customer->name : ""'),
+                    array ('title' => '聯絡人電話',  'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,          'exp' => '$obj->customer && $obj->customer->company ? $obj->customer->company->telephone . (($e = trim ($obj->customer->extension, "#")) ? " #" . $e : "") : ""'),
                     array ('title' => '數量',   'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,        'exp' => '$obj->quantity ? $obj->quantity : "-"'),
                     array ('title' => '單價',   'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->single_money ? $obj->single_money : "-"'),
                     array ('title' => '總金額',  'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,        'exp' => '$obj->all_money'),
