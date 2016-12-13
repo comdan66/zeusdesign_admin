@@ -31,8 +31,8 @@ class Invoices extends Admin_controller {
 
   private function _search_columns () {
     return array ( 
-        array ('key' => 'name', 'title' => '專案名稱', 'sql' => 'name LIKE ?'), 
         array ('key' => 'customer_id', 'title' => '聯絡人', 'sql' => 'customer_id = ?', 'select' => array_map (function ($customer) { return array ('value' => $customer->id, 'text' => $customer->name, 'group' => $customer->company ? $customer->company->name : '');}, Customer::find ('all', array ('select' => 'id, name, customer_company_id', 'order' => 'id ASC')))),
+        array ('key' => 'is_pay', 'title' => '是否請款', 'sql' => 'is_pay = ?', 'select' => array_map (function ($key) { return array ('value' => $key, 'text' => Invoice::$payNames[$key]);}, array_keys (Invoice::$payNames))),
         array ('key' => 'is_finished', 'title' => '是否請款', 'sql' => 'is_finished = ?', 'select' => array_map (function ($key) { return array ('value' => $key, 'text' => Invoice::$finishNames[$key]);}, array_keys (Invoice::$finishNames))),
         array ('key' => 'user_id', 'title' => '作者', 'sql' => 'user_id = ?', 'select' => array_map (function ($user) { return array ('value' => $user->id, 'text' => $user->name);}, User::all (array ('select' => 'id, name')))),
       );
