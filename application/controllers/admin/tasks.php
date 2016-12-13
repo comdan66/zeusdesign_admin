@@ -70,16 +70,14 @@ class Tasks extends Admin_controller {
     if (!Task::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Task::create (array_intersect_key ($posts, Task::table ()->columns))); }))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
     
-    if (!Schedule::transaction (function () use ($obj) { return verifyCreateOrm (Schedule::create (array_intersect_key (array_merge (Schedule::bind_column_from_task ($obj), array ('user_id' => $obj->user_id, 'schedule_tag_id' => 0, 'task_id' => $obj->id, 'sort' => 0)), Schedule::table ()->columns))); }))
-      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
-
-    if ($posts['user_ids'])
-      foreach ($posts['user_ids'] as $user_id)
-        TaskUserMapping::transaction (function () use ($user_id, $obj) {
-          $create1 = verifyCreateOrm (TaskUserMapping::create (array_intersect_key (array ('user_id' => $user_id, 'task_id' => $obj->id), TaskUserMapping::table ()->columns)));
-          $create2 = verifyCreateOrm (Schedule::create (array_intersect_key (array_merge (Schedule::bind_column_from_task ($obj), array ('user_id' => $user_id, 'schedule_tag_id' => 0, 'task_id' => $obj->id, 'sort' => 0)), Schedule::table ()->columns)));
-          return $create1 && $create2;
-        });
+    $posts['user_ids'] = array_unique (array_merge ($posts['user_ids'], array ('id' => $obj->user_id)));
+  
+    foreach ($posts['user_ids'] as $user_id)
+      TaskUserMapping::transaction (function () use ($user_id, $obj) {
+        $create1 = verifyCreateOrm (TaskUserMapping::create (array_intersect_key (array ('user_id' => $user_id, 'task_id' => $obj->id), TaskUserMapping::table ()->columns)));
+        $create2 = verifyCreateOrm (Schedule::create (array_intersect_key (array_merge (Schedule::bind_column_from_task ($obj), array ('user_id' => $user_id, 'schedule_tag_id' => 0, 'task_id' => $obj->id, 'sort' => 0)), Schedule::table ()->columns)));
+        return $create1 && $create2;
+      });
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -120,6 +118,8 @@ class Tasks extends Admin_controller {
       return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '更新失敗！', 'posts' => $posts));
 
     $ori_ids = column_array ($obj->user_mappings, 'user_id');
+
+    $posts['user_ids'] = array_unique (array_merge ($posts['user_ids'], array ('id' => $obj->user_id)));
 
     if (($del_ids = array_diff ($ori_ids, $posts['user_ids'])) && ($mappings = TaskUserMapping::find ('all', array ('select' => 'id, user_id, task_id', 'conditions' => array ('task_id = ? AND user_id IN (?)', $obj->id, $del_ids)))))
       foreach ($mappings as $mapping)
