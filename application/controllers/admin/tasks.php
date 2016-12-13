@@ -69,6 +69,9 @@ class Tasks extends Admin_controller {
 
     if (!Task::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Task::create (array_intersect_key ($posts, Task::table ()->columns))); }))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
+    
+    if (!Schedule::transaction (function () use ($obj) { return verifyCreateOrm (Schedule::create (array_intersect_key (array_merge (Schedule::bind_column_from_task ($obj), array ('user_id' => $obj->user_id, 'schedule_tag_id' => 0, 'task_id' => $obj->id, 'sort' => 0)), Schedule::table ()->columns))); }))
+      return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
 
     if ($posts['user_ids'])
       foreach ($posts['user_ids'] as $user_id)
