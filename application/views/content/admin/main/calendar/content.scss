@@ -153,6 +153,12 @@
       td, th {
         &:first-child, &:last-child {
           background-color: rgba(250, 245, 245, 1.00);
+
+          &.not {
+            background-color: rgba(255, 255, 255, 1.00);
+            background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(250, 245, 245, 1.00)), color-stop(.25, transparent),color-stop(.5, transparent), color-stop(.5, rgba(250, 245, 245, 1.00)),color-stop(.75, rgba(250, 245, 245, 1.00)), color-stop(.75, transparent),to(transparent));
+            -webkit-background-size: 20px 20px;
+          }
           &, span {
             color: rgba(155, 21, 11, 1.00);
           }
@@ -207,9 +213,13 @@
               background-color: rgba(245, 246, 247, 1.00);
             }
             &.not {
-              > * {
-                @include opacity(.3);
-              }
+              background-color: rgba(255, 255, 255, 1.00);
+              background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(0, 0, 0, .050)), color-stop(.25, transparent),color-stop(.5, transparent), color-stop(.5, rgba(0, 0, 0, .050)),color-stop(.75, rgba(0, 0, 0, .050)), color-stop(.75, transparent),to(transparent));
+              -webkit-background-size: 20px 20px;
+
+              // > * {
+              //   @include opacity(.3);
+              // }
               // @include opacity(.3);
               // background-color: rgba(0, 0, 255, 0.2);
             }
