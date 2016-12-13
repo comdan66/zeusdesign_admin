@@ -5,6 +5,16 @@
  */
 
 $(function () {
+  window.vars.myId = $('#my_id').val ();
+  window.$users = $('#users');
+  window.$usersFilter = window.$users.find ('input[type="checkbox"]');
+  window.$usersFilter.click (function () {
+    loadMonthSchedules ($('.calendar'));
+  });
+  function selectUserIds () {
+    return window.$usersFilter.filter (':checked').map (function () { return $(this).val (); }).toArray ();
+  }
+
   function loadMonthSchedules ($obj) {
     var vars = $obj.get (0).vars;
     var $table = vars.$months.find ('table');
@@ -16,6 +26,7 @@ $(function () {
     $.ajax ({
       url: window.vars.apis.schedules.getList (),
       data: {
+        user_ids: selectUserIds (),
         range: {
           year: $month.data ('y'),
           month: $month.data ('m'),
@@ -29,7 +40,11 @@ $(function () {
     .done (function (result) {
       result.forEach (function (t, i) {
         $month.find ('td[data-y="' + t.year + '"][data-m="' + t.month + '"][data-d="' + t.day + '"]').append (
-          $('<div />').data ('id', t.id).css ({'background-color': t.tag.color ? t.tag.color : '#000000'}).addClass (t.finish ? 'finished' : null).text (t.title));
+          $('<div />').data ('id', t.id).css ({'background-color': t.tag.color}).addClass (t.finish ? 'finished' : null).addClass (t.task.id !== 0 ? 'task' : null).addClass (t.task.id === 0 && t.user.id == window.vars.myId ? 'edited' : null).append (
+              $('<img />').attr ('src', t.user.avatar)
+            ).append (
+              $('<span />').text (t.title)
+            ));
       });
     })
     .fail (function (result) { window.funs.ajaxError (result); })
@@ -96,6 +111,7 @@ $(function () {
           $header.append (
             $('<button />').attr ('type', 'button').addClass ('close_day').click (function () {
               $obj.removeClass ('day');
+              window.$users.removeClass ('hide');
               $header.find ('h2').text ('行事曆');
               $header.find ('button').remove ();
               vars.$daySchedule.empty ();
@@ -104,6 +120,7 @@ $(function () {
             $('<button />').attr ('type', 'button').addClass ('add_schedule').data ('y', vars.y).data ('m', vars.m).data ('d', vars.d).click (createSchedule)).find ('h2').text (vars.y + '/' + vars.m + '/' + vars.d);
           
           $obj.addClass ('day');
+          window.$users.addClass ('hide');
 
           loadDaySchedules ({
               year: $obj.get (0).vars.y,
@@ -161,7 +178,11 @@ $(function () {
       .done (function (result) {
         prompt.result ('新增完成！');
         prompt.okCallback (function () {
-          initSchedule (result).prependTo ($that.parents ('.panel').find ('.daySchedule'));
+          var $tmp = $that.parents ('.panel').find ('.daySchedule');
+          
+          // if ($tmp.find ('.not_task').length) initSchedule (result).insertBefore ($tmp.find ('.not_task').first ());
+          // else 
+          initSchedule (result).appendTo ($tmp);
           prompt.close ();
         });
       })
@@ -233,9 +254,10 @@ $(function () {
       $('<input />').attr ('type', 'checkbox').prop ('checked', t.finish ? true : false)).append (
       $('<span />'));
     
-    var $obj = $('<div />').data ('id', t.id).data ('tag_id', t.tag.id ? t.tag.id : 0).css ({'border-top': '5px solid ' + (t.tag.color ? t.tag.color : '#000000')}).addClass ('schedule' + (t.finish ? ' finished' : '')).append (
+    var $obj = $('<div />').data ('id', t.id).data ('tag_id', t.tag.id ? t.tag.id : 0).css ({'border-top': '5px solid ' + (t.tag.color ? t.tag.color : '#000000')}).addClass ('schedule' + (t.finish ? ' finished' : '')).addClass (t.task.id !== 0 ? 'task' : 'not_task').append (
       $('<div />').append (
         $('<div />').addClass ('controls').append (
+          $('<a />').addClass ('view').attr ('href', t.task.href)).append (
           $('<a />').addClass ('move')).append (
           $('<a />').addClass ('finish').append (
             $checkbox)).append (
@@ -298,6 +320,7 @@ $(function () {
   });
 
   $('.daySchedule').sortable ({
+    items: 'div.not_task',
     handle: '.move',
     placeholder: 'schedule_highlight',
     update: function () {
@@ -308,14 +331,14 @@ $(function () {
   });
 
   $('.calendar td').sortable ({
-    items: 'div',
+    items: 'div.edited',
     connectWith: 'td',
     update: function (e, ui) {
       var y = $(this).data ('y');
       var m = $(this).data ('m');
       var d = $(this).data ('d');
       
-      updateSort ($(this).find ('div').map (function (i) {
+      updateSort ($(this).find ('div.edited').map (function (i) {
           return {id: $(this).data ('id'), sort: i, year: y, month: m, day: d};
         }).toArray ());
     }

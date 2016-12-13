@@ -271,7 +271,7 @@ $(function () {
     window.history.back ();
   });
   $('form.form').submit (function () {
-    $(this).find ('input[type="checkbox"]:not([name="tag_ids[]"])').each (function () {
+    $(this).find ('.switch input[type="checkbox"]').each (function () {
       $(this).val ($(this).prop ('checked') ? 1 : 0).prop ('checked', true).parent ().addClass ('loading');
     });
   });

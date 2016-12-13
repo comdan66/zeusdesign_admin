@@ -211,6 +211,10 @@ html {
 .icon-tu:before {
   content: "\e90a";
 }
+.icon-shield:before {
+  content: "\e91b";
+}
+
 
 
 
@@ -805,7 +809,7 @@ $changeWidth: 768px;
       }
     }
   }
-  > header {
+  > header:not(.customize) {
     margin: 25px 0;
     margin-bottom: 0;
     display: inline-block;

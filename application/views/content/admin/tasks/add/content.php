@@ -7,7 +7,7 @@
   <form class='form full' method='post' action='<?php echo base_url ($uri_1);?>' enctype='multipart/form-data'>
     
     <div class='row n2'>
-      <label>新增者</label>
+      <label>* 新增者</label>
       <div>
         <select name='user_id'>
     <?php if ($users = User::all (array ('select' => 'id, name'))) {
@@ -23,37 +23,36 @@
         <div class='row n2'>
           <label>* 指派會員</label>
           <div>
-      <?php $tag_ids = isset ($posts['tag_ids']) ? $posts['tag_ids'] : array ();
-            foreach ($users as $user) { ?>
-              <label class='checkbox tag'><input type='checkbox' name='tag_ids[]' value='<?php echo $user->id;?>'<?php echo $tag_ids && in_array ($user->id, $tag_ids) ? ' checked' : '';?> /><span></span><?php echo $user->name;?></label>
+      <?php foreach ($users as $user) { ?>
+              <label class='checkbox tag'><input type='checkbox' name='user_ids[]' value='<?php echo $user->id;?>'<?php echo $user_ids && in_array ($user->id, $user_ids) ? ' checked' : '';?> /><span></span><?php echo $user->name;?></label>
       <?php } ?>
           </div>
         </div>
 <?php }?>
 
     <div class='row n2'>
-      <label>* 標題</label>
+      <label>* 任務標題</label>
       <div>
-        <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : '';?>' placeholder='請輸入標題..' maxlength='200' pattern='.{1,200}' required title='輸入標題!' autofocus />
+        <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : '';?>' placeholder='請輸入任務標題..' maxlength='200' pattern='.{1,200}' required title='輸入任務標題!' autofocus />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>* 日期</label>
+      <label>* 任務日期</label>
       <div>
-        <input type='date' name='date_at' value='<?php echo isset ($posts['date_at']) ? $posts['date_at'] : date ('Y-m-d');?>' placeholder='請輸入日期..' maxlength='200' pattern='.{1,200}' required title='輸入日期!' />
+        <input type='date' name='date_at' value='<?php echo isset ($posts['date_at']) ? $posts['date_at'] : date ('Y-m-d');?>' placeholder='請輸入任務日期..' maxlength='200' pattern='.{1,200}' required title='輸入任務日期!' />
       </div>
     </div>
 
     <div class='row n2'>
-      <label>* 內容</label>
+      <label>任務內容</label>
       <div>
         <textarea name='description' class='pure autosize cke' placeholder='請輸入內容..'><?php echo isset ($posts['description']) ? $posts['description'] : '';?></textarea>
       </div>
     </div>
 
     <div class='row n2'>
-      <label>是否完成</label>
+      <label>* 是否完成</label>
       <div>
         <label class='switch'>
           <input type='checkbox' name='finish'<?php echo isset ($posts['finish']) && ($posts['finish'] == Task::IS_FINISHED) ? ' checked' : '';?> />

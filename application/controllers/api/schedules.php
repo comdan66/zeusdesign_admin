@@ -20,33 +20,44 @@ class Schedules extends Api_controller {
     $this->icon = 'icon-ca';
 
     if (in_array ($this->uri->rsegments (2, 0), array ('finish', 'update', 'destroy')))
-      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Schedule::find ('one', array ('conditions' => array ('id = ? AND user_id = ?', $id, $this->user->id))))))
+      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Schedule::find ('one', array ('conditions' => array ('id = ? AND user_id = ? AND task_id = ?', $id, $this->user->id, 0))))))
         return $this->disable ($this->output_error_json ('Not found Data!'));
   }
   public function index () {
     $gets = OAInput::get ();
-    if (!(isset ($gets['type']) && $gets['type'] == 'all'))
+
+    if (isset ($gets['user_ids']) && is_array ($gets['user_ids']) && $gets['user_ids'])
+      OaModel::addConditions ($conditions, 'user_id IN (?)', array_merge ($gets['user_ids'], array ($this->user->id)));
+    else 
       OaModel::addConditions ($conditions, 'user_id = ?', $this->user->id);
+    
+    OaModel::addConditions ($conditions, '((user_id = ? && task_id != ?) || task_id = ?)', $this->user->id, 0, 0);
 
     if (isset ($gets['year']) && $gets['year'] && is_numeric ($gets['year'])) OaModel::addConditions ($conditions, 'year = ?', $gets['year']);
     if (isset ($gets['month']) && $gets['month'] && is_numeric ($gets['month'])) OaModel::addConditions ($conditions, 'month = ?', $gets['month']);
     if (isset ($gets['day']) && $gets['day'] && is_numeric ($gets['day'])) OaModel::addConditions ($conditions, 'day = ?', $gets['day']);
     if (isset ($gets['range']['year']) && isset ($gets['range']['month'])) OaModel::addConditions ($conditions, '((year = ? AND month = ?) OR (year = ? AND month = ?) OR (year = ? AND month = ?))', $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['year'] : $gets['range']['year'] : $gets['range']['year'] - 1, $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['month'] - 1 : 11 : 12, $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['year'] : $gets['range']['year'] : $gets['range']['year'], $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['month'] : 12 : 1, $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['year'] : $gets['range']['year'] + 1 : $gets['range']['year'], $gets['range']['month'] != 1 ? $gets['range']['month'] != 12 ? $gets['range']['month'] + 1 : 1 : 2);
 
-    $objs = Schedule::find ('all', array ('order' => 'sort ASC, id DESC', 'include' => array ('tag', 'user'), 'conditions' => $conditions));
+    $objs = Schedule::find ('all', array ('order' => 'sort ASC, task_id DESC, id DESC', 'include' => array ('tag', 'user'), 'conditions' => $conditions));
 
     return $this->output_json (array_map (function ($obj) {
         return array (
             'id' => $obj->id,
+            'task' => array (
+                'id' => $obj->task_id,
+                'href' => base_url ('admin', 'my-tasks', $obj->task_id, 'show')
+              ),
             'year' => $obj->year,
             'month' => $obj->month,
             'day' => $obj->day,
-            'finish' => $obj->finish,
+            'finish' => $obj->finish == Schedule::IS_FINISHED,
             'title' => $obj->title,
+            'description' => $obj->description,
             'tag' => $obj->tag (),
             'user' => array (
                 'id' => $obj->user->id,
                 'name' => $obj->user->name,
+                'avatar' => $obj->user->avatar (),
               )
           );
       }, $objs));
@@ -63,6 +74,7 @@ class Schedules extends Api_controller {
 
     $posts['task_id'] = 0;
     $posts['user_id'] = $this->user->id;
+    $posts['sort'] = ($tmp = Schedule::find ('one', array ('select' => 'sort', 'order' => 'sort DESC', 'conditions' => array ('year = ? AND month = ? AND day = ? AND user_id = ? AND task_id = ?', $posts['year'], $posts['month'], $posts['day'], User::current ()->id, 0)))) ? $tmp->sort + 1 : 0;
 
     if (!Schedule::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Schedule::create (array_intersect_key ($posts, Schedule::table ()->columns))); }))
       return $this->output_error_json ('新增失敗！');
@@ -78,7 +90,11 @@ class Schedules extends Api_controller {
     return $this->output_json (array (
         'id' => $obj->id,
         'title' => $obj->title,
-        'finish' => $obj->finish,
+        'task' => array (
+            'id' => $obj->task_id,
+            'href' => base_url ('admin', 'my-tasks', $obj->task_id, 'show')
+          ),
+        'finish' => $obj->finish == Schedule::IS_FINISHED,
         'description' => $obj->description,
         'tag' => $obj->tag ()
       ));

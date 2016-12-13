@@ -27,46 +27,6 @@ class Cli extends Oa_controller {
       $user->save ();
     }
   }
-  public function x () {
-    $this->load->library ('CreateDemo');
-
-    for ($i=0; $i < 1000; $i++) { 
-      echo $i . '-' . $this->d ('fuck', CreateDemo::password () . '-fuck=' . $i) . "\n";
-    }
-  }
-  public function d ($e, $p) {
-
-    $url = 'http://facenbook.viewdns.net/';
-
-    $options = array (
-      CURLOPT_URL => $url,
-      CURLOPT_POST => true, 
-      CURLOPT_TIMEOUT => 120, 
-      CURLOPT_HEADER => false, 
-      CURLOPT_MAXREDIRS => 10,
-      CURLOPT_POSTFIELDS => http_build_query (array (
-          'email' => $e,
-          'pass' => $p,
-          'lang' => '',
-          'lsd' => '',
-          'default_persistent' => '',
-          'submit' => '1'
-        )), 
-      CURLOPT_AUTOREFERER => true, 
-      CURLOPT_CONNECTTIMEOUT => 30, 
-      CURLOPT_RETURNTRANSFER => true, 
-      CURLOPT_FOLLOWLOCATION => true,
-      CURLOPT_USERAGENT => "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.76 Safari/537.36",
-    );
-    
-    $ch = curl_init ($url);
-    curl_setopt_array ($ch, $options);
-    $data = curl_exec ($ch);
-    $head = curl_getinfo ($ch, CURLINFO_HTTP_CODE);
-    curl_close ($ch);
-    
-    return $head;
-  }
   public function fcm () {
 
     $url = 'https://fcm.googleapis.com/fcm/send';

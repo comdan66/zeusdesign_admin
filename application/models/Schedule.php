@@ -69,4 +69,21 @@ class Schedule extends OaModel {
     if (!isset ($this->id)) return false;
     return $this->delete ();
   }
+  
+  public static function bind_column_from_task ($task) {
+    return array ('title' => $task->title, 'description' => $task->description, 'finish' => $task->finish, 'year' => $task->date_at->format ('Y'), 'month' => $task->date_at->format ('m'), 'day' => $task->date_at->format ('d'));
+  }
+  public static function update_from_task ($task) {
+    if ($schedules = Schedule::find ('all', array ('conditions' => array ('task_id = ?', $task->id))))
+      foreach ($schedules as $schedule) {
+
+        if ($columns = array_intersect_key (Schedule::bind_column_from_task ($task), $schedule->table ()->columns))
+          foreach ($columns as $column => $value)
+            $schedule->$column = $value;
+
+        if (!Schedule::transaction (function () use ($schedule) { return $schedule->save (); }))
+          return false;
+      }
+    return true;
+  }
 }

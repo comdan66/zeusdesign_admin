@@ -31,7 +31,7 @@ $(function () {
     .done (function (result) {
       result.forEach (function (t, i) {
         $month.find ('td[data-y="' + t.year + '"][data-m="' + t.month + '"][data-d="' + t.day + '"]').append (
-          $('<div />').data ('user_id', t.user.id).data ('id', t.id).css ({'background-color': t.tag.color ? t.tag.color : '#000000'}).addClass (t.finish ? 'finished' : null).addClass (t.user.id == window.vars.myId ? 'my' : 'notmy').append (
+          $('<div />').data ('user_id', t.user.id).data ('id', t.id).css ({'background-color': t.tag.color ? t.tag.color : '#000000'}).addClass (t.finish ? 'finished' : null).addClass (t.task_id !== 0 ? 'task' : null).addClass (t.task_id === 0 && t.user.id == window.vars.myId ? 'my' : 'notmy').append (
             $('<span />').text (t.title)).append (
             $('<span />').text (t.user.name)));
       });
@@ -108,7 +108,7 @@ $(function () {
             $('<button />').attr ('type', 'button').addClass ('add_schedule').data ('y', vars.y).data ('m', vars.m).data ('d', vars.d).click (createSchedule)).find ('h2').text (vars.y + '/' + vars.m + '/' + vars.d);
           
           $obj.addClass ('day');
-
+          
           loadDaySchedules ({
               year: $obj.get (0).vars.y,
               month: $obj.get (0).vars.m,
@@ -237,9 +237,10 @@ $(function () {
       $('<input />').attr ('type', 'checkbox').prop ('checked', t.finish ? true : false)).append (
       $('<span />'));
     
-    var $obj = $('<div />').data ('id', t.id).data ('tag_id', t.tag.id ? t.tag.id : 0).css ({'border-top': '5px solid ' + (t.tag.color ? t.tag.color : '#000000')}).addClass ('schedule' + (t.finish ? ' finished' : '')).append (
+    var $obj = $('<div />').data ('id', t.id).data ('tag_id', t.tag.id ? t.tag.id : 0).css ({'border-top': '5px solid ' + (t.tag.color ? t.tag.color : '#000000')}).addClass ('schedule' + (t.finish ? ' finished' : '')).addClass (t.task_id !== 0 ? 'task' : null).append (
       $('<div />').append (
         $('<div />').addClass ('controls').append (
+          $('<a />').addClass ('view').attr ('href', '')).append (
           $('<a />').addClass ('move')).append (
           $('<a />').addClass ('finish').append (
             $checkbox)).append (

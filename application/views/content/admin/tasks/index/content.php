@@ -58,7 +58,7 @@
               <td class='center'><?php echo $obj->id;?></td>
              
               <td class='center'>
-                <label class='switch' data-column='finish' data-url='<?php echo base_url ($uri_1, $obj->id);?>'>
+                <label class='switch' data-column='finish' data-url='<?php echo base_url ($uri_1, 'finish', $obj->id);?>'>
                   <input type='checkbox' name='finish'<?php echo $obj->finish == Task::IS_FINISHED ? ' checked' : '';?> />
                   <span></span>
                 </label>

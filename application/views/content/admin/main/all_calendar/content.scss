@@ -173,6 +173,7 @@
 
             @include transition(background-color .3s);
             @include overflow-docx3();
+            overflow: visible;
 
             @for $i from 6 through 9 {
               @media screen and (min-width: #{$i * 70px + 50px}) and (max-width: #{(($i + 1) * 70px + 50px) - 1px}) {
@@ -195,7 +196,7 @@
             &.today {
               // background-color: rgba(0, 0, 255, 0.2);
               // span {
-                border: 3px solid rgba(222, 91, 95, 1.00);
+                border: 3px solid rgba(66, 133, 244, 1.00);
               // }
             }
             > * {
@@ -235,6 +236,40 @@
               }
               &.notmy {
                 cursor: not-allowed;
+              }
+              &.task {
+                position: relative;
+                background-color: rgba(251, 188, 5, 1.00) !important;
+                border: 1px solid rgba(236, 83, 70, 1.00);
+                margin-top: 8px;
+
+                > span {
+                  &:first-child {
+                    font-weight: normal;
+                    color: rgba(72, 98, 163, 1.00);
+                    margin-left: 12px;
+                    width: calc(100% - (12px - 2px));
+                  }
+                }
+                &:before {
+                  @include admin-icomoon-font('icomoon') {
+                    position: absolute;
+                    content: "\e91b";
+                    top: -7px;
+                    left: -12px;
+                    display: inline-block;
+                    width: 25px;
+                    height: 25px;
+                    line-height: 25px + 1px;
+                    font-size: 17px;
+                    text-align: center;
+                    color: rgba(251, 188, 5, 1.00);
+                    @include border-radius(50%);
+                    background-color: rgba(236, 83, 70, 1.00);
+                    @include box-shadow(1px 0 1px rgba(0, 0, 0, .3));
+                    @include text-shadow(0 0 1px rgba(0, 0, 0, .1));
+                  };
+                }
               }
               &.my {
                 border: 3px solid rgba(222, 91, 95, 1.00);
@@ -309,8 +344,64 @@
       background-color: rgba(255, 255, 255, 1.00);
 
       border: 1px solid rgba(228, 228, 228, 1.00);
-      // border-top: 5px solid #000000;
       @include border-radius(2px);
+
+      &.task {
+        border-top-color: rgba(251, 188, 5, 1.00) !important;
+
+        > div {
+          .controls {
+            a {
+              &.view {
+                
+                &:after {
+                  @include admin-icomoon-font('icomoon') {
+                    position: absolute;
+                    content: "\e91b";
+                    top: -15px;
+                    left: -15px;
+                    display: inline-block;
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px + 1px;
+                    font-size: 23px;
+                    text-align: center;
+                    color: rgba(251, 188, 5, 1.00);
+                    @include border-radius(50%);
+                    background-color: rgba(236, 83, 70, 1.00);
+                    @include box-shadow(1px 0 1px rgba(0, 0, 0, .2));
+                    @include text-shadow(0 0 1px rgba(0, 0, 0, .1));
+                  };
+                }
+              }
+              &.move {
+                display: none;
+              }
+              &.finish {
+                display: none;
+              }
+              &.delete {
+                display: none;
+              }
+              &.edit {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+      &:not(.task) {
+        > div {
+          .controls {
+            a {
+              &.view {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+
       &.finished {
         .content {
           h3, > span {
@@ -332,7 +423,7 @@
             position: relative;
             display: inline-block;
             width: 50px;
-            height: calc(100% / 4);
+            height: 45px;
             min-height: 40px;
             text-align: center;
             cursor: pointer;
@@ -341,9 +432,8 @@
               font-size: 16px;
             }
             
-            + a {
-              border-top: 1px solid rgba(228, 228, 228, 1.00);
-            }
+            border-bottom: 1px solid rgba(228, 228, 228, 1.00);
+
             &:before, &:after {
               content: '';
               position: absolute;
@@ -398,12 +488,20 @@
                 }
               }
             }
+            &.view {
+              &:before {
+                @include admin-icomoon-font('icomoon') {
+                  content: "\e901";
+                }
+              }
+            }
           }
         }
+        
         .content {
           width: calc(100% - 50px);
           padding: 10px;
-          padding-left: 20px;
+          padding-left: 15px;
           // border-left: 1px solid rgba(228, 228, 228, 1.00);
 
           h3, > span {
@@ -414,10 +512,16 @@
           h3 {
             color: rgba(115, 135, 156, 1.00);
             margin-top: 5px;
+            border-bottom: 3px solid rgba(39, 40, 34, .10);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            padding-left: 10px;
           }
           > span {
             font-size: 14px;
             line-height: 1.7em;
+            padding-left: 10px;
+
             p {
               margin: 0;
 
