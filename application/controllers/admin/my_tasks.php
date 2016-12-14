@@ -124,7 +124,7 @@ class My_tasks extends Admin_controller {
 
     Schedule::update_from_task ($obj);
 
-    $content = Mail::renderContent ('mail/finish_task', array (
+    $content = Mail::renderContent ('mail/task_finish', array (
         'user' => $obj->user->name,
         'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務狀態：', 'value' => Task::$finishNames[$obj->finish]))
