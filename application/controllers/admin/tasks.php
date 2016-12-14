@@ -232,7 +232,7 @@ class Tasks extends Admin_controller {
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務狀態：', 'value' => Task::$finishNames[$obj->finish]))
       ));
     $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
-    Mail::send ('任務「' . $obj->title . '」被設定為 “' . Task::$finishNames[$obj->finish] . '”', $content, $users);
+    Mail::send ('宙斯任務「' . $obj->title . '」', $content, $users);
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
