@@ -86,6 +86,8 @@ class Tasks extends Admin_controller {
       'desc' => '任務標題為：「' . $obj->title . '」。',
       'backup'  => json_encode ($obj->columns_val ())));
 
+    delay_job ('mails', 'new_task', array ('id' => $obj->id));
+
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
   public function edit () {
