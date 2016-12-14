@@ -26,6 +26,8 @@ class Tasks extends Admin_controller {
 
     $this->add_param ('uri_1', $this->uri_1)
          ->add_param ('now_url', base_url ($this->uri_1));
+
+    $this->load->library ('fb');
   }
   private function _search_columns () {
     return array ( 
@@ -86,14 +88,11 @@ class Tasks extends Admin_controller {
       'desc' => '任務標題為：「' . $obj->title . '」。',
       'backup'  => json_encode ($obj->columns_val ())));
 
-    $this->load->library ('fb');
-    $content = Mail::renderContent ('mail/create_task', array (
+    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/create_task', array (
         'user' => $obj->user->name,
         'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
-      ));
-    $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
-    Mail::send ('宙斯任務「' . $obj->title . '」', $content, $users);
+      )), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
@@ -130,29 +129,35 @@ class Tasks extends Admin_controller {
 
     $posts['user_ids'] = array_unique (array_merge ($posts['user_ids'], array ('id' => $obj->user_id)));
 
-    if (($del_ids = array_diff ($ori_ids, $posts['user_ids'])) && ($mappings = TaskUserMapping::find ('all', array ('select' => 'id, user_id, task_id', 'conditions' => array ('task_id = ? AND user_id IN (?)', $obj->id, $del_ids)))))
+    $new_users = $del_users = array ();
+    if (($del_ids = array_diff ($ori_ids, $posts['user_ids'])) && ($mappings = TaskUserMapping::find ('all', array ('select' => 'id, user_id, task_id', 'include' => array ('user'), 'conditions' => array ('task_id = ? AND user_id IN (?)', $obj->id, $del_ids)))))
       foreach ($mappings as $mapping)
-        TaskUserMapping::transaction (function () use ($mapping) {
+        TaskUserMapping::transaction (function () use ($mapping, &$del_users) {
+          
           if ($schedules = Schedule::find ('all', array ('conditions' => array ('user_id = ? AND task_id = ?', $mapping->user_id, $mapping->task_id))))
             foreach ($schedules as $schedule)
               if (!$schedule->destroy ())
                 return false;
 
+          array_push ($del_users, $user);
+
           return $mapping->destroy ();
         });
+    
+    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/delete_task', array (
+        'user' => $obj->user->name,
+        'email' => $obj->user->email,
+        'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin'),
+      )), $del_users);
 
     Schedule::update_from_task ($obj);
 
-    $this->load->library ('fb');
-    $content = Mail::renderContent ('mail/update_task', array (
+    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/update_task', array (
         'user' => $obj->user->name,
         'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
-      ));
-    $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
-    Mail::send ('宙斯任務「' . $obj->title . '」', $content, $users);
+      )), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
 
-    $new_users = array ();
     if (($add_ids = array_diff ($posts['user_ids'], $ori_ids)) && ($users = User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $add_ids)))))
       foreach ($users as $user)
         TaskUserMapping::transaction (function () use ($user, $obj, &$new_users) {
@@ -162,15 +167,11 @@ class Tasks extends Admin_controller {
           return $create1 && $create2;
         });
     
-    if ($new_users) {
-      $this->load->library ('fb');
-      $content = Mail::renderContent ('mail/create_task', array (
-          'user' => $obj->user->name,
-          'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my-tasks', $obj->id, 'show'),
-          'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
-        ));
-      Mail::send ('宙斯任務「' . $obj->title . '」', $content, $new_users);
-    }
+    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/create_task', array (
+        'user' => $obj->user->name,
+        'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my-tasks', $obj->id, 'show'),
+        'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
+      )), $new_users);
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -184,9 +185,16 @@ class Tasks extends Admin_controller {
   public function destroy () {
     $obj = $this->obj;
     $backup = $obj->columns_val (true);
+    $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
 
     if (!Task::transaction (function () use ($obj) { return $obj->destroy (); }))
       return redirect_message (array ($this->uri_1), array ('_flash_danger' => '刪除失敗！'));
+
+    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/delete_task', array (
+        'user' => $obj->user->name,
+        'email' => $obj->user->email,
+        'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin'),
+      )), $users);
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -225,7 +233,6 @@ class Tasks extends Admin_controller {
 
     Schedule::update_from_task ($obj);
 
-    $this->load->library ('fb');
     $content = Mail::renderContent ('mail/finish_task', array (
         'user' => $obj->user->name,
         'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my-tasks', $obj->id, 'show'),

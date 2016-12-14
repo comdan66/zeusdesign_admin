@@ -27,9 +27,6 @@ class Cli extends Oa_controller {
       $user->save ();
     }
   }
-  public function mail () {
-    
-  }
   public function fcm () {
 
     $url = 'https://fcm.googleapis.com/fcm/send';

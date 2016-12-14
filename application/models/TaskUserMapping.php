@@ -11,6 +11,7 @@ class TaskUserMapping extends OaModel {
   static $table_name = 'task_user_mappings';
 
   static $has_one = array (
+    array ('user', 'class_name' => 'User'),
   );
 
   static $has_many = array (
