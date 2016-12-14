@@ -15,6 +15,7 @@ class Task extends OaModel {
 
   static $has_many = array (
     array ('user_mappings', 'class_name' => 'TaskUserMapping'),
+    array ('commits', 'class_name' => 'TaskCommit'),
     array ('users', 'class_name' => 'User', 'through' => 'task_mappings'),
     array ('schedules', 'class_name' => 'Schedule'),
   );
@@ -54,6 +55,9 @@ class Task extends OaModel {
       'mappings' => array_map (function ($mapping) {
         return $mapping->columns_val ();
       }, TaskUserMapping::find ('all', array ('conditions' => array ('task_id = ?', $this->id)))),
+      'commits' => array_map (function ($commit) {
+        return $commit->columns_val ();
+      }, TaskCommit::find ('all', array ('conditions' => array ('task_id = ?', $this->id)))),
       'schedules' => array_map (function ($schedule) {
         return $schedule->columns_val ();
       }, Schedule::find ('all', array ('conditions' => array ('task_id = ?', $this->id))))) : $var;
@@ -62,6 +66,11 @@ class Task extends OaModel {
     if ($this->user_mappings)
       foreach ($this->user_mappings as $user_mapping)
         if (!$user_mapping->destroy ())
+          return false;
+    
+    if ($this->commits)
+      foreach ($this->commits as $commit)
+        if (!$commit->destroy ())
           return false;
 
     if ($this->schedules)

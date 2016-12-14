@@ -12,6 +12,15 @@ class Platform extends Site_controller {
     parent::__construct ();
     $this->load->library ('fb');
   }
+  public function mail () {
+    echo  Mail::renderContent ('mail/task_commit', array (
+        'user' => 'wqe',
+        'url' => 'ad',
+        'title' => 'qwe',
+        'content' => 'qwe',
+        'detail' => array (array ('title' => '任務名稱：', 'value' => 'as'), array ('title' => '任務內容：', 'value' => 'ad'))
+      ));
+  }
   public function login () {
     if (User::current () && User::current ()->is_login ()) return redirect_message (array ('admin'), array ());
     else $this->load_view ();

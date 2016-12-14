@@ -27,7 +27,7 @@ html {
   body {
     position: relative;
 
-    background-color: rgba(255, 255, 255, 1.00);
+    background-color: rgba(247, 247, 247, 1.00);  
 
     font-family: 'Open sans', Comfortaa, 'Helvetica Neue', Helvetica, Arial, 'Hiragino Maru Gothic ProN', 'メイリオ','ヒラギノ丸ゴ ProN W4', '微軟正黑體', Meiryo, 'Droid Sans';
     height: auto;
@@ -43,6 +43,7 @@ html {
 
   }
 }
+
 .icon-no_a:before {
   content: "\e7f7";
 }
@@ -93,6 +94,9 @@ html {
 }
 .icon-settings:before {
   content: "\e912";
+}
+.icon-d2:before {
+  content: "\e91c";
 }
 .icon-d:before {
   content: "\e904";
@@ -214,6 +218,7 @@ html {
 .icon-shield:before {
   content: "\e91b";
 }
+
 
 
 

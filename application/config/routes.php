@@ -33,6 +33,7 @@ Route::group ('admin', function () {
   Route::get ('/my/(:any)/(:num)', 'main@index($1, $2)');
   Route::resourcePagination (array ('my_salaries'), 'my_salaries');
   Route::resourcePagination (array ('my_weights'), 'my_weights');
+  Route::resourcePagination (array ('my_tasks'), 'my_tasks');
 
   Route::resourcePagination (array ('schedule_tags'), 'schedule_tags');
   Route::resourcePagination (array ('users'), 'users');

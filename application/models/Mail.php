@@ -53,7 +53,7 @@ class Mail extends OaModel {
           array_push ($cc_str, ($cc->name . '<' . $cc->email . '>')) && $mail->addCC ($cc->email, $cc->name);
 
     if (!$to_str) return false;
-    if (!$mail->send ()) return false;
+    if (ENVIRONMENT == 'production' && !$mail->send ()) return false;
 
     $posts = array (
         'to' => implode (', ', $to_str),
