@@ -93,7 +93,7 @@ class Tasks extends Admin_controller {
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
       ));
     $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
-    Mail::send ('指派了一項任務「' . $obj->title . '」', $content, $users);
+    Mail::send ('宙斯任務「' . $obj->title . '」', $content, $users);
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
@@ -150,7 +150,7 @@ class Tasks extends Admin_controller {
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
       ));
     $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
-    Mail::send ('更新了任務「' . $obj->title . '」', $content, $users);
+    Mail::send ('宙斯任務「' . $obj->title . '」', $content, $users);
 
     $new_users = array ();
     if (($add_ids = array_diff ($posts['user_ids'], $ori_ids)) && ($users = User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $add_ids)))))
@@ -169,7 +169,7 @@ class Tasks extends Admin_controller {
           'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my-tasks', $obj->id, 'show'),
           'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
         ));
-      Mail::send ('指派了一項任務「' . $obj->title . '」', $content, $new_users);
+      Mail::send ('宙斯任務「' . $obj->title . '」', $content, $new_users);
     }
 
     UserLog::create (array (
