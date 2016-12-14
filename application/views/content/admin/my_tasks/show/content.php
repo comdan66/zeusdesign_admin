@@ -1,5 +1,4 @@
-
-<div class='panel'>
+<div class='panel main-task<?php echo $obj->finish == Task::IS_FINISHED ? ' finish' : '';?>'>
   <header>
     <h2><?php echo $obj->title;?></h2>
     <a href='<?php echo base_url ($uri_1);?>' class='icon-x'></a>

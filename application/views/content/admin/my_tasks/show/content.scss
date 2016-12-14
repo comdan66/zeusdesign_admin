@@ -360,3 +360,24 @@
     }
   }
 }
+.main-task.finish {
+  position: relative;
+
+  &:after{
+    content: '已完成';
+    position: absolute;
+    right: 50px;
+    top: 80px;
+    display: inline-block;
+    border: 5px solid rgba(255, 0, 0, .3);
+    z-index: 0;
+    color: rgba(245, 166, 159, 1.00);
+    font-size: 30px;
+    letter-spacing: 5px;
+    padding: 2px 15px;
+    font-weight: bolder;
+    @include border-radius(3px);
+    @include rotate(40deg);
+    @include opacity(.5);
+  }
+}
