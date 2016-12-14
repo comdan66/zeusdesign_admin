@@ -25,7 +25,7 @@ class Platform extends Site_controller {
         return redirect_message (array (), array ('_flash_danger' => 'Facebook 登入錯誤，請通知程式設計人員!(2)'));
 
     $user->name = $name;
-    $user->email = $email;
+    // $user->email = $email;
     $user->login_count += 1;
     $user->logined_at = date ('Y-m-d H:i:s');
 
