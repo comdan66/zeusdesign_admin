@@ -13,13 +13,9 @@ class Platform extends Site_controller {
     $this->load->library ('fb');
   }
   public function mail () {
-    echo  Mail::renderContent ('mail/task_commit', array (
-        'user' => 'wqe',
-        'url' => 'ad',
-        'title' => 'qwe',
-        'content' => 'qwe',
-        'detail' => array (array ('title' => '任務名稱：', 'value' => 'as'), array ('title' => '任務內容：', 'value' => 'ad'))
-      ));
+    if (User::current () && User::current ()->is_login ()) 
+      return redirect_message (func_get_args (), array ('_flash_info' => ''));
+    return redirect (forward_static_call_array (array ('Fb', 'loginUrl'), array_merge (array ('platform', 'fb_sign_in'), func_get_args ())));
   }
   public function login () {
     if (User::current () && User::current ()->is_login ()) return redirect_message (array ('admin'), array ());
