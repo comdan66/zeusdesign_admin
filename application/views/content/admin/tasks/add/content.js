@@ -5,4 +5,8 @@
  */
 
 $(function () {
+  $('form.form').submit (function () {
+    $('#loading .contant').text ('新增中，請稍候..');
+    $('#loading').addClass ('s');
+  });
 });

@@ -39,8 +39,3 @@
     </div>
   </form>
 </div>
-
-<div id='loading'>
-  <div class='cover'></div>
-  <div class='contant'>編譯中，請稍候..</div>
-</div>

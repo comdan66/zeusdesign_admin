@@ -26,7 +26,7 @@ class Mail extends OaModel {
     $CI =& get_instance ();
     return $CI->load->view ($path, $params, true);
   }
-  public static function send ($title, $content, $tos, $ccs) {
+  public static function send ($title, $content, $tos, $ccs = array ()) {
     if (!(is_string ($title = trim ($title)) && $title)) return false;
     if (!(is_string ($content = trim ($content)) && $content)) return false;
     if (!(is_array ($tos) && $tos)) return false;
@@ -37,14 +37,27 @@ class Mail extends OaModel {
     $mail = OAMail::create ()->setSubject ($title)
                              ->setBody ($content);
     
-    $to = $cc = '';
-    if ($tos) foreach ($tos as $m => $n) if ($to .= ($n . '<' . $m . '>')) $mail->addTo ($m, $n);
-    if ($ccs) foreach ($ccs as $m => $n) if ($cc .= ($n . '<' . $m . '>'))$mail->addCC ($m, $n);
+    $to_str = $cc_str = array ();
+    
+    if ($tos)
+      foreach ($tos as $to)
+        if (is_object ($to) && ($to instanceof User) && isset ($to->email) && isset ($to->name))
+          if ($to->id == User::current ()->id)
+            array_push ($ccs, $to);
+          else
+            array_push ($to_str, ($to->name . '<' . $to->email . '>')) && $mail->addTo ($to->email, $to->name);
 
-    // if (!$mail->send ()) return false;
+    if ($ccs)
+      foreach ($ccs as $cc)
+        if (is_object ($cc) && ($cc instanceof User) && isset ($cc->email) && isset ($cc->name))
+          array_push ($cc_str, ($cc->name . '<' . $cc->email . '>')) && $mail->addCC ($cc->email, $cc->name);
+
+    if (!$to_str) return false;
+    if (!$mail->send ()) return false;
+
     $posts = array (
-        'to' => $to,
-        'cc' => $cc,
+        'to' => implode (', ', $to_str),
+        'cc' => implode (', ', $cc_str),
         'title' => $title,
         'content' => $content,
       );

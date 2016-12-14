@@ -86,7 +86,14 @@ class Tasks extends Admin_controller {
       'desc' => '任務標題為：「' . $obj->title . '」。',
       'backup'  => json_encode ($obj->columns_val ())));
 
-    delay_job ('mails', 'new_task', array ('id' => $obj->id));
+    $this->load->library ('fb');
+    $content = Mail::renderContent ('mail/create_task', array (
+        'user' => $obj->user->name,
+        'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my-tasks', $obj->id, 'show'),
+        'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
+      ));
+    $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
+    Mail::send ('指派了一項任務「' . $obj->title . '」', $content, $users);
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
@@ -136,13 +143,34 @@ class Tasks extends Admin_controller {
 
     Schedule::update_from_task ($obj);
 
-    if (($add_ids = array_diff ($posts['user_ids'], $ori_ids)) && ($users = User::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $add_ids)))))
+    $this->load->library ('fb');
+    $content = Mail::renderContent ('mail/update_task', array (
+        'user' => $obj->user->name,
+        'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my-tasks', $obj->id, 'show'),
+        'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
+      ));
+    $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
+    Mail::send ('更新了任務「' . $obj->title . '」', $content, $users);
+
+    $new_users = array ();
+    if (($add_ids = array_diff ($posts['user_ids'], $ori_ids)) && ($users = User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $add_ids)))))
       foreach ($users as $user)
-        TaskUserMapping::transaction (function () use ($user, $obj) {
+        TaskUserMapping::transaction (function () use ($user, $obj, &$new_users) {
           $create1 = verifyCreateOrm (TaskUserMapping::create (array_intersect_key (array ('user_id' => $user->id, 'task_id' => $obj->id), TaskUserMapping::table ()->columns)));
           $create2 = verifyCreateOrm (Schedule::create (array_intersect_key (array_merge (Schedule::bind_column_from_task ($obj), array ('user_id' => $user->id, 'schedule_tag_id' => 0, 'task_id' => $obj->id, 'sort' => 0)), Schedule::table ()->columns)));
+          array_push ($new_users, $user);
           return $create1 && $create2;
         });
+    
+    if ($new_users) {
+      $this->load->library ('fb');
+      $content = Mail::renderContent ('mail/create_task', array (
+          'user' => $obj->user->name,
+          'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my-tasks', $obj->id, 'show'),
+          'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
+        ));
+      Mail::send ('指派了一項任務「' . $obj->title . '」', $content, $new_users);
+    }
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -196,6 +224,15 @@ class Tasks extends Admin_controller {
       return $this->output_error_json ('更新失敗！');
 
     Schedule::update_from_task ($obj);
+
+    $this->load->library ('fb');
+    $content = Mail::renderContent ('mail/finish_task', array (
+        'user' => $obj->user->name,
+        'url' => Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my-tasks', $obj->id, 'show'),
+        'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務狀態：', 'value' => Task::$finishNames[$obj->finish]))
+      ));
+    $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
+    Mail::send ('任務「' . $obj->title . '」被設定為 “' . Task::$finishNames[$obj->finish] . '”', $content, $users);
 
     UserLog::create (array (
       'user_id' => User::current ()->id,

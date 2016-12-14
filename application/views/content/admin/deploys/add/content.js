@@ -6,6 +6,7 @@
 
 $(function () {
   $('form.form').submit (function () {
+    $('#loading .contant').text ('編譯中，請稍候..');
     $('#loading').addClass ('s');
   });
 });
