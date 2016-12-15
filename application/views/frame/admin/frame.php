@@ -37,7 +37,7 @@
               <li>
                 <label data-cnt='<?php echo ($schedule_cnt = Schedule::count (array ('conditions' => array ('user_id = ? AND finish = ? AND year = ? AND month = ? AND day = ?', User::current ()->id, Schedule::NO_FINISHED, date ('Y'), date ('m'), date ('d')))));?>'>
                   <input type='checkbox' />
-                  <span class='icon-se'>個人管理</span>
+                  <span class='icon-u'>個人管理</span>
                   <ul>
                     <li><a href="<?php echo $url = base_url ('admin', 'my');?>" class='icon-u<?php echo $now_url == $url ? ' active' : '';?>'>基本資料</a></li>
                     <!-- <li><a href="<?php echo $url = base_url ('admin', 'notifications');?>" class='icon-no_a<?php echo $now_url == $url ? ' active' : '';?>'>系統通知</a></li> -->
@@ -51,11 +51,11 @@
                 </label>
               </li>
       <?php }
-            if (User::current ()->in_roles (array ('user'))) { ?>
+            if (User::current ()->in_roles (array ('admin'))) { ?>
               <li>
                 <label>
                   <input type='checkbox' />
-                  <span class='icon-u'>會員系統</span>
+                  <span class='icon-se'>後台系統</span>
                   <ul>
                     <li><a href="<?php echo $url = base_url ('admin', 'users');?>" class='icon-ua<?php echo $now_url == $url ? ' active' : '';?>'>權限設定</a></li>
                   </ul>
