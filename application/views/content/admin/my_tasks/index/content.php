@@ -44,6 +44,7 @@
           <th width='90' class='center'>已完成</th>
           <th width='120'>新增者</th>
           <th width='150'>任務名稱</th>
+          <th width='120'>優先權</th>
           <th >任務敘述</th>
           <th width='60' class='right'>留言數</th>
           <th width='50' class='right'>細節</th>
@@ -66,8 +67,12 @@
                 } ?>
               </td>
 
-              <td><?php echo $obj->title;?></td>
               <td><?php echo $obj->user->name;?></td>
+              <td><?php echo $obj->title;?></td>
+              <td>
+                <div class='color' style='background-color: <?php echo isset (Task::$levelColors[$obj->level]) ? Task::$levelColors[$obj->level] : '#ffffff';?>;'></div>
+                <?php echo isset (Task::$levelNames[$obj->level]) ? Task::$levelNames[$obj->level] : '無';?>
+              </td>
               <td><?php echo $obj->mini_description ();?></td>
               
               <td class='right'><?php echo count ($obj->commits);?></td>
@@ -78,7 +83,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='7' class='no_data'>沒有任何資料。</td>
+            <td colspan='8' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

@@ -41,12 +41,12 @@
     <table class='table'>
       <thead>
         <tr>
-          <th width='50' class='center'>#</th>
           <th width='90' class='center'>已經完成</th>
           <th width='100'>新增者</th>
-          <th width='150'>標題</th>
+          <th width='140'>標題</th>
+          <th width='120'>優先權</th>
           <th >內容</th>
-          <th width='200' class='right'>指派人員</th>
+          <th width='150' class='right'>指派人員</th>
           <th width='100' class='right'>日期</th>
           <th width='85' class='right'>修改/刪除</th>
         </tr>
@@ -55,7 +55,6 @@
   <?php if ($objs) {
           foreach ($objs as $obj) { ?>
             <tr>
-              <td class='center'><?php echo $obj->id;?></td>
              
               <td class='center'>
                 <label class='switch' data-column='finish' data-url='<?php echo base_url ($uri_1, 'finish', $obj->id);?>'>
@@ -66,6 +65,10 @@
 
               <td><?php echo $obj->user->name;?></td>
               <td><?php echo $obj->title;?></td>
+              <td>
+                <div class='color' style='background-color: <?php echo isset (Task::$levelColors[$obj->level]) ? Task::$levelColors[$obj->level] : '#ffffff';?>;'></div>
+                <?php echo isset (Task::$levelNames[$obj->level]) ? Task::$levelNames[$obj->level] : '無';?>
+              </td>
               <td><?php echo $obj->mini_description ();?></td>
               <td class='right'><?php echo implode ('', array_map (function ($u) { return '<div class="munit" style="text-align:right;">' . $u->name . '</div>'; }, $obj->users));?></td>
               <td class='right'><?php echo $obj->date_at->format ('Y-m-d');?></td>

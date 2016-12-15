@@ -13,6 +13,9 @@ class Platform extends Site_controller {
     $this->load->library ('fb');
   }
   public function mail () {
+    if (($id = OAInput::get ('id')) && is_numeric ($id) && ($mail = Mail::find ('one', array ('select' => 'id, count_open', 'conditions' => array ('id = ?', $id)))) && ($mail->count_open += 1))
+      Mail::transaction (function () use ($mail) { return $mail->save (); });
+      
     if (User::current () && User::current ()->is_login ()) 
       return redirect_message (func_get_args (), array ('_flash_info' => ''));
     return redirect (forward_static_call_array (array ('Fb', 'loginUrl'), array_merge (array ('platform', 'fb_sign_in'), func_get_args ())));

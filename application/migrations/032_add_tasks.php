@@ -16,6 +16,7 @@ class Migration_Add_tasks extends CI_Migration {
         `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
         `description` text NOT NULL COMMENT '內容',
         `finish` tinyint(4) DEFAULT '0' COMMENT '完成 1，未完成 0',
+        `level` tinyint(4) DEFAULT '4' COMMENT '優先權',
 
         `date_at` date DEFAULT NULL COMMENT '日期',
 

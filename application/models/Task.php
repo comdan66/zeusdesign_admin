@@ -31,6 +31,26 @@ class Task extends OaModel {
     self::NO_FINISHED => '尚未完成',
     self::IS_FINISHED => '已經完成',
   );
+  const LEVEL_1 = 1;
+  const LEVEL_2 = 2;
+  const LEVEL_3 = 3;
+  const LEVEL_4 = 4;
+  const LEVEL_5 = 5;
+
+  static $levelNames = array(
+    self::LEVEL_1 => '有空再處理',
+    self::LEVEL_2 => '一般事件',
+    self::LEVEL_3 => '重要事件',
+    self::LEVEL_4 => '非常重要',
+    self::LEVEL_5 => '非常緊急',
+  );
+  static $levelColors = array (
+    self::LEVEL_1 => 'rgba(142, 226, 236, 1.00)',
+    self::LEVEL_2 => 'rgba(157, 210, 248, 1.00)',
+    self::LEVEL_3 => 'rgba(176, 219, 178, 1.00)',
+    self::LEVEL_4 => 'rgba(254, 227, 147, 1.00)',
+    self::LEVEL_5 => 'rgba(253, 117, 74, 1.00)',
+  );
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }

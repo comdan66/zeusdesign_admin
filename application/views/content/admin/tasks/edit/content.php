@@ -32,6 +32,15 @@
 <?php }?>
 
     <div class='row n2'>
+      <label>* 優先權</label>
+      <div class='radios'>
+  <?php foreach (Task::$levelNames as $key => $value) { ?>
+          <label><input type='radio' name='level' value='<?php echo $key;?>' <?php echo (isset ($posts['level']) ? $posts['level'] : $obj->level) == $key ? ' checked' : '';?> /><span></span><?php echo $value;?></label>
+  <?php } ?>
+      </div>
+    </div>
+
+    <div class='row n2'>
       <label>* 任務標題</label>
       <div>
         <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : $obj->title;?>' placeholder='請輸入任務標題..' maxlength='200' pattern='.{1,200}' required title='輸入任務標題!' autofocus />

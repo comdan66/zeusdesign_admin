@@ -78,13 +78,16 @@ class My_tasks extends Admin_controller {
     if (!TaskCommit::transaction (function () use (&$commit, $obj, $posts) { return verifyCreateOrm ($commit = TaskCommit::create (array_intersect_key (array_merge ($posts, array ('task_id' => $obj->id, 'user_id' => User::current ()->id)), TaskCommit::table ()->columns))); }))
       return redirect_message (array ($this->uri_1, $obj->id, 'show'), array ('_flash_danger' => '留言失敗！', 'posts' => $posts));
 
-    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/task_commit', array (
+    Mail::send (
+      '宙斯任務「' . $obj->title . '」',
+      'mail/task_commit',
+      array (
         'user' => $commit->user->name,
         'title' => $obj->title,
         'content' => $commit->content,
         'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
-      )), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
+      ), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -125,13 +128,14 @@ class My_tasks extends Admin_controller {
 
     Schedule::update_from_task ($obj);
 
-    $content = Mail::renderContent ('mail/task_finish', array (
+    Mail::send (
+      '宙斯任務「' . $obj->title . '」',
+      'mail/task_finish',
+      array (
         'user' => $obj->user->name,
         'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務狀態：', 'value' => Task::$finishNames[$obj->finish]))
-      ));
-    $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
-    Mail::send ('宙斯任務「' . $obj->title . '」', $content, $users);
+      ), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
 
     UserLog::create (array (
       'user_id' => User::current ()->id,

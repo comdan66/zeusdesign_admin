@@ -86,11 +86,14 @@ class Tasks extends Admin_controller {
       'desc' => '任務標題為：「' . $obj->title . '」。',
       'backup'  => json_encode ($obj->columns_val ())));
 
-    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/task_create', array (
+    Mail::send (
+      '宙斯任務「' . $obj->title . '」',
+      'mail/task_create',
+      array (
         'user' => $obj->user->name,
         'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
-      )), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
+      ), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
 
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '新增成功！'));
   }
@@ -142,19 +145,25 @@ class Tasks extends Admin_controller {
           return $mapping->destroy ();
         });
     
-    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/task_delete', array (
+    Mail::send (
+      '宙斯任務「' . $obj->title . '」',
+      'mail/task_delete',
+      array (
         'user' => $obj->user->name,
         'email' => $obj->user->email,
         'url' => base_url ('platform', 'mail', 'admin'),
-      )), $del_users);
+      ), $del_users);
 
     Schedule::update_from_task ($obj);
 
-    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/task_update', array (
+    Mail::send (
+      '宙斯任務「' . $obj->title . '」',
+      'mail/task_update',
+      array (
         'user' => $obj->user->name,
         'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
-      )), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
+      ), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
 
     if (($add_ids = array_diff ($posts['user_ids'], $ori_ids)) && ($users = User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $add_ids)))))
       foreach ($users as $user)
@@ -165,11 +174,14 @@ class Tasks extends Admin_controller {
           return $create1 && $create2;
         });
     
-    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/task_create', array (
+    Mail::send (
+      '宙斯任務「' . $obj->title . '」',
+      'mail/task_create',
+      array (
         'user' => $obj->user->name,
         'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
-      )), $new_users);
+      ), $new_users);
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -188,11 +200,14 @@ class Tasks extends Admin_controller {
     if (!Task::transaction (function () use ($obj) { return $obj->destroy (); }))
       return redirect_message (array ($this->uri_1), array ('_flash_danger' => '刪除失敗！'));
 
-    Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/task_delete', array (
+    Mail::send (
+      '宙斯任務「' . $obj->title . '」',
+      'mail/task_delete',
+      array (
         'user' => $obj->user->name,
         'email' => $obj->user->email,
         'url' => base_url ('platform', 'mail', 'admin'),
-      )), $users);
+      ), $users);
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -231,13 +246,14 @@ class Tasks extends Admin_controller {
 
     Schedule::update_from_task ($obj);
 
-    $content = Mail::renderContent ('mail/task_finish', array (
+    Mail::send (
+      '宙斯任務「' . $obj->title . '」',
+      'mail/task_finish',
+      array (
         'user' => $obj->user->name,
         'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務狀態：', 'value' => Task::$finishNames[$obj->finish]))
-      ));
-    $users = ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ();
-    Mail::send ('宙斯任務「' . $obj->title . '」', $content, $users);
+      ), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -254,12 +270,14 @@ class Tasks extends Admin_controller {
     if (!isset ($posts['title'])) return '沒有填寫 任務標題！';
     if (!isset ($posts['date_at'])) return '沒有填寫 任務日期！';
     if (!isset ($posts['finish'])) return '沒有選擇 是否完成！';
+    if (!isset ($posts['level'])) return '沒有選擇 優先權！';
 
     if (!(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['user_id']))))) return '新增者 不存在！';
     if (!(is_array ($posts['user_ids']) && $posts['user_ids'] && User::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['user_ids']))))) return '沒有選擇 指派會員！';
     if (!(is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '任務標題 格式錯誤！';
     if (!(($posts['date_at'] = trim ($posts['date_at'])) && is_date ($posts['date_at']))) return '任務日期 格式錯誤！';
     if (!(is_numeric ($posts['finish'] = trim ($posts['finish'])) && in_array ($posts['finish'], array_keys (Task::$finishNames)))) return '是否完成 格式錯誤！';
+    if (!(is_numeric ($posts['level'] = trim ($posts['level'])) && in_array ($posts['level'], array_keys (Task::$levelNames)))) return '優先權 格式錯誤！';
 
     $posts['description'] = isset ($posts['description']) && is_string ($posts['description']) && ($posts['description'] = trim ($posts['description'])) ? $posts['description'] : '';
     return '';

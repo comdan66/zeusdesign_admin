@@ -17,8 +17,16 @@
         <div class='l'>
           <div class='ll'>優先權</div>
           <div class='rr'>
-            <div class='colors'><span></span><span></span><span></span><span></span><span class='a'></span><span id='cursor' data-val='80%'></span></div>
-            <span>很重要</span>
+            <div class='colors'>
+        <?php $cnt = count (Task::$levelColors);
+              $unit = 100 / $cnt;
+              $val = $unit * ($obj->level - 1);
+              foreach (Task::$levelColors as $key => $color) { ?>
+                <span style='width:<?php echo $unit;?>%;background-color:<?php echo $color;?>;'></span>
+        <?php }?>
+              <span id='cursor' data-val='<?php echo $val;?>%' style='width:<?php echo $unit;?>%;'></span>
+            </div>
+            <span><?php echo isset (Task::$levelNames[$obj->level]) ? Task::$levelNames[$obj->level] : '無';?></span>
           </div>
         </div>
         <div class='r'>
