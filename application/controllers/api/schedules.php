@@ -26,7 +26,7 @@ class Schedules extends Api_controller {
   public function index () {
     $gets = OAInput::get ();
 
-    if (isset ($gets['user_ids']) && is_array ($gets['user_ids']) && $gets['user_ids'])
+    if (User::current ()->in_roles (array ('project')) && isset ($gets['user_ids']) && is_array ($gets['user_ids']) && $gets['user_ids'])
       OaModel::addConditions ($conditions, 'user_id IN (?)', array_merge ($gets['user_ids'], array ($this->user->id)));
     else 
       OaModel::addConditions ($conditions, 'user_id = ?', $this->user->id);

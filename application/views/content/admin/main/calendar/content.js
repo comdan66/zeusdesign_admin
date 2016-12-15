@@ -7,13 +7,15 @@
 $(function () {
   window.vars.myId = $('#my_id').val ();
   window.$users = $('#users');
+  window.$search = $('#search');
   window.$usersFilter = window.$users.find ('input[type="checkbox"]');
-  window.$usersFilter.click (function () {
-    loadMonthSchedules ($('.calendar'));
+  window.$usersFilter.click (function () { loadMonthSchedules ($('.calendar')); });
+  
+  window.$search.click (function () {
+    window.$users.toggleClass ('show');
   });
-  function selectUserIds () {
-    return window.$usersFilter.filter (':checked').map (function () { return $(this).val (); }).toArray ();
-  }
+
+  function selectUserIds () { return window.$usersFilter.filter (':checked').map (function () { return $(this).val (); }).toArray (); }
 
   function loadMonthSchedules ($obj) {
     var vars = $obj.get (0).vars;
@@ -112,6 +114,7 @@ $(function () {
             $('<button />').attr ('type', 'button').addClass ('close_day').click (function () {
               $obj.removeClass ('day');
               window.$users.removeClass ('hide');
+              window.$search.removeClass ('hide');
               $header.find ('h2').text ('行事曆');
               $header.find ('button').remove ();
               vars.$daySchedule.empty ();
@@ -121,6 +124,7 @@ $(function () {
           
           $obj.addClass ('day');
           window.$users.addClass ('hide');
+          window.$search.addClass ('hide');
 
           loadDaySchedules ({
               year: $obj.get (0).vars.y,

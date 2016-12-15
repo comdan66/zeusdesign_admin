@@ -79,12 +79,13 @@ class My_tasks extends Admin_controller {
       return redirect_message (array ($this->uri_1, $obj->id, 'show'), array ('_flash_danger' => '留言失敗！', 'posts' => $posts));
 
     Mail::send ('宙斯任務「' . $obj->title . '」', Mail::renderContent ('mail/task_commit', array (
-        'user' => $obj->user->name,
+        'user' => $commit->user->name,
         'title' => $obj->title,
-        'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'content' => $commit->content,
+        'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
       )), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
+
     UserLog::create (array (
       'user_id' => User::current ()->id,
       'icon' => 'icon-d2',
