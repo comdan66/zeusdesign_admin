@@ -75,8 +75,16 @@ class My_tasks extends Admin_controller {
     if ($msg = $this->_validation_update ($posts))
       return redirect_message (array ($this->uri_1, $obj->id, 'show'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
+    $posts['action'] = '針對此任務留言';
     if (!TaskCommit::transaction (function () use (&$commit, $obj, $posts) { return verifyCreateOrm ($commit = TaskCommit::create (array_intersect_key (array_merge ($posts, array ('task_id' => $obj->id, 'user_id' => User::current ()->id)), TaskCommit::table ()->columns))); }))
       return redirect_message (array ($this->uri_1, $obj->id, 'show'), array ('_flash_danger' => '留言失敗！', 'posts' => $posts));
+
+    $users = array_filter (($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array (), function ($user) { return $user->id != User::current ()->id; });
+
+    Notification::send (
+      $users,
+      User::current ()->name . ' 在任務「' . $obj->title . '」上面留言。',
+      base_url ('admin', 'my-tasks', $obj->id, 'show'));
 
     Mail::send (
       '宙斯任務「' . $obj->title . '」',
@@ -87,7 +95,7 @@ class My_tasks extends Admin_controller {
         'content' => $commit->content,
         'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務內容：', 'value' => $obj->description))
-      ), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
+      ), $users);
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -128,6 +136,13 @@ class My_tasks extends Admin_controller {
 
     Schedule::update_from_task ($obj);
 
+    $users = array_filter (($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array (), function ($user) { return $user->id != User::current ()->id; });
+
+    Notification::send (
+      $users,
+      '任務「' . $obj->title . '」目前已經被標示 “' . Task::$finishNames[$obj->finish] . '” 囉。',
+      base_url ('admin', 'my-tasks', $obj->id, 'show'));
+
     Mail::send (
       '宙斯任務「' . $obj->title . '」',
       'mail/task_finish',
@@ -135,7 +150,7 @@ class My_tasks extends Admin_controller {
         'user' => $obj->user->name,
         'url' => base_url ('platform', 'mail', 'admin', 'my-tasks', $obj->id, 'show'),
         'detail' => array (array ('title' => '任務名稱：', 'value' => $obj->title), array ('title' => '任務狀態：', 'value' => Task::$finishNames[$obj->finish]))
-      ), ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array ());
+      ), $users);
 
     UserLog::create (array (
       'user_id' => User::current ()->id,

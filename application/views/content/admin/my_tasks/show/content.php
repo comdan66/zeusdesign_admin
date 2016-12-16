@@ -59,11 +59,11 @@
 </div>
 
 <?php
-    if ($commits = TaskCommit::find ('all', array ('select' => 'user_id, content, created_at', 'order' => 'id DESC', 'include' => array ('user'), 'conditions' => array ('task_id = ?', $obj->id)))) { ?>
+    if ($commits = TaskCommit::find ('all', array ('select' => 'user_id, action, content, created_at', 'order' => 'id DESC', 'include' => array ('user'), 'conditions' => array ('task_id = ?', $obj->id)))) { ?>
   <div class='panel commits'>
 <?php foreach ($commits as $commit) { ?>
         <div class='commit'>
-          <div class='users'><div class='user owner'><img src='<?php echo $commit->user->avatar ();?>' /><span><?php echo $commit->user->name;?></span></div> 於 <time datetime='<?php echo $commit->created_at->format ('Y-m-d H:i:s');?>'><?php echo $commit->created_at->format ('Y-m-d H:i:s');?></time> 針對此任務留言。</div>
+          <div class='users'><div class='user owner'><img src='<?php echo $commit->user->avatar ();?>' /><span><?php echo $commit->user->name;?></span></div> 於 <time datetime='<?php echo $commit->created_at->format ('Y-m-d H:i:s');?>'><?php echo $commit->created_at->format ('Y-m-d H:i:s');?></time> <?php echo $commit->action;?>。</div>
           <div class='content'><?php echo  $commit->content;?></div>
         </div>
 <?php }?>

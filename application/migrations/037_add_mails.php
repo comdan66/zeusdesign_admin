@@ -14,6 +14,7 @@ class Migration_Add_mails extends CI_Migration {
 
         `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
         `content` text NOT NULL COMMENT 'content',
+        `view_path` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'View Path',
         `to` text NOT NULL COMMENT 'to',
         `cc` text NOT NULL COMMENT 'cc',
         `count_send` smallint(6) unsigned NOT NULL DEFAULT 0 COMMENT '發送數量',

@@ -418,6 +418,7 @@ $changeWidth: 768px;
   
   > span {
     float: right;
+
   }
   span {
     height: 32px;
@@ -431,6 +432,35 @@ $changeWidth: 768px;
     @include a(0px, false, rgba(90, 115, 142, 1.00), rgba(36, 83, 124, 1.00));
     font-size: 20px;
     padding-top: 5px;
+    + a {
+      margin-left: 10px;
+    }
+    &.active {
+      color: rgba(36, 83, 124, 1.00);
+    }
+
+    &[data-cnt]:not([data-cnt="0"]) {
+      position: relative;
+
+      &:after {
+        content: attr(data-cnt);
+        position: absolute;
+        left: 50%;
+        top: -3px;
+        display: inline-block;
+        min-width: 17px;
+        height: 18px;
+        font-weight: bold;
+        padding: 0 5px;
+        line-height: 16px;
+        text-align: center;
+        font-size: 10px;
+        background-color: rgba(236, 83, 70, 1.00);
+        color: rgba(255, 255, 255, 1.00);
+        @include border-radius(9px);
+        z-index: 99;
+      }
+    }
   }
 }
 #hamburger {
@@ -885,7 +915,7 @@ $changeWidth: 768px;
         i {
           font-style: normal;
           position: absolute;
-          right: 0;
+          right: 1px;
           top: 5px;
           display: inline-block;
           width: 25px;
@@ -896,6 +926,7 @@ $changeWidth: 768px;
           border-left: 1px solid rgba(200, 200, 200, 1.00);
           color: rgba(100, 100, 100, 1);
           @include transition(color .3s);
+          background-color: rgba(255, 255, 255, 1.00);
           
           &:hover {
             color: rgba(85, 85, 85, 1);
@@ -2033,7 +2064,7 @@ form.form {
     min-width: 20px;
     height: 20px;
     padding: 0 5px;
-    line-height: 20px;
+    line-height: 19px;
     text-align: center;
     font-size: 13px;
     background-color: rgba(236, 83, 70, 1.00);

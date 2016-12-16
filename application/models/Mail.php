@@ -37,8 +37,9 @@ class Mail extends OaModel {
     if (!(is_string ($title = trim ($title)) && $title)) return false;
     if (!(is_string ($path = trim ($path)) && $path)) return false;
     if (!is_array ($params)) return false;
-    if (!(is_array ($tos = array_filter ($tos, function ($to) { return is_object ($to) && ($to instanceof User) && isset ($to->email) && isset ($to->name); })) && $tos)) return false;
-    $ccs = array_filter ($ccs, function ($cc) { return is_object ($cc) && ($cc instanceof User) && isset ($cc->email) && isset ($cc->name); });
+
+    if (!$tos = array_values (array_filter (array_map (function ($to) { if (is_object ($to) && ($to instanceof User) && isset ($to->email) && isset ($to->name) && ($to->email = trim ($to->email)) && ($to->name = trim ($to->name))) return array ('mail' => $to->email, 'name' => $to->name); if (is_array ($to) && ((isset ($to['email']) && ($to['email'] = trim ($to['email']))) || (isset ($to['mail']) && ($to['mail'] = trim ($to['mail'])))) && isset ($to['name']) && ($to['name'] = trim ($to['name']))) return array ('mail' => isset ($to['email']) ? $to['email'] : $to['mail'], 'name' => $to['name']); return array (); }, $tos)))) return false;
+    $ccs = array_values (array_filter (array_map (function ($cc) { if (is_object ($cc) && ($cc instanceof User) && isset ($cc->email) && isset ($cc->name) && ($cc->email = trim ($cc->email)) && ($cc->name = trim ($cc->name))) return array ('mail' => $cc->email, 'name' => $cc->name); if (is_array ($cc) && ((isset ($cc['email']) && ($cc['email'] = trim ($cc['email']))) || (isset ($cc['mail']) && ($cc['mail'] = trim ($cc['mail'])))) && isset ($cc['name']) && ($cc['name'] = trim ($cc['name']))) return array ('mail' => isset ($cc['email']) ? $cc['email'] : $cc['mail'], 'name' => $cc['name']); return array (); }, $ccs)));
 
     $posts = array (
         'title' => $title,
@@ -65,17 +66,16 @@ class Mail extends OaModel {
                              ->setBody ($content);
 
     $to_str = $cc_str = $tmp = array ();
+
     if ($tos)
       foreach ($tos as $to)
-        if ($to->id == User::current ()->id)
-          array_push ($ccs, $to);
-        else if (!in_array ($to->id, $tmp) && array_push ($tmp, $to->id))
-          array_push ($to_str, ($to->name . '<' . $to->email . '>')) && $mail->addTo ($to->email, $to->name);
+        if (!in_array ($to['mail'], $tmp) && array_push ($tmp, $to['mail']))
+          array_push ($to_str, ($to['name'] . '<' . $to['mail'] . '>')) && $mail->addTo ($to['mail'], $to['name']);
     
     if ($ccs)
       foreach ($ccs as $cc)
-        if (!in_array ($cc->id, $tmp) && array_push ($tmp, $cc->id))
-          array_push ($cc_str, ($cc->name . '<' . $cc->email . '>')) && $mail->addCC ($cc->email, $cc->name);
+        if (!in_array ($cc['mail'], $tmp) && array_push ($tmp, $cc['mail']))
+          array_push ($cc_str, ($cc['name'] . '<' . $cc['mail'] . '>')) && $mail->addCC ($cc['mail'], $cc['name']);
 
     if (!$to_str) return false;
     if (ENVIRONMENT == 'production' && !$mail->send ()) return false;
@@ -83,6 +83,7 @@ class Mail extends OaModel {
     $posts = array (
         'to' => implode (', ', $to_str),
         'cc' => implode (', ', $cc_str),
+        'view_path' => $path,
         'content' => $content,
         'count_send' => count ($tmp),
         'finish' => Mail::FINISH_YES,
@@ -93,5 +94,9 @@ class Mail extends OaModel {
         $obj->$column = $value;
     
     return Mail::transaction (function () use ($obj, $posts) { return $obj->save (); });
+  }
+  public function mini_content ($length = 100) {
+    if (!isset ($this->content)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->content), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
 }

@@ -1,7 +1,7 @@
 <header>
   <div class='title'>
-    <h1>聯絡</h1>
-    <p>留言管理</p>
+    <h1>通知</h1>
+    <p>通知管理</p>
   </div>
 
   <form class='select'>
@@ -33,7 +33,7 @@
 
 <div class='panel'>
   <header>
-    <h2>留言列表</h2>
+    <h2>通知列表</h2>
   </header>
 
   <div class='content'>
@@ -43,11 +43,8 @@
         <tr>
           <th width='50' class='center'>#</th>
           <th width='80' class='center'>已讀</th>
-          <th width='150'>名稱</th>
-          <th width='200'>E-Mail</th>
-          <th>內容</th>
-          <th width='100'>IP</th>
-          <th width='65' class='right'>刪除</th>
+          <th>內容敘述</th>
+          <th width='95' class='right'>檢視</th>
         </tr>
       </thead>
       <tbody>
@@ -56,25 +53,18 @@
             <tr>
               <td class='center'><?php echo $obj->id;?></td>
               <td class='center'>
-                <label class='switch' data-for_role='contact' data-column='is_readed' data-url='<?php echo base_url ($uri_1, 'is_readed', $obj->id);?>'>
-                  <input type='checkbox' name='is_readed'<?php echo $obj->is_readed == Contact::READ_YES ? ' checked' : '';?> />
+                <label class='switch' data-for_role='natification' data-column='is_read' data-url='<?php echo base_url ('admin/my_notifications', 'is_read', $obj->id);?>'>
+                  <input type='checkbox' name='is_read'<?php echo $obj->is_read == Notification::READ_YES ? ' checked' : '';?> />
                   <span></span>
                 </label>
               </td>
-              <td><?php echo $obj->name;?></td>
-              <td><?php echo $obj->email;?></td>
-              <td><?php echo $obj->message;?></td>
-              <td><?php echo $obj->ip;?></td>
-
-              <td class='right'>
-                <a class='icon-t' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
-              </td>
-
+              <td><?php echo $obj->description;?></td>
+              <td class='right'><?php if ($obj->link) {?><a class='icon-y' href="<?php echo $obj->link;?>"></a><?php }?></td>
             </tr>
     <?php }
         } else { ?>
           <tr>
-            <td colspan='7' class='no_data'>沒有任何資料。</td>
+            <td colspan='4' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>

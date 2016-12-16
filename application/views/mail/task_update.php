@@ -17,6 +17,10 @@
         </div>
 <?php } ?>
 
+      <div style='border: 1px solid #bcbcbc; padding: 5px 15px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; background-color: #f5f7fa;margin-top: 15px;'>
+        <p style='color: #203041; margin: 5px 0; padding: 0 5px; line-height: 25px;'><b><?php echo $action;?></b>，<span><?php echo $content;?></span></p>
+      </div>
+
       <a href='<?php echo $url;?>' style='border: 1px solid rgba(255, 0, 0, 0.3); margin-top: 25px; padding: 10px; background-color: #ce5341; color: white; border: 1px solid #c33a2f; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; display: inline-block; text-decoration: inherit;'>到 宙思後台 上查看</a>
     </div>
     <div style='text-align: right; font-size: 13px; display: block; padding-right: 15px; padding-top: 15px; color: #6d7780;padding-bottom: 15px;'>

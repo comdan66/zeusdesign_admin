@@ -9,7 +9,7 @@
 class Invoices extends Admin_controller {
   private $uri_1 = null;
   private $obj = null;
-  private $icon = 'icon-ti';
+  private $icon = null;
 
   public function __construct () {
     parent::__construct ();

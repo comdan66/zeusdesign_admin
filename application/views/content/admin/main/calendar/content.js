@@ -183,10 +183,11 @@ $(function () {
         prompt.result ('新增完成！');
         prompt.okCallback (function () {
           var $tmp = $that.parents ('.panel').find ('.daySchedule');
-          
-          // if ($tmp.find ('.not_task').length) initSchedule (result).insertBefore ($tmp.find ('.not_task').first ());
-          // else 
           initSchedule (result).appendTo ($tmp);
+          
+          var time = new Date (), isToday = data.year == time.getFullYear () && data.month == (time.getMonth () + 1) && data.day == time.getDate ();
+          if (isToday) window.funs.updateCounter ('schedule', false);
+
           prompt.close ();
         });
       })
@@ -254,7 +255,9 @@ $(function () {
     .complete (function (result) {});
   }
   function initSchedule (t) {
-    var $checkbox = $('<label />').addClass ('checkbox').addClass ('blue').data ('column', 'finish').data ('url', '/api/schedules/finish/' + t.id).append (
+    var time = new Date (), isToday = t.year == time.getFullYear () && t.month == (time.getMonth () + 1) && t.day == time.getDate ();
+    
+    var $checkbox = $('<label />').addClass ('checkbox').addClass ('blue').data ('for_role', isToday ? 'schedule' : '').data ('column', 'finish').data ('url', '/api/schedules/finish/' + t.id).append (
       $('<input />').attr ('type', 'checkbox').prop ('checked', t.finish ? true : false)).append (
       $('<span />'));
     

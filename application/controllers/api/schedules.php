@@ -164,8 +164,8 @@ class Schedules extends Api_controller {
     $backup = $obj->columns_val (true);
     
     $validation = function (&$posts) {
-      if (!isset ($posts['finish'])) return '沒有選擇 是否請款！';
-      if (!(is_numeric ($posts['finish'] = trim ($posts['finish'])) && in_array ($posts['finish'], array_keys (Schedule::$finishNames)))) return '是否請款 格式錯誤！';
+      if (!isset ($posts['finish'])) return '沒有選擇 是否完成！';
+      if (!(is_numeric ($posts['finish'] = trim ($posts['finish'])) && in_array ($posts['finish'], array_keys (Schedule::$finishNames)))) return '是否完成 格式錯誤！';
       return '';
     };
 

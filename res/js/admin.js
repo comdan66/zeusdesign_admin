@@ -171,6 +171,10 @@ $(function () {
   });
 
   window.funs.initPhotoSwipeFromDOM ('.content table', 'figure._i');
+  window.funs.updateCounter = function (key, result) {
+    if (typeof key !== 'undefined')
+      $('*[data-role*="' + key + '"]').each (function () { $(this).attr ('data-cnt', (result ? -1 : 1) + parseInt ($(this).attr ('data-cnt'), 10)); });
+  };
 
   window.funs.updateFlag = function ($objs, callback) {
     $objs.each (function () {
@@ -200,6 +204,9 @@ $(function () {
             $(this).prop ('checked', result ? true : false).prop ('disabled', false);
             $that.removeClass ('loading').get (0).oriVal = $(this).prop ('checked');
             callback && callback.bind ($that, result ? true : false) ();
+
+            window.funs.updateCounter ($that.data ('for_role'), result);
+
           }.bind ($(this)))
           .fail (function (result) { $(this).prop ('checked', $that.removeClass ('loading').get (0).oriVal).prop ('disabled', false); }.bind ($(this)));
         } else if ($input.attr ('type') == 'radio') {

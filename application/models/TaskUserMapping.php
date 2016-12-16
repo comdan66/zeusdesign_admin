@@ -11,13 +11,13 @@ class TaskUserMapping extends OaModel {
   static $table_name = 'task_user_mappings';
 
   static $has_one = array (
-    array ('user', 'class_name' => 'User'),
   );
 
   static $has_many = array (
   );
 
   static $belongs_to = array (
+    array ('user', 'class_name' => 'User'),
   );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {

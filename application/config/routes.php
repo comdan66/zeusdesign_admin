@@ -34,9 +34,11 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('my_salaries'), 'my_salaries');
   Route::resourcePagination (array ('my_weights'), 'my_weights');
   Route::resourcePagination (array ('my_tasks'), 'my_tasks');
+  Route::resourcePagination (array ('my_notifications'), 'my_notifications');
 
   Route::resourcePagination (array ('schedule_tags'), 'schedule_tags');
   Route::resourcePagination (array ('users'), 'users');
+  Route::resourcePagination (array ('mails'), 'mails');
   Route::resourcePagination (array ('contacts'), 'contacts');
   Route::resourcePagination (array ('deploys'), 'deploys');
 
