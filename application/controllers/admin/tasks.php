@@ -238,7 +238,7 @@ class Tasks extends Admin_controller {
         'action' => '更新了任務細項',
         'content' => implode ('，', $changes) . '。');
 
-      if (TaskCommit::transaction (function () use (&$commit, $obj, $posts) { return verifyCreateOrm ($commit = TaskCommit::create (array_intersect_key (array_merge ($posts, array ('task_id' => $obj->id, 'user_id' => User::current ()->id)), TaskCommit::table ()->columns))); })) {
+      if (TaskCommit::transaction (function () use (&$commit, $obj, $posts) { return verifyCreateOrm ($commit = TaskCommit::create (array_intersect_key (array_merge ($posts, array ('task_id' => $obj->id, 'user_id' => User::current ()->id, 'file' => '', 'size' => 0)), TaskCommit::table ()->columns))); })) {
         Notification::send (
           $users,
           '任務「' . $obj->title . '」內容有更新囉。',
