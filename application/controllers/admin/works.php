@@ -249,7 +249,7 @@ class Works extends Admin_controller {
     if (!(is_numeric ($posts['is_enabled'] = trim ($posts['is_enabled'])) && in_array ($posts['is_enabled'], array_keys (Work::$enableNames)))) return '是否公開 格式錯誤！';
     if (!(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['user_id']))))) return '作品作者 不存在！';
     if (!(is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '作品標題 格式錯誤！';
-    if (!is_upload_image_format ($cover, 2 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '作品封面 格式錯誤！';
+    if (!is_upload_image_format ($cover, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '作品封面 格式錯誤！';
     if (!(is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '作品內容 格式錯誤！';
 
     $posts['tag_ids'] = isset ($posts['tag_ids']) && is_array ($posts['tag_ids']) && $posts['tag_ids'] ? column_array (WorkTag::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['tag_ids']))), 'id') : array ();
@@ -269,7 +269,7 @@ class Works extends Admin_controller {
           );
       }, $posts['blocks']))) : array ();
 
-    $images = array_filter ($images, function ($image) { return is_upload_image_format ($image, 2 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png')); });
+    $images = array_filter ($images, function ($image) { return is_upload_image_format ($image, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png')); });
 
     return '';
   }
@@ -283,7 +283,7 @@ class Works extends Admin_controller {
     if (!(is_numeric ($posts['is_enabled'] = trim ($posts['is_enabled'])) && in_array ($posts['is_enabled'], array_keys (Work::$enableNames)))) return '是否公開 格式錯誤！';
     if (!(is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $posts['user_id']))))) return '作品作者 不存在！';
     if (!(is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '作品標題 格式錯誤！';
-    if ($cover && !is_upload_image_format ($cover, 2 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '文章封面 格式錯誤！';
+    if ($cover && !is_upload_image_format ($cover, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '文章封面 格式錯誤！';
     if (!(is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '作品內容 格式錯誤！';
 
     $posts['tag_ids'] = isset ($posts['tag_ids']) && is_array ($posts['tag_ids']) && $posts['tag_ids'] ? column_array (WorkTag::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['tag_ids']))), 'id') : array ();
@@ -303,7 +303,7 @@ class Works extends Admin_controller {
           );
       }, $posts['blocks']))) : array ();
 
-    $images = array_filter ($images, function ($image) { return is_upload_image_format ($image, 2 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png')); });
+    $images = array_filter ($images, function ($image) { return is_upload_image_format ($image, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png')); });
 
     $posts['oldimg'] = isset ($posts['oldimg']) ? $posts['oldimg'] : array ();
 
