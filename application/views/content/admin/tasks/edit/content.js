@@ -5,6 +5,10 @@
  */
 
 $(function () {
+  $('.icons a').click (function () {
+    $(this).parents ('figure').remove ();
+  });
+  
   $('form.form').submit (function () {
     $('#loading .contant').text ('處理中，請稍候..');
     $('#loading').addClass ('s');

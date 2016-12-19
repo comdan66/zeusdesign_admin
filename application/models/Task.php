@@ -18,6 +18,7 @@ class Task extends OaModel {
     array ('commits', 'class_name' => 'TaskCommit'),
     array ('users', 'class_name' => 'User', 'through' => 'task_mappings'),
     array ('schedules', 'class_name' => 'Schedule'),
+    array ('attachments', 'class_name' => 'TaskAttachment'),
   );
 
   static $belongs_to = array (
@@ -78,6 +79,9 @@ class Task extends OaModel {
       'commits' => array_map (function ($commit) {
         return $commit->columns_val ();
       }, TaskCommit::find ('all', array ('conditions' => array ('task_id = ?', $this->id)))),
+      'attachments' => array_map (function ($attachment) {
+        return $attachment->columns_val ();
+      }, TaskAttachment::find ('all', array ('conditions' => array ('task_id = ?', $this->id)))),
       'schedules' => array_map (function ($schedule) {
         return $schedule->columns_val ();
       }, Schedule::find ('all', array ('conditions' => array ('task_id = ?', $this->id))))) : $var;

@@ -70,20 +70,20 @@ class My_tasks extends Admin_controller {
       return redirect_message (array ($this->uri_1, $obj->id, 'show'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
+    $file = OAInput::file ('file');
     $backup = $obj->columns_val (true);
 
-    if ($msg = $this->_validation_update ($posts))
+    if ($msg = $this->_validation_update ($posts, $file))
       return redirect_message (array ($this->uri_1, $obj->id, 'show'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
-    $posts['action'] = '針對此任務留言';
-    if (!TaskCommit::transaction (function () use (&$commit, $obj, $posts) { return verifyCreateOrm ($commit = TaskCommit::create (array_intersect_key (array_merge ($posts, array ('task_id' => $obj->id, 'user_id' => User::current ()->id)), TaskCommit::table ()->columns))); }))
+    if (!TaskCommit::transaction (function () use (&$commit, $obj, $posts, $file) { return verifyCreateOrm ($commit = TaskCommit::create (array_intersect_key (array_merge ($posts, array ('task_id' => $obj->id, 'user_id' => User::current ()->id)), TaskCommit::table ()->columns))) && (!$file || ($commit->file->put ($file))); }))
       return redirect_message (array ($this->uri_1, $obj->id, 'show'), array ('_flash_danger' => '留言失敗！', 'posts' => $posts));
 
     $users = array_filter (($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array (), function ($user) { return $user->id != User::current ()->id; });
 
     Notification::send (
       $users,
-      User::current ()->name . ' 在任務「' . $obj->title . '」上面留言。',
+      User::current ()->name . ' 在任務「' . $obj->title . '」上面' . $commit->action . '。',
       base_url ('admin', 'my-tasks', $obj->id, 'show'));
 
     Mail::send (
@@ -161,10 +161,12 @@ class My_tasks extends Admin_controller {
 
     return $this->output_json ($obj->finish == Task::IS_FINISHED);
   }
-  private function _validation_update (&$posts) {
-    if (!isset ($posts['content'])) return '沒有填寫 留言內容！';
-    if (!(is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '留言內容 格式錯誤！';
-
+  private function _validation_update (&$posts, &$file) {
+    $file = $file && is_upload_file_format ($file, 10 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png', 'ppt', 'pptx', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'zip')) ? $file : array ();
+    $posts['content'] = isset ($posts['content']) && is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])) ? $posts['content'] : '';
+    if (!$posts['content'] && !$file) return '請輸入留言、註解 或 選擇檔案！';
+    $posts['action'] = $posts['content'] && $file ? '留言與上傳附件檔' : ($posts['content'] && !$file ? '留言' : '上傳附件檔');
+    $posts['size'] = $file ? $file['size'] : 0;
     return '';
   }
 }

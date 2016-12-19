@@ -54,7 +54,8 @@ class Tasks extends Admin_controller {
 
     return $this->load_view (array (
         'posts' => $posts,
-        'user_ids' => isset ($posts['user_ids']) ? $posts['user_ids'] : array ()
+        'user_ids' => isset ($posts['user_ids']) ? $posts['user_ids'] : array (),
+        'files' => isset ($posts['files']) ? $posts['files'] : array (),
       ));
   }
   public function create () {
@@ -63,6 +64,7 @@ class Tasks extends Admin_controller {
 
     $posts = OAInput::post ();
     $posts['description'] = OAInput::post ('description', false);
+    $files = $this->_validation_file ('files', $posts, OAInput::file ());
 
     if ($msg = $this->_validation_create ($posts))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => $msg, 'posts' => $posts));
@@ -77,6 +79,11 @@ class Tasks extends Admin_controller {
         $create1 = verifyCreateOrm (TaskUserMapping::create (array_intersect_key (array ('user_id' => $user_id, 'task_id' => $obj->id), TaskUserMapping::table ()->columns)));
         $create2 = verifyCreateOrm (Schedule::create (array_intersect_key (array_merge (Schedule::bind_column_from_task ($obj), array ('user_id' => $user_id, 'schedule_tag_id' => 0, 'task_id' => $obj->id, 'sort' => 0)), Schedule::table ()->columns)));
         return $create1 && $create2;
+      });
+
+    foreach ($files as $file)
+      TaskAttachment::transaction (function () use ($file, $obj) {
+        return verifyCreateOrm ($attachment = TaskAttachment::create (array_intersect_key (array ('task_id' => $obj->id, 'title' => $file['title'], 'file' => '', 'size' => $file['file']['size']), TaskAttachment::table ()->columns))) && $attachment->file->put ($file['file']);
       });
 
     UserLog::create (array (
@@ -111,6 +118,7 @@ class Tasks extends Admin_controller {
         'posts' => $posts,
         'obj' => $this->obj,
         'user_ids' => isset ($posts['user_ids']) ? $posts['user_ids'] : column_array ($this->obj->user_mappings, 'user_id'),
+        'files' => isset ($posts['files']) ? $posts['files'] : array (),
       ));
   }
   public function update () {
@@ -127,6 +135,7 @@ class Tasks extends Admin_controller {
     
     $posts = OAInput::post ();
     $posts['description'] = OAInput::post ('description', false);
+    $files = $this->_validation_file ('files', $posts, OAInput::file ());
     $backup = $obj->columns_val (true);
 
     if ($msg = $this->_validation_update ($posts))
@@ -138,6 +147,19 @@ class Tasks extends Admin_controller {
     
     if (!Task::transaction (function () use ($obj, $posts) { return $obj->save (); }))
       return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '更新失敗！', 'posts' => $posts));
+
+    $add_attachments = $del_attachments = array ();
+    $ori_ids = column_array ($obj->attachments, 'id');
+    if (($del_ids = array_diff ($ori_ids, $posts['old_attachment_ids'])) && ($tmps = TaskAttachment::find ('all', array ('select' => 'id, title, file', 'conditions' => array ('id IN (?)', $del_ids))))) 
+      foreach ($tmps as $attachment)
+        TaskAttachment::transaction (function () use ($attachment, &$del_attachments) {
+          return array_push ($del_attachments, $attachment) && $attachment->destroy ();
+        });
+
+    foreach ($files as $file)
+      TaskAttachment::transaction (function () use ($file, $obj, &$add_attachments) {
+        return verifyCreateOrm ($attachment = TaskAttachment::create (array_intersect_key (array ('task_id' => $obj->id, 'title' => $file['title'], 'file' => '', 'size' => $file['file']['size']), TaskAttachment::table ()->columns))) && $attachment->file->put ($file['file']) && array_push ($add_attachments, $attachment);
+      });
 
     $ori_ids = column_array ($obj->user_mappings, 'user_id');
 
@@ -206,6 +228,8 @@ class Tasks extends Admin_controller {
     if ($del_users || $new_users) array_push ($changes, '指派人員異動');
     if ($del_users) array_push ($changes, '移除 ' . implode (', ', column_array ($del_users, 'name')));
     if ($new_users) array_push ($changes, '加入 ' . implode (', ', column_array ($new_users, 'name')));
+    if ($del_attachments) array_push ($changes, count ($del_attachments) == 1 ? '刪除附件檔案 ' . $del_attachments[0]->title : ('刪除了 ' . count ($del_attachments) . ' 個附件，分別是 ' . implode ('、', column_array ($del_attachments, 'title'))));
+    if ($add_attachments) array_push ($changes, count ($add_attachments) == 1 ? '新增附件檔案 ' . $add_attachments[0]->title : ('新增了 ' . count ($add_attachments) . ' 個附件，分別是 ' . implode ('、', column_array ($add_attachments, 'title'))));
 
     if ($changes) {
       $posts = array (
@@ -341,9 +365,22 @@ class Tasks extends Admin_controller {
     if (!(is_numeric ($posts['level'] = trim ($posts['level'])) && in_array ($posts['level'], array_keys (Task::$levelNames)))) return '優先權 格式錯誤！';
 
     $posts['description'] = isset ($posts['description']) && is_string ($posts['description']) && ($posts['description'] = trim ($posts['description'])) ? $posts['description'] : '';
+    $posts['old_attachment_ids'] = isset ($posts['old_attachment_ids']) && is_array ($posts['old_attachment_ids']) && $posts['old_attachment_ids'] ? $posts['old_attachment_ids'] : array ();
     return '';
   }
   private function _validation_update (&$posts) {
     return $this->_validation_create ($posts);
+  }
+  private function _validation_file ($key, &$posts, &$files) {
+    if (!isset ($posts[$key])) return array ();
+    if (!isset ($files[$key])) return array ();
+    if (count ($posts[$key]) != count ($files[$key])) return array ();
+
+    $new = array ();
+      foreach ($posts[$key] as $i => $post)
+        if (($file = array ('name' => $files[$key][$i]['name']['name'], 'type' => $files[$key][$i]['type']['name'], 'tmp_name' => $files[$key][$i]['tmp_name']['name'], 'error' => $files[$key][$i]['error']['name'], 'size' => $files[$key][$i]['size']['name'])) && is_upload_file_format ($file, 10 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png', 'ppt', 'pptx', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'zip')))
+          array_push ($new, array ('title' => ($post['title'] = trim ($post['title'])) ? $post['title'] : $file['name'], 'file' => $file));
+
+    return $new;
   }
 }

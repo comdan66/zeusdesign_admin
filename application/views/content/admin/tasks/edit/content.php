@@ -71,6 +71,31 @@
       </div>
     </div>
 
+<?php if (count ($obj->attachments)) { ?>
+        <div class='row n2 icons'>
+          <label>附件</label>
+          <div>
+    <?php foreach ($obj->attachments as $attachment) { ?>
+            <figure href='<?php echo $attachment->file_icon ();?>'>
+              <input type='hidden' name='old_attachment_ids[]' value='<?php echo $attachment->id;?>' />
+              <img src='<?php echo $attachment->file_icon ();?>' />
+              <figcaption data-description='<?php echo $attachment->title;?>'><?php echo $attachment->title;?></figcaption>
+              <a class='icon-x'></a>
+              <span><?php echo size_unit ($attachment->size);?></span>
+            </figure>
+    <?php }?>
+          </div>
+        </div>
+<?php }?>
+
+    <div class='row n2 files' data-i='0' data-files='<?php echo json_encode ($files);?>'>
+      <label>附件</label>
+      <div>
+        <div class='add_file'>
+          <button type='button' class='icon-r add'></button>
+        </div>
+      </div>
+    </div>
 
     <div class='btns'>
       <div class='row n2'>

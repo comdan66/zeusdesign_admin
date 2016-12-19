@@ -6,9 +6,9 @@
  * @link        http://www.ioa.tw/
  */
 
-class TaskCommit extends OaModel {
+class TaskAttachment extends OaModel {
 
-  static $table_name = 'task_commits';
+  static $table_name = 'task_attachments';
 
   static $has_one = array (
   );
@@ -17,22 +17,19 @@ class TaskCommit extends OaModel {
   );
 
   static $belongs_to = array (
-    array ('user', 'class_name' => 'User'),
   );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
-    
-    OrmFileUploader::bind ('file', 'TaskCommitFileFileUploader');
+
+    OrmFileUploader::bind ('file', 'TaskAttachmentFileFileUploader');
   }
   public function columns_val ($has = false) {
     $var = array (
       'id'         => $this->id,
       'task_id'    => $this->task_id,
-      'user_id'    => $this->user_id,
-      'content'    => $this->content,
-      'file'       => $this->file,
-      'size'       => $this->size,
+      'title'     => $this->title,
+      'file'    => $this->file,
       'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
@@ -41,8 +38,24 @@ class TaskCommit extends OaModel {
   public function destroy () {
     return $this->delete ();
   }
-  public function mini_content ($length = 100) {
-    if (!isset ($this->content)) return '';
-    return $length ? mb_strimwidth (remove_ckedit_tag ($this->content), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
+  public function file_icon () {
+    $name = 'd4.png';
+    switch (pathinfo ((string)$this->file, PATHINFO_EXTENSION)) {
+      case 'jpg': case 'jpeg': $name = 'jpg.png'; break;
+      
+      case 'ppt': case 'pptx': $name = 'ppt.png'; break;
+      
+      // case 'doc': case 'docx':
+      //   $name = 'doc.png';
+      //   break;
+      
+      case 'xls': case 'xlsx': $name = 'xls.png'; break;
+      case 'gif': $name = 'gif.png'; break;
+      case 'png': $name = 'png.png'; break;
+      case 'pdf': $name = 'pdf.png'; break;
+      case 'zip': $name = 'zip.png'; break;
+      default: $name = 'd4.png'; break;
+    }
+    return res_url ('res', 'image', 'extension', $name);
   }
 }

@@ -45,26 +45,54 @@
       <h4 title='內容如下'></h4>
       <div class='content'><?php echo $obj->description;?></div>
     </div>
+<?php if (count ($obj->attachments)) { ?>
+        <div class='description'>
+          <h4 title='附件檔案'></h4>
+          <div class='content attachments'>
+      <?php foreach ($obj->attachments as $attachment) { ?>
+              <a href='<?php echo $attachment->file->url ();?>' target='_blank'>
+                <img src='<?php echo $attachment->file_icon ();?>' />
+                <figcaption data-description='<?php echo $attachment->title;?>'><?php echo $attachment->title;?></figcaption>
+                <div><?php echo size_unit ($attachment->size);?></div>
+              </a>
+      <?php }?>
+          </div>
+        </div>
+<?php }?>
   </div>
 </div>
 
 <div class='panel commit-form'>
-  <form class='commit' method='post' action='<?php echo base_url ($uri_1, $obj->id);?>'>
+  <form class='commit' method='post' action='<?php echo base_url ($uri_1, $obj->id);?>' enctype='multipart/form-data'>
     <input type='hidden' name='_method' value='put' />
 
     <div class='avatar'><img src='<?php echo User::current ()->avatar ();?>'></div>
-    <div class='input'><input type='text' id='commit_input_content' name='content' placeholder='請輸入留言、註解..' maxlength='200' pattern='.{1,200}' required title='輸入留言、註解!'></div>
+    <div class='input'>
+      <input type='text' id='commit_input_content' name='content' placeholder='請輸入留言、註解..' maxlength='200' >
+      <input type='file' name='file' />
+    </div>
     <button type='submit'>送出</button>
   </form>
 </div>
 
 <?php
-    if ($commits = TaskCommit::find ('all', array ('select' => 'user_id, action, content, created_at', 'order' => 'id DESC', 'include' => array ('user'), 'conditions' => array ('task_id = ?', $obj->id)))) { ?>
+    if ($commits = TaskCommit::find ('all', array ('order' => 'id DESC', 'include' => array ('user'), 'conditions' => array ('task_id = ?', $obj->id)))) { ?>
   <div class='panel commits'>
 <?php foreach ($commits as $commit) { ?>
         <div class='commit'>
           <div class='users'><div class='user owner'><img src='<?php echo $commit->user->avatar ();?>' /><span><?php echo $commit->user->name;?></span></div> 於 <time datetime='<?php echo $commit->created_at->format ('Y-m-d H:i:s');?>'><?php echo $commit->created_at->format ('Y-m-d H:i:s');?></time> <?php echo $commit->action;?>。</div>
           <div class='content'><?php echo  $commit->content;?></div>
+    <?php if ((string)$commit->file) {?>
+            <div class='file'>
+              <a href='<?php echo $commit->file->url ();?>' target='_blank'>
+                <img src='<?php echo $attachment->file_icon ();?>' />
+                <div>
+                  <span><?php echo (string)$commit->file;?></span>
+                  <span><?php echo size_unit ($attachment->size);?></span>
+                </div>
+              </a>
+            </div>
+    <?php } ?>
         </div>
 <?php }?>
   </div>

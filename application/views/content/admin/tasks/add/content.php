@@ -71,6 +71,15 @@
     </div>
 
 
+    <div class='row n2 files' data-i='0' data-files='<?php echo json_encode ($files);?>'>
+      <label>附件</label>
+      <div>
+        <div class='add_file'>
+          <button type='button' class='icon-r add'></button>
+        </div>
+      </div>
+    </div>
+
     <div class='btns'>
       <div class='row n2'>
         <label></label>

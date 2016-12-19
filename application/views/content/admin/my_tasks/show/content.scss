@@ -258,7 +258,7 @@
       content: attr(title);
       text-align: center;
       top: 0;
-      left: calc(50% - 120px / 2);
+      left: 10px;
       width: 120px;
       height: 30px;
       line-height: 30px;
@@ -287,6 +287,58 @@
         @include opacity(.5);
       }
     }
+    &.attachments {
+      @include clearfix();
+      
+      a {
+        float: left;
+        position: relative;
+        margin: 0;
+        cursor: pointer;
+        margin: 5px 10px;
+        overflow: visible;
+        cursor: pointer;
+        width: 75px + 2px + 10px * 2;
+        height: 120px + 2px + 10px;
+        padding: 0 10px;
+        padding-top: 10px;
+        border: 1px dashed rgba(39, 40, 34, .3);
+        background-color: rgba(247, 247, 247, 1.00);
+        @include border-radius(3px);
+        @include transition(background-color .3s);
+        
+        &:hover {
+          background-color: rgba(247 * 0.95, 247 * 0.95, 247 * 0.95, 1.00);
+        }
+        img {
+          height: calc(100% - 20px - 1px);
+        }
+
+        figcaption {
+          position: absolute;
+          left: 10px;
+          bottom: 20px;
+          display: inline-block;
+          width: calc(100% - 10px * 2);
+          padding: 5px;
+          @include opacity(.5);
+          background-color: rgba(39, 40, 34, 1.00);
+          font-size: 10px;
+          color: rgba(255, 255, 255, 1.00);
+          @include border-bottom-radius(6px);
+          @include overflow-docx3();
+        }
+        div {
+          margin-top: 2px;
+          display: inline-block;
+          text-align: center;
+          font-size: 10px;
+          width: 100%;
+          color: rgba(39, 40, 34, 1.00);
+          @include overflow-docx3();
+        }
+      }
+    }
   }
 }
 .commit-form {
@@ -312,17 +364,24 @@
     .input {
       float: left;
       display: inline-block;
-      width: calc(100% - 50px - 100px - 10px);
-      padding-top: 4px;
+      width: calc(100% - 50px - 60px - 10px);
+      padding-top: 3px;
+      @include clearfix();
 
       input {
         @include input;
-        width: 100%;
+        float: left;
+        width: 70%;
+        height: 33px;
+        +input {
+          margin-left: 5px;
+          width: calc(30% - 5px);
+        }
       }
     }
     button {
       @include button('blue', false);
-      width: 100px;
+      width: 60px;
       margin-left: 10px;
       margin-top: 3px;
     }
@@ -338,7 +397,64 @@
       padding-left: 5px;
       padding-right: 5px;
       padding-top: 5px;
-      border-top: 1px dotted rgba(39, 40, 34, .150);
+      border-top: 1px dashed rgba(39, 40, 34, .30);
+      
+      &:empty {
+        + .file {
+          margin-top: 5px;
+        }
+      }
+    }
+    .file {
+      margin-top: 10px;
+
+      a {
+        display: inline-block;
+        padding: 5px;
+        @include clearfix();
+        width: 200px;
+        cursor: pointer;
+
+        border: 1px dashed rgba(39, 40, 34, .3);
+        background-color: rgba(247, 247, 247, 1.00);
+        @include transition(background-color .3s);
+        @include border-radius(3px);
+
+        &:hover {
+          background-color: rgba(247 * 0.95, 247 * 0.95, 247 * 0.95, 1.00);
+        }
+        img {
+          display: inline-block;
+          float: left;
+          width: 0 + 75px / 2;
+          height: 0 + 99px / 2;
+        }
+        div {
+          display: inline-block;
+          float: left;
+          width: calc(100% - (75px / 2) - 6px);
+          margin-left: 6px;
+          @include clearfix();
+
+          span {
+            display: inline-block;
+            width: 100%;
+            padding: 0 3px;
+            color: rgba(39, 40, 34, .7500);
+            @include overflow-docx3();
+
+            &:last-child {
+              margin-top: 5px;
+              text-align: right;
+              color: rgba(39, 40, 34, .50);
+              font-size: 10px;
+              font-style: italic;
+              border-top: 1px dashed rgba(190, 191, 189, .25);
+            }
+          }
+        }
+      }
+      // border: 1px solid rgba(255, 0, 0, .3);
     }
     + .commit {
       margin-top: 35px;

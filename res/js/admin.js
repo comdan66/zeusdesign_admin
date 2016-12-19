@@ -438,7 +438,36 @@ $(function () {
       $addSource.find ('.add').click (function () { that.fm ($sources.data ('i')).insertBefore ($addSource); $sources.data ('i', $sources.data ('i') + 1); }).click ();
     });
   };
+  window.funs.formAddFile = function ($obj) {
+    $obj.each (function () {
+      var that = this, $files = $(this), $addFile = $files.find ('.add_file');
+
+      that.fm = function (i, t, h) {
+        return $('<div />').addClass ('file').append (
+          $('<div />').append (
+            $('<a />').addClass ('icon-tu').click (function () {
+              var $p = $(this).parents ('.file');
+              $p.clone (true).insertBefore ($p.index () > 0 ? $p.prev () : $addFile);
+              $p.remove ();
+            })).append (
+            $('<a />').addClass ('icon-td').click (function () {
+              var $p = $(this).parents ('.file'), $x = $p.next (), $n = $p.clone (true);
+              if ($x.hasClass ('add_file')) $n.prependTo ($td);
+              else $n.insertAfter ($x);
+              $p.remove ();
+            }))).append (
+          $('<input />').attr ('type', 'text').attr ('name', 'files[' + i + '][title]').attr ('placeholder', '請輸入附件標題..').attr ('maxlength', 200).val (t ? t : '')).append (
+          $('<input />').attr ('type', 'file').attr ('name', 'files[' + i + '][name]').attr ('placeholder', '請選擇檔案..').val (h ? h : '')).append (
+          $('<button />').attr ('type', 'button').addClass ('icon-t').click (function () { $(this).parents ('.file').remove (); })
+        );
+      };
+
+      if ($files.data ('files')) $files.data ('files').forEach (function (t) { that.fm ($files.data ('i'), t.title, t.href).insertBefore ($addFile); $files.data ('i', $files.data ('i') + 1); });
+      $addFile.find ('.add').click (function () { that.fm ($files.data ('i')).insertBefore ($addFile); $files.data ('i', $files.data ('i') + 1); }).click ();
+    });
+  };
   window.funs.formAddSource ($('form.form .row.sources'));
+  window.funs.formAddFile ($('form.form .row.files'));
 
 
   window.funs.formAddEmail = function ($obj) {

@@ -6,6 +6,27 @@
  * @link        http://www.ioa.tw/
  */
 
+if ( !function_exists ('size_unit')) {
+  function size_unit ($size, $unit = null, $default = null) {
+    $sizes = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB');
+    $mod = 1024;
+    $ii = count ($sizes) - 1;
+
+    $unit = array_search ((string)$unit, $sizes);
+    if ($unit === null || $unit === false) $unit = $ii;
+
+    if ($default === null) $default = '%01.2f %s';
+
+    $i = 0;
+    while ($unit != $i && $size >= 1024 && $i < $ii) {
+      $size /= $mod;
+      $i++;
+    }
+
+    return sprintf ($default, $size, $sizes[$i]);
+  }
+}
+
 if ( !function_exists ('is_datetime')) {
   function is_datetime ($date) {
     return (DateTime::createFromFormat('Y-m-d H:i:s', $date) !== false);
@@ -15,6 +36,30 @@ if ( !function_exists ('is_datetime')) {
 if ( !function_exists ('is_date')) {
   function is_date ($date) {
     return (DateTime::createFromFormat('Y-m-d', $date) !== false);
+  }
+}
+
+if (!function_exists ('is_upload_image_format')) {
+  function is_upload_image_format ($file, $check_size = 0, $types = array ()) {
+    if (!(isset ($file['name']) && isset ($file['type']) && isset ($file['tmp_name']) && isset ($file['error']) && isset ($file['size'])))
+      return false;
+
+    if ($check_size && !(is_numeric ($file['size']) && $file['size'] > 0)) return false;
+    if (!$types) return true;
+
+    $CI =& get_instance ();
+    $CI->config->load ('mimes');
+    $mimes = $CI->config->item ('mimes');
+    foreach ($types as $type)
+      if (isset ($mimes[$type]))
+        if (is_string ($mimes[$type])) {
+          if ($mimes[$type] == $file['type']) return true;
+        } else if (is_array ($mimes[$type])) {
+          foreach ($mimes[$type] as $mime)
+            if ($mime == $file['type']) return true;
+        }
+
+    return false;
   }
 }
 
@@ -29,6 +74,7 @@ if (!function_exists ('is_upload_file_format')) {
     $CI =& get_instance ();
     $CI->config->load ('mimes');
     $mimes = $CI->config->item ('mimes');
+
     foreach ($types as $type)
       if (isset ($mimes[$type]))
         if (is_string ($mimes[$type])) {
