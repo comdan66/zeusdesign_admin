@@ -56,6 +56,6 @@ class TaskAttachment extends OaModel {
       case 'zip': $name = 'zip.png'; break;
       default: $name = 'd4.png'; break;
     }
-    return res_url ('res', 'image', 'extension', $name);
+    return base_url ('res', 'image', 'extension', $name);
   }
 }
