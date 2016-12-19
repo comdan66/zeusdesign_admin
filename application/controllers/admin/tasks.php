@@ -64,7 +64,8 @@ class Tasks extends Admin_controller {
 
     $posts = OAInput::post ();
     $posts['description'] = OAInput::post ('description', false);
-    $files = $this->_validation_file ('files', $posts, OAInput::file ());
+    $files = OAInput::file ();
+    $files = $this->_validation_file ('files', $posts, $files);
 
     if ($msg = $this->_validation_create ($posts))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => $msg, 'posts' => $posts));
@@ -135,7 +136,8 @@ class Tasks extends Admin_controller {
     
     $posts = OAInput::post ();
     $posts['description'] = OAInput::post ('description', false);
-    $files = $this->_validation_file ('files', $posts, OAInput::file ());
+    $files = OAInput::file ();
+    $files = $this->_validation_file ('files', $posts, $files);
     $backup = $obj->columns_val (true);
 
     if ($msg = $this->_validation_update ($posts))

@@ -15,4 +15,8 @@ $(function () {
       $commitInputContent.focus ();
     });
   });
+  $('form.commit').submit (function () {
+    $('#loading .contant').text ('新增中，請稍候..');
+    $('#loading').addClass ('s');
+  });
 });
