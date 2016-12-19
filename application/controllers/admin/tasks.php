@@ -284,7 +284,7 @@ class Tasks extends Admin_controller {
       '宙斯任務「' . $obj->title . '」',
       'mail/task_delete',
       array (
-        'user' => $obj->user->name,
+        'user' => User::current ()->name,
         'email' => $obj->user->email,
         'url' => base_url ('platform', 'mail', 'admin', 'my-tasks'),
       ), $users);
