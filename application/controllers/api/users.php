@@ -12,6 +12,14 @@ class Users extends Api_controller {
     parent::__construct ();
 
   }
+  public function id () {
+    if (!(User::current () && User::current ()->is_login ()))
+      return $this->output_error_json ('錯誤，沒有該位使用者！');
+
+    return $this->output_json (array (
+        'id' => User::current ()->id
+      ));
+  }
   public function token () {
     if (!(($posts = OAInput::post ()) && isset ($posts['id']) && $posts['id'] && ($user = User::find ('one', array ('conditions' => array ('id = ?', $posts['id']))))))
       return $this->output_error_json ('錯誤，沒有該位使用者！');

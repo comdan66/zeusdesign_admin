@@ -47,6 +47,7 @@
                     <li><a href="<?php echo $url = base_url ('admin', 'my-salaries');?>" class='icon-moneybag<?php echo $now_url == $url ? ' active' : '';?>'>我的宙思幣</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'my-weights');?>" class='icon-balance-scale<?php echo $now_url == $url ? ' active' : '';?>'>體重記錄</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'my-tasks');?>" class='icon-shield<?php echo $now_url == $url ? ' active' : '';?>'>我的任務</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'my-image-bases');?>" class='icon-cs<?php echo $now_url == $url ? ' active' : '';?>'>我的圖庫</a></li>
                   </ul>
                 </label>
               </li>
@@ -97,6 +98,17 @@
                   <ul>
                     <li><a href="<?php echo $url = base_url ('admin', 'work-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>作品分類</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'works');?>" class='icon-g<?php echo $now_url == $url ? ' active' : '';?>'>作品管理</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php }
+            if (User::current ()->in_roles (array ('image'))) { ?>
+              <li>
+                <label>
+                  <input type='checkbox' />
+                  <span class='icon-ims'>圖庫系統</span>
+                  <ul>
+                    <li><a href="<?php echo $url = base_url ('admin', 'image-bases');?>" class='icon-cs<?php echo $now_url == $url ? ' active' : '';?>'>宙思圖庫</a></li>
                   </ul>
                 </label>
               </li>

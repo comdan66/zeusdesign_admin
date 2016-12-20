@@ -16,6 +16,7 @@ class User extends OaModel {
   static $has_many = array (
     array ('roles', 'class_name' => 'UserRole'),
     array ('task_mappings', 'class_name' => 'TaskUserMapping'),
+    array ('image_bases', 'class_name' => 'ImageBase'),
   );
 
   static $belongs_to = array (
@@ -42,6 +43,9 @@ class User extends OaModel {
     );
     return $has ? array (
       'this' => $var,
+      'image_bases' => array_map (function ($image_base) {
+        return $image_base->columns_val ();
+      }, ImageBase::find ('all', array ('conditions' => array ('user_id = ?', $this->id)))),
       'roles' => array_map (function ($role) {
         return $role->columns_val ();
       }, UserRole::find ('all', array ('conditions' => array ('user_id = ?', $this->id))))) : $var;

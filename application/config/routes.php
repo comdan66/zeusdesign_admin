@@ -35,6 +35,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('my_weights'), 'my_weights');
   Route::resourcePagination (array ('my_tasks'), 'my_tasks');
   Route::resourcePagination (array ('my_notifications'), 'my_notifications');
+  Route::resourcePagination (array ('my_image_bases'), 'my_image_bases');
 
   Route::resourcePagination (array ('schedule_tags'), 'schedule_tags');
   Route::resourcePagination (array ('users'), 'users');
@@ -60,6 +61,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('tag', 'work_tags'), 'tag_work_tags');
   Route::resourcePagination (array ('works'), 'works');
   Route::resourcePagination (array ('tasks'), 'tasks');
+  Route::resourcePagination (array ('image_bases'), 'image_bases');
   
   Route::resourcePagination (array ('invoice_tags'), 'invoice_tags');
   Route::resourcePagination (array ('invoices'), 'invoices');
@@ -74,6 +76,7 @@ Route::group ('api', function () {
   Route::post ('/users/token', 'users@token');
   Route::post ('/users/notification', 'users@notification');
 
+  Route::resource (array ('image_bases'), 'image_bases');
   Route::resource (array ('schedules'), 'schedules');
   Route::resource (array ('schedule_tags'), 'schedule_tags');
   
