@@ -41,9 +41,10 @@
       <thead>
         <tr>
           <th width='50' class='center'>#</th>
-          <th >圖片網址</th>
+          <th width='70'>圖片</th>
           <th width='300'>網頁網址</th>
           <th width='300'>圖片網址</th>
+          <th >備註</th>
           <th width='95' class='right'>原始檔/刪除</th>
         </tr>
       </thead>
@@ -61,6 +62,7 @@
               </td>
               <td><?php echo mini_link ($obj->from_url, 40);?></td>
               <td><?php echo mini_link ($obj->image_url, 40);?></td>
+              <td><?php echo $obj->memo;?></td>
               <td class='right'>
                 <a class='icon-y' href='<?php echo $obj->name->url ();?>' target='_blank'></a>
                 /
@@ -70,7 +72,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='5' class='no_data'>沒有任何資料。</td>
+            <td colspan='6' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>
