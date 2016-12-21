@@ -6,9 +6,9 @@
 
 @import "_oa";
 
-#main>header>* {
+#main>header:not(.customize)>* {
   width: calc(100% - 550px);
 }
-#main>header>*:first-child {
+#main>header:not(.customize)>*:first-child {
   width: 550px;
 }

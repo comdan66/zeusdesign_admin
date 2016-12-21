@@ -5,10 +5,3 @@
  */
 
 @import "_oa";
-
-#main>header:not(.customize)>* {
-  width: calc(100% - 300px);
-}
-#main>header:not(.customize)>*:first-child {
-  width: 300px;
-}

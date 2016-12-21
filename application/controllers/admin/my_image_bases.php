@@ -29,8 +29,9 @@ class My_image_bases extends Admin_controller {
   }
   private function _search_columns () {
     return array ( 
-        array ('key' => 'image_url',    'title' => '圖片網址', 'sql' => 'image_url LIKE ?'), 
-        array ('key' => 'from_url',    'title' => '網頁網址', 'sql' => 'from_url LIKE ?'), 
+        array ('key' => 'image_base_tag_id', 'title' => '分類',    'sql' => 'image_base_tag_id = ?', 'select' => array_map (function ($tag) { return array ('value' => '' . $tag->id, 'text' => $tag->name);}, ImageBaseTag::all (array ('select' => 'id, name', 'conditions' => array ('user_id = ?', User::current ()->id))))),
+        array ('key' => 'image_url',         'title' => '圖片網址', 'sql' => 'image_url LIKE ?'), 
+        array ('key' => 'from_url',          'title' => '網頁網址', 'sql' => 'from_url LIKE ?'), 
       );
   }
   public function index ($offset = 0) {

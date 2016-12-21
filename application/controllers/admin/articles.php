@@ -39,7 +39,7 @@ class Articles extends Admin_controller {
     $columns = array ( 
         array ('key' => 'content', 'title' => '內容', 'sql' => 'content LIKE ?'), 
         array ('key' => 'title',   'title' => '標題', 'sql' => 'title LIKE ?'), 
-        array ('key' => 'user_id', 'title' => '作者', 'sql' => 'user_id = ?', 'select' => array_map (function ($user) { return array ('value' => $user->id, 'text' => $user->name);}, User::all (array ('select' => 'id, name')))),
+        array ('key' => 'user_id', 'title' => '作者', 'sql' => 'user_id = ?', 'select' => array_map (function ($user) { return array ('value' => '' . $user->id, 'text' => $user->name);}, User::all (array ('select' => 'id, name')))),
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));

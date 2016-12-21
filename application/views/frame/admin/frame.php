@@ -40,14 +40,13 @@
                   <span class='icon-u'>個人管理</span>
                   <ul>
                     <li><a href="<?php echo $url = base_url ('admin', 'my');?>" class='icon-bo<?php echo $now_url == $url ? ' active' : '';?>'>基本資料</a></li>
-                    <!-- <li data-cnt='12'><a href="<?php echo $url = base_url ('admin', 'notifications');?>" class='icon-no_a<?php echo $now_url == $url ? ' active' : '';?>'>系統通知</a></li> -->
                     <li><a href="<?php echo $url = base_url ('admin', 'schedule-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>行程分類</a></li>
-                    <li data-role='schedule' data-cnt='<?php echo $schedule_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'calendar');?>" class='icon-calendar<?php echo $now_url == $url ? ' active' : '';?>'>個人行程</a></li>
-                    <!-- <li><a href="<?php echo $url = base_url ('admin', 'all-calendar');?>" class='icon-calendar<?php echo $now_url == $url ? ' active' : '';?>'>全部行程</a></li> -->
-                    <li><a href="<?php echo $url = base_url ('admin', 'my-salaries');?>" class='icon-moneybag<?php echo $now_url == $url ? ' active' : '';?>'>我的宙思幣</a></li>
+                    <li data-role='schedule' data-cnt='<?php echo $schedule_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'calendar');?>" class='icon-calendar<?php echo $now_url == $url ? ' active' : '';?>'>我的行程</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'my-weights');?>" class='icon-balance-scale<?php echo $now_url == $url ? ' active' : '';?>'>體重記錄</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'my-tasks');?>" class='icon-shield<?php echo $now_url == $url ? ' active' : '';?>'>我的任務</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'my-image-base-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>圖庫分類</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'my-image-bases');?>" class='icon-cs<?php echo $now_url == $url ? ' active' : '';?>'>我的圖庫</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'my-salaries');?>" class='icon-moneybag<?php echo $now_url == $url ? ' active' : '';?>'>我的宙思幣</a></li>
                   </ul>
                 </label>
               </li>

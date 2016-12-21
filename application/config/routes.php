@@ -35,6 +35,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('my_weights'), 'my_weights');
   Route::resourcePagination (array ('my_tasks'), 'my_tasks');
   Route::resourcePagination (array ('my_notifications'), 'my_notifications');
+  Route::resourcePagination (array ('my_image_base_tags'), 'my_image_base_tags');
   Route::resourcePagination (array ('my_image_bases'), 'my_image_bases');
 
   Route::resourcePagination (array ('schedule_tags'), 'schedule_tags');
