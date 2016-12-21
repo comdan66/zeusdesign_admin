@@ -6,7 +6,7 @@
  * @link        http://www.ioa.tw/
  */
 
-class Schedule_tags extends Api_controller {
+class Image_base_tags extends Api_controller {
   private $user = null;
   private $tag = null;
 
@@ -20,11 +20,11 @@ class Schedule_tags extends Api_controller {
         return $this->disable ($this->output_error_json ('Not found User!'));
 
     if (in_array ($this->uri->rsegments (2, 0), array ('finish', 'update', 'destroy')))
-      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->tag = ScheduleTag::find ('one', array ('conditions' => array ('id = ? AND user_id = ?', $id, $this->user->id))))))
+      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->tag = ImageBaseTag::find ('one', array ('conditions' => array ('id = ? AND user_id = ?', $id, $this->user->id))))))
         return $this->disable ($this->output_error_json ('Not found Data!'));
   }
   public function index () {
-    $tags = ScheduleTag::find ('all', array (
+    $tags = ImageBaseTag::find ('all', array (
       'order' => 'id DESC',
       'conditions' => array ('user_id = ?', $this->user->id)));
 
@@ -32,7 +32,6 @@ class Schedule_tags extends Api_controller {
       return array (
           'id' => $tag->id,
           'name' => $tag->name,
-          'color' => $tag->color (),
         );
     }, $tags));
   }

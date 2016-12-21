@@ -77,6 +77,8 @@ Route::group ('api', function () {
   Route::post ('/users/notification', 'users@notification');
 
   Route::resource (array ('image_bases'), 'image_bases');
+  Route::resource (array ('image_base_tags'), 'image_base_tags');
+  
   Route::resource (array ('schedules'), 'schedules');
   Route::resource (array ('schedule_tags'), 'schedule_tags');
   

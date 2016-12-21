@@ -6,15 +6,14 @@
  * @link        http://www.ioa.tw/
  */
 
-class Migration_Add_schedule_tags extends CI_Migration {
+class Migration_Add_image_base_tags extends CI_Migration {
   public function up () {
     $this->db->query (
-      "CREATE TABLE `schedule_tags` (
+      "CREATE TABLE `image_base_tags` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
         `user_id` int(11) unsigned NOT NULL COMMENT 'User ID',
 
         `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '名稱',
-        `color` varchar(10) COLLATE utf8_unicode_ci NOT NULL COMMENT '色碼',
 
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',
@@ -24,7 +23,7 @@ class Migration_Add_schedule_tags extends CI_Migration {
   }
   public function down () {
     $this->db->query (
-      "DROP TABLE `schedule_tags`;"
+      "DROP TABLE `image_base_tags`;"
     );
   }
 }
