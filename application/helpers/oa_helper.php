@@ -151,7 +151,7 @@ if (!function_exists ('conditions')) {
     $qs = implode ('&amp;', array_map (function ($q) { return $q[0] . '=' . $q[1]; }, $qs));
 
     $configs = array (
-        'uri_segment' => count ($configs),
+        'uri_segment' => ($tmp = array_search ('%s', $configs)) !== false ? $tmp + 1 : count ($configs),
         'base_url' => base_url (array_merge ($configs, array ($qs ? '?' . $qs : '')))
       );
     return $conditions;

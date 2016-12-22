@@ -11,7 +11,7 @@ function getUrlParam (paramName) {
 }
 
 $(function () {
-  $('.ckes > div').click (function () {
+  $('#imgs > .img').click (function () {
     var funcNum = getUrlParam ('CKEditorFuncNum'),
         url = $(this).data ('url');
 

@@ -1330,9 +1330,10 @@ div.radios {
     margin: 0;
     padding: 1px 3px;
     background-color: rgba(221, 221, 221, 1.00);
+    border: 1px solid rgba(207, 207, 207, 1.00);
     @include clearfix();
     @include border-radius(3px);
-
+    
     li {
       float: left;
       display: inline-block;
