@@ -16,9 +16,9 @@ class Migration_Add_weights extends CI_Migration {
         
         `cover` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '自拍照片',
 
-        `weight` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '體重',
+        `weight` float NOT NULL DEFAULT 0 COMMENT '體重',
         `rate` float NOT NULL DEFAULT 0 COMMENT '體脂率',
-        `calorie` smallint(6) unsigned NOT NULL DEFAULT 0 COMMENT '運動卡路里',
+        `calorie` float NOT NULL DEFAULT 0 COMMENT '運動卡路里',
         `memo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '備註',
 
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
