@@ -148,7 +148,7 @@ class My_weights extends Admin_controller {
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '刪除成功！'));
   }
   private function _validation_create (&$posts, &$cover) {
-    if (!((string)$obj->cover || isset ($cover))) $cover = null;
+    if (!($cover && ((string)$obj->cover || isset ($cover)))) $cover = null;
     if (!is_upload_image_format ($cover, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '自拍照片 格式錯誤！';
 
     $posts['weight'] = isset ($posts['weight']) && is_numeric ($posts['weight'] = trim ($posts['weight'])) && ($posts['weight'] > 0) && ($posts['weight'] < 150) ? $posts['weight'] : 0;
@@ -158,7 +158,7 @@ class My_weights extends Admin_controller {
     return '';
   }
   private function _validation_update (&$posts, &$cover, $obj) {
-    if (!((string)$obj->cover || isset ($cover))) $cover = null;
+    if (!($cover && ((string)$obj->cover || isset ($cover)))) $cover = null;
     if ($cover && !is_upload_image_format ($cover, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '文章封面 格式錯誤！';
 
     $posts['weight'] = isset ($posts['weight']) && is_numeric ($posts['weight'] = trim ($posts['weight'])) && ($posts['weight'] > 0) && ($posts['weight'] < 150) ? $posts['weight'] : 0;
