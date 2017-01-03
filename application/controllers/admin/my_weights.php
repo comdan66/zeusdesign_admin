@@ -148,12 +148,12 @@ class My_weights extends Admin_controller {
     return redirect_message (array ($this->uri_1), array ('_flash_info' => '刪除成功！'));
   }
   private function _validation_create (&$posts, &$cover) {
-    if (!isset ($cover)) return '沒有選擇 自拍照片！';
+    if (!((string)$obj->cover || isset ($cover))) $cover = null;
     if (!is_upload_image_format ($cover, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '自拍照片 格式錯誤！';
 
-    $posts['weight'] = isset ($posts['weight']) && is_numeric ($posts['weight'] = trim ($posts['weight'])) && ($posts['weight'] > 0) && ($posts['weight'] < 150);
-    $posts['rate'] = isset ($posts['rate']) && is_numeric ($posts['rate'] = trim ($posts['rate'])) && ($posts['rate'] > 0) && ($posts['rate'] < 100);
-    $posts['calorie'] = isset ($posts['calorie']) && is_numeric ($posts['calorie'] = trim ($posts['calorie'])) && ($posts['calorie'] > 0) && ($posts['calorie'] < 3000);
+    $posts['weight'] = isset ($posts['weight']) && is_numeric ($posts['weight'] = trim ($posts['weight'])) && ($posts['weight'] > 0) && ($posts['weight'] < 150) ? $posts['weight'] : 0;
+    $posts['rate'] = isset ($posts['rate']) && is_numeric ($posts['rate'] = trim ($posts['rate'])) && ($posts['rate'] > 0) && ($posts['rate'] < 100) ? $posts['rate'] : 0;
+    $posts['calorie'] = isset ($posts['calorie']) && is_numeric ($posts['calorie'] = trim ($posts['calorie'])) && ($posts['calorie'] > 0) && ($posts['calorie'] < 3000) ? $posts['calorie'] : 0;
 
     return '';
   }
