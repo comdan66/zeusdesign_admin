@@ -11,6 +11,7 @@ class Invoice extends OaModel {
   static $table_name = 'invoices';
 
   static $has_many = array (
+    array ('images', 'class_name' => 'InvoiceImage'),
   );
 
   static $belongs_to = array (
@@ -55,7 +56,11 @@ class Invoice extends OaModel {
       'updated_at'     => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at'     => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
-    return $has ? array ('this' => $var) : $var;
+    return $has ? array (
+      'this' => $var,
+      'images' => array_map (function ($image) {
+        return $image->columns_val ();
+      }, InvoiceImage::find ('all', array ('conditions' => array ('invoice_id = ?', $this->id))))) : $var;
   }
   public function mini_name ($length = 50) {
     if (!isset ($this->name)) return '';

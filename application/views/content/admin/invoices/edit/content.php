@@ -88,6 +88,28 @@
       </div>
     </div>
 
+    <div class='row n2'>
+      <label>圖片</label>
+      <div class='imgs_row'>
+
+  <?php foreach ($obj->images as $image) { ?>
+          <div class="drop_img">
+            <img src="<?php echo $image->name->url ('800w');?>" />
+            <input type='hidden' name='oldimg[]' value='<?php echo $image->id;?>' />
+            <input type="file" name="images[]" style="top: 0px; left: 0px;">
+            <a class="icon-t"></a>
+          </div>
+  <?php } ?>
+
+        <div class='drop_img no_cchoice'>
+          <img src='' />
+          <input type='file' name='images[]' />
+          <a class='icon-t'></a>
+        </div>
+
+      </div>
+    </div>
+
 
 
     <div class='row n2'>

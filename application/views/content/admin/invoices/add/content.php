@@ -87,6 +87,19 @@
     </div>
 
     <div class='row n2'>
+      <label>圖片</label>
+      <div class='imgs_row'>
+
+        <div class='drop_img no_cchoice'>
+          <img src='' />
+          <input type='file' name='images[]' />
+          <a class='icon-t'></a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class='row n2'>
       <label>數量</label>
       <div>
         <input type='number' name='quantity' id='quantity' value='<?php echo isset ($posts['quantity']) ? $posts['quantity'] : '0';?>' placeholder='請輸入數量..' />

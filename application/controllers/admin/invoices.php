@@ -45,7 +45,7 @@ class Invoices extends Admin_controller {
 
     $limit = 25;
     $total = Invoice::count (array ('conditions' => $conditions));
-    $objs = Invoice::find ('all', array ('offset' => $offset < $total ? $offset : 0, 'limit' => $limit, 'order' => 'id DESC', 'include' => array ('user', 'tag', 'customer'), 'conditions' => $conditions));
+    $objs = Invoice::find ('all', array ('offset' => $offset < $total ? $offset : 0, 'limit' => $limit, 'order' => 'id DESC', 'include' => array ('user', 'tag', 'customer', 'images'), 'conditions' => $conditions));
 
     return $this->load_view (array (
         'objs' => $objs,
@@ -65,12 +65,17 @@ class Invoices extends Admin_controller {
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
+    $images = OAInput::file ('images[]');
 
-    if ($msg = $this->_validation_create ($posts))
+    if ($msg = $this->_validation_create ($posts, $images))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
     if (!Invoice::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = Invoice::create (array_intersect_key ($posts, Invoice::table ()->columns))); }))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
+
+    if ($images)
+      foreach ($images as $image)
+        InvoiceImage::transaction (function () use ($image, $obj) { return verifyCreateOrm ($img = InvoiceImage::create (array_intersect_key (array ('invoice_id' => $obj->id), InvoiceImage::table ()->columns))) && $img->name->put ($image); });
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -96,9 +101,10 @@ class Invoices extends Admin_controller {
       return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
+    $images = OAInput::file ('images[]');
     $backup = $obj->columns_val (true);
 
-    if ($msg = $this->_validation_update ($posts))
+    if ($msg = $this->_validation_update ($posts, $images))
       return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
     if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
@@ -107,6 +113,14 @@ class Invoices extends Admin_controller {
 
     if (!Invoice::transaction (function () use ($obj, $posts) { return $obj->save (); }))
       return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_flash_danger' => '更新失敗！', 'posts' => $posts));
+
+    if (($del_ids = array_diff (column_array ($obj->images, 'id'), $posts['oldimg'])) && ($imgs = InvoiceImage::find ('all', array ('select' => 'id, name', 'conditions' => array ('id IN (?)', $del_ids)))))
+      foreach ($imgs as $img)
+        InvoiceImage::transaction (function () use ($img) { return $img->destroy (); });
+
+    if ($images)
+      foreach ($images as $image)
+        InvoiceImage::transaction (function () use ($image, $obj) { return verifyCreateOrm ($img = InvoiceImage::create (array_intersect_key (array ('invoice_id' => $obj->id), InvoiceImage::table ()->columns))) && $img->name->put ($image); });
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
@@ -201,7 +215,7 @@ class Invoices extends Admin_controller {
 
     return $this->output_json ($obj->is_pay == Invoice::IS_PAY);
   }
-  private function _validation_create (&$posts) {
+  private function _validation_create (&$posts, &$images) {
     if (!isset ($posts['is_finished'])) return '沒有選擇 是否請款！';
     if (!isset ($posts['is_pay'])) return '沒有選擇 是否入帳！';
     if (!isset ($posts['user_id'])) return '沒有選擇 負責人！';
@@ -224,10 +238,13 @@ class Invoices extends Admin_controller {
     
     $posts['memo'] = isset ($posts['memo']) && is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) ? $posts['memo'] : '';
 
+    $images = array_filter ($images, function ($image) { return is_upload_image_format ($image, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png')); });
+    
     return '';
   }
-  private function _validation_update (&$posts) {
-    return $this->_validation_create ($posts);
+  private function _validation_update (&$posts, &$images) {
+    $posts['oldimg'] = isset ($posts['oldimg']) ? $posts['oldimg'] : array ();
+    return $this->_validation_create ($posts, $images);
   }
   public function export () {
     $columns = $this->_search_columns ();

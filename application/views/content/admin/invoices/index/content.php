@@ -57,11 +57,12 @@
         <tr>
           <th width='90' class='center'>已請款</th>
           <th width='90' class='center'>已入帳</th>
-          <th width='120'>負責人</th>
-          <th width='120'>聯絡人</th>
-          <th width='150'>聯絡電話</th>
+          <th width='110'>負責人</th>
+          <th width='110'>聯絡人</th>
+          <th width='140'>聯絡電話</th>
           <th>專案名稱</th>
-          <th width='100'>總金額</th>
+          <th width='70' class='center'>圖片</th>
+          <th width='90' class='right'>總金額</th>
           <th width='80' class='right'>修改/刪除</th>
         </tr>
       </thead>
@@ -85,7 +86,19 @@
               <td><?php echo $obj->customer ? $obj->customer->name . ($obj->customer->company ? '(' . $obj->customer->company->name . ')' : '') : '';?></td>
               <td><?php echo $obj->customer && $obj->customer->company ? $obj->customer->company->telephone . (($e = trim ($obj->customer->extension, '#')) ? ' #' . $e : '') : '';?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo number_format ($obj->all_money);?></td>
+              
+              <td class='center images'>
+                <?php if ($obj->images) { ?>
+                  <?php foreach ($obj->images as $image) { ?>
+                          <figure class='_i' href='<?php echo $image->name->url ();?>'>
+                            <img src='<?php echo $image->name->url ();?>' />
+                            <figcaption><?php echo $obj->name;?></figcaption>
+                          </figure>
+                  <?php }?>
+                <?php } ?>
+              </td>
+
+              <td class='right'><?php echo number_format ($obj->all_money);?></td>
               <td class='right'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
                 /

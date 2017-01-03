@@ -5,3 +5,11 @@
  */
 
 @import "_oa";
+
+.images {
+  figure {
+    + figure {
+      margin-top: 5px !important;
+    }
+  }
+}
