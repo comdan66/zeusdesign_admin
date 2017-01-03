@@ -76,7 +76,7 @@ class My_weights extends Admin_controller {
     $posts['date_at'] = date ('Y-m-d');
     $posts['user_id'] = User::current ()->id;
 
-    if (!Weight::transaction (function () use (&$obj, $posts, $cover) { return verifyCreateOrm ($obj = Weight::create (array_intersect_key ($posts, Weight::table ()->columns))) && $obj->cover->put ($cover); }))
+    if (!Weight::transaction (function () use (&$obj, $posts, $cover) { return verifyCreateOrm ($obj = Weight::create (array_intersect_key ($posts, Weight::table ()->columns))) && ($cover ? $obj->cover->put ($cover) : true) ; }))
       return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
 
     UserLog::create (array (
