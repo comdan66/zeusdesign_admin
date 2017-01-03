@@ -54,7 +54,7 @@ class My_weights extends Admin_controller {
       ));
   }
   public function add () {
-    if ($obj = Weight::find ('one', array ('select' => 'id', 'conditions' => array ('date_at = ?', date ('Y-m-d')))))
+    if ($obj = Weight::find ('one', array ('select' => 'id', 'conditions' => array ('date_at = ? AND user_id = ?', date ('Y-m-d'), User::current ()->id))))
       return redirect (base_url ($this->uri_1, $obj->id, 'edit'), 'refresh');
 
     $posts = Session::getData ('posts', true);
@@ -161,9 +161,9 @@ class My_weights extends Admin_controller {
     if (!((string)$obj->cover || isset ($cover))) return '沒有選擇 文章封面！';
     if ($cover && !is_upload_image_format ($cover, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '文章封面 格式錯誤！';
 
-    $posts['weight'] = isset ($posts['weight']) && is_numeric ($posts['weight'] = trim ($posts['weight'])) && ($posts['weight'] > 0) && ($posts['weight'] < 150);
-    $posts['rate'] = isset ($posts['rate']) && is_numeric ($posts['rate'] = trim ($posts['rate'])) && ($posts['rate'] > 0) && ($posts['rate'] < 100);
-    $posts['calorie'] = isset ($posts['calorie']) && is_numeric ($posts['calorie'] = trim ($posts['calorie'])) && ($posts['calorie'] > 0) && ($posts['calorie'] < 3000);
+    $posts['weight'] = isset ($posts['weight']) && is_numeric ($posts['weight'] = trim ($posts['weight'])) && ($posts['weight'] > 0) && ($posts['weight'] < 150) ? $posts['weight'] : 0;
+    $posts['rate'] = isset ($posts['rate']) && is_numeric ($posts['rate'] = trim ($posts['rate'])) && ($posts['rate'] > 0) && ($posts['rate'] < 100) ? $posts['rate'] : 0;
+    $posts['calorie'] = isset ($posts['calorie']) && is_numeric ($posts['calorie'] = trim ($posts['calorie'])) && ($posts['calorie'] > 0) && ($posts['calorie'] < 3000) ? $posts['calorie'] : 0;
 
     return '';
   }
