@@ -59,10 +59,12 @@
             <tr>
               <td class='center'><?php echo $obj->id;?></td>
               <td class='center'>
-                <figure class='_i' href='<?php echo $obj->cover->url ('500w');?>'>
-                  <img src='<?php echo $obj->cover->url ('500w');?>' />
-                  <figcaption data-description='<?php echo $obj->date_at->format ('Y-m-d');?> <?php echo $obj->weight;?>Kg (<?php echo $obj->rate;?>%) <?php echo $obj->calorie;?>Kcal'><?php echo $obj->date_at->format ('Y-m-d');?></figcaption>
-                </figure>
+          <?php if ((string)$obj->cover) { ?>
+                  <figure class='_i' href='<?php echo $obj->cover->url ('500w');?>'>
+                    <img src='<?php echo $obj->cover->url ('500w');?>' />
+                    <figcaption data-description='<?php echo $obj->date_at->format ('Y-m-d');?> <?php echo $obj->weight;?>Kg (<?php echo $obj->rate;?>%) <?php echo $obj->calorie;?>Kcal'><?php echo $obj->date_at->format ('Y-m-d');?></figcaption>
+                  </figure>
+          <?php } ?>
               </td>
               
               <td><?php echo $obj->weight;?></td>
