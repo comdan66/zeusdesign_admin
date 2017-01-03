@@ -149,7 +149,7 @@ class My_weights extends Admin_controller {
   }
   private function _validation_create (&$posts, &$cover) {
     if (!($cover && ((string)$obj->cover || isset ($cover)))) $cover = null;
-    if (!is_upload_image_format ($cover, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '自拍照片 格式錯誤！';
+    if ($cover && !is_upload_image_format ($cover, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '文章封面 格式錯誤！';
 
     $posts['weight'] = isset ($posts['weight']) && is_numeric ($posts['weight'] = trim ($posts['weight'])) && ($posts['weight'] > 0) && ($posts['weight'] < 150) ? $posts['weight'] : 0;
     $posts['rate'] = isset ($posts['rate']) && is_numeric ($posts['rate'] = trim ($posts['rate'])) && ($posts['rate'] > 0) && ($posts['rate'] < 100) ? $posts['rate'] : 0;
