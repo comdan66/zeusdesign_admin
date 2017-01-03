@@ -34,21 +34,21 @@
     <div class='row n2'>
       <label>目前體重</label>
       <div>
-        <input type='number' name='weight' id='weight' value='<?php echo isset ($posts['weight']) ? $posts['weight'] : $obj->weight;?>' placeholder='請輸入目前體重..' maxlength='200' pattern='.{1,200}' required title='輸入目前體重!' autofocus />
+        <input type='text' name='weight' id='weight' value='<?php echo isset ($posts['weight']) ? $posts['weight'] : $obj->weight;?>' placeholder='請輸入目前體重..' maxlength='200' pattern='.{1,200}' required title='輸入目前體重!' autofocus />
       </div>
     </div>
 
     <div class='row n2'>
       <label>目前體脂率</label>
       <div>
-        <input type='number' name='rate' id='rate' value='<?php echo isset ($posts['rate']) ? $posts['rate'] : $obj->rate;?>' placeholder='請輸入目前體脂率..' maxlength='200' pattern='.{1,200}' required title='輸入目前體脂率!' />
+        <input type='text' name='rate' id='rate' value='<?php echo isset ($posts['rate']) ? $posts['rate'] : $obj->rate;?>' placeholder='請輸入目前體脂率..' maxlength='200' pattern='.{1,200}' required title='輸入目前體脂率!' />
       </div>
     </div>
 
     <div class='row n2'>
       <label>運動消耗卡路里</label>
       <div>
-        <input type='number' name='calorie' id='calorie' value='<?php echo isset ($posts['calorie']) ? $posts['calorie'] : $obj->calorie;?>' placeholder='請輸入這次運動消耗卡路里..' maxlength='200' pattern='.{1,200}' required title='輸入這次運動消耗卡路里!' />
+        <input type='text' name='calorie' id='calorie' value='<?php echo isset ($posts['calorie']) ? $posts['calorie'] : $obj->calorie;?>' placeholder='請輸入這次運動消耗卡路里..' maxlength='200' pattern='.{1,200}' required title='輸入這次運動消耗卡路里!' />
       </div>
     </div>
 

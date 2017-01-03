@@ -158,7 +158,7 @@ class My_weights extends Admin_controller {
     return '';
   }
   private function _validation_update (&$posts, &$cover, $obj) {
-    if (!((string)$obj->cover || isset ($cover))) return '沒有選擇 文章封面！';
+    if (!((string)$obj->cover || isset ($cover))) $cover = null;
     if ($cover && !is_upload_image_format ($cover, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '文章封面 格式錯誤！';
 
     $posts['weight'] = isset ($posts['weight']) && is_numeric ($posts['weight'] = trim ($posts['weight'])) && ($posts['weight'] > 0) && ($posts['weight'] < 150) ? $posts['weight'] : 0;
