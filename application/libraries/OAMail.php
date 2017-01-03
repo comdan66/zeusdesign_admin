@@ -5,8 +5,8 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  */
 
-require_once FCPATH . 'application' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'PHPMailer-5.2.13' . DIRECTORY_SEPARATOR . 'class.phpmailer.php';
-require_once FCPATH . 'application' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'PHPMailer-5.2.13' . DIRECTORY_SEPARATOR . 'class.smtp.php';
+require_once FCPATH . 'application' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'PHPMailer-5.2.21' . DIRECTORY_SEPARATOR . 'class.phpmailer.php';
+require_once FCPATH . 'application' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'PHPMailer-5.2.21' . DIRECTORY_SEPARATOR . 'class.smtp.php';
 
 class OAMail extends PHPMailer {
 

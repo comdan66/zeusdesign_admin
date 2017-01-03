@@ -27,6 +27,27 @@ class Cli extends Oa_controller {
       $user->save ();
     }
   }
+  // public function mail () {
+  //   $this->load->library ('OAMail');
+
+  //   $mail = OAMail::create ()->setSubject ('123 test')
+  //                            ->setBody ('123434324rfgrbv');
+
+  //   $mail->addTo ('comdan66@gmail.com', 'OA');
+  //   $mail->send ();
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
   public function fcm () {
 
     $url = 'https://fcm.googleapis.com/fcm/send';
