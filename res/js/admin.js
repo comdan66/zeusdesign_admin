@@ -47,6 +47,7 @@ Array.prototype.min = function (k) { return Math.min.apply (null, this.column (k
 
 function getStorage (key) { return ((typeof (Storage) !== 'undefined') && (value = localStorage.getItem (key)) && (value = JSON.parse (value))) ? value : undefined; }
 function setStorage (key, data) { try { if (typeof (Storage) !== 'undefined') { localStorage.setItem (key, JSON.stringify (data)); return true; } return false; } catch (err) { console.error ('Set storage failure.', error); return false; } }
+function _for (file, callback) { var reader = new FileReader (); reader.onload = function (e) { var view = new DataView (e.target.result); if (view.getUint16 (0, false) != 0xFFD8) return callback (-2); var length = view.byteLength, offset = 2; while (offset < length) { var marker = view.getUint16 (offset, false); offset += 2; if (marker == 0xFFE1) { if (view.getUint32 (offset += 2, false) != 0x45786966) return callback (-1); var little = view.getUint16 (offset += 6, false) == 0x4949; offset += view.getUint32 (offset + 4, little); var tags = view.getUint16 (offset, little); offset += 2; for (var i = 0; i < tags; i++) if (view.getUint16 (offset + (i * 12), little) == 0x0112) return callback (view.getUint16(offset + (i * 12) + 8, little)); } else if ((marker & 0xFF00) != 0xFF00) break; else offset += view.getUint16 (offset, false); } return callback (-1); }; reader.readAsArrayBuffer (file.slice (0, 64 * 1024)); }
 
 $(function () {
   $('._i').imgLiquid ({ verticalAlign:'center' });
@@ -243,9 +244,38 @@ $(function () {
             if ($(this).get (0).files && $(this).get (0).files[0]) {
               var reader = new FileReader ();
               reader.onload = function (e) {
-                $img.attr ('src', e.target.result).load (function () {
-                  $obj.removeAttr ('data-loading').removeClass ('no_cchoice');
-                });
+
+                _vmxw = 1024;
+
+                var img = new Image ();
+                img.src = e.target.result;
+                img.onload = function () {
+                  
+                  _for ($input.get (0).files[0], function (o) {
+                    var _ca = document.createElement ('canvas');
+
+                    if (o == 6 || o == 8) { _ca.height = img.width; _ca.width = img.height; } else { _ca.width = img.width; _ca.height = img.height; }
+                    if (Math.max (_ca.width, _ca.height) > _vmxw) { if (_ca.width > _ca.height) { _ca.height = (_vmxw / _ca.width) * _ca.height; _ca.width = _vmxw; } else { _ca.width = (_vmxw / _ca.height) * _ca.width; _ca.height = _vmxw; } }
+                    
+                    if (o == 3) {
+                      _ca.getContext ('2d').transform (-1, 0, 0, -1, _ca.width, _ca.height);
+                      _ca.getContext ('2d').drawImage (img, 0, 0, _ca.width, _ca.height);
+                    } else if (o == 6) {
+                      _ca.getContext ('2d').transform (0, 1, -1, 0, _ca.width, 0);
+                      _ca.getContext ('2d').drawImage (img, 0, 0, _ca.height, _ca.width);
+                    } else if (o == 8) {
+                      _ca.getContext ('2d').transform (0, -1, 1, 0, 0, _ca.height);
+                      _ca.getContext ('2d').drawImage (img, 0, 0, _ca.height, _ca.width);
+                    } else {
+                      _ca.getContext ('2d').drawImage (img, 0, 0, _ca.width, _ca.height);
+                    }
+
+                    $img.attr ('src', _ca.toDataURL ()).load (function () {
+                      $obj.removeAttr ('data-loading').removeClass ('no_cchoice');
+                    });
+                  });
+                }
+
               };
               reader.readAsDataURL ($(this).get (0).files[0]);
             }
