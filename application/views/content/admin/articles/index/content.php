@@ -49,6 +49,7 @@
           <th width='100'>作者</th>
           <th width='200'>標題</th>
           <th>內容</th>
+          <th width='50'>PV</th>
           <th width='120' class='right'>預覽/修改/刪除</th>
         </tr>
       </thead>
@@ -72,6 +73,7 @@
               <td><?php echo $obj->user->name;?></td>
               <td><?php echo $obj->mini_title (25);?></td>
               <td><?php echo $obj->mini_content (50);?></td>
+              <td><?php echo number_format ($obj->pv);?></td>
               <td class='right'>
                 <a class='icon-y' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>" target='_blank'></a>
                 /
