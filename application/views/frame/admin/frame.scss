@@ -43,7 +43,6 @@ html {
 
   }
 }
-
 .icon-no_a:before {
   content: "\e7f7";
 }
@@ -155,6 +154,9 @@ html {
 .icon-moneybag:before {
   content: "\e917";
 }
+.icon-abacus:before {
+  content: "\e920";
+}
 .icon-bil:before {
   content: "\e90f";
 }
@@ -164,6 +166,9 @@ html {
 .icon-tags:before {
   content: "\e91d";
 }
+.icon-clipboard:before {
+  content: "\e91e";
+}
 .icon-ruler:before {
   content: "\e91a";
 }
@@ -172,6 +177,9 @@ html {
 }
 .icon-ma:before {
   content: "\e90b";
+}
+.icon-notebook-list:before {
+  content: "\e91f";
 }
 .icon-fs:before {
   content: "\e915";
@@ -221,9 +229,6 @@ html {
 .icon-shield:before {
   content: "\e91b";
 }
-
-
-
 
 
 
@@ -285,7 +290,13 @@ $changeWidth: 768px;
           // padding-left: 9px;
         }
       }
-      a {
+      .item {
+        padding-right: 0 !important;
+      }
+      a:not(:nth-child(1)) {
+        display: none;
+      }
+      a:nth-child(1) {
         padding: 13px;
         padding-left: 100px;
         font-size: 0;
@@ -621,7 +632,40 @@ $changeWidth: 768px;
       display: inline-block;
       width: 100%;
       
-      a {
+      &.item {
+        padding-right: 15px;
+        @include clearfix();
+        &:hover {
+          a:nth-child(2), a:nth-child(3) {
+            @include opacity(1);
+          }
+        }
+        a {
+          display: inline-block;
+          float: left;
+
+          &:nth-child(1) {
+            width: calc(100% - 25px * 2);
+          }
+          &:nth-child(2), &:nth-child(3) {
+            width: 25px;
+            padding: 0;
+            height: 35px;
+            text-align: center;
+            line-height: 35px;
+            text-decoration: none;
+            font-size: 10px;
+            color: rgba(26 * 1.5, 187 * 1.5, 156 * 1.5, .5500);
+            @include opacity(0);
+            @include transition(opacity .5s, color .3s);
+            
+            &:hover {
+              color: rgba(26, 187, 156, 1.00);
+            }
+          }
+        }
+      }
+      a:nth-child(1) {
         position: relative;
         display: inline-block;
         width: 100%;
@@ -842,8 +886,8 @@ $changeWidth: 768px;
           outline: 0;
         }
       }
-      > .icon-r {
-        color: #2ba683;
+      > a {
+        color: #2ba683 !important;
       }
     }
   }
@@ -1368,7 +1412,7 @@ textarea.pure {
   @include textarea;
 }
 table.table {
-  table-layout:fixed;
+  table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
   text-align: left;
@@ -1723,6 +1767,32 @@ form.form {
         }
         > div {
           width: calc(100% - #{$tw});
+
+          > select , > input[type='number'], > input[type='date'], > input[type='text'], > textarea {
+            width: 100%;
+          }
+
+        }
+      }
+    }
+    .row .img_row {
+      width: calc(100% - #{$tw} - 10px);
+      
+      .drop_img {
+        width: 100%;
+      }
+    }
+  }
+  &.mid {
+    $tw: 200px;
+
+    .row {
+      &.n2 {
+        > label {
+          width: $tw;
+        }
+        > div {
+          width: calc(100% - #{$tw} - #{$tw / 2});
 
           > select , > input[type='number'], > input[type='date'], > input[type='text'], > textarea {
             width: 100%;

@@ -31,6 +31,7 @@ Route::group ('admin', function () {
   Route::get ('/my', 'main@index');
   Route::get ('/my/(:any)', 'main@index($1)');
   Route::get ('/my/(:any)/(:num)', 'main@index($1, $2)');
+
   Route::resourcePagination (array ('my_salaries'), 'my_salaries');
   Route::resourcePagination (array ('my_weights'), 'my_weights');
   Route::resourcePagination (array ('my_tasks'), 'my_tasks');
@@ -63,6 +64,8 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('works'), 'works');
   Route::resourcePagination (array ('tasks'), 'tasks');
   Route::resourcePagination (array ('image_bases'), 'image_bases');
+  Route::resourcePagination (array ('price_types'), 'price_types');
+  Route::resourcePagination (array ('type', 'prices'), 'type_prices');
   
   Route::resourcePagination (array ('invoice_tags'), 'invoice_tags');
   Route::resourcePagination (array ('invoices'), 'invoices');

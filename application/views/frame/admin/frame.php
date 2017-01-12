@@ -101,6 +101,26 @@
                 </label>
               </li>
       <?php }
+            if (User::current ()->in_roles (array ('price'))) { ?>
+              <li>
+                <label>
+                  <input type='checkbox' />
+                  <span class='icon-clipboard'>報價系統</span>
+                  <ul>
+              <?php foreach (PriceType::find ('all', array ('order' => 'id DESC')) as $type) { ?>
+                      <li class='item'>
+                        <a href="<?php echo $url = base_url ('admin', 'type', $type->id, 'prices');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'><?php echo $type->name?></a>
+                        <a class='icon-e' href="<?php echo base_url ('admin', 'price-types', $type->id, 'edit');?>"></a>
+                        <a class='icon-t' href="<?php echo base_url ('admin', 'price-types', $type->id);?>" data-method='delete' data-alert='確定刪除？分類下的細項也會一併刪除喔！'></a>
+                      </li>
+              <?php }?>
+                    
+                    <li><a href="<?php echo $url = base_url ('admin', 'price-types', 'add');?>" class='icon-r<?php echo $now_url ==  base_url ('admin', 'price-types') ? ' active' : '';?>'>新增分類</a></li>
+                    <li><a href="<?php echo $url = base_url ('admin', 'prices', 'abacus');?>" class='icon-abacus<?php echo $now_url ==  $url ? ' active' : '';?>'>報價計算機</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php }
             if (User::current ()->in_roles (array ('image'))) { ?>
               <li>
                 <label>

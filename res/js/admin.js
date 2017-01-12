@@ -297,7 +297,8 @@ $(function () {
   window.funs.dropUploadImg ($('.drop_img'));
 
   $('a[data-method="delete"]').click (function () {
-    if (!confirm ('確定要刪除？')) return false;
+    var title = $(this).data ('alert') ? $(this).data ('alert') : '確定要刪除？';
+    if (!confirm (title)) return false;
     else return true;
   })
   $('#main_menu ul li > a.active').parents ('label').find ('input').prop ('checked', true)
