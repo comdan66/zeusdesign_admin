@@ -23,7 +23,14 @@
     <div class='row n2'>
       <label>描述</label>
       <div>
-        <input type='text' name='description' value='<?php echo isset ($posts['description']) ? $posts['description'] : '';?>' placeholder='請輸入描述..' maxlength='200' />
+        <input type='text' name='desc' value='<?php echo isset ($posts['desc']) ? $posts['desc'] : '';?>' placeholder='請輸入描述..' maxlength='200' />
+      </div>
+    </div>
+
+    <div class='row n2'>
+      <label>備註</label>
+      <div>
+        <input type='text' name='memo' value='<?php echo isset ($posts['memo']) ? $posts['memo'] : '';?>' placeholder='請輸入備註..' maxlength='200' />
       </div>
     </div>
 

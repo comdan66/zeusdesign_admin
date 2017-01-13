@@ -14,7 +14,7 @@ class Type_prices extends Admin_controller {
   public function __construct () {
     parent::__construct ();
     
-    if (!User::current ()->in_roles (array ('work')))
+    if (!User::current ()->in_roles (array ('price')))
       return redirect_message (array ('admin'), array ('_flash_danger' => '您的權限不足，或者頁面不存在。'));
 
     $this->uri_1 = 'admin/type';
@@ -35,7 +35,8 @@ class Type_prices extends Admin_controller {
   }
   public function index ($id, $offset = 0) {
     $columns = array ( 
-        array ('key' => 'description', 'title' => '描述', 'sql' => 'description LIKE ?'), 
+        array ('key' => 'memo', 'title' => '備註', 'sql' => 'memo LIKE ?'), 
+        array ('key' => 'desc', 'title' => '描述', 'sql' => 'desc LIKE ?'), 
         array ('key' => 'name', 'title' => '名稱', 'sql' => 'name LIKE ?'), 
       );
 
@@ -164,7 +165,8 @@ class Type_prices extends Admin_controller {
     if (!isset ($posts['money'])) return '沒有填寫 價格！';
     if (!(is_numeric ($posts['money']) && ($posts['money'] = trim ($posts['money'])) > 0)) return '價格 格式錯誤！';
     
-    $posts['description'] = isset ($posts['description']) && is_string ($posts['description']) && ($posts['description'] = trim ($posts['description'])) ? $posts['description'] : '';
+    $posts['desc'] = isset ($posts['desc']) && is_string ($posts['desc']) && ($posts['desc'] = trim ($posts['desc'])) ? $posts['desc'] : '';
+    $posts['memo'] = isset ($posts['memo']) && is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])) ? $posts['memo'] : '';
     $posts['sources'] = isset ($posts['sources']) && is_array ($posts['sources']) && $posts['sources'] ? array_values (array_filter ($posts['sources'], function ($source) { return isset ($source['href']) && is_string ($source['href']) && ($source['href'] = trim ($source['href'])); })) : array ();
 
     return '';

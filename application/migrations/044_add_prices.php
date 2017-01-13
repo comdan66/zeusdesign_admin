@@ -15,8 +15,8 @@ class Migration_Add_prices extends CI_Migration {
 
         `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '功能名稱',
         `money` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '金額',
-        `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
-        `source_link` text  COMMENT '參考網址',
+        `desc` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+        `memo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '備註',
        
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',

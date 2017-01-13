@@ -12,7 +12,6 @@ class Migration_Add_price_types extends CI_Migration {
       "CREATE TABLE `price_types` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
         `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '分類名稱',
-       
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',
         PRIMARY KEY (`id`)

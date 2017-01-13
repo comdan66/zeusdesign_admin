@@ -8,7 +8,7 @@
 
 class Price extends OaModel {
 
-  static $table_description = 'prices';
+  static $table_name = 'prices';
 
   static $has_one = array (
   );
@@ -29,8 +29,8 @@ class Price extends OaModel {
       'id'          => $this->id,
       'name'        => $this->name,
       'money'       => $this->money,
-      'description' => $this->description,
-      'source_link' => $this->source_link,
+      'desc'        => $this->desc,
+      'memo'        => $this->memo,
       'updated_at'  => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at'  => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
@@ -40,9 +40,9 @@ class Price extends OaModel {
         return $source->columns_val ();
       }, PriceSource::find ('all', array ('conditions' => array ('price_id = ?', $this->id))))) : $var;
   }
-  public function mini_description ($length = 50) {
-    if (!isset ($this->description)) return '';
-    return $length ? mb_strimwidth (remove_ckedit_tag ($this->description), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
+  public function mini_desc ($length = 50) {
+    if (!isset ($this->desc)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->desc), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
   public function destroy () {
     return $this->delete ();

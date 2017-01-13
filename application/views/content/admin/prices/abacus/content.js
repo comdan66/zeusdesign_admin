@@ -15,7 +15,19 @@ function numberFormat (n, d, p, t){
 }
 
 $(function () {
-  $('.left .features').sortable ({
+
+  var $leftFeatures = $('.left .features');
+  var $leftFeature = $leftFeatures.find ('.feature');
+  var $rightFeatures = $('.right .features');
+  var $sumSpan = $('#sum span');
+
+  function updatePrice () {
+    var moneys = $rightFeatures.find ('.feature').map (function () { return $(this).data ('money'); }).toArray ();
+    $sumSpan.text (numberFormat (moneys.length ? moneys.reduce (function (a, b) { return a + b; }) : 0));
+  }
+
+
+  $leftFeatures.sortable ({
     connectWith: ".features",
     remove: function (event, ui) {
         ui.item.clone (true).appendTo (ui.item.parent ());
@@ -24,7 +36,8 @@ $(function () {
       },
     placeholder: 'feature_highlight',
   });
-  $('.right .features').sortable ({
+
+  $rightFeatures.sortable ({
     connectWith: ".features",
 
     remove: function (event, ui) {
@@ -34,32 +47,20 @@ $(function () {
     placeholder: 'feature_highlight',
   });
 
-  $('.right .features').on ('click', '.feature a', function () {
+  $rightFeatures.on ('click', '.feature a', function () {
     $(this).parents ('.feature').remove ();
     updatePrice ();
   });
 
-  function updatePrice () {
-    var moneys = $('.right .features .feature').map (function () {
-      return $(this).data ('money');
-    }).toArray ();
+  var $types = $('#types');
+  $types.change (function () {
+    $leftFeatures.addClass ('no');
+    var $tmp = $leftFeature.removeClass ('show').filter ('.type_' + $(this).val ()).addClass ('show');
+    if ($tmp.length) $leftFeatures.removeClass ('no');
+  });
 
-
-    var price = moneys.length ? moneys.reduce (function (a, b) { return a + b; }) : 0;
-    $('#sum span').text (numberFormat (price));
-    
-  }
-  // $('.calendar td').sortable ({
-  //   items: 'div.edited',
-  //   connectWith: 'td',
-  //   update: function (e, ui) {
-  //     var y = $(this).data ('y');
-  //     var m = $(this).data ('m');
-  //     var d = $(this).data ('d');
-      
-  //     updateSort ($(this).find ('div.edited').map (function (i) {
-  //         return {id: $(this).data ('id'), sort: i, year: y, month: m, day: d};
-  //       }).toArray ());
-  //   }
-  // });
+  $('#export').click (function () {
+    var ids = $rightFeatures.find ('.feature').map (function () { return $(this).data ('id'); }).toArray ();
+    window.location.assign ($(this).data ('url') + '?ids=' + ids.join (','));
+  });
 });
