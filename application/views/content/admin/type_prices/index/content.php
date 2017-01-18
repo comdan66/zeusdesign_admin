@@ -47,8 +47,8 @@
           <th width='150'>名稱</th>
           <th width='100'>金額</th>
           <th >敘述</th>
-          <th width='100'>備註</th>
-          <th width='220'>參考鏈結</th>
+          <th width='200'>參考鏈結</th>
+          <th width='100' class='right'>備註</th>
           <th width='85' class='right'>修改/刪除</th>
         </tr>
       </thead>
@@ -60,12 +60,12 @@
               <td><?php echo $obj->name;?></td>
               <td><?php echo number_format ($obj->money);?></td>
               <td><?php echo $obj->mini_desc ();?></td>
-              <td><?php echo $obj->memo;?></td>
               <td>
           <?php echo implode ('', array_map (function ($source) {
                   return "<div class='munit'>" . make_click_enable_link ($source->href, 30, $source->title ? $source->title : $source->href) . "</div>";
                 }, $obj->sources)); ?>
               </td>
+              <td class='right'><?php echo $obj->memo;?></td>
               <td class='right'>
                 <a class='icon-e' href="<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id, 'edit');?>"></a>
                 /
