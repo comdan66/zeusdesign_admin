@@ -46,7 +46,7 @@
         <tr>
           <th width='80' class='center'>已入帳</th>
           <th width='80' class='center'>已支付</th>
-          <th width='80'>負責人</th>
+          <th width='85'>負責人</th>
           <th width='110'>專案名稱</th>
           <th width='75'>總金額</th>
           <th width='105'>類型</th>
