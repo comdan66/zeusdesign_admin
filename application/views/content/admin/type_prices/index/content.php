@@ -44,7 +44,7 @@
       <thead>
         <tr>
           <th width='80'>#</th>
-          <th width='150'>名稱</th>
+          <th width='180'>名稱</th>
           <th width='100'>金額</th>
           <th >敘述</th>
           <th width='200'>參考鏈結</th>
