@@ -44,7 +44,8 @@
       <thead>
         <tr>
           <th width='80'>#</th>
-          <th width='120'>名稱</th>
+          <th width='150'>名稱</th>
+          <th width='100'>金額</th>
           <th >敘述</th>
           <th width='100'>備註</th>
           <th width='220'>參考鏈結</th>
@@ -57,6 +58,7 @@
             <tr>
               <td><?php echo $obj->id;?></td>
               <td><?php echo $obj->name;?></td>
+              <td><?php echo $obj->money;?></td>
               <td><?php echo $obj->mini_desc ();?></td>
               <td><?php echo $obj->memo;?></td>
               <td>
@@ -73,7 +75,7 @@
     <?php }
         } else { ?>
           <tr>
-            <td colspan='5' class='no_data'>沒有任何資料。</td>
+            <td colspan='7' class='no_data'>沒有任何資料。</td>
           </tr>
   <?php } ?>
       </tbody>
