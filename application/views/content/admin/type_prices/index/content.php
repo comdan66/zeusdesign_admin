@@ -58,7 +58,7 @@
             <tr>
               <td><?php echo $obj->id;?></td>
               <td><?php echo $obj->name;?></td>
-              <td><?php echo $obj->money;?></td>
+              <td><?php echo number_format ($obj->money);?></td>
               <td><?php echo $obj->mini_desc ();?></td>
               <td><?php echo $obj->memo;?></td>
               <td>
