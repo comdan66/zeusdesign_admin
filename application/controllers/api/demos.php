@@ -47,7 +47,7 @@ class Demos extends Api_controller {
             'sort' => $image->sort,
             'url' => array (
                 'ori' => $image->name->url (),
-                'w100' => $image->name->url ('100w'),
+                'w200' => $image->name->url ('200w'),
               ),
           );
     }, $obj->images))));

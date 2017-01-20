@@ -11,7 +11,7 @@ class DemoImageNameImageUploader extends OrmImageUploader {
   public function getVersions () {
     return array (
         '' => array (),
-        '100w' => array ('resize', 100, 100, 'width'),
+        '200w' => array ('resize', 200, 200, 'width'),
       );
   }
 }
