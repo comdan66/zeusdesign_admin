@@ -85,10 +85,10 @@
     <?php if ((string)$commit->file) {?>
             <div class='file'>
               <a href='<?php echo $commit->file->url ();?>' target='_blank'>
-                <img src='<?php echo $attachment->file_icon ();?>' />
+                <img src='<?php echo $commit->file_icon ();?>' />
                 <div>
                   <span><?php echo (string)$commit->file;?></span>
-                  <span><?php echo size_unit ($attachment->size);?></span>
+                  <span><?php echo size_unit ($commit->size);?></span>
                 </div>
               </a>
             </div>
