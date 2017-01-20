@@ -10,7 +10,7 @@ class Demos extends Api_controller {
 
   public function __construct () {
     parent::__construct ();
-    header ("Access-Control-Allow-Origin: " . (ENVIRONMENT != 'production' ? 'http://dev.' : 'https://') .  . "demo.zeusdesign.com.tw");
+    header ("Access-Control-Allow-Origin: " . (ENVIRONMENT != 'production' ? 'http://dev.' : 'https://') . "demo.zeusdesign.com.tw");
   }
   public function psw () {
     $gets = OAInput::get ();
