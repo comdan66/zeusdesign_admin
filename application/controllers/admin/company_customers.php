@@ -24,7 +24,7 @@ class Company_customers extends Admin_controller {
     $this->icon = 'icon-ab';
 
     if (!(($id = $this->uri->rsegments (3, 0)) && ($this->parent = CustomerCompany::find_by_id ($id))))
-      return redirect_message (array ('customer-companies'), array ('_flash_danger' => '找不到該筆資料。'));
+      return redirect_message (array ('admin', 'customer-companies'), array ('_flash_danger' => '找不到該筆資料。'));
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
       if (!(($id = $this->uri->rsegments (4, 0)) && ($this->obj = Customer::find_by_id ($id))))

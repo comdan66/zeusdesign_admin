@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?l3f9o6');
-  src:  url('fonts/icomoon.eot?l3f9o6#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?l3f9o6') format('truetype'),
-    url('fonts/icomoon.woff?l3f9o6') format('woff'),
-    url('fonts/icomoon.svg?l3f9o6#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?1sgvv2');
+  src:  url('fonts/icomoon.eot?1sgvv2#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?1sgvv2') format('truetype'),
+    url('fonts/icomoon.woff?1sgvv2') format('woff'),
+    url('fonts/icomoon.svg?1sgvv2#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -47,6 +47,9 @@
 }
 .icon-pi:before {
   content: "\e911";
+}
+.icon-layout:before {
+  content: "\e004";
 }
 .icon-cl:before {
   content: "\e014";
@@ -110,6 +113,15 @@
 }
 .icon-ea:before {
   content: "\e9ca";
+}
+.icon-eye:before {
+  content: "\e9ce";
+}
+.icon-un-eye:before {
+  content: "\e9d1";
+}
+.icon-new-tab:before {
+  content: "\ea7e";
 }
 .icon-sev:before {
   content: "\e914";

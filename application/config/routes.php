@@ -66,6 +66,8 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('image_bases'), 'image_bases');
   Route::resourcePagination (array ('price_types'), 'price_types');
   Route::resourcePagination (array ('type', 'prices'), 'type_prices');
+  Route::resourcePagination (array ('demos'), 'demos');
+  Route::resourcePagination (array ('demo', 'images'), 'demo_demo_images');
   
   Route::resourcePagination (array ('invoice_tags'), 'invoice_tags');
   Route::resourcePagination (array ('invoices'), 'invoices');
@@ -88,6 +90,8 @@ Route::group ('api', function () {
   
   Route::resource (array ('spends'), 'spends');
   Route::resource (array ('spend_items'), 'spend_items');
+  
+  Route::resource (array ('demos'), 'demos');
 });
 // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
 // print_r (Route::getRoute ());

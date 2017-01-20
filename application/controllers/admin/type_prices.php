@@ -133,7 +133,7 @@ class Type_prices extends Admin_controller {
     UserLog::create (array (
       'user_id' => User::current ()->id,
       'icon' => $this->icon,
-      'content' => '新增一項報價。',
+      'content' => '修改一項報價。',
       'desc' => '在報價系統分類 “' . $parent->name . '” 下修改了一項功能報價。',
       'backup' => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
 

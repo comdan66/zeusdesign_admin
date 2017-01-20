@@ -101,6 +101,26 @@
                 </label>
               </li>
       <?php }
+            if (User::current ()->in_roles (array ('demo'))) { ?>
+              <li>
+                <label>
+                  <input type='checkbox' />
+                  <span class='icon-layout'>提案系統</span>
+                  <ul>
+              <?php foreach (Demo::find ('all', array ('order' => 'id DESC')) as $demo) { ?>
+                      <li class='item n3'>
+                        <a href="<?php echo $url = base_url ('admin', 'demo', $demo->id, 'images');?>" class='icon-br<?php echo $now_url == $url ? ' active' : '';?>'><?php echo $demo->name?></a>
+                        <a class='icon-new-tab' href="<?php echo $demo->demo_url ();?>"></a>
+                        <a class='icon-e' href="<?php echo base_url ('admin', 'demos', $demo->id, 'edit');?>"></a>
+                        <a class='icon-t' href="<?php echo base_url ('admin', 'demos', $demo->id);?>" data-method='delete' data-alert='確定刪除？分類下的細項也會一併刪除喔！'></a>
+                      </li>
+              <?php }?>
+                    
+                    <li><a href="<?php echo $url = base_url ('admin', 'demos', 'add');?>" class='icon-r<?php echo $now_url ==  base_url ('admin', 'demos') ? ' active' : '';?>'>新增提案</a></li>
+                  </ul>
+                </label>
+              </li>
+      <?php }
             if (User::current ()->in_roles (array ('price'))) { ?>
               <li>
                 <label>

@@ -6,7 +6,7 @@
  * @link        http://www.ioa.tw/
  */
 
-class Tag_work_tags extends Admin_controller {
+class Demo_demo_images extends Admin_controller {
   private $uri_1 = null;
   private $uri_2 = null;
   private $parent = null;
@@ -16,37 +16,39 @@ class Tag_work_tags extends Admin_controller {
   public function __construct () {
     parent::__construct ();
     
-    if (!User::current ()->in_roles (array ('work')))
+    if (!User::current ()->in_roles (array ('demo')))
       return redirect_message (array ('admin'), array ('_flash_danger' => '您的權限不足，或者頁面不存在。'));
 
-    $this->uri_1 = 'admin/tag';
-    $this->uri_2 = 'work-tags';
-    $this->icon = 'icon-ta';
+    $this->uri_1 = 'admin/demo';
+    $this->uri_2 = 'images';
+    $this->icon = 'icon-ims';
 
-    if (!(($id = $this->uri->rsegments (3, 0)) && ($this->parent = WorkTag::find_by_id ($id))))
-      return redirect_message (array ('admin', 'work-tags'), array ('_flash_danger' => '找不到該筆資料。'));
+    if (!(($id = $this->uri->rsegments (3, 0)) && ($this->parent = Demo::find_by_id ($id))))
+      return redirect_message (array ($this->uri_1), array ('_flash_danger' => '找不到該筆資料。'));
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy', 'sort')))
-      if (!(($id = $this->uri->rsegments (4, 0)) && ($this->obj = WorkTag::find_by_id ($id))))
+      if (!(($id = $this->uri->rsegments (4, 0)) && ($this->obj = DemoImage::find_by_id ($id))))
         return redirect_message (array ($this->uri_1, $this->parent_tag->id, $this->uri_2), array ('_flash_danger' => '找不到該筆資料。'));
 
     $this->add_param ('uri_1', $this->uri_1)
          ->add_param ('uri_2', $this->uri_2)
          ->add_param ('parent', $this->parent)
-         ->add_param ('now_url', base_url ('admin', 'work-tags'));
+         ->add_param ('now_url', base_url ($this->uri_1, $this->parent->id, $this->uri_2));
   }
   public function index ($id, $offset = 0) {
     $columns = array ( 
+        array ('key' => 'message', 'title' => '內容', 'sql' => 'message LIKE ?'), 
+        array ('key' => 'email', 'title' => 'E-Mail', 'sql' => 'email LIKE ?'), 
         array ('key' => 'name', 'title' => '名稱', 'sql' => 'name LIKE ?'), 
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ($this->parent->id, $this->uri_2, '%s'));
     $conditions = conditions ($columns, $configs);
-    OaModel::addConditions ($conditions, 'work_tag_id = ?', $this->parent->id);
+    OaModel::addConditions ($conditions, 'demo_id = ?', $this->parent->id);
 
     $limit = 25;
-    $total = WorkTag::count (array ('conditions' => $conditions));
-    $objs = WorkTag::find ('all', array ('offset' => $offset < $total ? $offset : 0, 'limit' => $limit, 'order' => 'sort DESC', 'include' => array ('mappings'), 'conditions' => $conditions));
+    $total = DemoImage::count (array ('conditions' => $conditions));
+    $objs = DemoImage::find ('all', array ('offset' => $offset < $total ? $offset : 0, 'limit' => $limit, 'order' => 'sort ASC', 'conditions' => $conditions));
 
     return $this->load_view (array (
         'objs' => $objs,
@@ -58,7 +60,7 @@ class Tag_work_tags extends Admin_controller {
     $posts = Session::getData ('posts', true);
 
     return $this->load_view (array (
-        'posts' => $posts
+        'posts' => $posts,
       ));
   }
   public function create () {
@@ -68,21 +70,22 @@ class Tag_work_tags extends Admin_controller {
       return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2, 'add'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
-    
-    if ($msg = $this->_validation_create ($posts))
+    $name = OAInput::file ('name');
+
+    if ($msg = $this->_validation_create ($posts, $name))
       return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2, 'add'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
-    $posts['sort'] = WorkTag::count (array ('conditions' => array ('work_tag_id = ?', $parent->id)));
-    $posts['work_tag_id'] = $parent->id;
+    $posts['demo_id'] = $parent->id;
+    $posts['sort'] = DemoImage::count (array ('conditions' => array ('demo_id = ?', $parent->id)));
 
-    if (!WorkTag::transaction (function () use (&$obj, $posts) { return verifyCreateOrm ($obj = WorkTag::create (array_intersect_key ($posts, WorkTag::table ()->columns))); }))
+    if (!DemoImage::transaction (function () use (&$obj, $posts, $name) { return verifyCreateOrm ($obj = DemoImage::create (array_intersect_key ($posts, DemoImage::table ()->columns))) && $obj->name->put ($name); }))
       return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2, 'add'), array ('_flash_danger' => '新增失敗！', 'posts' => $posts));
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
       'icon' => $this->icon,
-      'content' => '新增一項作品分類內的子分類。',
-      'desc' => '在作品分類 “' . $parent->name . '” 下新增了一項子分類，其名稱為「' . $obj->name . '」。',
+      'content' => '新增一項提案內容。',
+      'desc' => '在提案名稱 “' . $parent->name . '” 下新增了一項內容。',
       'backup' => json_encode ($obj->columns_val ())));
 
     return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_info' => '新增成功！'));
@@ -93,7 +96,7 @@ class Tag_work_tags extends Admin_controller {
 
     return $this->load_view (array (
         'posts' => $posts,
-        'obj' => $this->obj
+        'obj' => $this->obj,
       ));
   }
   public function update () {
@@ -104,23 +107,24 @@ class Tag_work_tags extends Admin_controller {
       return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2, $obj->id, 'edit'), array ('_flash_danger' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
+    $name = OAInput::file ('name');
     $backup = $obj->columns_val (true);
 
-    if ($msg = $this->_validation_update ($posts))
+    if ($msg = $this->_validation_update ($posts, $name, $obj))
       return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2, $obj->id, 'edit'), array ('_flash_danger' => $msg, 'posts' => $posts));
 
     if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
       foreach ($columns as $column => $value)
         $obj->$column = $value;
 
-    if (!WorkTag::transaction (function () use ($obj, $posts) { return $obj->save (); }))
+    if (!DemoImage::transaction (function () use ($obj, $posts, $name) { if (!$obj->save () || ($name && !$obj->name->put ($name))) return false; return true; }))
       return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2, $obj->id, 'edit'), array ('_flash_danger' => '更新失敗！', 'posts' => $posts));
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
       'icon' => $this->icon,
-      'content' => '修改一項作品分類內的子分類。',
-      'desc' => '在作品分類 “' . $parent->name . '” 下修改了一項子分類，其名稱為「' . $obj->name . '」。',
+      'content' => '修改一項提案內容。',
+      'desc' => '在提案名稱 “' . $parent->name . '” 下修改了一項內容。',
       'backup' => json_encode (array ('ori' => $backup, 'now' => $obj->columns_val (true)))));
 
     return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_info' => '更新成功！'));
@@ -131,14 +135,14 @@ class Tag_work_tags extends Admin_controller {
     $parent = $this->parent;
     $backup = $obj->columns_val (true);
 
-    if (!WorkTag::transaction (function () use ($obj) { return $obj->destroy (); }))
+    if (!DemoImage::transaction (function () use ($obj) { return $obj->destroy (); }))
       return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_danger' => '刪除失敗！'));
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
       'icon' => $this->icon,
-      'content' => '刪除一項作品分類內的子分類。',
-      'desc' => '在作品分類 “' . $parent->name . '” 下刪除了一項子分類，已經備份了刪除紀錄，細節可詢問工程師。',
+      'content' => '刪除一項提案內的內容。',
+      'desc' => '在提案 “' . $parent->name . '” 下刪除了一項內容，已經備份了刪除紀錄，細節可詢問工程師。',
       'backup' => json_encode ($backup)));
 
     return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_info' => '刪除成功！'));
@@ -151,36 +155,39 @@ class Tag_work_tags extends Admin_controller {
     if (!in_array ($sort, array ('up', 'down')))
       return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_danger' => '排序失敗！'));
 
-    OaModel::addConditions ($conditions, 'work_tag_id = ?', $parent->id);
-    $total = WorkTag::count (array ('conditions' => $conditions));
+    OaModel::addConditions ($conditions, 'demo_id = ?', $parent->id);
+    $total = DemoImage::count (array ('conditions' => $conditions));
 
     switch ($sort) {
-      case 'up': $sort = $obj->sort; $obj->sort = $obj->sort + 1 >= $total ? 0 : $obj->sort + 1; break;
-      case 'down': $sort = $obj->sort; $obj->sort = $obj->sort - 1 < 0 ? $total - 1 : $obj->sort - 1; break;
+      case 'down': $sort = $obj->sort; $obj->sort = $obj->sort + 1 >= $total ? 0 : $obj->sort + 1; break;
+      case 'up': $sort = $obj->sort; $obj->sort = $obj->sort - 1 < 0 ? $total - 1 : $obj->sort - 1; break;
     }
 
     $change = array ();
     array_push ($change, array ('id' => $obj->id, 'old' => $sort, 'new' => $obj->sort));
     OaModel::addConditions ($conditions, 'sort = ?', $obj->sort);
 
-    if (!WorkTag::transaction (function () use ($conditions, $obj, $sort, &$change) { if (($next = WorkTag::find ('one', array ('conditions' => $conditions))) && array_push ($change, array ('id' => $next->id, 'old' => $next->sort, 'new' => $sort))) { $next->sort = $sort; if (!$next->save ()) return false; } return $obj->save (); }))
+    if (!DemoImage::transaction (function () use ($conditions, $obj, $sort, &$change) { if (($next = DemoImage::find ('one', array ('conditions' => $conditions))) && array_push ($change, array ('id' => $next->id, 'old' => $next->sort, 'new' => $sort))) { $next->sort = $sort; if (!$next->save ()) return false; } return $obj->save (); }))
       return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_danger' => '排序失敗！'));
 
     UserLog::create (array (
       'user_id' => User::current ()->id,
       'icon' => $this->icon,
-      'content' => '調整了一項作品分類下子分類的順序。',
+      'content' => '調整了一項提案下內容的順序。',
       'desc' => '已經備份了調整紀錄，細節可詢問工程師。',
       'backup' => json_encode ($change)));
 
     return redirect_message (array ($this->uri_1, $parent->id, $this->uri_2), array ('_flash_info' => '排序成功！'));
   }
-  private function _validation_create (&$posts) {
-    if (!isset ($posts['name'])) return '沒有填寫 分類名稱！';
-    if (!(is_string ($posts['name']) && ($posts['name'] = trim ($posts['name'])))) return '分類名稱 格式錯誤！';
+  private function _validation_create (&$posts, &$name) {
+    if (!isset ($name)) return '沒有選擇 內容圖片！';
+    if (!is_upload_image_format ($name, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '內容圖片 格式錯誤！';
     return '';
   }
-  private function _validation_update (&$posts) {
-    return $this->_validation_create ($posts);
+
+  private function _validation_update (&$posts, &$name, $obj) {
+    if (!((string)$obj->name || isset ($name))) return '沒有選擇 內容圖片！';
+    if ($name && !is_upload_image_format ($name, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png'))) return '內容圖片 格式錯誤！';
+    return '';
   }
 }
