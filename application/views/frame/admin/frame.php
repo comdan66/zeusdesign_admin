@@ -108,8 +108,9 @@
                   <span class='icon-layout'>提案系統</span>
                   <ul>
               <?php foreach (Demo::find ('all', array ('order' => 'id DESC')) as $demo) { ?>
-                      <li>
+                      <li class='item n1'>
                         <a href="<?php echo $url = base_url ('admin', 'demo', $demo->id, 'images');?>" class='icon-br<?php echo $now_url == $url ? ' active' : '';?>'><?php echo $demo->name?></a>
+                        <a class='icon-new-tab' href="<?php echo $demo->demo_url ();?>"></a>
                       </li>
               <?php }?>
                     
