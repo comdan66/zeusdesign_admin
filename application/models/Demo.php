@@ -40,7 +40,7 @@ class Demo extends OaModel {
   public function demo_url () {
     if (!isset ($this->uid)) return '';
 
-    return "http://" . (ENVIRONMENT != 'production' ? 'dev.' : '') . "demo.zeusdesign.com.tw/#" . $this->uid;
+    return (ENVIRONMENT != 'production' ? 'http://dev.' : 'https://') . "demo.zeusdesign.com.tw/#" . $this->uid;
   }
   public function columns_val ($has = false) {
     $var = array (
