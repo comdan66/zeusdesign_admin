@@ -109,8 +109,8 @@
                   <ul>
               <?php foreach (Demo::find ('all', array ('order' => 'id DESC')) as $demo) { ?>
                       <li class='item n1'>
-                        <a href="<?php echo $url = base_url ('admin', 'demo', $demo->id, 'images');?>" class='icon-br<?php echo $now_url == $url ? ' active' : '';?>' target='_blank'><?php echo $demo->name?></a>
-                        <a class='icon-new-tab' href="<?php echo $demo->demo_url ();?>"></a>
+                        <a href="<?php echo $url = base_url ('admin', 'demo', $demo->id, 'images');?>" class='icon-br<?php echo $now_url == $url ? ' active' : '';?>'><?php echo $demo->name?></a>
+                        <a class='icon-new-tab' href="<?php echo $demo->demo_url ();?>" target='_blank'></a>
                       </li>
               <?php }?>
                     
