@@ -36,7 +36,7 @@
     <div>
       <a class='icon-t' href="<?php echo base_url ('admin', 'demos', $parent->id);?>" data-method='delete' data-alert='確定刪除？分類下的細項也會一併刪除喔！'></a>
       <a class='icon-e' href="<?php echo base_url ('admin', 'demos', $parent->id, 'edit');?>"></a>
-      <a class='icon-new-tab' href="<?php echo $parent->demo_url ();?>" data-method='delete' data-alert='確定刪除？分類下的細項也會一併刪除喔！'></a>
+      <a class='icon-new-tab' href="<?php echo $parent->demo_url ();?>"></a>
     </div>
   </div>
 </div>
