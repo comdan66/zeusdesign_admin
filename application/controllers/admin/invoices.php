@@ -38,6 +38,8 @@ class Invoices extends Admin_controller {
       );
   }
   public function index ($offset = 0) {
+    $_GET['user_id'] = OAInput::get ('user_id') || OAInput::get ('user_id') == '' ? OAInput::get ('user_id') : User::current ()->id;
+    
     $columns = $this->_search_columns ();
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
