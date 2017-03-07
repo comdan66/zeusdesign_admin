@@ -44,6 +44,7 @@ class Lines extends Api_controller {
       write_file ($path, '===> Error, Events Error! Msg:' . $e->getMessage () . "\n", FOPEN_READ_WRITE_CREATE);
       exit ();
     }
+    write_file ($path, 'Data OK..' . "\n", FOPEN_READ_WRITE_CREATE);
 
     foreach ($events as $event) {
       if ($event instanceof MessageEvent) {
