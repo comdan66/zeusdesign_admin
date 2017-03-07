@@ -41,7 +41,7 @@ class Lines extends Api_controller {
       write_file ($path, '--------4');
     
     try {
-      $events = $bot->parseEventRequest($req->getBody(), $signature[0]);
+      $events = $bot->parseEventRequest ($body, $signature);
     } catch (Exception $e) {
       write_file ($path, '===> Error, Events Error! Msg:' . $e->getMessage ());
       exit ();
