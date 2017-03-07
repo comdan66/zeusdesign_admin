@@ -6,8 +6,9 @@
  * @link        http://www.ioa.tw/
  */
 require FCPATH . 'vendor/autoload.php';
-use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
+use LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use LINE\LINEBot\Constant\HTTPHeader;
 use LINE\LINEBot\Event\MessageEvent;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
 
@@ -23,7 +24,7 @@ class Lines extends Api_controller {
     $channel_secret = Cfg::setting ('line', 'channel', 'secret');
     $token = Cfg::setting ('line', 'channel', 'token');
 
-    if (!isset ($_SERVER["HTTP_".\LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE])) {
+    if (!isset ($_SERVER["HTTP_" . HTTPHeader::LINE_SIGNATURE])) {
       write_file ($path, '===> Error, Header Error!');
       exit ();
     }
@@ -31,7 +32,7 @@ class Lines extends Api_controller {
     $httpClient = new CurlHTTPClient ($token);
     $bot = new LINEBot ($httpClient, ['channelSecret' => $channel_secret]);
 
-    $signature = $_SERVER["HTTP_".\LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
+    $signature = $_SERVER["HTTP_" . HTTPHeader::LINE_SIGNATURE];
     $body = file_get_contents ("php://input");
 
     
@@ -41,6 +42,7 @@ class Lines extends Api_controller {
       write_file ($path, '===> Error, Events Error! Msg:' . $e->getMessage ());
       exit ();
     }
+      write_file ($path, '--------');
 
     foreach ($events as $event) {
       if (!($event instanceof MessageEvent)) {
