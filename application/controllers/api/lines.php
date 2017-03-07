@@ -19,16 +19,30 @@ class Lines extends Api_controller {
     $token = Cfg::setting ('line', 'channel', 'token');
 
     /* 將收到的資料整理至變數 */
-    $receive = json_decode (file_get_contents ("php://input"));
+    $body = json_decode (file_get_contents ("php://input"));
+    $headers = $this->input->request_headers ();
+    // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+    // var_dump ();
+    // exit ();
+
+
+
+
+
+
+
+
+
+
     // $text = $receive->result[0]->content->text;
     // $from = $receive->result[0]->content->from;
     // $content_type = $receive->result[0]->content->contentType;
     $path = FCPATH . 'temp/input.json';
+    write_file ($path, $headers['X-line-signature']);
     // write_file ($path, json_encode ($receive));
     // write_file ($path, json_encode ($this->input->request_headers()));
-    write_file ($path, json_encode (OAInput::get ()));
+    // write_file ($path, json_encode (OAInput::get ()));
     // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    // var_dump ($headers = $this->input->request_headers());
     // var_dump (LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE);
     // {"X-line-signature":"joFU91e1koizDtlJs5gRjENNvPuk06\/SJmDZ131G+k4=","Content-type":"application\/json;charset=UTF-8","Content-length":"233","Host":"admin.zeusdesign.com.tw","Accept":"*\/*","User-agent":"LineBotWebhook\/1.0"}
     exit ();
