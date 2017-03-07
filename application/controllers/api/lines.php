@@ -60,6 +60,7 @@ class Lines extends Api_controller {
         write_file ($path, '===> Log:' . 'location message has come' . "\n", FOPEN_READ_WRITE_CREATE);
       }
       $replyText = $event->getText ();
+      write_file ($path, 'TEXT: ' $replyText . "\n", FOPEN_READ_WRITE_CREATE);
       
       $messageBuilder = null;
       if ($event instanceof TextMessage && preg_match ('/GPS/i', $replyText)) {
