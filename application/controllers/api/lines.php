@@ -13,6 +13,7 @@ use LINE\LINEBot\Event\MessageEvent;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\Event\MessageEvent\LocationMessage;
 use LINE\LINEBot\MessageBuilder\LocationMessageBuilder;
+use LINE\LINEBot\MessageBuilder\ButtonTemplateBuilder;
 
 class Lines extends Api_controller {
 
@@ -57,6 +58,10 @@ class Lines extends Api_controller {
         write_file ($path, '===> Log:' . 'location message has come' . "\n", FOPEN_READ_WRITE_CREATE);
       }
       $replyText = $event->getText ();
+      
+      if (!($event instanceof TextMessage && $replyText == '表演'))
+        continue;
+
       // $resp = $bot->replyText ($event->getReplyToken (), array (
       //   'type' => 'location',
       //   'title' => 'my location',
@@ -64,7 +69,14 @@ class Lines extends Api_controller {
       //   'latitude' => 35.65910807942215,
       //   'longitude' => 139.70372892916203,
       //   ));
-      $messageBuilder = new LocationMessageBuilder ('my location', '〒150-0002 東京都渋谷区渋谷２丁目２１−１', 35.65910807942215, 139.70372892916203);
+
+
+      // $messageBuilder = new LocationMessageBuilder ('my location', '〒150-0002 東京都渋谷区渋谷２丁目２１−１', 35.65910807942215, 139.70372892916203);
+      $messageBuilder = new ButtonTemplateBuilder ('你好', '測試一下', 'http://pic.mazu.ioa.tw/upload/pictures/name/0/0/4/32/2048w_1470185053_5700966ba81a8.jpg', array (
+            "type" => "uri",
+            "label" => "View detail",
+            "uri" => "http://example.com/page/123"
+        ));
       // $resp = $bot->replyMessage ($event->getReplyToken (), $messageBuilder);
     }
     echo "OK";
