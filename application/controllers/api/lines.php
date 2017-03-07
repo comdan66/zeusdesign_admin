@@ -16,7 +16,7 @@ class Lines extends Api_controller {
   public function index () {
     $channel_id = Cfg::setting ('line', 'channel', 'id');
     $channel_secret = Cfg::setting ('line', 'channel', 'secret');
-    $mid = Cfg::setting ('line', 'channel', 'mid');
+    $token = Cfg::setting ('line', 'channel', 'token');
 
     /* 將收到的資料整理至變數 */
     $receive = json_decode (file_get_contents ("php://input"));
@@ -24,8 +24,27 @@ class Lines extends Api_controller {
     // $from = $receive->result[0]->content->from;
     // $content_type = $receive->result[0]->content->contentType;
     $path = FCPATH . 'temp/input.json';
-    write_file ($path, json_encode ($receive));
-    
+    // write_file ($path, json_encode ($receive));
+    write_file ($path, json_encode ($this->input->request_headers()));
+    // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+    // var_dump ($headers = $this->input->request_headers());
+    // var_dump (LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE);
+    exit ();
+    $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($token);
+    $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channel_secret]);
+
+
+    $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder ('hello');
+    $response = $bot->replyMessage('<reply token>', $textMessageBuilder);
+    if ($response->isSucceeded ()) {
+        echo 'Succeeded!';
+        return;
+    }
+
+// Failed
+echo $response->getHTTPStatus . ' ' . $response->getRawBody();
+
+
     // /* 準備Post回Line伺服器的資料 */
     // $header = ["Content-Type: application/json; charser=UTF-8", "X-Line-ChannelID:" . $channel_id, "X-Line-ChannelSecret:" . $channel_secret, "X-Line-Trusted-User-With-ACL:" . $mid];
     // $message = $this->getBoubouMessage ($text);
