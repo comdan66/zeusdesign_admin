@@ -24,9 +24,7 @@ class Lines extends Api_controller {
     
   }
   public function index () {
-    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump ();
-    exit ();
+    
     $path = FCPATH . 'temp/input.json';
     $channel_id = Cfg::setting ('line', 'channel', 'id');
     $channel_secret = Cfg::setting ('line', 'channel', 'secret');
@@ -73,7 +71,7 @@ class Lines extends Api_controller {
         $messageBuilder = new TemplateMessageBuilder ('2017 白沙屯媽祖 GPS', $buttonTemplateBuilder);
         
       }
-      if ($event instanceof TextMessage && preg_match ('/媽祖位置/i', $replyText)) {
+      if ($event instanceof TextMessage && preg_match ('/媽祖位置|媽祖在哪/i', $replyText)) {
         $latLng = json_decode (file_get_contents ('https://api.baishatun.godroad.tw/gps.json'));
         $messageBuilder = new LocationMessageBuilder ('媽祖現在的位置', Get_Address_From_Google_Maps ($latLng[0], $latLng[1]), $latLng[0], $latLng[1]);
       }
