@@ -49,15 +49,12 @@ class Lines extends Api_controller {
     foreach ($events as $event) {
       if ($event instanceof MessageEvent) {
         write_file ($path, '===> Log:' . 'message event has come' . "\n", FOPEN_READ_WRITE_CREATE);
-        continue;
       }
       if ($event instanceof TextMessage) {
         write_file ($path, '===> Log:' . 'text message has come' . "\n", FOPEN_READ_WRITE_CREATE);
-        continue;
       }
       if ($event instanceof LocationMessage) {
         write_file ($path, '===> Log:' . 'location message has come' . "\n", FOPEN_READ_WRITE_CREATE);
-        continue;
       }
       $replyText = $event->getText ();
       // $resp = $bot->replyText ($event->getReplyToken (), array (
