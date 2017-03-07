@@ -25,10 +25,12 @@ class Lines extends Api_controller {
     // $content_type = $receive->result[0]->content->contentType;
     $path = FCPATH . 'temp/input.json';
     // write_file ($path, json_encode ($receive));
-    write_file ($path, json_encode ($this->input->request_headers()));
+    // write_file ($path, json_encode ($this->input->request_headers()));
+    write_file ($path, json_encode (OAInput::post ()));
     // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
     // var_dump ($headers = $this->input->request_headers());
     // var_dump (LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE);
+    // {"X-line-signature":"joFU91e1koizDtlJs5gRjENNvPuk06\/SJmDZ131G+k4=","Content-type":"application\/json;charset=UTF-8","Content-length":"233","Host":"admin.zeusdesign.com.tw","Accept":"*\/*","User-agent":"LineBotWebhook\/1.0"}
     exit ();
     $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($token);
     $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channel_secret]);
