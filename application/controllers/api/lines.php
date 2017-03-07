@@ -23,7 +23,6 @@ class Lines extends Api_controller {
     
   }
   public function index () {
-    ob_start ();
     $path = FCPATH . 'temp/input.json';
     $channel_id = Cfg::setting ('line', 'channel', 'id');
     $channel_secret = Cfg::setting ('line', 'channel', 'secret');
@@ -79,10 +78,15 @@ class Lines extends Api_controller {
           new UriTemplateActionBuilder ("View detail", 'www.ioa.tw'),
         ));
       $resp = $bot->replyMessage ($event->getReplyToken (), $messageBuilder);
-
-      $raw = ob_get_clean ();
-      write_file ($path, $raw . "\n", FOPEN_READ_WRITE_CREATE);
+      
+      if ($response->isSucceeded ()) {
+          write_file ($path, 'Succeeded!' . "\n", FOPEN_READ_WRITE_CREATE);
+          echo 'Succeeded!';
+          return;
+      } else {
+          write_file ($path, $response->getHTTPStatus . ' ' . $response->getRawBody () . "\n", FOPEN_READ_WRITE_CREATE);
+          return;
+      }
     }
-    echo "OK";
   }
 }
