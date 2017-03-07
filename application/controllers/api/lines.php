@@ -13,6 +13,7 @@ use LINE\LINEBot\Event\MessageEvent;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\Event\MessageEvent\LocationMessage;
 use LINE\LINEBot\MessageBuilder\LocationMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
 
@@ -74,14 +75,11 @@ class Lines extends Api_controller {
 
 
       // $messageBuilder = new LocationMessageBuilder ('my location', '〒150-0002 東京都渋谷区渋谷２丁目２１−１', 35.65910807942215, 139.70372892916203);
-      try {
-        $messageBuilder = new ButtonTemplateBuilder ('你好', '測試一下', 'http://pic.mazu.ioa.tw/upload/pictures/name/0/0/4/32/2048w_1470185053_5700966ba81a8.jpg', array (
-            new UriTemplateActionBuilder ("View detail", 'www.ioa.tw'),
-          ));
-      } catch (Exception $e) {
-        write_file ($path, '===> Error, Builder Error! Msg:' . $e->getMessage () . "\n", FOPEN_READ_WRITE_CREATE);
-        exit ();
-      }
+      $buttonTemplateBuilder = new ButtonTemplateBuilder ('你好', '測試一下', 'http://pic.mazu.ioa.tw/upload/pictures/name/0/0/4/32/2048w_1470185053_5700966ba81a8.jpg', array (
+          new UriTemplateActionBuilder ("View detail", 'www.ioa.tw'),
+        ));
+      $messageBuilder = new TemplateMessageBuilder ('Button alt text', $buttonTemplateBuilder);
+      
       write_file ($path, 'Data OK3..' . "\n", FOPEN_READ_WRITE_CREATE);
 
       $resp = $bot->replyMessage ($event->getReplyToken (), $messageBuilder);
