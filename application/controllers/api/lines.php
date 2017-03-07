@@ -20,13 +20,12 @@ class Lines extends Api_controller {
 
     /* 將收到的資料整理至變數 */
     $receive = json_decode (file_get_contents ("php://input"));
-    $text = $receive->result[0]->content->text;
-    $from = $receive->result[0]->content->from;
-    $content_type = $receive->result[0]->content->contentType;
+    // $text = $receive->result[0]->content->text;
+    // $from = $receive->result[0]->content->from;
+    // $content_type = $receive->result[0]->content->contentType;
+    $path = FCPATH . 'temp/input.json';
+    write_file ($path, json_encode ($receive));
     
-    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump ($text, $from, $content_type);
-    exit ();
     // /* 準備Post回Line伺服器的資料 */
     // $header = ["Content-Type: application/json; charser=UTF-8", "X-Line-ChannelID:" . $channel_id, "X-Line-ChannelSecret:" . $channel_secret, "X-Line-Trusted-User-With-ACL:" . $mid];
     // $message = $this->getBoubouMessage ($text);
