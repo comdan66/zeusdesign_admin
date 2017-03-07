@@ -45,11 +45,11 @@ class Lines extends Api_controller {
     }
 
     foreach ($events as $event) {
-      if (!($event instanceof MessageEvent)) {
+      if ($event instanceof MessageEvent) {
         write_file ($path, '===> Log:' . 'Non message event has come');
         continue;
       }
-      if (!($event instanceof TextMessage)) {
+      if ($event instanceof TextMessage) {
         write_file ($path, '===> Log:' . 'Non text message has come');
         continue;
       }
@@ -62,7 +62,7 @@ class Lines extends Api_controller {
       //   'longitude' => 139.70372892916203,
       //   ));
       $messageBuilder = new LocationMessageBuilder ('my location', '〒150-0002 東京都渋谷区渋谷２丁目２１−１', 35.65910807942215, 139.70372892916203);
-      $resp = $bot->replyMessage ($event->getReplyToken (), $messageBuilder);
+      // $resp = $bot->replyMessage ($event->getReplyToken (), $messageBuilder);
     }
     echo "OK";
   }
