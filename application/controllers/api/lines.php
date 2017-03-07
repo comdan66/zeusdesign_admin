@@ -75,8 +75,9 @@ class Lines extends Api_controller {
 
 
       // $messageBuilder = new LocationMessageBuilder ('my location', '〒150-0002 東京都渋谷区渋谷２丁目２１−１', 35.65910807942215, 139.70372892916203);
-      $buttonTemplateBuilder = new ButtonTemplateBuilder ('你好', '測試一下', 'http://pic.mazu.ioa.tw/upload/pictures/name/0/0/4/32/2048w_1470185053_5700966ba81a8.jpg', array (
-          new UriTemplateActionBuilder ("View detail", 'www.ioa.tw'),
+
+      $buttonTemplateBuilder = new ButtonTemplateBuilder ('你好', '測試一下', 'https://works.ioa.tw/evolution/img/pokemons/150/003.png', array (
+          new UriTemplateActionBuilder ('Go to line.me', 'https://line.me'),
         ));
       $messageBuilder = new TemplateMessageBuilder ('Button alt text', $buttonTemplateBuilder);
       
