@@ -24,6 +24,9 @@ class Lines extends Api_controller {
     
   }
   public function index () {
+    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+    var_dump ();
+    exit ();
     $path = FCPATH . 'temp/input.json';
     $channel_id = Cfg::setting ('line', 'channel', 'id');
     $channel_secret = Cfg::setting ('line', 'channel', 'secret');
@@ -61,28 +64,24 @@ class Lines extends Api_controller {
       }
       $replyText = $event->getText ();
       
-      if (!($event instanceof TextMessage && strtolower ($replyText) == 'gps'))
-        continue;
-      write_file ($path, 'Data OK2..' . "\n", FOPEN_READ_WRITE_CREATE);
+      $messageBuilder = null;
+      if ($event instanceof TextMessage && preg_match ('/GPS/i', $replyText)) {
 
-      // $resp = $bot->replyText ($event->getReplyToken (), array (
-      //   'type' => 'location',
-      //   'title' => 'my location',
-      //   'address' => '〒150-0002 東京都渋谷区渋谷２丁目２１−１',
-      //   'latitude' => 35.65910807942215,
-      //   'longitude' => 139.70372892916203,
-      //   ));
+        $buttonTemplateBuilder = new ButtonTemplateBuilder ('2017 白沙屯媽祖 GPS', '2017 白沙屯媽祖 GPS 即時定位，歲次丁酉年，苗栗通霄白沙屯拱天宮媽祖南下北港朝天宮進香 GPS 系統。', 'https://baishatun.godroad.tw/img/og/index.png', array (
+            new UriTemplateActionBuilder ('開啟 GPS 定位', 'https://baishatun.godroad.tw'),
+          ));
+        $messageBuilder = new TemplateMessageBuilder ('2017 白沙屯媽祖 GPS', $buttonTemplateBuilder);
+        
+      }
+      if ($event instanceof TextMessage && preg_match ('/媽祖位置/i', $replyText)) {
+        $latLng = json_decode (file_get_contents ('https://api.baishatun.godroad.tw/gps.json'));
+        $messageBuilder = new LocationMessageBuilder ('媽祖現在的位置', Get_Address_From_Google_Maps ($latLng[0], $latLng[1]), $latLng[0], $latLng[1]);
+      }
 
 
-      // $messageBuilder = new LocationMessageBuilder ('my location', '〒150-0002 東京都渋谷区渋谷２丁目２１−１', 35.65910807942215, 139.70372892916203);
+      if (!$messageBuilder) return;
 
-      $buttonTemplateBuilder = new ButtonTemplateBuilder ('2017 白沙屯媽祖 GPS', '2017 白沙屯媽祖 GPS 即時定位，歲次丁酉年，苗栗通霄白沙屯拱天宮媽祖南下北港朝天宮進香 GPS 系統。', 'https://baishatun.godroad.tw/img/og/index.png', array (
-          new UriTemplateActionBuilder ('開啟 GPS 定位', 'https://baishatun.godroad.tw'),
-        ));
-      $messageBuilder = new TemplateMessageBuilder ('2017 白沙屯媽祖 GPS', $buttonTemplateBuilder);
-      
       write_file ($path, 'Data OK3..' . "\n", FOPEN_READ_WRITE_CREATE);
-
       $resp = $bot->replyMessage ($event->getReplyToken (), $messageBuilder);
       
       if ($response->isSucceeded ()) {
@@ -94,5 +93,35 @@ class Lines extends Api_controller {
           return;
       }
     }
+  }
+
+
+  private function Get_Address_From_Google_Maps ($lat, $lng) {
+
+  $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . $lat . ',' . $lng . '&sensor=false';
+
+  $data = @file_get_contents($url);
+  $jsondata = json_decode($data,true);
+
+  if (!$this->check_status ($jsondata)) return '';
+
+  // $address = array(
+  //     'country' => google_getCountry($jsondata),
+  //     'province' => google_getProvince($jsondata),
+  //     'city' => google_getCity($jsondata),
+  //     'street' => google_getStreet($jsondata),
+  //     'postal_code' => google_getPostalCode($jsondata),
+  //     'country_code' => google_getCountryCode($jsondata),
+  //     'formatted_address' => google_getAddress($jsondata),
+  // );
+
+  return $this->google_getAddress ($jsondata);
+  }
+  private function check_status ($jsondata) {
+      if ($jsondata["status"] == "OK") return true;
+      return false;
+  }
+  private function google_getAddress ($jsondata) {
+      return $jsondata["results"][0]["formatted_address"];
   }
 }
