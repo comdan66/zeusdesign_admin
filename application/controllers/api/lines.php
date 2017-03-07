@@ -77,6 +77,7 @@ class Lines extends Api_controller {
       $messageBuilder = new ButtonTemplateBuilder ('你好', '測試一下', 'http://pic.mazu.ioa.tw/upload/pictures/name/0/0/4/32/2048w_1470185053_5700966ba81a8.jpg', array (
           new UriTemplateActionBuilder ("View detail", 'www.ioa.tw'),
         ));
+      write_file ($path, 'Data OK3..' . "\n", FOPEN_READ_WRITE_CREATE);
       $resp = $bot->replyMessage ($event->getReplyToken (), $messageBuilder);
       
       if ($response->isSucceeded ()) {
