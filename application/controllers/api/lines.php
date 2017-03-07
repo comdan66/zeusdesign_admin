@@ -23,18 +23,22 @@ class Lines extends Api_controller {
     $channel_id = Cfg::setting ('line', 'channel', 'id');
     $channel_secret = Cfg::setting ('line', 'channel', 'secret');
     $token = Cfg::setting ('line', 'channel', 'token');
+      write_file ($path, '--------1');
 
     if (!isset ($_SERVER["HTTP_" . HTTPHeader::LINE_SIGNATURE])) {
       write_file ($path, '===> Error, Header Error!');
       exit ();
     }
+      write_file ($path, '--------2');
 
     $httpClient = new CurlHTTPClient ($token);
     $bot = new LINEBot ($httpClient, ['channelSecret' => $channel_secret]);
+      write_file ($path, '--------3');
 
     $signature = $_SERVER["HTTP_" . HTTPHeader::LINE_SIGNATURE];
     $body = file_get_contents ("php://input");
 
+      write_file ($path, '--------4');
     
     try {
       $events = $bot->parseEventRequest($req->getBody(), $signature[0]);
@@ -42,7 +46,7 @@ class Lines extends Api_controller {
       write_file ($path, '===> Error, Events Error! Msg:' . $e->getMessage ());
       exit ();
     }
-      write_file ($path, '--------');
+      write_file ($path, '--------5');
 
     foreach ($events as $event) {
       if (!($event instanceof MessageEvent)) {
