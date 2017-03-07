@@ -17,9 +17,7 @@ class Lines extends Api_controller {
     $channel_id = Cfg::setting ('line', 'channel', 'id');
     $channel_secret = Cfg::setting ('line', 'channel', 'secret');
     $mid = Cfg::setting ('line', 'channel', 'mid');
-    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump ($channel_id, $channel_secret, $mid);
-    exit ();
+
     /* 將收到的資料整理至變數 */
     $receive = json_decode (file_get_contents ("php://input"));
     $text = $receive->result[0]->content->text;
