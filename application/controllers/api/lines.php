@@ -11,6 +11,7 @@ use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot\Constant\HTTPHeader;
 use LINE\LINEBot\Event\MessageEvent;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
+use LINE\LINEBot\Event\MessageEvent\LocationMessage;
 use LINE\LINEBot\MessageBuilder\LocationMessageBuilder;
 
 class Lines extends Api_controller {
@@ -26,7 +27,7 @@ class Lines extends Api_controller {
     $token = Cfg::setting ('line', 'channel', 'token');
 
     if (!isset ($_SERVER["HTTP_" . HTTPHeader::LINE_SIGNATURE])) {
-      write_file ($path, '===> Error, Header Error!');
+      write_file ($path, '===> Error, Header Error!', FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
       exit ();
     }
 
@@ -40,17 +41,21 @@ class Lines extends Api_controller {
     try {
       $events = $bot->parseEventRequest ($body, $signature);
     } catch (Exception $e) {
-      write_file ($path, '===> Error, Events Error! Msg:' . $e->getMessage ());
+      write_file ($path, '===> Error, Events Error! Msg:' . $e->getMessage (), FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
       exit ();
     }
 
     foreach ($events as $event) {
       if ($event instanceof MessageEvent) {
-        write_file ($path, '===> Log:' . 'Non message event has come');
+        write_file ($path, '===> Log:' . 'message event has come', FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
         continue;
       }
       if ($event instanceof TextMessage) {
-        write_file ($path, '===> Log:' . 'Non text message has come');
+        write_file ($path, '===> Log:' . 'text message has come', FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
+        continue;
+      }
+      if ($event instanceof LocationMessage) {
+        write_file ($path, '===> Log:' . 'location message has come', FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
         continue;
       }
       $replyText = $event->getText ();
