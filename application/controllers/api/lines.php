@@ -26,7 +26,7 @@ class Lines extends Api_controller {
     $path = FCPATH . 'temp/input.json';
     // write_file ($path, json_encode ($receive));
     // write_file ($path, json_encode ($this->input->request_headers()));
-    write_file ($path, json_encode (OAInput::post ()));
+    write_file ($path, json_encode (OAInput::get ()));
     // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
     // var_dump ($headers = $this->input->request_headers());
     // var_dump (LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE);
