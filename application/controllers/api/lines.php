@@ -77,7 +77,7 @@ class Lines extends Api_controller {
             "label" => "View detail",
             "uri" => "http://example.com/page/123"
         ));
-      // $resp = $bot->replyMessage ($event->getReplyToken (), $messageBuilder);
+      $resp = $bot->replyMessage ($event->getReplyToken (), $messageBuilder);
     }
     echo "OK";
   }
