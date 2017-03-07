@@ -63,6 +63,7 @@ class Lines extends Api_controller {
       
       if (!($event instanceof TextMessage && $replyText == '表演'))
         continue;
+      write_file ($path, 'Data OK2..' . "\n", FOPEN_READ_WRITE_CREATE);
 
       // $resp = $bot->replyText ($event->getReplyToken (), array (
       //   'type' => 'location',
