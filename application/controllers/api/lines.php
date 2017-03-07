@@ -24,7 +24,6 @@ class Lines extends Api_controller {
     
   }
   public function index () {
-    
     $path = FCPATH . 'temp/input.json';
     $channel_id = Cfg::setting ('line', 'channel', 'id');
     $channel_secret = Cfg::setting ('line', 'channel', 'secret');
@@ -73,7 +72,7 @@ class Lines extends Api_controller {
       }
       if ($event instanceof TextMessage && preg_match ('/媽祖位置|媽祖在哪/i', $replyText)) {
         $latLng = json_decode (file_get_contents ('https://api.baishatun.godroad.tw/gps.json'));
-        $messageBuilder = new LocationMessageBuilder ('媽祖現在的位置', Get_Address_From_Google_Maps ($latLng[0], $latLng[1]), $latLng[0], $latLng[1]);
+        $messageBuilder = new LocationMessageBuilder ('媽祖現在的位置', $this->Get_Address_From_Google_Maps ($latLng[0], $latLng[1]), $latLng[0], $latLng[1]);
       }
 
 
@@ -96,7 +95,7 @@ class Lines extends Api_controller {
 
   private function Get_Address_From_Google_Maps ($lat, $lng) {
 
-  $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . $lat . ',' . $lng . '&sensor=false';
+  $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . $lat . ',' . $lng . '&sensor=false&language=zh-TW';
 
   $data = @file_get_contents($url);
   $jsondata = json_decode($data,true);
