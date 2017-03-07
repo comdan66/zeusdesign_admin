@@ -61,7 +61,7 @@ class Lines extends Api_controller {
       }
       $replyText = $event->getText ();
       
-      if (!($event instanceof TextMessage && $replyText == 'GPS'))
+      if (!($event instanceof TextMessage && strtolower ($replyText) == 'GPS'))
         continue;
       write_file ($path, 'Data OK2..' . "\n", FOPEN_READ_WRITE_CREATE);
 
