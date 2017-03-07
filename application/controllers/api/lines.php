@@ -6,6 +6,8 @@
  * @link        http://www.ioa.tw/
  */
 require FCPATH . 'vendor/autoload.php';
+use LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use LINE\LINEBot;
 
 class Lines extends Api_controller {
 
@@ -14,17 +16,29 @@ class Lines extends Api_controller {
     
   }
   public function index () {
+    $path = FCPATH . 'temp/input.json';
     $channel_id = Cfg::setting ('line', 'channel', 'id');
     $channel_secret = Cfg::setting ('line', 'channel', 'secret');
     $token = Cfg::setting ('line', 'channel', 'token');
 
-    /* 將收到的資料整理至變數 */
-    $body = json_decode (file_get_contents ("php://input"));
-    $headers = $this->input->request_headers ();
-    // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    // var_dump ();
-    // exit ();
+    if (!isset ($_SERVER["HTTP_".\LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE])) {
+      write_file ($path, '===> Error, Header Error!');
+      exit ();
+    }
 
+    $httpClient = new CurlHTTPClient ($token);
+    $bot = new LINEBot ($httpClient, ['channelSecret' => $channel_secret]);
+
+    $signature = $_SERVER["HTTP_".\LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
+    $body = file_get_contents ("php://input");
+
+    $events = $bot->parseEventRequest ($body, $signature);
+    
+    write_file ($path, '===============');
+
+echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+var_dump ($signature, $body);
+exit ();
 
 
 
@@ -37,7 +51,6 @@ class Lines extends Api_controller {
     // $text = $receive->result[0]->content->text;
     // $from = $receive->result[0]->content->from;
     // $content_type = $receive->result[0]->content->contentType;
-    $path = FCPATH . 'temp/input.json';
     write_file ($path, $headers['X-line-signature']);
     // write_file ($path, json_encode ($receive));
     // write_file ($path, json_encode ($this->input->request_headers()));
@@ -46,9 +59,6 @@ class Lines extends Api_controller {
     // var_dump (LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE);
     // {"X-line-signature":"joFU91e1koizDtlJs5gRjENNvPuk06\/SJmDZ131G+k4=","Content-type":"application\/json;charset=UTF-8","Content-length":"233","Host":"admin.zeusdesign.com.tw","Accept":"*\/*","User-agent":"LineBotWebhook\/1.0"}
     exit ();
-    $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($token);
-    $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channel_secret]);
-
 
     $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder ('hello');
     $response = $bot->replyMessage('<reply token>', $textMessageBuilder);
