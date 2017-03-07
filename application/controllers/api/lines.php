@@ -27,7 +27,7 @@ class Lines extends Api_controller {
     $token = Cfg::setting ('line', 'channel', 'token');
 
     if (!isset ($_SERVER["HTTP_" . HTTPHeader::LINE_SIGNATURE])) {
-      write_file ($path, '===> Error, Header Error!', FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
+      write_file ($path, '===> Error, Header Error!', FOPEN_READ_WRITE_CREATE);
       exit ();
     }
 
@@ -41,21 +41,21 @@ class Lines extends Api_controller {
     try {
       $events = $bot->parseEventRequest ($body, $signature);
     } catch (Exception $e) {
-      write_file ($path, '===> Error, Events Error! Msg:' . $e->getMessage (), FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
+      write_file ($path, '===> Error, Events Error! Msg:' . $e->getMessage (), FOPEN_READ_WRITE_CREATE);
       exit ();
     }
 
     foreach ($events as $event) {
       if ($event instanceof MessageEvent) {
-        write_file ($path, '===> Log:' . 'message event has come', FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
+        write_file ($path, '===> Log:' . 'message event has come', FOPEN_READ_WRITE_CREATE);
         continue;
       }
       if ($event instanceof TextMessage) {
-        write_file ($path, '===> Log:' . 'text message has come', FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
+        write_file ($path, '===> Log:' . 'text message has come', FOPEN_READ_WRITE_CREATE);
         continue;
       }
       if ($event instanceof LocationMessage) {
-        write_file ($path, '===> Log:' . 'location message has come', FOPEN_READ_WRITE_CREATE_DESTRUCTIVE);
+        write_file ($path, '===> Log:' . 'location message has come', FOPEN_READ_WRITE_CREATE);
         continue;
       }
       $replyText = $event->getText ();
