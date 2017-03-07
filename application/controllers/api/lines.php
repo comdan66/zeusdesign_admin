@@ -61,7 +61,7 @@ class Lines extends Api_controller {
       }
       $replyText = $event->getText ();
       
-      if (!($event instanceof TextMessage && $replyText == '表演'))
+      if (!($event instanceof TextMessage && $replyText == 'GPS'))
         continue;
       write_file ($path, 'Data OK2..' . "\n", FOPEN_READ_WRITE_CREATE);
 
@@ -76,8 +76,8 @@ class Lines extends Api_controller {
 
       // $messageBuilder = new LocationMessageBuilder ('my location', '〒150-0002 東京都渋谷区渋谷２丁目２１−１', 35.65910807942215, 139.70372892916203);
 
-      $buttonTemplateBuilder = new ButtonTemplateBuilder ('你好', '測試一下', 'https://works.ioa.tw/evolution/img/pokemons/150/003.png', array (
-          new UriTemplateActionBuilder ('Go to line.me', 'https://line.me'),
+      $buttonTemplateBuilder = new ButtonTemplateBuilder ('2017 白沙屯媽祖 GPS', '2017 白沙屯媽祖 GPS 即時定位，歲次丁酉年，苗栗通霄白沙屯拱天宮媽祖南下北港朝天宮進香 GPS 系統。', 'https://baishatun.godroad.tw/img/og/index.png', array (
+          new UriTemplateActionBuilder ('開啟 GPS 定位', 'https://baishatun.godroad.tw'),
         ));
       $messageBuilder = new TemplateMessageBuilder ('Button alt text', $buttonTemplateBuilder);
       
