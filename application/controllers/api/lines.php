@@ -142,6 +142,7 @@ exit ();
       if ($event instanceof StickerMessage) $instanceof = 'StickerMessage';
       if ($event instanceof ImageMessage) $instanceof = 'ImageMessage';
       if ($event instanceof AudioMessage) $instanceof = 'AudioMessage';
+      write_file ($path, $event->getType () . "\n", FOPEN_READ_WRITE_CREATE);
 
       $params = array (
           'type' => $event->getType (),
