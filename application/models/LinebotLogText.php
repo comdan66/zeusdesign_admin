@@ -10,6 +10,8 @@ use LINE\LINEBot\MessageBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
+use LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 
@@ -197,6 +199,13 @@ class LinebotLogText extends OaModel {
     if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $builder = new TextMessageBuilder ($response[array_rand ($response)]);
+    return $this->reply ($bot, $builder);
+  }
+  public function searchTest ($bot) {
+    if ($this->log->source_id != 'U4a37e32a1d11b3995d2bf299597e432f') return false;
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TemplateMessageBuilder ('dddd', new ConfirmTemplateBuilder ('確定？', array (new MessageTemplateActionBuilder ('123', '456'))));
     return $this->reply ($bot, $builder);
   }
 }

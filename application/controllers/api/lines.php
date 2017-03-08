@@ -106,6 +106,7 @@ exit ();
               $linebotLogText->searchHello ($bot) ||
               $linebotLogText->searchName ($bot) ||
               $linebotLogText->searchCallMe ($bot) ||
+              $linebotLogText->searchTest ($bot) ||
               false)
             echo 'Succeeded!';
 
