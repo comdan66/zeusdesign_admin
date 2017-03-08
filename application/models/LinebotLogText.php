@@ -109,11 +109,14 @@ write_file (FCPATH . 'temp/input.json', ('==================3') . count($keys = 
 write_file (FCPATH . 'temp/input.json', ('==================4') . count($keys = LinebotLogText::regex ($pattern, $this->text)) . "\n", FOPEN_READ_WRITE_CREATE);
 
     if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+write_file (FCPATH . 'temp/input.json', ('==================4:1')  . "\n", FOPEN_READ_WRITE_CREATE);
 
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $this->CI->load->library ('AlleyGet');
+write_file (FCPATH . 'temp/input.json', ('==================4:2')  . "\n", FOPEN_READ_WRITE_CREATE);
 
     if (!$datas = AlleyGet::recommend ()) return $this->reply ($bot, new TextMessageBuilder ('哭哭，這附近沒什麼美食耶..'));
+write_file (FCPATH . 'temp/input.json', ('==================4:3')  . "\n", FOPEN_READ_WRITE_CREATE);
 
     $builder = new TemplateMessageBuilder (mb_strimwidth (implode (',', $keys) . ' 來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder (array_map (function ($data) {
       return new CarouselColumnTemplateBuilder (
@@ -123,6 +126,7 @@ write_file (FCPATH . 'temp/input.json', ('==================4') . count($keys = 
         array (new UriTemplateActionBuilder (mb_strimwidth ('我要吃 ' . $data['title'], 0, 8 * 2, '…','UTF-8'), $data['url']))
       );
     }, $datas)));
+write_file (FCPATH . 'temp/input.json', ('==================4:4')  . "\n", FOPEN_READ_WRITE_CREATE);
 
     return $this->reply ($bot, $builder);
   }
