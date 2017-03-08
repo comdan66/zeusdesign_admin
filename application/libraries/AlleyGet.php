@@ -47,7 +47,7 @@ class AlleyGet {
     return array_slice (array_map (function ($item) {
       return array (
           'title' => $item['productName'],
-          'desc' => $item['useRule'],
+          'desc' => $item['story'],
           'img' => $item['originImage'],
           'url' => $item['webSite'],
         );
@@ -79,7 +79,7 @@ class AlleyGet {
     return array_slice (array_map (function ($item) {
       return array (
           'title' => $item['productName'],
-          'desc' => $item['useRule'],
+          'desc' => $item['story'],
           'img' => $item['originImage'],
           'url' => $item['webSite'],
         );
