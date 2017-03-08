@@ -107,7 +107,6 @@ class Lines extends Api_controller {
             
               $this->load->library ('CreateDemo');
               $colums = array_map (function ($pic) {
-                write_file ($path, '===> ' . $pic->title . "\n", FOPEN_READ_WRITE_CREATE);
                 return new CarouselColumnTemplateBuilder (
                   $pic->title,
                   $pic->title,
@@ -115,6 +114,8 @@ class Lines extends Api_controller {
                   array (new UriTemplateActionBuilder ('我要看正妹', $pic->page))
                 );
               }, CreateDemo::pics (3, 8, $keys));
+              
+              write_file ($path, "?\n", FOPEN_READ_WRITE_CREATE);
               
               $builder = new TemplateMessageBuilder (implode (',', $keys) . ' 來囉！', new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
