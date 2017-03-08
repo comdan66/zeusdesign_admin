@@ -38,8 +38,13 @@ echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>
 var_dump (YoutubeGet::search (array ('q' => '犁炮', 'maxResults' => rand (10, 30))));
 exit ();
   }
-  private function searchIWant ($str) {
+  private function searchIWantLook ($str) {
     preg_match_all ('/我(想|要)*看\s*(?P<c>.*)/', $str, $result);
+    if (!$result['c']) return array ();
+    return preg_split ('/[\s,]+/', $result['c'][0]);
+  }
+  private function searchIWantListen ($str) {
+    preg_match_all ('/我(想|要)*聽\s*(?P<c>.*)/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
@@ -102,21 +107,19 @@ exit ();
           if (!LinebotLogText::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogText::create ( array_intersect_key ($params, LinebotLogText::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
-          if ($keys = $this->searchIWant ($linebotLogText->text)) {
+          if ($keys = $this->searchIWantLook ($linebotLogText->text)) {
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
-          
             $this->load->library ('CreateDemo');
             if (($colums = CreateDemo::pics (4, 5, $keys)) && ($colums = array_map (function ($pic) use ($keys) {
-
                 return new CarouselColumnTemplateBuilder (
                   mb_strimwidth ($pic['title'], 0, 18, '…','UTF-8'),
                   mb_strimwidth ($pic['title'], 0, 28, '…','UTF-8'),
                   $pic['url'],
-                  array (new UriTemplateActionBuilder ('我要看 ' . $keys[0], $pic['page']))
+                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要看 ' . implode (' ', $keys), 0, 8, '…','UTF-8'), $pic['page']))
                 );
               }, $colums))) {
 
-              $builder = new TemplateMessageBuilder (implode (',', $keys) . ' 來囉！', new CarouselTemplateBuilder ($colums));
+              $builder = new TemplateMessageBuilder (mb_strimwidth (implode (',', $keys) . ' 來囉！', 0, 198, '…','UTF-8'), new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
@@ -132,7 +135,37 @@ exit ();
               $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
               echo 'Succeeded!';
             }
-          } 
+          } else if ($keys = $this->searchIWantListen ($linebotLogText->text)) {
+            $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
+            $this->load->library ('YoutubeGet');
+
+            if (($colums = YoutubeGet::search (array ('q' => implode (' ', $keys), 'maxResults' => rand (3, 5)))) && ($colums = array_map (function ($youtube) use ($keys) {
+                return new CarouselColumnTemplateBuilder (
+                  mb_strimwidth ($youtube['title'], 0, 18, '…','UTF-8'),
+                  mb_strimwidth ($youtube['title'], 0, 28, '…','UTF-8'),
+                  $youtube['thumbnails'][count ($youtube['thumbnails']) - 1],
+                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要看 ' . implode (' ', $keys), 0, 8, '…','UTF-8'), 
+                    'https://www.youtube.com/watch?v=' . $youtube['id']))
+                );
+              }, $colums))) {
+              
+              $builder = new TemplateMessageBuilder (mb_strimwidth (implode (',', $keys) . ' 來囉！', 0, 198, '…','UTF-8'), new CarouselTemplateBuilder ($colums));
+              $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+              $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+
+              if (!$response->isSucceeded ()) return false;
+              $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+              echo 'Succeeded!';
+            } else {
+              $builder = new TextMessageBuilder ('哭哭，找不到你想要的 ' . $linebotLogText->text . ' 耶..');
+              $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+              $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+
+              if (!$response->isSucceeded ()) return false;
+              $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+              echo 'Succeeded!';
+            }
+          }
 
 
           break;

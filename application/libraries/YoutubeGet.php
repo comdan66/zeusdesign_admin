@@ -11,7 +11,6 @@ class YoutubeGet {
   public function __construct () {
   }
 
-
   public static function search ($options = array ()) {
     $CI  =& get_instance ();
     $CI->load->library ('Google/Google');
