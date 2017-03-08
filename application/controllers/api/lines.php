@@ -39,12 +39,12 @@ var_dump (YoutubeGet::search (array ('q' => '犁炮', 'maxResults' => rand (10, 
 exit ();
   }
   private function searchIWantLook ($str) {
-    preg_match_all ('/我(想|要)*找\s*(?P<c>.*)/', $str, $result);
+    preg_match_all ('/我{0,1}(想|要)*找\s*(?P<c>.*)/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
   private function searchIWantListen ($str) {
-    preg_match_all ('/我(想|要)*(聽|看)\s*(?P<c>.*)/', $str, $result);
+    preg_match_all ('/我{0,1}(想|要)*(聽|看)\s*(?P<c>.*)/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
