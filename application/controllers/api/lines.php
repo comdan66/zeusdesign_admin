@@ -115,7 +115,7 @@ class Lines extends Api_controller {
                 );
               }, CreateDemo::pics (3, 8, $keys));
               
-              write_file ($path, "?\n", FOPEN_READ_WRITE_CREATE);
+              write_file ($path, count($colums) . "\n", FOPEN_READ_WRITE_CREATE);
               
               $builder = new TemplateMessageBuilder (implode (',', $keys) . ' 來囉！', new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
