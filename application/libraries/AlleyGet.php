@@ -44,13 +44,13 @@ class AlleyGet {
     $data = json_decode ($data, true);
     if (!(isset ($data['items']) && $data['items'])) return array ();
     
-    return array_map (function ($item) {
+    return array_slice (array_map (function ($item) {
       return array (
           'title' => $item['productName'],
           'desc' => $item['useRule'],
           'img' => $item['originImage'],
           'url' => $item['webSite'],
         );
-    }, $data['items']);
+    }, $data['items']), 0, 5);
   }
 }
