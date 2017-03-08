@@ -188,10 +188,10 @@ exit ();
           $this->load->library ('AlleyGet');
           if (($colums = AlleyGet::search ($linebotLogLocation->latitude, $linebotLogLocation->longitude)) && ($colums = array_map (function ($store) {
               return new CarouselColumnTemplateBuilder (
-                mb_strimwidth ($pic['title'], 0, 18 * 2, '…','UTF-8'),
-                mb_strimwidth ($pic['desc'], 0, 28 * 2, '…','UTF-8'),
-                $pic['img'],
-                array (new UriTemplateActionBuilder (mb_strimwidth ('我要吃 ' . $pic['title'], 0, 8 * 2, '…','UTF-8'), $pic['url']))
+                mb_strimwidth ($store['title'], 0, 18 * 2, '…','UTF-8'),
+                mb_strimwidth ($store['desc'], 0, 28 * 2, '…','UTF-8'),
+                $store['img'],
+                array (new UriTemplateActionBuilder (mb_strimwidth ('我要吃 ' . $store['title'], 0, 8 * 2, '…','UTF-8'), $store['url']))
               );
             }, $colums))) {
 
