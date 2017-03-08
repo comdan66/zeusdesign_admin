@@ -42,71 +42,6 @@ echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>
 var_dump ($this->searchHello ('好哈 Hello哈哈哈'));
 exit ();
   }
-  private function searchIWantLook ($str) {
-    preg_match_all ('/我{0,1}(想|要)*找\s*(?P<c>.*)/', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchIWantListen ($str) {
-    preg_match_all ('/我{0,1}(想|要)*(聽|看)\s*(?P<c>.*)/', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchIWantEat ($str) {
-    preg_match_all ('/我{0,1}(想|要)*(吃)\s*(?P<c>.*)/', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchRecommend ($str) {
-    preg_match_all ('/(?P<c>(吃什麼|吃啥|好吃的|啥好吃|要吃啥|什麼好吃))/', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchDont ($str) {
-    preg_match_all ('/不\s*(?P<c>(想|要|可|準).*)/', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function search3Q ($str) {
-    preg_match_all ('/(?P<c>(謝|3Q|3q).*)/', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchSpeechless ($str) {
-    preg_match_all ('/(?P<c>(＝\s*＝|=\s*=|\.\.|3q).*)/', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchNotThing ($str) {
-    preg_match_all ('/(?P<c>(沒事).*)/', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchHaha ($str) {
-    preg_match_all ('/(?P<c>(XD|ＸＤ|ＸD|xＤ|好笑|哈哈*))/i', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchBot ($str) {
-    preg_match_all ('/(?P<c>(機器人|Bot*))/i', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchHello ($str) {
-    preg_match_all ('/(?P<c>(妳好|你好|哈囉|Hello|嗨|Hi))/i', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchName ($str) {
-    preg_match_all ('/(?P<c>(你叫什|你是誰|妳叫什|妳是誰))/i', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
-  private function searchCallMe ($str) {
-    preg_match_all ('/(天使|添屎)+(?P<c>.*)/', $str, $result);
-    if (!$result['c']) return array ();
-    return preg_split ('/[\s,]+/', $result['c'][0]);
-  }
   public function index () {
     $path = FCPATH . 'temp/input.json';
     $channel_id = Cfg::setting ('line', 'channel', 'id');
@@ -177,12 +112,23 @@ exit ();
             );
           if (!LinebotLogText::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogText::create ( array_intersect_key ($params, LinebotLogText::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
-write_file (FCPATH . 'temp/input.json', ('==================1') . "\n", FOPEN_READ_WRITE_CREATE);
+
           if ($linebotLogText->searchIWantLook ($bot) ||
               $linebotLogText->searchIWantListen ($bot) ||
               $linebotLogText->searchIWantEat ($bot) ||
-              $linebotLogText->searchRecommend ($bot))
+              $linebotLogText->searchRecommend ($bot) ||
+              $linebotLogText->searchDont ($bot) ||
+              $linebotLogText->search3Q ($bot) ||
+              $linebotLogText->searchSpeechles ($bot) ||
+              $linebotLogText->searchNotThing ($bot) ||
+              $linebotLogText->searchHaha ($bot) ||
+              $linebotLogText->searchBot ($bot) ||
+              $linebotLogText->searchHello ($bot) ||
+              $linebotLogText->searchName ($bot) ||
+              $linebotLogText->searchCallMe ($bot) ||
+              false)
             echo 'Succeeded!';
+
           break;
         case 'LocationMessage':
           $params = array (

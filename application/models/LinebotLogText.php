@@ -44,7 +44,6 @@ class LinebotLogText extends OaModel {
   }
   public function searchIWantLook ($bot) {
     $pattern = '/我{0,1}(想|要)*找\s*(?P<c>.*)/';
-write_file (FCPATH . 'temp/input.json', ('==================1') . count($keys = LinebotLogText::regex ($pattern, $this->text)) . "\n", FOPEN_READ_WRITE_CREATE);
 
     if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
 
@@ -65,7 +64,6 @@ write_file (FCPATH . 'temp/input.json', ('==================1') . count($keys = 
   }
   public function searchIWantListen ($bot) {
     $pattern = '/我{0,1}(想|要)*(聽|看)\s*(?P<c>.*)/';
-write_file (FCPATH . 'temp/input.json', ('==================2') . count($keys = LinebotLogText::regex ($pattern, $this->text)) . "\n", FOPEN_READ_WRITE_CREATE);
     
 
     if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
@@ -88,7 +86,6 @@ write_file (FCPATH . 'temp/input.json', ('==================2') . count($keys = 
   }
   public function searchIWantEat ($bot) {
     $pattern = '/我{0,1}(想|要)*(吃)\s*(?P<c>.*)/';
-write_file (FCPATH . 'temp/input.json', ('==================3') . count($keys = LinebotLogText::regex ($pattern, $this->text)) . "\n", FOPEN_READ_WRITE_CREATE);
 
     if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
 
@@ -110,17 +107,13 @@ write_file (FCPATH . 'temp/input.json', ('==================3') . count($keys = 
   }
   public function searchRecommend ($bot) {
     $pattern = '/(?P<c>(吃什麼|吃啥|好吃的|啥好吃|要吃啥|什麼好吃))/';
-write_file (FCPATH . 'temp/input.json', ('==================4') . count($keys = LinebotLogText::regex ($pattern, $this->text)) . "\n", FOPEN_READ_WRITE_CREATE);
 
     if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
-write_file (FCPATH . 'temp/input.json', ('==================4:1')  . "\n", FOPEN_READ_WRITE_CREATE);
 
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $this->CI->load->library ('AlleyGet');
-write_file (FCPATH . 'temp/input.json', ('==================4:2')  . "\n", FOPEN_READ_WRITE_CREATE);
 
     if (!$datas = AlleyGet::recommend ()) return $this->reply ($bot, new TextMessageBuilder ('哭哭，這附近沒什麼美食耶..'));
-write_file (FCPATH . 'temp/input.json', ('==================4:3')  . "\n", FOPEN_READ_WRITE_CREATE);
 
     $builder = new TemplateMessageBuilder (mb_strimwidth (implode (',', $keys) . ' 來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder (array_map (function ($data) {
       return new CarouselColumnTemplateBuilder (
@@ -130,8 +123,79 @@ write_file (FCPATH . 'temp/input.json', ('==================4:3')  . "\n", FOPEN
         array (new UriTemplateActionBuilder (mb_strimwidth ('我要吃 ' . $data['title'], 0, 8 * 2, '…','UTF-8'), $data['url']))
       );
     }, $datas)));
-write_file (FCPATH . 'temp/input.json', ('==================4:4')  . "\n", FOPEN_READ_WRITE_CREATE);
 
+    return $this->reply ($bot, $builder);
+  }
+  public function searchDont ($bot) {
+    $pattern = '/不\s*(?P<c>(想|要|可|準).*)/';
+    $response = array ('為什麼？', '蛤～～', '所以？');
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TextMessageBuilder ($response[array_rand ($response)]);
+    return $this->reply ($bot, $builder);
+  }
+  public function search3Q ($bot) {
+    $pattern = '/(?P<c>(謝|3Q|3q).*)/';
+    $response = array ('不客氣啦！', 'OK 的啦！', '您客氣了：）');
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TextMessageBuilder ($response[array_rand ($response)]);
+    return $this->reply ($bot, $builder);
+  }
+  public function searchSpeechles ($bot) {
+    $pattern = '/(?P<c>(＝\s*＝|=\s*=|\.\.|3q).*)/';
+    $response = array ('幹嘛！！？', '= =+', '哈哈哈哈..');
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TextMessageBuilder ($response[array_rand ($response)]);
+    return $this->reply ($bot, $builder);
+  }
+  public function searchNotThing ($bot) {
+    $pattern = '/(?P<c>(沒事).*)/';
+    $response = array ('真的嗎.. = =+', '說！剛剛要說啥', '嗯哼，快說喔！');
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TextMessageBuilder ($response[array_rand ($response)]);
+    return $this->reply ($bot, $builder);
+  }
+  public function searchHaha ($bot) {
+    $pattern = '/(?P<c>(XD|ＸＤ|ＸD|xＤ|好笑|哈哈*))/i';
+    $response = array ('笑什麼笑！', '很好笑？', '呵呵呵', '笑屁喔！');
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TextMessageBuilder ($response[array_rand ($response)]);
+    return $this->reply ($bot, $builder);
+  }
+  public function searchBot ($bot) {
+    $pattern = '/(?P<c>(機器人|Bot*))/i';
+    $response = array ('幹嘛，找我？', '我不是機器人！', '人家很聰明的！！');
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TextMessageBuilder ($response[array_rand ($response)]);
+    return $this->reply ($bot, $builder);
+  }
+  public function searchHello ($bot) {
+    $pattern = '/(?P<c>(妳好|你好|哈囉|Hello|嗨|Hi))/i';
+    $response = array ('你好！', '嗨～～', '嗨，你好（揮手');
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TextMessageBuilder ($response[array_rand ($response)]);
+    return $this->reply ($bot, $builder);
+  }
+  public function searchName ($bot) {
+    $pattern = '/(?P<c>(你叫什|你是誰|妳叫什|妳是誰))/i';
+    $response = array ('我叫 小～添～屎～，是大家的好朋友～～');
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TextMessageBuilder ($response[array_rand ($response)]);
+    return $this->reply ($bot, $builder);
+  }
+  public function searchCallMe ($bot) {
+    $pattern = '/(天使|添屎)+(?P<c>.*)/';
+    $response = array ('找我幹嘛？', '恩？', '怎麼了？', '我在！', implode (' ', $keys));
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TextMessageBuilder ($response[array_rand ($response)]);
     return $this->reply ($bot, $builder);
   }
 }
