@@ -205,7 +205,14 @@ class LinebotLogText extends OaModel {
     if ($this->log->source_id != 'U4a37e32a1d11b3995d2bf299597e432f') return false;
     if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
-    $builder = new TemplateMessageBuilder ('dddd', new ConfirmTemplateBuilder ('確定？', array (new MessageTemplateActionBuilder ('123', '456'), new MessageTemplateActionBuilder ('abc', 'def'))));
+    // $builder = new TemplateMessageBuilder ('dddd', new ConfirmTemplateBuilder ('確定？', array (new MessageTemplateActionBuilder ('123', '456'), new MessageTemplateActionBuilder ('abc', 'def'))));
+    $builder = new TemplateMessageBuilder(
+                        'Confirm alt text',
+                        new ConfirmTemplateBuilder('Do it?', [
+                            new MessageTemplateActionBuilder('Yes', 'Yes!'),
+                            new MessageTemplateActionBuilder('No', 'No!'),
+                        ])
+                    );
     return $this->reply ($bot, $builder);
   }
 }
