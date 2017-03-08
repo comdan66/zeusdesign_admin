@@ -6,7 +6,7 @@
  * @link        http://www.ioa.tw/
  */
 
-require FCPATH . 'vendor/autoload.php';
+require_once FCPATH . 'vendor/autoload.php';
 
 class OaLineModel extends ActiveRecordModel {
 

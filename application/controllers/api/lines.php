@@ -5,7 +5,8 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  * @link        http://www.ioa.tw/
  */
-require FCPATH . 'vendor/autoload.php';
+require_once FCPATH . 'vendor/autoload.php';
+
 use LINE\LINEBot;
 use LINE\LINEBot\Constant\EventSourceType;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
