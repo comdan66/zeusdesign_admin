@@ -98,7 +98,7 @@ exit ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
   private function searchName ($str) {
-    preg_match_all ('/(?P<c>(你叫什|你是誰))/i', $str, $result);
+    preg_match_all ('/(?P<c>(你叫什|你是誰|妳叫什|妳是誰))/i', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
