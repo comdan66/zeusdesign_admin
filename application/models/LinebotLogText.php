@@ -162,7 +162,7 @@ class LinebotLogText extends OaLineModel {
     if (!$datas = WeatherGet::getByLatLng ($keys[0], $keys[1])) return $this->reply ($bot, new TextMessageBuilder ('哭哭，目前沒有此處的資料耶..'));
       write_file (FCPATH . 'temp/input.json', $datas['title'] . "\n", FOPEN_READ_WRITE_CREATE);
 
-    $builder = new TemplateMessageBuilder ($datas['title'], new ButtonTemplateBuilder ($datas['title'], $datas['desc'], $datas['img'], array (new UriTemplateActionBuilder ('詳細內容', $datas['url']))));
+    $builder = new TemplateMessageBuilder ($datas['title'], new ButtonTemplateBuilder ('2017 白沙屯媽祖 GPS', '2017 白沙屯媽祖 GPS 即時定位，歲次丁酉年，苗栗通霄白沙屯拱天宮媽祖南下北港朝天宮進香 GPS 系統。', 'https://baishatun.godroad.tw/img/og/index.png', array (new UriTemplateActionBuilder ('開啟 GPS 定位', 'https://baishatun.godroad.tw'))));
       write_file (FCPATH . 'temp/input.json', $datas['title'] . "=========\n", FOPEN_READ_WRITE_CREATE);
     return $this->reply ($bot, $builder);
   }
