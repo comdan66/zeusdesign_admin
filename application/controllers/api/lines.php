@@ -25,9 +25,12 @@ class Lines extends Api_controller {
     
   }
   public function test () {
-    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump (LinebotLogText::regex ('/附近的?美食\s*\((?P<c>(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?))\)/', "我想知道這附近的美食(24.999164132164, 121.52344331145)"));
-    exit ();
+    $this->load->library ('WeatherGet');
+    ;
+
+echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+var_dump (WeatherGet::getByLatLng (24.999163220568, 121.52344331145));
+exit ();
 
   }
   public function index () {
