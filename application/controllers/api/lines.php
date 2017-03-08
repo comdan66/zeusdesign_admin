@@ -97,7 +97,7 @@ class Lines extends Api_controller {
           if (!LinebotLogText::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogText::create ( array_intersect_key ($params, LinebotLogText::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
-          if (preg_match ('/正妹|找妹/i', $linebotLogText->text)) {
+          if (true || preg_match ('/正妹|找妹/i', $linebotLogText->text)) {
               $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
             
               $this->load->library ('CreateDemo');
@@ -129,7 +129,7 @@ class Lines extends Api_controller {
                   $column3,
                 ));
 
-              $builder = new TemplateMessageBuilder ('正妹來囉！', $carouselTemplateBuilder);
+              // $builder = new TemplateMessageBuilder ('正妹來囉！', $carouselTemplateBuilder);
               
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $builder = new ButtonTemplateBuilder ('2017 白沙屯媽祖 GPS', '2017 白沙屯媽祖 GPS 即時定位，歲次丁酉年，苗栗通霄白沙屯拱天宮媽祖南下北港朝天宮進香 GPS 系統。', 'https://baishatun.godroad.tw/img/og/index.png', array (new UriTemplateActionBuilder ('開啟 GPS 定位', 'https://baishatun.godroad.tw')));
@@ -137,12 +137,12 @@ class Lines extends Api_controller {
 
               if (!$response->isSucceeded ()) {
 
-                $profile = $response->getJSONDecodedBody ();
-                $bot->replyText(
-                    $linebotLog->reply_token,
-                    'Display name: ' . $profile['displayName'],
-                    'Status message: ' . $profile['statusMessage']
-                );
+                // $profile = $response->getJSONDecodedBody ();
+                // $bot->replyText(
+                //     $linebotLog->reply_token,
+                //     'Display name: ' . $profile['displayName'],
+                //     'Status message: ' . $profile['statusMessage']
+                // );
 
                 return false;
               }
