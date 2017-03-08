@@ -103,7 +103,7 @@ exit ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
   private function searchCallMe ($str) {
-    preg_match_all ('/(天使|小添屎|添屎)+(?P<c>.*)/', $str, $result);
+    preg_match_all ('/(天使|添屎)+(?P<c>.*)/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
