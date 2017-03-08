@@ -107,6 +107,8 @@ class Lines extends Api_controller {
             
               $this->load->library ('CreateDemo');
               $colums = array_map (function ($pic) {
+                write_file ($path, $pic->title . '-' . $pic->url . "\n", FOPEN_READ_WRITE_CREATE);
+
                 return new CarouselColumnTemplateBuilder (
                   $pic->title,
                   $pic->title,
