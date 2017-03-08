@@ -130,6 +130,8 @@ class Lines extends Api_controller {
                 ));
 
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+
+              $builder = new TextMessageBuilder ('目前ＧＰＳ已經');
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
               if (!$response->isSucceeded ()) return false;
