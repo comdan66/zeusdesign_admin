@@ -43,6 +43,7 @@ class LinebotLogText extends OaModel {
 write_file (FCPATH . 'temp/input.json', ('==================2') . "\n", FOPEN_READ_WRITE_CREATE);
 
     if (!(isset ($this->text) && $keys = LinebotLogText::regex ($pattern, $this->text))) return false;
+write_file (FCPATH . 'temp/input.json', ('==================2.1') . "\n", FOPEN_READ_WRITE_CREATE);
 
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $this->CI->load->library ('CreateDemo');
