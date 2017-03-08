@@ -142,14 +142,15 @@ exit ();
       if ($event instanceof StickerMessage) $instanceof = 'StickerMessage';
       if ($event instanceof ImageMessage) $instanceof = 'ImageMessage';
       if ($event instanceof AudioMessage) $instanceof = 'AudioMessage';
-      write_file ($path, $event->getType () . "\n", FOPEN_READ_WRITE_CREATE);
-      write_file ($path, $instanceof . "\n", FOPEN_READ_WRITE_CREATE);
-      write_file ($path, ($event->getReplyToken ()) . "\n", FOPEN_READ_WRITE_CREATE);
-      write_file ($path, ($event->getEventSourceId ()) . "\n", FOPEN_READ_WRITE_CREATE);
-      write_file ($path, ($event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM)) . "\n", FOPEN_READ_WRITE_CREATE);
-      write_file ($path, ($event->getTimestamp ()) . "\n", FOPEN_READ_WRITE_CREATE);
-      write_file ($path, ($event->getMessageType ()) . "\n", FOPEN_READ_WRITE_CREATE);
-      write_file ($path, ($event->getMessageId ()) . "\n", FOPEN_READ_WRITE_CREATE);
+      
+      // write_file ($path, $event->getType () . "\n", FOPEN_READ_WRITE_CREATE);
+      // write_file ($path, $instanceof . "\n", FOPEN_READ_WRITE_CREATE);
+      // write_file ($path, ($event->getReplyToken ()) . "\n", FOPEN_READ_WRITE_CREATE);
+      // write_file ($path, ($event->getEventSourceId ()) . "\n", FOPEN_READ_WRITE_CREATE);
+      // write_file ($path, ($event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM)) . "\n", FOPEN_READ_WRITE_CREATE);
+      // write_file ($path, ($event->getTimestamp ()) . "\n", FOPEN_READ_WRITE_CREATE);
+      // write_file ($path, ($event->getMessageType ()) . "\n", FOPEN_READ_WRITE_CREATE);
+      // write_file ($path, ($event->getMessageId ()) . "\n", FOPEN_READ_WRITE_CREATE);
 
       $params = array (
           'type' => $event->getType (),
@@ -158,8 +159,8 @@ exit ();
           'source_id' => $event->getEventSourceId (),
           'source_type' => $event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM),
           'timestamp' => $event->getTimestamp (),
-          'message_type' => $event->getMessageType (),
-          'message_id' => $event->getMessageId (),
+          'message_type' => $event->getType () == 'message' ? $event->getMessageType () : '',
+          'message_id' => $event->getType () == 'message' ? $event->getMessageId () : '',
           'status' => LinebotLog::STATUS_INIT,
         );
       if (!LinebotLog::transaction (function () use (&$linebotLog, $params) { return verifyCreateOrm ($linebotLog = LinebotLog::create ( array_intersect_key ($params, LinebotLog::table ()->columns))); })) return false;
