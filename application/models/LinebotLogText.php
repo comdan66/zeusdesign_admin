@@ -150,6 +150,19 @@ class LinebotLogText extends OaLineModel {
 
     return $this->reply ($bot, $builder);
   }
+  public function searchLocation ($bot) {
+    $pattern = '/附近的?天氣.*\s*\((?P<c>(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?))\)/';
+
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $this->CI->load->library ('WeatherGet');
+
+    if (!$datas = WeatherGet::getByLatLng ($keys[0], $keys[1])) return $this->reply ($bot, new TextMessageBuilder ('哭哭，目前沒有此處的資料耶..'));
+
+    $builder = new TemplateMessageBuilder ($datas['title'], new ButtonTemplateBuilder ($datas['title'], $datas['desc'], $datas['img'], array (new UriTemplateActionBuilder ('詳細內容', $datas['url']))));
+    return $this->reply ($bot, $builder);
+  }
   public function searchDont ($bot) {
     $pattern = '/不\s*(?P<c>(想|要|可|準).*)/';
     $response = array ('為什麼？', '蛤～～', '所以？');
