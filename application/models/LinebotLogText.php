@@ -42,7 +42,7 @@ class LinebotLogText extends OaModel {
     $pattern = '/我{0,1}(想|要)*找\s*(?P<c>.*)/';
 write_file (FCPATH . 'temp/input.json', ('==================2') . "\n", FOPEN_READ_WRITE_CREATE);
 
-    if (!(isset ($this->text) && $keys = LinebotLogText::regex ($pattern, $this->text))) return false;
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
 write_file (FCPATH . 'temp/input.json', ('==================2.1') . "\n", FOPEN_READ_WRITE_CREATE);
 
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
@@ -67,7 +67,7 @@ write_file (FCPATH . 'temp/input.json', ('==================5') . "\n", FOPEN_RE
     $pattern = '/我{0,1}(想|要)*(聽|看)\s*(?P<c>.*)/';
     
 
-    if (!(isset ($this->text) && $keys = LinebotLogText::regex ($pattern, $this->text))) return false;
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
 
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $this->CI->load->library ('YoutubeGet');
@@ -88,7 +88,7 @@ write_file (FCPATH . 'temp/input.json', ('==================5') . "\n", FOPEN_RE
   public function searchIWantEat ($bot) {
     $pattern = '/我{0,1}(想|要)*(吃)\s*(?P<c>.*)/';
 
-    if (!(isset ($this->text) && $keys = LinebotLogText::regex ($pattern, $this->text))) return false;
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
 
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $this->CI->load->library ('AlleyGet');
@@ -109,7 +109,7 @@ write_file (FCPATH . 'temp/input.json', ('==================5') . "\n", FOPEN_RE
   public function searchRecommend ($bot) {
     $pattern = '/我{0,1}(想|要)*(吃)\s*(?P<c>.*)/';
 
-    if (!(isset ($this->text) && $keys = LinebotLogText::regex ($pattern, $this->text))) return false;
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
 
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $this->CI->load->library ('AlleyGet');
