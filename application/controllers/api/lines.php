@@ -106,7 +106,7 @@ exit ();
           
             $this->load->library ('CreateDemo');
             if (($colums = CreateDemo::pics (3, 5, $keys)) && ($colums = array_map (function ($pic) use ($keys, $path) {
-                write_file ($path, '~~~ :' . json_encode($path) . "\n", FOPEN_READ_WRITE_CREATE);
+                write_file ($path, '~~~ :' . json_encode($pic) . "\n", FOPEN_READ_WRITE_CREATE);
 
                 return new CarouselColumnTemplateBuilder (
                   $pic['title'], $pic['title'], $pic['url'],
