@@ -115,19 +115,17 @@ class Lines extends Api_controller {
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
-              if (!$response->isSucceeded ()) {
-
-                // $profile = $response->getJSONDecodedBody ();
-                // $bot->replyText(
-                //     $linebotLog->reply_token,
-                //     'Display name: ' . $profile['displayName'],
-                //     'Status message: ' . $profile['statusMessage']
-                // );
-
-                return false;
-              }
+              if (!$response->isSucceeded ()) return false;
               $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
               echo 'Succeeded!';
+          } else {
+            $builder = new TextMessageBuilder ('哭哭，找不到你想要的 ' . $linebotLogText->text . ' 耶..');
+            $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+            $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+
+            if (!$response->isSucceeded ()) return false;
+            $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+            echo 'Succeeded!';
           }
 
 
