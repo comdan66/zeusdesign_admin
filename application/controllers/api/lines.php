@@ -35,7 +35,7 @@ class Lines extends Api_controller {
 
     $this->load->library ('CreateDemo');
     echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump (CreateDemo::pics ());
+    var_dump (CreateDemo::pics (3, 8, $this->searchIWant('我想看 正妹')));
     exit ();;
   }
   private function searchIWant ($str) {
