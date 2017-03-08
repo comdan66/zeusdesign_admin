@@ -155,7 +155,7 @@ exit ();
       $params = array (
           'type' => $event->getType (),
           'instanceof' => $instanceof,
-          'reply_token' => $event->getReplyToken (),
+          'reply_token' => $event->getType () == 'unfollow' ? '' : $event->getReplyToken (),
           'source_id' => $event->getEventSourceId (),
           'source_type' => $event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM),
           'timestamp' => $event->getTimestamp (),
