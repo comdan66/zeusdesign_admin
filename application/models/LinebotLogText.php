@@ -7,6 +7,7 @@
  */
 require FCPATH . 'vendor/autoload.php';
 use LINE\LINEBot\MessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 
