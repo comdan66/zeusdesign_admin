@@ -202,6 +202,7 @@ class LinebotLogText extends OaLineModel {
     return $this->reply ($bot, $builder);
   }
   public function searchTest ($bot) {
+    return false;
     if ($this->log->source_id != 'U4a37e32a1d11b3995d2bf299597e432f') return false;
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
 
