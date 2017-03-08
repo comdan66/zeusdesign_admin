@@ -109,14 +109,14 @@ class Lines extends Api_controller {
                   array (
                     new UriTemplateActionBuilder ('我要看正妹', 'https://farm3.staticflickr.com/2936/32899685570_12609976b2.jpg'))
                 );
-              $column1 = new CarouselColumnTemplateBuilder (
+              $column2 = new CarouselColumnTemplateBuilder (
                   '正妹2',
                   '正妹 正妹',
                   'https://farm4.staticflickr.com/3926/33154446171_78ff24b412.jpg',
                   array (
                     new UriTemplateActionBuilder ('我要看正妹', 'https://farm4.staticflickr.com/3926/33154446171_78ff24b412.jpg'))
                 );
-              $column1 = new CarouselColumnTemplateBuilder (
+              $column3 = new CarouselColumnTemplateBuilder (
                   '正妹3',
                   '正妹 正妹',
                   'https://farm4.staticflickr.com/3953/33154437801_ac04cd8cdd.jpg',
@@ -125,15 +125,12 @@ class Lines extends Api_controller {
                 );
               $carouselTemplateBuilder = new CarouselTemplateBuilder (array (
                   $column1,
-                  $column2
+                  $column2,
+                  $column3,
                 ));
 
               $builder = new TemplateMessageBuilder ('正妹來囉！', $carouselTemplateBuilder);
-              
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
-              // $builder = new ButtonTemplateBuilder ('2017 白沙屯媽祖 GPS', '2017 白沙屯媽祖 GPS 即時定位，歲次丁酉年，苗栗通霄白沙屯拱天宮媽祖南下北港朝天宮進香 GPS 系統。', 'https://baishatun.godroad.tw/img/og/index.png', array (new UriTemplateActionBuilder ('開啟 GPS 定位', 'https://baishatun.godroad.tw')));
-              // $builder = new TemplateMessageBuilder ('正妹來囉！', $builder);
-              // $builder = new TextMessageBuilder ('不客氣喔：）');
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
               if (!$response->isSucceeded ()) {
