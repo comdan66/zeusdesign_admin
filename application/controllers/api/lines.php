@@ -35,7 +35,7 @@ class Lines extends Api_controller {
 
     $this->load->library ('CreateDemo');
     echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump (CreateDemo::pics (3, 8, $this->searchIWant('我想看 正妹')));
+    var_dump (CreateDemo::pics ());
     exit ();;
   }
   private function searchIWant ($str) {
@@ -107,12 +107,11 @@ class Lines extends Api_controller {
             
               $this->load->library ('CreateDemo');
               $colums = array_map (function ($pic) {
-                write_file ($path, $pic->title . '-' . $pic->url . "\n", FOPEN_READ_WRITE_CREATE);
-
-                return ;
+                return new CarouselColumnTemplateBuilder (
+                  $pic['title'], $pic['title'], $pic['url'],
+                  array (new UriTemplateActionBuilder ('我要看正妹', $pic['page']))
+                );
               }, CreateDemo::pics (3, 8, $keys));
-              exit();
-              write_file ($path, count($colums) . "\n", FOPEN_READ_WRITE_CREATE);
               
               $builder = new TemplateMessageBuilder (implode (',', $keys) . ' 來囉！', new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
