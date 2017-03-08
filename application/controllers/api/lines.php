@@ -115,7 +115,7 @@ exit ();
                   mb_strimwidth ($pic['title'], 0, 18 * 2, '…','UTF-8'),
                   mb_strimwidth ($pic['title'], 0, 28 * 2, '…','UTF-8'),
                   $pic['url'],
-                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要看 ' . implode (' ', $keys), 0, 8 * 2, '…','UTF-8'), $pic['page']))
+                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要看 ' . $pic['title'], 0, 8 * 2, '…','UTF-8'), $pic['page']))
                 );
               }, $colums))) {
 
@@ -144,7 +144,7 @@ exit ();
                   mb_strimwidth ($youtube['title'], 0, 18 * 2, '…','UTF-8'),
                   mb_strimwidth ($youtube['title'], 0, 28 * 2, '…','UTF-8'),
                   $youtube['thumbnails'][count ($youtube['thumbnails']) - 1]['url'],
-                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要聽 ' . implode (' ', $keys), 0, 8 * 2, '…','UTF-8'), 
+                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要聽 ' . $youtube['title'], 0, 8 * 2, '…','UTF-8'), 
                     'https://www.youtube.com/watch?v=' . $youtube['id']))
                 );
               }, $colums))) {
