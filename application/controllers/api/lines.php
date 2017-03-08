@@ -35,7 +35,7 @@ class Lines extends Api_controller {
     $this->load->library ('AlleyGet');
 
 echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump ($this->searchRecommend ('吃啥'));
+var_dump ($this->searchDont ('我不想看電影 我等等'));
 exit ();
   }
   private function searchIWantLook ($str) {
@@ -55,6 +55,11 @@ exit ();
   }
   private function searchRecommend ($str) {
     preg_match_all ('/(?P<c>(吃什麼|吃啥|好吃的|啥好吃|要吃啥|什麼好吃))/', $str, $result);
+    if (!$result['c']) return array ();
+    return preg_split ('/[\s,]+/', $result['c'][0]);
+  }
+  private function searchDont ($str) {
+    preg_match_all ('/不\s*(?P<c>(想|要|可|準).*)/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
@@ -233,7 +238,17 @@ exit ();
               $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
               echo 'Succeeded!';
             }
+          } else if ($keys = $this->searchDont ($linebotLogText->text)) {
+            $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
+            $builder = new TextMessageBuilder ('為什麼?');
+            $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+
+            $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+            if (!$response->isSucceeded ()) return false;
+            $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+            echo 'Succeeded!';
           }
+          
 
 
           break;
