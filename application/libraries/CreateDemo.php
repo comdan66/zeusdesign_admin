@@ -46,7 +46,7 @@ class CreateDemo {
           'method' => 'flickr.photos.search',
           'api_key' => '09dc017022847889346d048182b9515f',
           'tags' => implode (',', $tags),
-          'per_page' => '200',
+          'per_page' => '50',
           'extras' => 'url_m',
           'sort' => 'interestingness-desc',
           'format' => 'json',
