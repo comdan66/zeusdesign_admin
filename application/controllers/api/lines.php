@@ -101,16 +101,16 @@ class Lines extends Api_controller {
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
           if ($keys = $this->searchIWant ($linebotLogText->text)) {
-              $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
-            
-              $this->load->library ('CreateDemo');
-              $colums = array_map (function ($pic) use ($keys) {
-                return new CarouselColumnTemplateBuilder (
-                  $pic['title'], $pic['title'], $pic['url'],
-                  array (new UriTemplateActionBuilder ('我要看 ' . $keys[0], $pic['page']))
-                );
-              }, CreateDemo::pics (3, 8, $keys));
-              
+            $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
+          
+            $this->load->library ('CreateDemo');
+            if ($colums = array_map (function ($pic) use ($keys) {
+              return new CarouselColumnTemplateBuilder (
+                $pic['title'], $pic['title'], $pic['url'],
+                array (new UriTemplateActionBuilder ('我要看 ' . $keys[0], $pic['page']))
+              );
+            }, CreateDemo::pics (3, 8, $keys))) {
+
               $builder = new TemplateMessageBuilder (implode (',', $keys) . ' 來囉！', new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
@@ -118,15 +118,16 @@ class Lines extends Api_controller {
               if (!$response->isSucceeded ()) return false;
               $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
               echo 'Succeeded!';
-          } else {
-            $builder = new TextMessageBuilder ('哭哭，找不到你想要的 ' . $linebotLogText->text . ' 耶..');
-            $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
-            $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+            } else {
+              $builder = new TextMessageBuilder ('哭哭，找不到你想要的 ' . $linebotLogText->text . ' 耶..');
+              $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+              $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
-            if (!$response->isSucceeded ()) return false;
-            $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
-            echo 'Succeeded!';
-          }
+              if (!$response->isSucceeded ()) return false;
+              $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+              echo 'Succeeded!';
+            }
+          } 
 
 
           break;
