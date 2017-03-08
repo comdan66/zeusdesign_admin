@@ -32,10 +32,10 @@ class Lines extends Api_controller {
     
   }
   public function test () {
-    $this->load->library ('YoutubeGet');
+    $this->load->library ('AlleyGet');
 
 echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump (YoutubeGet::search (array ('q' => '犁炮', 'maxResults' => rand (10, 30))));
+var_dump (AlleyGet::search (25.064253, 121.522898));
 exit ();
   }
   private function searchIWantLook ($str) {
