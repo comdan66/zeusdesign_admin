@@ -160,6 +160,7 @@ class LinebotLogText extends OaLineModel {
     $this->CI->load->library ('WeatherGet');
 
     if (!$datas = WeatherGet::getByLatLng ($keys[0], $keys[1])) return $this->reply ($bot, new TextMessageBuilder ('哭哭，目前沒有此處的資料耶..'));
+      write_file (FCPATH . 'temp/input.json', $datas['title'] . "\n", FOPEN_READ_WRITE_CREATE);
 
     $builder = new TemplateMessageBuilder ($datas['title'], new ButtonTemplateBuilder ($datas['title'], $datas['desc'], $datas['img'], array (new UriTemplateActionBuilder ('詳細內容', $datas['url']))));
     return $this->reply ($bot, $builder);
