@@ -54,7 +54,7 @@ exit ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
   private function searchRecommend ($str) {
-    preg_match_all ('/(?P<c>(吃什麼|吃啥|好吃的|啥好吃|什麼好吃))/', $str, $result);
+    preg_match_all ('/(?P<c>(吃什麼|吃啥|好吃的|啥好吃|要吃啥|什麼好吃))/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
