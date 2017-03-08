@@ -39,7 +39,7 @@ class Lines extends Api_controller {
 //     $this->load->library ('AlleyGet');
 
 echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump ($this->searchSpeechless ('searchSpeechless  == '));
+var_dump ($this->searchHaha ('好哈哈哈哈'));
 exit ();
   }
   private function searchIWantLook ($str) {
@@ -79,6 +79,11 @@ exit ();
   }
   private function searchNotThing ($str) {
     preg_match_all ('/(?P<c>(沒事).*)/', $str, $result);
+    if (!$result['c']) return array ();
+    return preg_split ('/[\s,]+/', $result['c'][0]);
+  }
+  private function searchHaha ($str) {
+    preg_match_all ('/(?P<c>(好笑|哈哈*))/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
@@ -299,6 +304,16 @@ exit ();
           } else if ($keys = $this->searchNotThing ($linebotLogText->text)) {
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
             $text = array ('真的嗎.. = =+', '說！剛剛要說啥', '嗯哼，快說喔！');
+            $builder = new TextMessageBuilder ($text[array_rand ($text)]);
+            $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+
+            $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+            if (!$response->isSucceeded ()) return false;
+            $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+            echo 'Succeeded!';
+          } else if ($keys = $this->searchHaha ($linebotLogText->text)) {
+            $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
+            $text = array ('笑什麼笑！', '很好笑？', '呵呵呵', '笑屁喔！');
             $builder = new TextMessageBuilder ($text[array_rand ($text)]);
             $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
 
