@@ -73,7 +73,7 @@ class Lines extends Api_controller {
       if ($event instanceof ImageMessage) $instanceof = 'ImageMessage';
       if ($event instanceof AudioMessage) $instanceof = 'AudioMessage';
 
-      $log = LineBotLog::create (array (
+      $lineBotLog = LineBotLog::create (array (
           'type' => $event->getType (),
           'instanceof' => $instanceof,
           'reply_token' => $event->getReplyToken (),
@@ -82,6 +82,26 @@ class Lines extends Api_controller {
           'timestamp' => $event->getTimestamp (),
           'is_echo' => LineBotLog::NO_ECHO,
         ));
+      if (!LineBotLog::transaction (function () use (&$lineBotLog, $params) { return verifyCreateOrm ($lineBotLog = LineBotLog::create ( array_intersect_key ($params, LineBotLog::table ()->columns))); })) return false;
+
+
+      switch ($lineBotLog->instanceof) {
+        case 'TextMessage':
+          break;
+        case 'VideoMessage':
+          break;
+        case 'StickerMessage':
+          break;
+        case 'LocationMessage':
+          break;
+        case 'ImageMessage':
+          break;
+        case 'AudioMessage':
+          break;
+        
+        default:
+          break;
+      }
 
       // if () {
 
