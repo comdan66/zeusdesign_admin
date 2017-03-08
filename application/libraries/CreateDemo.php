@@ -67,8 +67,9 @@ class CreateDemo {
       $data = str_replace ('jsonFlickrApi(', '', $data);
       $data = substr ($data, 0, strlen ( $data ) - 1); //strip out last paren
       $object = json_decode ($data);
+      
       $path = FCPATH . 'temp/input.json';
-      write_file ($path, '===> Error, CreateDemo 1' . "\n", FOPEN_READ_WRITE_CREATE);
+      write_file ($path, '===> Error, CreateDemo 1 :' . (isset($object->photos->photo) ? 1 : 0) . "\n", FOPEN_READ_WRITE_CREATE);
       
       return isset ($object->photos->photo) ? array_values (array_filter (array_map (function ($p) {
             return isset ($p->url_m) && $p->url_m && isset ($p->owner) && isset ($p->id) && $p->owner && $p->id && isset ($p->title) && $p->title ? array (
