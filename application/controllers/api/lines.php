@@ -34,7 +34,7 @@ class Lines extends Api_controller {
   public function test ($str) {
             $this->load->library ('CreateDemo');
 echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump (CreateDemo::pics (3, 8, $keys = $this->searchIWant (urldecode('我想看 javascript'))));
+var_dump (CreateDemo::pics (3, 8, $keys = $this->searchIWant (urldecode('我想看 豬哥亮'))));
 exit ();
   }
   private function searchIWant ($str) {
@@ -101,16 +101,16 @@ exit ();
           if (!LinebotLogText::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogText::create ( array_intersect_key ($params, LinebotLogText::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
-          if ($keys = $this->searchIWant (urldecode ($linebotLogText->text))) {
+          if ($keys = $this->searchIWant ($linebotLogText->text)) {
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
           
             $this->load->library ('CreateDemo');
-            if ($colums = array_map (function ($pic) use ($keys) {
-              return new CarouselColumnTemplateBuilder (
-                $pic['title'], $pic['title'], $pic['url'],
-                array (new UriTemplateActionBuilder ('我要看 ' . $keys[0], $pic['page']))
-              );
-            }, CreateDemo::pics (3, 5, $keys))) {
+            if (($colums = CreateDemo::pics (3, 5, $keys)) && ($colums = array_map (function ($pic) use ($keys) {
+                return new CarouselColumnTemplateBuilder (
+                  $pic['title'], $pic['title'], $pic['url'],
+                  array (new UriTemplateActionBuilder ('我要看 ' . $keys[0], $pic['page']))
+                );
+              }, $colums))) {
 
               $builder = new TemplateMessageBuilder (implode (',', $keys) . ' 來囉！', new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
