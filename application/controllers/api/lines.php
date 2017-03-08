@@ -89,8 +89,8 @@ exit ();
         //     'img_url' => $event->getType () == 'unfollow' ? '' : $event->getReplyToken (),
         //     'statusMessage' => $event->getEventSourceId (),
         //   );
-        write_file ($path, json_encode($bot->getProfile ($linebotLog->source_id)) . "\n", FOPEN_READ_WRITE_CREATE);
       }
+        write_file ($path, json_encode ($bot->getProfile ('U4a37e32a1d11b3995d2bf299597e432f')) . "\n", FOPEN_READ_WRITE_CREATE);
 
       if ($event->getType () != 'message') continue;
 
