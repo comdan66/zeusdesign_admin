@@ -7,6 +7,8 @@
  */
 require FCPATH . 'vendor/autoload.php';
 use LINE\LINEBot\MessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 
 class LinebotLogText extends OaModel {
 
