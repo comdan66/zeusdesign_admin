@@ -42,7 +42,7 @@ class AlleyGet {
     curl_close ($ch);
 
     echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump (json_decode ($data, ture));
+    var_dump (json_decode ($data, true));
     exit ();
   }
 }
