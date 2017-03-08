@@ -32,10 +32,6 @@ class Lines extends Api_controller {
         'source_id' => '',
         'source_type' => '',
         'timestamp' => '',
-        'message_id' => '',
-        'message_type' => '',
-        'message_text' => '',
-        'ori' => '',
       ));
   }
   public function index () {
@@ -71,7 +67,7 @@ class Lines extends Api_controller {
           'source_id' => $event->getEventSourceId (),
           'source_type' => $event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM),
           'timestamp' => $event->getTimestamp (),
-          'ok' => LineBotLog::NO_ECHO,
+          'is_echo' => LineBotLog::NO_ECHO,
         ));
 
       if ($event instanceof TextMessage) {
