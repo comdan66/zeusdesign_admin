@@ -204,8 +204,8 @@ class LinebotLogText extends OaModel {
   public function searchTest ($bot) {
     if ($this->log->source_id != 'U4a37e32a1d11b3995d2bf299597e432f') return false;
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
-    
-    $builder = new TemplateMessageBuilder ('dddd', new ConfirmTemplateBuilder ('確定？', array (new MessageTemplateActionBuilder ('123', '456'), new MessageTemplateActionBuilder ('abc', 'def'))));
+
+    $builder = new TemplateMessageBuilder ('dddd', new ConfirmTemplateBuilder ('確定？', array (new MessageTemplateActionBuilder ('123', '哈哈'), new MessageTemplateActionBuilder ('abc', 'def'))));
     // $builder = new TemplateMessageBuilder(
     //                     'Confirm alt text',
     //                     new ConfirmTemplateBuilder('Do it?', [
