@@ -102,6 +102,11 @@ exit ();
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
+  private function searchCallMe ($str) {
+    preg_match_all ('/(天使|小添屎|添屎)+(?P<c>.*)/', $str, $result);
+    if (!$result['c']) return array ();
+    return preg_split ('/[\s,]+/', $result['c'][0]);
+  }
   public function index () {
     $path = FCPATH . 'temp/input.json';
     $channel_id = Cfg::setting ('line', 'channel', 'id');
@@ -359,6 +364,17 @@ exit ();
           } else if ($keys = $this->searchName ($linebotLogText->text)) {
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
             $text = array ('我叫 小～添～屎～，是大家的好朋友～～');
+            $builder = new TextMessageBuilder ($text[array_rand ($text)]);
+            $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+
+            $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+            if (!$response->isSucceeded ()) return false;
+            $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+            echo 'Succeeded!';
+          } else if ($keys = $this->searchCallMe ($linebotLogText->text)) {
+            $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
+            
+            $text = array ('找我幹嘛？', '恩？', '怎麼了？', '我在！', implode (' ', $keys));
             $builder = new TextMessageBuilder ($text[array_rand ($text)]);
             $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
 
