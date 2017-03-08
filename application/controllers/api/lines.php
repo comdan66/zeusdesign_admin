@@ -77,6 +77,11 @@ exit ();
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
+  private function searchNotThing ($str) {
+    preg_match_all ('/(?P<c>(沒事).*)/', $str, $result);
+    if (!$result['c']) return array ();
+    return preg_split ('/[\s,]+/', $result['c'][0]);
+  }
   public function index () {
     $path = FCPATH . 'temp/input.json';
     $channel_id = Cfg::setting ('line', 'channel', 'id');
@@ -284,6 +289,16 @@ exit ();
           } else if ($keys = $this->searchSpeechless ($linebotLogText->text)) {
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
             $text = array ('幹嘛！！？', '= =+', '哈哈哈哈..');
+            $builder = new TextMessageBuilder ($text[array_rand ($text)]);
+            $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+
+            $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+            if (!$response->isSucceeded ()) return false;
+            $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+            echo 'Succeeded!';
+          } else if ($keys = $this->searchNotThing ($linebotLogText->text)) {
+            $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
+            $text = array ('真的嗎.. = =+', '說！剛剛要說啥', '嗯哼，快說喔！');
             $builder = new TextMessageBuilder ($text[array_rand ($text)]);
             $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
 
