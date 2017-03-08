@@ -174,7 +174,7 @@ exit ();
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
             $this->load->library ('AlleyGet');
 
-            if (($colums = AlleyGet::search ($linebotLogText->text)) && ($colums = array_map (function ($store) {
+            if (($colums = AlleyGet::search (implode (' ', $keys))) && ($colums = array_map (function ($store) {
                 return new CarouselColumnTemplateBuilder (
                   mb_strimwidth ($store['title'], 0, 18 * 2, '…','UTF-8'),
                   mb_strimwidth ($store['desc'], 0, 28 * 2, '…','UTF-8'),
