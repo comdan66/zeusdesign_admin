@@ -133,6 +133,7 @@ class Lines extends Api_controller {
               
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $builder = new ButtonTemplateBuilder ('2017 白沙屯媽祖 GPS', '2017 白沙屯媽祖 GPS 即時定位，歲次丁酉年，苗栗通霄白沙屯拱天宮媽祖南下北港朝天宮進香 GPS 系統。', 'https://baishatun.godroad.tw/img/og/index.png', array (new UriTemplateActionBuilder ('開啟 GPS 定位', 'https://baishatun.godroad.tw')));
+              $builder = new TextMessageBuilder ('不客氣喔：）');
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
               if (!$response->isSucceeded ()) {
