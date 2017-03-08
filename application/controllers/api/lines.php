@@ -25,15 +25,10 @@ class Lines extends Api_controller {
     
   }
   public function test () {
-//             $text = array ('為什麼？', '所以？', '嗯哼，為什麼？');
-// echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-// var_dump ($text[array_rand ($text)]);
-// exit ();
-//     $this->load->library ('AlleyGet');
+    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+    var_dump (LinebotLogText::regex ('/附近的?美食\s*\((?P<c>(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?))\)/', "我想知道這附近的美食(24.999164132164, 121.52344331145)"));
+    exit ();
 
-echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump ($this->searchHello ('好哈 Hello哈哈哈'));
-exit ();
   }
   public function index () {
     $path = FCPATH . 'temp/input.json';
@@ -107,6 +102,7 @@ exit ();
               $linebotLogText->searchHello ($bot) ||
               $linebotLogText->searchName ($bot) ||
               $linebotLogText->searchCallMe ($bot) ||
+              $linebotLogText->searchLocation ($bot) ||
               $linebotLogText->searchTest ($bot) ||
               false)
             echo 'Succeeded!';

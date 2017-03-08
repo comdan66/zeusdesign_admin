@@ -40,24 +40,6 @@ class LinebotLogLocation extends OaLineModel {
     $this->log->setStatus (LinebotLog::STATUS_SUCCESS);
     return true;
   }
-  public function searchProducts2 ($bot) {
-    $this->log->setStatus (LinebotLog::STATUS_MATCH);
-    $this->CI->load->library ('AlleyGet');
-
-    if (!$datas = AlleyGet::products ($this->latitude, $this->longitude)) return $this->reply ($bot, new TextMessageBuilder ('哭哭，這附近沒什麼美食耶..'));
-
-    $builder = new TemplateMessageBuilder (mb_strimwidth ('附近好吃的美食來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder (array_map (function ($store) {
-        return new CarouselColumnTemplateBuilder (
-          mb_strimwidth ($store['title'], 0, 18 * 2, '…','UTF-8'),
-          mb_strimwidth ($store['desc'], 0, 28 * 2, '…','UTF-8'),
-          $store['img'],
-          array (new UriTemplateActionBuilder (mb_strimwidth ('我要吃 ' . $store['title'], 0, 8 * 2, '…','UTF-8'), $store['url']))
-        );
-      }, $datas)));
-
-    return $this->reply ($bot, $builder);
-  }
-
   public function searchProducts ($bot) {
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $builder = new TemplateMessageBuilder ('有個問題需要被解答！', new ConfirmTemplateBuilder ('請問您是要知道這附近的？', array (new MessageTemplateActionBuilder ('店家美食？', '我想知道這附近的美食(' . $this->latitude . ', ' . $this->longitude . ')'), new MessageTemplateActionBuilder ('天氣概況', '我想知道這附近的天氣概況(' . $this->latitude . ', ' . $this->longitude . ')'))));

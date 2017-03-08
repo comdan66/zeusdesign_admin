@@ -34,7 +34,7 @@ class LinebotLogText extends OaLineModel {
   }
   public static function regex ($pattern, $str) {
     preg_match_all ($pattern, $str, $result);
-    if (!$result['c']) return array ();
+    if (!(isset ($result['c']) && $result['c'])) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
   public function reply ($bot, MessageBuilder $build) {
@@ -126,6 +126,27 @@ class LinebotLogText extends OaLineModel {
         array (new UriTemplateActionBuilder (mb_strimwidth ('我要吃 ' . $data['title'], 0, 8 * 2, '…','UTF-8'), $data['url']))
       );
     }, $datas)));
+
+    return $this->reply ($bot, $builder);
+  }
+  public function searchLocation ($bot) {
+    $pattern = '/附近的?美食\s*\((?P<c>(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?))\)/';
+
+    if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
+
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $this->CI->load->library ('AlleyGet');
+
+    if (!$datas = AlleyGet::products ($this->latitude, $this->longitude)) return $this->reply ($bot, new TextMessageBuilder ('哭哭，這附近沒什麼美食耶..'));
+
+    $builder = new TemplateMessageBuilder (mb_strimwidth ('附近好吃的美食來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder (array_map (function ($store) {
+        return new CarouselColumnTemplateBuilder (
+          mb_strimwidth ($store['title'], 0, 18 * 2, '…','UTF-8'),
+          mb_strimwidth ($store['desc'], 0, 28 * 2, '…','UTF-8'),
+          $store['img'],
+          array (new UriTemplateActionBuilder (mb_strimwidth ('我要吃 ' . $store['title'], 0, 8 * 2, '…','UTF-8'), $store['url']))
+        );
+      }, $datas)));
 
     return $this->reply ($bot, $builder);
   }
