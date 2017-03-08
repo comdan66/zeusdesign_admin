@@ -53,6 +53,11 @@ exit ();
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
+  private function searchRecommend ($str) {
+    preg_match_all ('/(?P<c>吃什麼)/', $str, $result);
+    if (!$result['c']) return array ();
+    return preg_split ('/[\s,]+/', $result['c'][0]);
+  }
   public function index () {
     $path = FCPATH . 'temp/input.json';
     $channel_id = Cfg::setting ('line', 'channel', 'id');
@@ -183,7 +188,36 @@ exit ();
                 );
               }, $colums))) {
 
-              $builder = new TemplateMessageBuilder (mb_strimwidth ('附近好吃的美食來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder ($colums));
+              $builder = new TemplateMessageBuilder (mb_strimwidth ('這幾家美食參考一下喔！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder ($colums));
+              $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+              $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+
+              if (!$response->isSucceeded ()) return false;
+              $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+              echo 'Succeeded!';
+            } else {
+              $builder = new TextMessageBuilder ('哭哭，這附近沒什麼美食耶..');
+              $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+              $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+
+              if (!$response->isSucceeded ()) return false;
+              $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+              echo 'Succeeded!';
+            }
+          } else if ($keys = $this->searchRecommend ($linebotLogText->text)) {
+            $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
+            $this->load->library ('AlleyGet');
+
+            if (($colums = AlleyGet::recommend ()) && ($colums = array_map (function ($store) {
+                return new CarouselColumnTemplateBuilder (
+                  mb_strimwidth ($store['title'], 0, 18 * 2, '…','UTF-8'),
+                  mb_strimwidth ($store['desc'], 0, 28 * 2, '…','UTF-8'),
+                  $store['img'],
+                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要吃 ' . $store['title'], 0, 8 * 2, '…','UTF-8'), $store['url']))
+                );
+              }, $colums))) {
+
+              $builder = new TemplateMessageBuilder (mb_strimwidth ('推薦的美食來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
