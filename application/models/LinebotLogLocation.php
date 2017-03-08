@@ -5,15 +5,8 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  * @link        http://www.ioa.tw/
  */
-require FCPATH . 'vendor/autoload.php';
-use LINE\LINEBot\MessageBuilder;
-use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
-use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 
-class LinebotLogLocation extends OaModel {
+class LinebotLogLocation extends OaLineModel {
 
   static $table_name = 'linebot_log_locations';
 
@@ -38,7 +31,7 @@ class LinebotLogLocation extends OaModel {
     $this->log->setStatus (LinebotLog::STATUS_SUCCESS);
     return true;
   }
-  public function searchProducts ($bot) {
+  public function searchProducts2 ($bot) {
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $this->CI->load->library ('AlleyGet');
 
@@ -53,6 +46,12 @@ class LinebotLogLocation extends OaModel {
         );
       }, $datas)));
 
+    return $this->reply ($bot, $builder);
+  }
+
+  public function searchProducts ($bot) {
+    $this->log->setStatus (LinebotLog::STATUS_MATCH);
+    $builder = new TemplateMessageBuilder ('請問您是要知道這附近的？', new ConfirmTemplateBuilder ('有個問題需要被解答！', array (new MessageTemplateActionBuilder ('店家美食？', '我想知道這附近的美食(' . $this->latitude . ', ' . $this->longitude . ')'), new MessageTemplateActionBuilder ('天氣概況(' . $this->latitude . ', ' . $this->longitude . ')', ''))));
     return $this->reply ($bot, $builder);
   }
 }

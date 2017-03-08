@@ -5,17 +5,8 @@
  * @copyright   Copyright (c) 2016 OA Wu Design
  * @link        http://www.ioa.tw/
  */
-require FCPATH . 'vendor/autoload.php';
-use LINE\LINEBot\MessageBuilder;
-use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
-use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
-use LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 
-class LinebotLogText extends OaModel {
+class LinebotLogText extends OaLineModel {
 
   static $table_name = 'linebot_log_texts';
 

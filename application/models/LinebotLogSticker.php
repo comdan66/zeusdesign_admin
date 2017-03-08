@@ -6,7 +6,7 @@
  * @link        http://www.ioa.tw/
  */
 
-class LinebotLogSticker extends OaModel {
+class LinebotLogSticker extends OaLineModel {
 
   static $table_name = 'linebot_log_stickers';
 

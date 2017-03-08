@@ -6,7 +6,7 @@
  * @link        http://www.ioa.tw/
  */
 
-class LinebotLogVideo extends OaModel {
+class LinebotLogVideo extends OaLineModel {
 
   static $table_name = 'linebot_log_videos';
 
