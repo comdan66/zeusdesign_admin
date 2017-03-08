@@ -90,8 +90,12 @@ exit ();
         //     'statusMessage' => $event->getEventSourceId (),
         //   );
       }
-        write_file ($path, json_encode ($bot->getProfile ('U4a37e32a1d11b3995d2bf299597e432f')) . "\n", FOPEN_READ_WRITE_CREATE);
+        write_file ($path, json_encode ($response = $bot->getProfile ('U4a37e32a1d11b3995d2bf299597e432f')) . "\n", FOPEN_READ_WRITE_CREATE);
 
+        if (!$response->isSucceeded()) {
+        write_file ($path, json_encode ($response->getRawBody()) . "\n", FOPEN_READ_WRITE_CREATE);
+            return;
+        }
       if ($event->getType () != 'message') continue;
 
       switch ($linebotLog->instanceof) {
