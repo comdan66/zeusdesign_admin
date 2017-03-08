@@ -83,7 +83,7 @@ exit ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
   private function searchHaha ($str) {
-    preg_match_all ('/(?P<c>(XD|好笑|哈哈*))/i', $str, $result);
+    preg_match_all ('/(?P<c>(XD|ＸＤ|ＸD|xＤ|好笑|哈哈*))/i', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
