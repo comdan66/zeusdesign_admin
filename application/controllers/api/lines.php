@@ -143,6 +143,7 @@ exit ();
       if ($event instanceof ImageMessage) $instanceof = 'ImageMessage';
       if ($event instanceof AudioMessage) $instanceof = 'AudioMessage';
       
+      write_file ($path, ('==================') . "\n", FOPEN_READ_WRITE_CREATE);
       write_file ($path, $event->getType () . "\n", FOPEN_READ_WRITE_CREATE);
       write_file ($path, $instanceof . "\n", FOPEN_READ_WRITE_CREATE);
       write_file ($path, ($event->getReplyToken ()) . "\n", FOPEN_READ_WRITE_CREATE);
@@ -151,6 +152,7 @@ exit ();
       write_file ($path, ($event->getTimestamp ()) . "\n", FOPEN_READ_WRITE_CREATE);
       write_file ($path, ($event->getMessageType ()) . "\n", FOPEN_READ_WRITE_CREATE);
       write_file ($path, ($event->getMessageId ()) . "\n", FOPEN_READ_WRITE_CREATE);
+      write_file ($path, ('==================') . "\n", FOPEN_READ_WRITE_CREATE);
 
       $params = array (
           'type' => $event->getType (),
