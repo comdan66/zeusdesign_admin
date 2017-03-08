@@ -22,7 +22,7 @@ class AlleyGet {
     return $t[array_rand ($t)];
   }
   public static function search ($lat, $lng) {
-    $url = "https://apialley.friday.tw/api/2.0/product/?latitude" . $lat . "&longitude=" . $lng;
+    $url = "https://apialley.friday.tw/api/2.0/product/?latitude=" . $lat . "&longitude=" . $lng;
 
     $options = array (
       CURLOPT_URL => $url,
@@ -42,7 +42,7 @@ class AlleyGet {
     curl_close ($ch);
 
     echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump ($data);
+    var_dump (json_decode ($data, ture));
     exit ();
   }
 }
