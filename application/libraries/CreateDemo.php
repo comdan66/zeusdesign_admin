@@ -66,15 +66,13 @@ class CreateDemo {
     $data = str_replace ('jsonFlickrApi(', '', $data);
     $data = substr ($data, 0, strlen ( $data ) - 1); //strip out last paren
     $object = json_decode ($data);
-echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump ($object);
-exit ();
-    return array_filter (array_map (function ($p) {
+
+    return isset ($object->photos->photo) ? array_filter (array_map (function ($p) {
       return isset ($p->url_m) && $p->url_m && isset ($p->owner) && isset ($p->id) && $p->owner && $p->id && isset ($p->title) && $p->title ? array (
         'title' => $p->title,
         'url' => $p->url_m,
         'page' => 'https://www.flickr.com/photos/' . $p->owner . '/' . $p->id) : null;
-    }, $object->photos->photo));
+    }, $object->photos->photo)) : array ();
   }
 
   public static function text ($min = 5, $max = 15) {
