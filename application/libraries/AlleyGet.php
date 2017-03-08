@@ -41,8 +41,16 @@ class AlleyGet {
     $data = curl_exec ($ch);
     curl_close ($ch);
 
-    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump (json_decode ($data, true));
-    exit ();
+    $data = json_decode ($data, true);
+    if (!(isset ($data['items']) && $data['items'])) return array ();
+    
+    return array_map (function ($item) {
+      return array (
+          'title' => $item['productName'],
+          'desc' => $item['useRule'],
+          'img' => $item['originImage'],
+          'url' => $item['webSite'],
+        );
+    }, $data['items']);
   }
 }
