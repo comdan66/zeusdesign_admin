@@ -13,7 +13,11 @@ use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot\Constant\HTTPHeader;
 use LINE\LINEBot\Event\MessageEvent;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
+use LINE\LINEBot\Event\MessageEvent\VideoMessage;
+use LINE\LINEBot\Event\MessageEvent\StickerMessage;
 use LINE\LINEBot\Event\MessageEvent\LocationMessage;
+use LINE\LINEBot\Event\MessageEvent\ImageMessage;
+use LINE\LINEBot\Event\MessageEvent\AudioMessage;
 use LINE\LINEBot\MessageBuilder\LocationMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
@@ -60,9 +64,18 @@ class Lines extends Api_controller {
     }
 
     foreach ($events as $event) {
+      $instanceof = '';
+
+      // if ($event instanceof TextMessage) $instanceof = 'TextMessage';
+      // if ($event instanceof VideoMessage) $instanceof = 'VideoMessage';
+      // if ($event instanceof StickerMessage) $instanceof = 'StickerMessage';
+      // if ($event instanceof LocationMessage) $instanceof = 'LocationMessage';
+      // if ($event instanceof ImageMessage) $instanceof = 'ImageMessage';
+      // if ($event instanceof AudioMessage) $instanceof = 'AudioMessage';
 
       $log = LineBotLog::create (array (
           'type' => $event->getType (),
+          'instanceof' => get_class ($event),
           'reply_token' => $event->getReplyToken (),
           'source_id' => $event->getEventSourceId (),
           'source_type' => $event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM),
@@ -70,7 +83,7 @@ class Lines extends Api_controller {
           'is_echo' => LineBotLog::NO_ECHO,
         ));
 
-      if ($event instanceof TextMessage) {
+      if () {
 
 
         // $messageBuilder = null;
