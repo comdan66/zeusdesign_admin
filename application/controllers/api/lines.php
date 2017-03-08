@@ -20,8 +20,10 @@ use LINE\LINEBot\Event\MessageEvent\ImageMessage;
 use LINE\LINEBot\Event\MessageEvent\AudioMessage;
 use LINE\LINEBot\MessageBuilder\LocationMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 
 class Lines extends Api_controller {
 
@@ -30,13 +32,11 @@ class Lines extends Api_controller {
     
   }
   public function test () {
-    LinebotLog::create (array (
-        'type' => '',
-        'reply_token' => '',
-        'source_id' => '',
-        'source_type' => '',
-        'timestamp' => '',
-      ));
+    $this->load->library ('CreateDemo');
+    $pics = CreateDemo::pics (3, 8, array ('正妹', '可愛'));
+    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+    var_dump ($pics);
+    exit ();
   }
   public function index () {
     $path = FCPATH . 'temp/input.json';
@@ -97,6 +97,47 @@ class Lines extends Api_controller {
           if (!LinebotLogText::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogText::create ( array_intersect_key ($params, LinebotLogText::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
+          if (preg_match ('/正妹|找妹/i', $linebotLogText->text)) {
+              $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
+            
+              $this->load->library ('CreateDemo');
+              $pics = CreateDemo::pics (3, 8, array ('正妹', '可愛'));
+              $column1 = new CarouselColumnTemplateBuilder (
+                  '正妹1',
+                  '正妹 正妹',
+                  'https://farm3.staticflickr.com/2936/32899685570_12609976b2.jpg',
+                  array (
+                    new UriTemplateActionBuilder ('我要看正妹', 'https://farm3.staticflickr.com/2936/32899685570_12609976b2.jpg'))
+                );
+              $column1 = new CarouselColumnTemplateBuilder (
+                  '正妹2',
+                  '正妹 正妹',
+                  'https://farm3.staticflickr.com/2936/32899685570_12609976b2.jpg',
+                  array (
+                    new UriTemplateActionBuilder ('我要看正妹', 'https://farm3.staticflickr.com/2936/32899685570_12609976b2.jpg'))
+                );
+              $column1 = new CarouselColumnTemplateBuilder (
+                  '正妹3',
+                  '正妹 正妹',
+                  'https://farm3.staticflickr.com/2936/32899685570_12609976b2.jpg',
+                  array (
+                    new UriTemplateActionBuilder ('我要看正妹', 'https://farm3.staticflickr.com/2936/32899685570_12609976b2.jpg'))
+                );
+              $builder = new CarouselTemplateBuilder (array (
+                  $column1,
+                  $column2,
+                  $column3,
+                ));
+
+              $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+              $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+
+              if (!$response->isSucceeded ()) return false;
+              $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+              echo 'Succeeded!';
+          }
+
+
           break;
         case 'LocationMessage':
           $params = array (
@@ -106,7 +147,7 @@ class Lines extends Api_controller {
               'latitude' => $event->getLatitude (),
               'longitude' => $event->getLongitude (),
             );
-          if (!LinebotLogLocation::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogLocation::create ( array_intersect_key ($params, LinebotLogLocation::table ()->columns))); })) return false;
+          if (!LinebotLogLocation::transaction (function () use (&$linebotLogLocation, $params) { return verifyCreateOrm ($linebotLogLocation = LinebotLogLocation::create ( array_intersect_key ($params, LinebotLogLocation::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
           break;
@@ -116,28 +157,13 @@ class Lines extends Api_controller {
               'package_id' => $event->getPackageId (),
               'sticker_id' => $event->getStickerId (),
             );
-          if (!LinebotLogSticker::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogSticker::create ( array_intersect_key ($params, LinebotLogSticker::table ()->columns))); })) return false;
+          if (!LinebotLogSticker::transaction (function () use (&$linebotLogSticker, $params) { return verifyCreateOrm ($linebotLogSticker = LinebotLogSticker::create ( array_intersect_key ($params, LinebotLogSticker::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
           break;
 
-        case 'VideoMessage':
-          $params = array ('linebot_log_id' => $linebotLog->id,);
-          if (!LinebotLogVideo::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogVideo::create ( array_intersect_key ($params, LinebotLogVideo::table ()->columns))); })) return false;
-          $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
-          break;
-
-        case 'ImageMessage':
-          $params = array ('linebot_log_id' => $linebotLog->id,);
-          if (!LinebotLogImage::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogImage::create ( array_intersect_key ($params, LinebotLogImage::table ()->columns))); })) return false;
-          $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
-          break;
-
-        case 'AudioMessage':
-          $params = array ('linebot_log_id' => $linebotLog->id,);
-          if (!LinebotLogAudio::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogAudio::create ( array_intersect_key ($params, LinebotLogAudio::table ()->columns))); })) return false;
-          $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
-          break;
-
+        case 'VideoMessage': $params = array ('linebot_log_id' => $linebotLog->id,); if (!LinebotLogVideo::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogVideo::create ( array_intersect_key ($params, LinebotLogVideo::table ()->columns))); })) return false; $linebotLog->setStatus (LinebotLog::STATUS_CONTENT); break;
+        case 'ImageMessage': $params = array ('linebot_log_id' => $linebotLog->id,); if (!LinebotLogImage::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogImage::create ( array_intersect_key ($params, LinebotLogImage::table ()->columns))); })) return false; $linebotLog->setStatus (LinebotLog::STATUS_CONTENT); break;
+        case 'AudioMessage': $params = array ('linebot_log_id' => $linebotLog->id,); if (!LinebotLogAudio::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogAudio::create ( array_intersect_key ($params, LinebotLogAudio::table ()->columns))); })) return false; $linebotLog->setStatus (LinebotLog::STATUS_CONTENT); break;
         default:
           break;
       }
