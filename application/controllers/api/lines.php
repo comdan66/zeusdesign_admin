@@ -105,7 +105,9 @@ exit ();
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
           
             $this->load->library ('CreateDemo');
-            if (($colums = CreateDemo::pics (3, 5, $keys)) && ($colums = array_map (function ($pic) use ($keys) {
+            if (($colums = CreateDemo::pics (3, 5, $keys)) && ($colums = array_map (function ($pic) use ($keys, $path) {
+                write_file ($path, '~~~ :' . json_encode($path) . "\n", FOPEN_READ_WRITE_CREATE);
+
                 return new CarouselColumnTemplateBuilder (
                   $pic['title'], $pic['title'], $pic['url'],
                   array (new UriTemplateActionBuilder ('我要看 ' . $keys[0], $pic['page']))
