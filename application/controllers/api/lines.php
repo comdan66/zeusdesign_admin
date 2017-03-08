@@ -87,6 +87,11 @@ exit ();
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
+  private function searchBot ($str) {
+    preg_match_all ('/(?P<c>(機器人|Bot*))/i', $str, $result);
+    if (!$result['c']) return array ();
+    return preg_split ('/[\s,]+/', $result['c'][0]);
+  }
   public function index () {
     $path = FCPATH . 'temp/input.json';
     $channel_id = Cfg::setting ('line', 'channel', 'id');
@@ -314,6 +319,16 @@ exit ();
           } else if ($keys = $this->searchHaha ($linebotLogText->text)) {
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
             $text = array ('笑什麼笑！', '很好笑？', '呵呵呵', '笑屁喔！');
+            $builder = new TextMessageBuilder ($text[array_rand ($text)]);
+            $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+
+            $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+            if (!$response->isSucceeded ()) return false;
+            $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+            echo 'Succeeded!';
+          } else if ($keys = $this->searchBot ($linebotLogText->text)) {
+            $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
+            $text = array ('幹嘛，找我？', '我不是機器人！', '人家很聰明的！！');
             $builder = new TextMessageBuilder ($text[array_rand ($text)]);
             $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
 
