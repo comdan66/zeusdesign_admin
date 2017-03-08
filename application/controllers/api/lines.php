@@ -137,7 +137,7 @@ exit ();
               $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
               echo 'Succeeded!';
             } else {
-              $builder = new TextMessageBuilder ('哭哭，找不到你想要的 ' . $linebotLogText->text . ' 耶..');
+              $builder = new TextMessageBuilder ('哭哭，找不到你想要的 ' . implode (' ', $keys) . ' 耶..');
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
@@ -167,7 +167,7 @@ exit ();
               $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
               echo 'Succeeded!';
             } else {
-              $builder = new TextMessageBuilder ('哭哭，找不到你想要的 ' . $linebotLogText->text . ' 耶..');
+              $builder = new TextMessageBuilder ('哭哭，找不到你想要的 ' . implode (' ', $keys) . ' 耶..');
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
@@ -196,7 +196,7 @@ exit ();
               $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
               echo 'Succeeded!';
             } else {
-              $builder = new TextMessageBuilder ('哭哭，找不到 ' . $linebotLogText->text . ' 耶..');
+              $builder = new TextMessageBuilder ('哭哭，找不到 ' . implode (' ', $keys) . ' 耶..');
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
