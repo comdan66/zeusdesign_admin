@@ -254,7 +254,7 @@ exit ();
             echo 'Succeeded!';
           } else if ($keys = $this->searchDont ($linebotLogText->text)) {
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
-            $text = array ('為什麼？', '所以？');
+            $text = array ('為什麼？', '所以？', '嗯哼，為什麼？');
             $builder = new TextMessageBuilder ($text[array_rand ($text)]);
             $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
 
