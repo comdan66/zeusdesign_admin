@@ -59,7 +59,6 @@ exit ();
     $signature = $_SERVER["HTTP_" . HTTPHeader::LINE_SIGNATURE];
     $body = file_get_contents ("php://input");
 
-    
     try {
       $events = $bot->parseEventRequest ($body, $signature);
     } catch (Exception $e) {
@@ -78,17 +77,6 @@ exit ();
       if ($event instanceof ImageMessage) $instanceof = 'ImageMessage';
       if ($event instanceof AudioMessage) $instanceof = 'AudioMessage';
       
-      // write_file ($path, ('==================') . "\n", FOPEN_READ_WRITE_CREATE);
-      // write_file ($path, $event->getType () . "\n", FOPEN_READ_WRITE_CREATE);
-      // write_file ($path, $instanceof . "\n", FOPEN_READ_WRITE_CREATE);
-      // write_file ($path, ($event->getReplyToken ()) . "\n", FOPEN_READ_WRITE_CREATE);
-      // write_file ($path, ($event->getEventSourceId ()) . "\n", FOPEN_READ_WRITE_CREATE);
-      // write_file ($path, ($event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM)) . "\n", FOPEN_READ_WRITE_CREATE);
-      // write_file ($path, ($event->getTimestamp ()) . "\n", FOPEN_READ_WRITE_CREATE);
-      // write_file ($path, ($event->getMessageType ()) . "\n", FOPEN_READ_WRITE_CREATE);
-      // write_file ($path, ($event->getMessageId ()) . "\n", FOPEN_READ_WRITE_CREATE);
-      // write_file ($path, ('==================') . "\n", FOPEN_READ_WRITE_CREATE);
-
       $params = array (
           'type' => $event->getType (),
           'instanceof' => $instanceof,
@@ -141,33 +129,9 @@ exit ();
           if (!LinebotLogLocation::transaction (function () use (&$linebotLogLocation, $params) { return verifyCreateOrm ($linebotLogLocation = LinebotLogLocation::create ( array_intersect_key ($params, LinebotLogLocation::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
-          $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
-          $this->load->library ('AlleyGet');
-          if (($colums = AlleyGet::products ($linebotLogLocation->latitude, $linebotLogLocation->longitude)) && ($colums = array_map (function ($store) {
-              return new CarouselColumnTemplateBuilder (
-                mb_strimwidth ($store['title'], 0, 18 * 2, '…','UTF-8'),
-                mb_strimwidth ($store['desc'], 0, 28 * 2, '…','UTF-8'),
-                $store['img'],
-                array (new UriTemplateActionBuilder (mb_strimwidth ('我要吃 ' . $store['title'], 0, 8 * 2, '…','UTF-8'), $store['url']))
-              );
-            }, $colums))) {
-
-            $builder = new TemplateMessageBuilder (mb_strimwidth ('附近好吃的美食來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder ($colums));
-            $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
-            $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
-
-            if (!$response->isSucceeded ()) return false;
-            $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+          if ($linebotLogLocation->searchProducts ($bot))
             echo 'Succeeded!';
-          } else {
-            $builder = new TextMessageBuilder ('哭哭，這附近沒什麼美食耶..');
-            $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
-            $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
-            if (!$response->isSucceeded ()) return false;
-            $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
-            echo 'Succeeded!';
-          }
           break;
         case 'StickerMessage':
           $params = array (
