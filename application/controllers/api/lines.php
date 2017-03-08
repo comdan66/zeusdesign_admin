@@ -32,14 +32,12 @@ class Lines extends Api_controller {
     
   }
   public function test () {
-
-    $this->load->library ('CreateDemo');
-    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump (CreateDemo::pics ());
-    exit ();;
+// echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+// var_dump ($this->searchIWant ('我想要看 女生'));
+// exit ();
   }
   private function searchIWant ($str) {
-    preg_match_all ('/我想看\s*(?P<c>.*)/', $str, $result);
+    preg_match_all ('/我(想|要)*看{0,1}\s*(?P<c>.*)/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
@@ -106,10 +104,10 @@ class Lines extends Api_controller {
               $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
             
               $this->load->library ('CreateDemo');
-              $colums = array_map (function ($pic) {
+              $colums = array_map (function ($pic) use ($keys) {
                 return new CarouselColumnTemplateBuilder (
                   $pic['title'], $pic['title'], $pic['url'],
-                  array (new UriTemplateActionBuilder ('我要看正妹', $pic['page']))
+                  array (new UriTemplateActionBuilder ('我要看 ' . $keys[0], $pic['page']))
                 );
               }, CreateDemo::pics (3, 8, $keys));
               
