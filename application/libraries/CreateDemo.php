@@ -67,12 +67,12 @@ class CreateDemo {
     $data = substr ($data, 0, strlen ( $data ) - 1); //strip out last paren
     $object = json_decode ($data);
 
-    return isset ($object->photos->photo) ? array_filter (array_map (function ($p) {
-      return isset ($p->url_m) && $p->url_m && isset ($p->owner) && isset ($p->id) && $p->owner && $p->id && isset ($p->title) && $p->title ? array (
-        'title' => $p->title,
-        'url' => $p->url_m,
-        'page' => 'https://www.flickr.com/photos/' . $p->owner . '/' . $p->id) : null;
-    }, $object->photos->photo)) : array ();
+    return isset ($object->photos->photo) ? array_values (array_filter (array_map (function ($p) {
+          return isset ($p->url_m) && $p->url_m && isset ($p->owner) && isset ($p->id) && $p->owner && $p->id && isset ($p->title) && $p->title ? array (
+            'title' => $p->title,
+            'url' => $p->url_m,
+            'page' => 'https://www.flickr.com/photos/' . $p->owner . '/' . $p->id) : null;
+        }, $object->photos->photo))) : array ();
   }
 
   public static function text ($min = 5, $max = 15) {
