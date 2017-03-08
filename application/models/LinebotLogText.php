@@ -137,7 +137,7 @@ class LinebotLogText extends OaLineModel {
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $this->CI->load->library ('AlleyGet');
 
-    if (!$datas = AlleyGet::products ($this->latitude, $this->longitude)) return $this->reply ($bot, new TextMessageBuilder ('哭哭，這附近沒什麼美食耶..'));
+    if (!$datas = AlleyGet::products ($keys[0], $keys[1])) return $this->reply ($bot, new TextMessageBuilder ('哭哭，這附近沒什麼美食耶..'));
 
     $builder = new TemplateMessageBuilder (mb_strimwidth ('附近好吃的美食來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder (array_map (function ($store) {
         return new CarouselColumnTemplateBuilder (
