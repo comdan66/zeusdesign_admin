@@ -81,7 +81,7 @@ class Lines extends Api_controller {
           'source_id' => $event->getEventSourceId (),
           'source_type' => $event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM),
           'timestamp' => $event->getTimestamp (),
-          'is_echo' => LinebotLog::NO_ECHO,
+          'status' => LinebotLog::STATUS_INIT,
         );
       if (!LinebotLog::transaction (function () use (&$linebotLog, $params) { return verifyCreateOrm ($linebotLog = LinebotLog::create ( array_intersect_key ($params, LinebotLog::table ()->columns))); })) return false;
 
@@ -95,7 +95,10 @@ class Lines extends Api_controller {
               'message_text' => $event->getText (),
             );
           if (!LinebotLogMsg::transaction (function () use (&$linebotLogMsg, $params) { return verifyCreateOrm ($linebotLogMsg = LinebotLogMsg::create ( array_intersect_key ($params, LinebotLogMsg::table ()->columns))); })) return false;
+          $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
+
+          // $linebotLogMsg
 
           break;
         case 'LocationMessage':
