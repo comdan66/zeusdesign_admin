@@ -35,7 +35,7 @@ class Lines extends Api_controller {
     $this->load->library ('AlleyGet');
 
 echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump (AlleyGet::search (25.064253, 121.522898));
+var_dump ($this->searchRecommend ('吃什麼'));
 exit ();
   }
   private function searchIWantLook ($str) {
