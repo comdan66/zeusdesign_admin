@@ -163,6 +163,7 @@ class LinebotLogText extends OaLineModel {
       write_file (FCPATH . 'temp/input.json', $datas['title'] . "\n", FOPEN_READ_WRITE_CREATE);
 
     $builder = new TemplateMessageBuilder ($datas['title'], new ButtonTemplateBuilder ($datas['title'], $datas['desc'], $datas['img'], array (new UriTemplateActionBuilder ('詳細內容', $datas['url']))));
+      write_file (FCPATH . 'temp/input.json', $datas['title'] . "=========\n", FOPEN_READ_WRITE_CREATE);
     return $this->reply ($bot, $builder);
   }
   public function searchDont ($bot) {
