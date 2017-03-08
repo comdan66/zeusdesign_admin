@@ -14,7 +14,7 @@ class WeatherGet {
   public static function getByLatLng ($lat, $lng) {
     $key = Cfg::setting ('google', ENVIRONMENT, 'server_key');
 
-    if (!(($data = json_decode (file_get_contents ('http://maps.googleapis.com/maps/api/geocode/json?latlng=' . $lat . ',' . $lng . '&language=zh-TW' . ($key ? '&key=' . $key : '')), true)) && isset ($data['results'][0]['address_components']) && ($data = $data['results'][0]['address_components'])))
+    if (!(($data = json_decode (file_get_contents ('https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $lat . ',' . $lng . '&language=zh-TW' . ($key ? '&key=' . $key : '')), true)) && isset ($data['results'][0]['address_components']) && ($data = $data['results'][0]['address_components'])))
       return false;
 
     for ($i = 0, $c = count ($data), $postal_code = '0'; $i < $c; $i++)
