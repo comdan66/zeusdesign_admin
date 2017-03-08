@@ -17,8 +17,8 @@ use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 
-class OaLineModel extends OaModel {
-  
+class OaLineModel extends ActiveRecordModel {
+
   public function __construct ($attributes = array (), $guard_attributes = TRUE, $instantiating_via_find = FALSE, $new_record = TRUE) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
