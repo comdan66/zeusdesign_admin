@@ -140,7 +140,7 @@ exit ();
             $this->load->library ('YoutubeGet');
 
             if (($colums = YoutubeGet::search (array ('q' => implode (' ', $keys), 'maxResults' => rand (3, 5)))) && ($colums = array_map (function ($youtube) use ($keys) {
-                write_file (FCPATH . 'temp/input.json', $youtube['thumbnails'][count ($youtube['thumbnails']) - 1]['url']);
+                write_file (FCPATH . 'temp/input.json', count ($youtube['thumbnails']));
                 return new CarouselColumnTemplateBuilder (
                   mb_strimwidth ($youtube['title'], 0, 18, '…','UTF-8'),
                   mb_strimwidth ($youtube['title'], 0, 28, '…','UTF-8'),
