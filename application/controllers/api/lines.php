@@ -35,7 +35,7 @@ class Lines extends Api_controller {
     $this->load->library ('AlleyGet');
 
 echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump ($this->searchRecommend ('吃什麼'));
+var_dump ($this->searchRecommend ('吃啥'));
 exit ();
   }
   private function searchIWantLook ($str) {
@@ -54,7 +54,7 @@ exit ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
   private function searchRecommend ($str) {
-    preg_match_all ('/(?P<c>吃什麼)/', $str, $result);
+    preg_match_all ('/(?P<c>(吃什麼|吃啥))/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
