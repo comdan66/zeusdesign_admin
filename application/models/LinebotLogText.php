@@ -150,7 +150,7 @@ class LinebotLogText extends OaLineModel {
 
     return $this->reply ($bot, $builder);
   }
-  public function searchLocation ($bot) {
+  public function searchWeather ($bot) {
     $pattern = '/附近的?天氣.*\s*\((?P<c>(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?))\)/';
 
     if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
