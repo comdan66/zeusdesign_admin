@@ -112,14 +112,14 @@ exit ();
             $this->load->library ('CreateDemo');
             if (($colums = CreateDemo::pics (4, 5, $keys)) && ($colums = array_map (function ($pic) use ($keys) {
                 return new CarouselColumnTemplateBuilder (
-                  mb_strimwidth ($pic['title'], 0, 18, '…','UTF-8'),
-                  mb_strimwidth ($pic['title'], 0, 28, '…','UTF-8'),
+                  mb_strimwidth ($pic['title'], 0, 18 * 2, '…','UTF-8'),
+                  mb_strimwidth ($pic['title'], 0, 28 * 2, '…','UTF-8'),
                   $pic['url'],
-                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要看 ' . implode (' ', $keys), 0, 8, '…','UTF-8'), $pic['page']))
+                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要看 ' . implode (' ', $keys), 0, 8 * 2, '…','UTF-8'), $pic['page']))
                 );
               }, $colums))) {
 
-              $builder = new TemplateMessageBuilder (mb_strimwidth (implode (',', $keys) . ' 來囉！', 0, 198, '…','UTF-8'), new CarouselTemplateBuilder ($colums));
+              $builder = new TemplateMessageBuilder (mb_strimwidth (implode (',', $keys) . ' 來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
@@ -141,15 +141,15 @@ exit ();
 
             if (($colums = YoutubeGet::search (array ('q' => implode (' ', $keys), 'maxResults' => rand (3, 5)))) && ($colums = array_map (function ($youtube) use ($keys) {
                 return new CarouselColumnTemplateBuilder (
-                  mb_strimwidth ($youtube['title'], 0, 18, '…','UTF-8'),
-                  mb_strimwidth ($youtube['title'], 0, 28, '…','UTF-8'),
+                  mb_strimwidth ($youtube['title'], 0, 18 * 2, '…','UTF-8'),
+                  mb_strimwidth ($youtube['title'], 0, 28 * 2, '…','UTF-8'),
                   $youtube['thumbnails'][count ($youtube['thumbnails']) - 1]['url'],
-                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要看 ' . implode (' ', $keys), 0, 8, '…','UTF-8'), 
+                  array (new UriTemplateActionBuilder (mb_strimwidth ('我要聽 ' . implode (' ', $keys), 0, 8 * 2, '…','UTF-8'), 
                     'https://www.youtube.com/watch?v=' . $youtube['id']))
                 );
               }, $colums))) {
 
-              $builder = new TemplateMessageBuilder (mb_strimwidth (implode (',', $keys) . ' 來囉！', 0, 198, '…','UTF-8'), new CarouselTemplateBuilder ($colums));
+              $builder = new TemplateMessageBuilder (mb_strimwidth (implode (',', $keys) . ' 來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
