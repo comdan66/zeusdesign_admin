@@ -35,6 +35,10 @@ class CreateDemo {
 
     $pics = array_slice (self::$pics, 0, $l = rand ($min, $max));
     self::$pics = array_slice (self::$pics, $l);
+    
+    $path = FCPATH . 'temp/input.json';
+    write_file ($path, '===> Error, CreateDemo 3 :' . count(self::$pics) . "\n", FOPEN_READ_WRITE_CREATE);
+      
     return $pics;
   }
 
