@@ -93,7 +93,7 @@ exit ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
   private function searchHello ($str) {
-    preg_match_all ('/(?P<c>(妳好|哈囉|Hello|嗨|Hi))/i', $str, $result);
+    preg_match_all ('/(?P<c>(妳好|你好|哈囉|Hello|嗨|Hi))/i', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
