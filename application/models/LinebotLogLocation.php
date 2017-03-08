@@ -24,6 +24,7 @@ class LinebotLogLocation extends OaModel {
   );
 
   static $belongs_to = array (
+    array ('log', 'class_name' => 'LinebotLog'),
   );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
