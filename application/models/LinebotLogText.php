@@ -40,6 +40,7 @@ class LinebotLogText extends OaModel {
   }
   public function searchIWantLook ($bot) {
     $pattern = '/我{0,1}(想|要)*找\s*(?P<c>.*)/';
+write_file (FCPATH . 'temp/input.json', ('==================2') . "\n", FOPEN_READ_WRITE_CREATE);
 
     if (!(isset ($this->text) && $keys = LinebotLogText::regex ($pattern, $this->text))) return false;
 
@@ -60,6 +61,7 @@ class LinebotLogText extends OaModel {
   }
   public function searchIWantListen ($bot) {
     $pattern = '/我{0,1}(想|要)*(聽|看)\s*(?P<c>.*)/';
+    
 
     if (!(isset ($this->text) && $keys = LinebotLogText::regex ($pattern, $this->text))) return false;
 

@@ -177,7 +177,7 @@ exit ();
             );
           if (!LinebotLogText::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogText::create ( array_intersect_key ($params, LinebotLogText::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
-
+write_file (FCPATH . 'temp/input.json', ('==================1') . "\n", FOPEN_READ_WRITE_CREATE);
           if ($linebotLogText->searchIWantLook ($bot) ||
               $linebotLogText->searchIWantListen ($bot) ||
               $linebotLogText->searchIWantEat ($bot) ||
