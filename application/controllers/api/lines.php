@@ -97,8 +97,6 @@ class Lines extends Api_controller {
           if (!LinebotLogText::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogText::create ( array_intersect_key ($params, LinebotLogText::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
-          // $linebotLogText
-
           break;
         case 'LocationMessage':
           $params = array (
@@ -111,13 +109,35 @@ class Lines extends Api_controller {
           if (!LinebotLogLocation::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogLocation::create ( array_intersect_key ($params, LinebotLogLocation::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
-        
+          break;
+        case 'StickerMessage':
+          $params = array (
+              'linebot_log_id' => $linebotLog->id,
+              'package_id' => $event->getPackageId (),
+              'sticker_id' => $event->getStickerId (),
+            );
+          if (!LinebotLogSticker::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogSticker::create ( array_intersect_key ($params, LinebotLogSticker::table ()->columns))); })) return false;
+          $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
           break;
 
         case 'VideoMessage':
-        case 'StickerMessage':
+          $params = array ('linebot_log_id' => $linebotLog->id,);
+          if (!LinebotLogVideo::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogVideo::create ( array_intersect_key ($params, LinebotLogVideo::table ()->columns))); })) return false;
+          $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
+          break;
+
         case 'ImageMessage':
+          $params = array ('linebot_log_id' => $linebotLog->id,);
+          if (!LinebotLogImage::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogImage::create ( array_intersect_key ($params, LinebotLogImage::table ()->columns))); })) return false;
+          $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
+          break;
+
         case 'AudioMessage':
+          $params = array ('linebot_log_id' => $linebotLog->id,);
+          if (!LinebotLogAudio::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogAudio::create ( array_intersect_key ($params, LinebotLogAudio::table ()->columns))); })) return false;
+          $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
+          break;
+
         default:
           break;
       }
