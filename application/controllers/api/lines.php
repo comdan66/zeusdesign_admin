@@ -32,11 +32,16 @@ class Lines extends Api_controller {
     
   }
   public function test () {
+
     $this->load->library ('CreateDemo');
-    $pics = CreateDemo::pics (3, 8, array ('正妹', '可愛'));
     echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump ($pics);
-    exit ();
+    var_dump (CreateDemo::pics ());
+    exit ();;
+  }
+  private function searchIWant ($str) {
+    preg_match_all ('/我想看\s*(?P<c>.*)/', $str, $result);
+    if (!$result['c']) return array ();
+    return preg_split ('/[\s,]+/', $result['c'][0]);
   }
   public function index () {
     $path = FCPATH . 'temp/input.json';
@@ -97,39 +102,20 @@ class Lines extends Api_controller {
           if (!LinebotLogText::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogText::create ( array_intersect_key ($params, LinebotLogText::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
-          if (true || preg_match ('/正妹|找妹/i', $linebotLogText->text)) {
+          if ($keys = $this->searchIWant ($linebotLogText->text)) {
               $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
             
               $this->load->library ('CreateDemo');
-              $pics = CreateDemo::pics (3, 8, array ('正妹', '可愛'));
-              $column1 = new CarouselColumnTemplateBuilder (
-                  '正妹1',
-                  '正妹 正妹',
-                  'https://farm3.staticflickr.com/2936/32899685570_12609976b2.jpg',
-                  array (
-                    new UriTemplateActionBuilder ('我要看正妹', 'https://farm3.staticflickr.com/2936/32899685570_12609976b2.jpg'))
+              $colums = array_map (function ($pic) {
+                return new CarouselColumnTemplateBuilder (
+                  $pic->title,
+                  $pic->title,
+                  $pic->url,
+                  array (new UriTemplateActionBuilder ('我要看正妹', $pic->page))
                 );
-              $column2 = new CarouselColumnTemplateBuilder (
-                  '正妹2',
-                  '正妹 正妹',
-                  'https://farm4.staticflickr.com/3926/33154446171_78ff24b412.jpg',
-                  array (
-                    new UriTemplateActionBuilder ('我要看正妹', 'https://farm4.staticflickr.com/3926/33154446171_78ff24b412.jpg'))
-                );
-              $column3 = new CarouselColumnTemplateBuilder (
-                  '正妹3',
-                  '正妹 正妹',
-                  'https://farm4.staticflickr.com/3953/33154437801_ac04cd8cdd.jpg',
-                  array (
-                    new UriTemplateActionBuilder ('我要看正妹', 'https://farm4.staticflickr.com/3953/33154437801_ac04cd8cdd.jpg'))
-                );
-              $carouselTemplateBuilder = new CarouselTemplateBuilder (array (
-                  $column1,
-                  $column2,
-                  $column3,
-                ));
-
-              $builder = new TemplateMessageBuilder ('正妹來囉！', $carouselTemplateBuilder);
+              }, CreateDemo::pics (3, 8, $keys));
+              
+              $builder = new TemplateMessageBuilder (implode (',', $keys) . ' 來囉！', new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 

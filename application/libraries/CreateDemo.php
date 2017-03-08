@@ -68,7 +68,10 @@ class CreateDemo {
     $object = json_decode ($data);
 
     return array_filter (array_map (function ($p) {
-      return isset ($p->url_m) && $p->url_m && isset ($p->title) && $p->title ? array ('title' => $p->title, 'url' => $p->url_m) : null;
+      return isset ($p->url_m) && $p->url_m && isset ($p->title) && $p->title ? array (
+        'title' => $p->title,
+        'url' => $p->url_m,
+        'page' => 'https://www.flickr.com/photos/' . $p->owner . '/' . $p->id) : null;
     }, $object->photos->photo));
   }
 
