@@ -101,6 +101,17 @@ class Lines extends Api_controller {
 
           break;
         case 'LocationMessage':
+          $params = array (
+              'linebot_log_id' => $linebotLog->id,
+              'title' => $event->getTitle (),
+              'address' => $event->getAddress (),
+              'latitude' => $event->getLatitude (),
+              'longitude' => $event->getLongitude (),
+            );
+          if (!LinebotLogLocation::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogLocation::create ( array_intersect_key ($params, LinebotLogLocation::table ()->columns))); })) return false;
+          $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
+
+        
           break;
 
         case 'VideoMessage':
