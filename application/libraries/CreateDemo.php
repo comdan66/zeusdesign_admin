@@ -69,6 +69,7 @@ class CreateDemo {
       $object = json_decode ($data);
       
       $path = FCPATH . 'temp/input.json';
+      write_file ($path, '===> Error, CreateDemo 1 :' . (isset($object->photos->photo) ? 1 : 0) . ":" . count($return) . "\n", FOPEN_READ_WRITE_CREATE);
       $return = isset ($object->photos->photo) ? array_values (array_filter (array_map (function ($p) {
             return isset ($p->url_m) && $p->url_m && isset ($p->owner) && isset ($p->id) && $p->owner && $p->id && isset ($p->title) && $p->title ? array (
               'title' => $p->title,
@@ -76,7 +77,7 @@ class CreateDemo {
               'page' => 'https://www.flickr.com/photos/' . $p->owner . '/' . $p->id) : null;
           }, $object->photos->photo))) : array ();
 
-      write_file ($path, '===> Error, CreateDemo 1 :' . (isset($object->photos->photo) ? 1 : 0) . ":" . count($return) . "\n", FOPEN_READ_WRITE_CREATE);
+      write_file ($path, '===> Error, CreateDemo 2 :' . (isset($object->photos->photo) ? 1 : 0) . ":" . count($return) . "\n", FOPEN_READ_WRITE_CREATE);
       return $return;
     } catch (Exception $e) {
       $path = FCPATH . 'temp/input.json';
