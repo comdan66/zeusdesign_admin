@@ -14,6 +14,7 @@ use LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 
 class LinebotLogText extends OaLineModel {
 
