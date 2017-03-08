@@ -123,15 +123,15 @@ class Lines extends Api_controller {
                   array (
                     new UriTemplateActionBuilder ('我要看正妹', 'https://farm3.staticflickr.com/2936/32899685570_12609976b2.jpg'))
                 );
-              $builder = new CarouselTemplateBuilder (array (
+              $carouselTemplateBuilder = new CarouselTemplateBuilder (array (
                   $column1,
                   $column2,
                   $column3,
                 ));
 
+              $builder = new TemplateMessageBuilder ('正妹來囉！', $carouselTemplateBuilder);
+              
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
-
-              $builder = new TextMessageBuilder ('目前ＧＰＳ已經');
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
               if (!$response->isSucceeded ()) return false;
