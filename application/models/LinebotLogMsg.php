@@ -6,9 +6,9 @@
  * @link        http://www.ioa.tw/
  */
 
-class LinebotMsg extends OaModel {
+class LinebotLogMsg extends OaModel {
 
-  static $table_name = 'linebot_msgs';
+  static $table_name = 'linebot_log_msgs';
 
   static $has_one = array (
   );

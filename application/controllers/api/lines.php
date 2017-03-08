@@ -30,7 +30,7 @@ class Lines extends Api_controller {
     
   }
   public function test () {
-    LineBotLog::create (array (
+    LinebotLog::create (array (
         'type' => '',
         'reply_token' => '',
         'source_id' => '',
@@ -67,38 +67,44 @@ class Lines extends Api_controller {
       $instanceof = '';
 
       if ($event instanceof TextMessage) $instanceof = 'TextMessage';
+      if ($event instanceof LocationMessage) $instanceof = 'LocationMessage';
+      
       if ($event instanceof VideoMessage) $instanceof = 'VideoMessage';
       if ($event instanceof StickerMessage) $instanceof = 'StickerMessage';
-      if ($event instanceof LocationMessage) $instanceof = 'LocationMessage';
       if ($event instanceof ImageMessage) $instanceof = 'ImageMessage';
       if ($event instanceof AudioMessage) $instanceof = 'AudioMessage';
 
-      $lineBotLog = LineBotLog::create (array (
+      $params = array (
           'type' => $event->getType (),
           'instanceof' => $instanceof,
           'reply_token' => $event->getReplyToken (),
           'source_id' => $event->getEventSourceId (),
           'source_type' => $event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM),
           'timestamp' => $event->getTimestamp (),
-          'is_echo' => LineBotLog::NO_ECHO,
-        ));
-      if (!LineBotLog::transaction (function () use (&$lineBotLog, $params) { return verifyCreateOrm ($lineBotLog = LineBotLog::create ( array_intersect_key ($params, LineBotLog::table ()->columns))); })) return false;
+          'is_echo' => LinebotLog::NO_ECHO,
+        );
+      if (!LinebotLog::transaction (function () use (&$linebotLog, $params) { return verifyCreateOrm ($linebotLog = LinebotLog::create ( array_intersect_key ($params, LinebotLog::table ()->columns))); })) return false;
 
 
-      switch ($lineBotLog->instanceof) {
+      switch ($linebotLog->instanceof) {
         case 'TextMessage':
-          break;
-        case 'VideoMessage':
-          break;
-        case 'StickerMessage':
+          $params = array (
+              'linebot_log_id' => $linebotLog->id,
+              'message_id' => $event->getMessageId (),
+              'message_type' => $event->getMessageType (),
+              'message_text' => $event->getText (),
+            );
+          if (!LinebotLogMsg::transaction (function () use (&$linebotLogMsg, $params) { return verifyCreateOrm ($linebotLogMsg = LinebotLogMsg::create ( array_intersect_key ($params, LinebotLogMsg::table ()->columns))); })) return false;
+
+
           break;
         case 'LocationMessage':
           break;
+
+        case 'VideoMessage':
+        case 'StickerMessage':
         case 'ImageMessage':
-          break;
         case 'AudioMessage':
-          break;
-        
         default:
           break;
       }
@@ -133,7 +139,7 @@ class Lines extends Api_controller {
         // $response = $bot->replyMessage ($log->reply_token, $messageBuilder);
 
         // if ($response->isSucceeded ()) {
-        //   $log->ok = LineBotLog::IS_ECHO;
+        //   $log->ok = LinebotLog::IS_ECHO;
         //   $log->save ();
 
         //   echo 'Succeeded!';
