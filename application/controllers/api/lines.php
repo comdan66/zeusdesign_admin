@@ -31,10 +31,10 @@ class Lines extends Api_controller {
     parent::__construct ();
     
   }
-  public function test () {
-// echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-// var_dump ($this->searchIWant ('我想要看 女生'));
-// exit ();
+  public function test ($str) {
+echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+var_dump ($this->searchIWant ($str));
+exit ();
   }
   private function searchIWant ($str) {
     preg_match_all ('/我(想|要)*看{0,1}\s*(?P<c>.*)/', $str, $result);
