@@ -134,7 +134,17 @@ class Lines extends Api_controller {
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
               $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
 
-              if (!$response->isSucceeded ()) return false;
+              if (!$response->isSucceeded ()) {
+
+                $profile = $response->getJSONDecodedBody ();
+                $bot->replyText(
+                    $linebotLog->reply_token,
+                    'Display name: ' . $profile['displayName'],
+                    'Status message: ' . $profile['statusMessage']
+                );
+
+                return false;
+              }
               $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
               echo 'Succeeded!';
           }
