@@ -39,7 +39,7 @@ class YoutubeGet {
           'title' => isset ($item->snippet->title) ? $item->snippet->title : '',
           'tags' => isset ($item->snippet->tags) ? $item->snippet->tags : array (),
           'publishedAt' => isset ($item->snippet->publishedAt) ? $item->snippet->publishedAt : '',
-          'thumbnails' => isset ($item->snippet->thumbnails) ? array_filter (array_map (function ($size) use ($item) {
+          'thumbnails' => isset ($item->snippet->thumbnails) ? array_values (array_filter (array_map (function ($size) use ($item) {
               if (!method_exists ($item->snippet->thumbnails, $size))
                 return null;
       
@@ -52,7 +52,7 @@ class YoutubeGet {
                     'width' => $thumbnail->width,
                     'height' => $thumbnail->height
                   ) : array ());
-            }, $sizes)) : array (),
+            }, $sizes))) : array (),
         ) : array ();
   }
 
