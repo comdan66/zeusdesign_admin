@@ -25,11 +25,6 @@ class Lines extends Api_controller {
     
   }
   public function test () {
-    $pattern = '/附近的?天氣.*\s*\((?P<c>(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?))\)/';
-    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump ( LinebotLogText::regex ($pattern, '我想知道這附近的天氣概況(24.999143773179, 121.52344297618)'));
-    exit ();
-
   }
   public function index () {
     $path = FCPATH . 'temp/input.json';
@@ -104,8 +99,8 @@ class Lines extends Api_controller {
               $linebotLogText->searchName ($bot) ||
               $linebotLogText->searchCallMe ($bot) ||
               $linebotLogText->searchLocation ($bot) ||
-              $linebotLogText->searchTest ($bot) ||
               $linebotLogText->searchWeather ($bot) ||
+              $linebotLogText->searchTest ($bot) ||
               false)
             echo 'Succeeded!';
 
