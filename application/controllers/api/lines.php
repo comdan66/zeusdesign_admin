@@ -32,10 +32,14 @@ class Lines extends Api_controller {
     
   }
   public function test () {
-    $this->load->library ('AlleyGet');
+//             $text = array ('為什麼？', '所以？', '嗯哼，為什麼？');
+// echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+// var_dump ($text[array_rand ($text)]);
+// exit ();
+//     $this->load->library ('AlleyGet');
 
 echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump ($this->searchDont ('我不想看電影 我等等'));
+var_dump ($this->searchSpeechless ('searchSpeechless  == '));
 exit ();
   }
   private function searchIWantLook ($str) {
@@ -65,6 +69,11 @@ exit ();
   }
   private function search3Q ($str) {
     preg_match_all ('/(?P<c>(謝|3Q|3q).*)/', $str, $result);
+    if (!$result['c']) return array ();
+    return preg_split ('/[\s,]+/', $result['c'][0]);
+  }
+  private function searchSpeechless ($str) {
+    preg_match_all ('/(?P<c>(＝\s*＝|=\s*=|\.\.|3q).*)/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
@@ -265,6 +274,16 @@ exit ();
           } else if ($keys = $this->search3Q ($linebotLogText->text)) {
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
             $text = array ('不客氣啦！', 'OK 的啦！', '您客氣了：）');
+            $builder = new TextMessageBuilder ($text[array_rand ($text)]);
+            $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
+
+            $response = $bot->replyMessage ($linebotLog->reply_token, $builder);
+            if (!$response->isSucceeded ()) return false;
+            $linebotLog->setStatus (LinebotLog::STATUS_SUCCESS);
+            echo 'Succeeded!';
+          } else if ($keys = $this->searchSpeechless ($linebotLogText->text)) {
+            $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
+            $text = array ('幹嘛！！？', '= =+', '哈哈哈哈..');
             $builder = new TextMessageBuilder ($text[array_rand ($text)]);
             $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
 
