@@ -42,7 +42,7 @@ class LinebotLogLocation extends OaLineModel {
   }
   public function searchProducts ($bot) {
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
-    $builder = new TemplateMessageBuilder ('有個問題需要被解答！', new ConfirmTemplateBuilder ('請問您是要知道這附近的？', array (new MessageTemplateActionBuilder ('店家美食？', '我想知道這附近的美食(' . $this->latitude . ', ' . $this->longitude . ')'), new MessageTemplateActionBuilder ('天氣概況', '我想知道這附近的天氣概況(' . $this->latitude . ', ' . $this->longitude . ')'))));
+    $builder = new TemplateMessageBuilder ('有個問題需要被解答！', new ConfirmTemplateBuilder ('請問您是要知道這附近的？', array (new MessageTemplateActionBuilder ('天氣概況', '我想知道這附近的天氣概況(' . $this->latitude . ', ' . $this->longitude . ')'), new MessageTemplateActionBuilder ('美食店家', '我想知道這附近的美食(' . $this->latitude . ', ' . $this->longitude . ')'))));
     return $this->reply ($bot, $builder);
   }
 }

@@ -36,7 +36,7 @@ class WeatherGet {
     $data = json_decode (file_get_contents ('https://works.ioa.tw/weather/api/weathers/' . $id . '.json'), true);
     $img = 'https://works.ioa.tw/weather/img/weathers/zeusdesign/' . $data['img'];
     $title = $city . ''. $name . ' 目前的天氣概況';
-    $desc = $name . '目前 ' . $data['desc'] . '，氣溫 ' . $data['temperature'] . '°C，相對濕度 ' . $data['humidity'] . '%，累積降雨量 ' . $data['rainfall'] . 'mm，' . ($data['specials'] ? '此處已經發佈 ' . implode (',', column_array ($data['specials'], 'title')) : ('今天太陽將於 ' . $data['sunset'] . ' 落下，請把握今日時光喔！'));
+    $desc = '目前 ' . $data['desc'] . '，氣溫 ' . $data['temperature'] . '°C，相對濕度 ' . $data['humidity'] . '%，累積降雨量 ' . $data['rainfall'] . 'mm，' . ($data['specials'] ? '此處已經發佈 ' . implode (',', column_array ($data['specials'], 'title')) : ('今天太陽將於 ' . $data['sunset'] . ' 落下，請把握今日時光喔！'));
     $url = 'https://works.ioa.tw/weather/towns/' . $city . '-' . $name . '.html';
 
     return array (
