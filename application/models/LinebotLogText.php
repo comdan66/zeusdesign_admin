@@ -40,17 +40,13 @@ class LinebotLogText extends OaModel {
   }
   public function searchIWantLook ($bot) {
     $pattern = '/我{0,1}(想|要)*找\s*(?P<c>.*)/';
-write_file (FCPATH . 'temp/input.json', ('==================2') . count($keys = LinebotLogText::regex ($pattern, $this->text)) . "\n", FOPEN_READ_WRITE_CREATE);
 
     if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
-write_file (FCPATH . 'temp/input.json', ('==================2.1') . "\n", FOPEN_READ_WRITE_CREATE);
 
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     $this->CI->load->library ('CreateDemo');
-write_file (FCPATH . 'temp/input.json', ('==================3') . "\n", FOPEN_READ_WRITE_CREATE);
 
     if (!$datas = CreateDemo::pics (4, 5, $keys)) return $this->reply ($bot, new TextMessageBuilder ('哭哭，找不到你想要的 ' . implode (' ', $keys) . ' 耶..'));
-write_file (FCPATH . 'temp/input.json', ('==================4') . "\n", FOPEN_READ_WRITE_CREATE);
 
     $builder = new TemplateMessageBuilder (mb_strimwidth (implode (',', $keys) . ' 來囉！', 0, 198 * 2, '…','UTF-8'), new CarouselTemplateBuilder (array_map (function ($data) {
         return new CarouselColumnTemplateBuilder (
@@ -59,7 +55,6 @@ write_file (FCPATH . 'temp/input.json', ('==================4') . "\n", FOPEN_RE
           $data['url'],
           array (new UriTemplateActionBuilder (mb_strimwidth ('我要看 ' . $data['title'], 0, 8 * 2, '…','UTF-8'), $data['page']))
       ); }, $datas)));
-write_file (FCPATH . 'temp/input.json', ('==================5') . "\n", FOPEN_READ_WRITE_CREATE);
 
     return $this->reply ($bot, $builder);
   }
