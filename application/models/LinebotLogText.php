@@ -160,10 +160,9 @@ class LinebotLogText extends OaLineModel {
     $this->CI->load->library ('WeatherGet');
 
     if (!$datas = WeatherGet::getByLatLng ($keys[0], $keys[1])) return $this->reply ($bot, new TextMessageBuilder ('哭哭，目前沒有此處的資料耶..'));
-      write_file (FCPATH . 'temp/input.json', $datas['title'] . "\n", FOPEN_READ_WRITE_CREATE);
 
-    $builder = new TemplateMessageBuilder ($datas['title'], new ButtonTemplateBuilder ('2017 白沙屯媽祖 GPS', '2017 白沙屯媽祖 GPS 即時定位，歲次丁酉年，苗栗通霄白沙屯拱天宮媽祖南下北港朝天宮進香 GPS 系統。', 'https://baishatun.godroad.tw/img/og/index.png', array (new UriTemplateActionBuilder ('開啟 GPS 定位', 'https://baishatun.godroad.tw'))));
-      write_file (FCPATH . 'temp/input.json', $datas['title'] . "=========\n", FOPEN_READ_WRITE_CREATE);
+    $builder = new TemplateMessageBuilder (mb_strimwidth ($datas['title'], 0, 8 * 2, '…','UTF-8'), new ButtonTemplateBuilder (mb_strimwidth ($datas['title'], 0, 18 * 2, '…','UTF-8'), mb_strimwidth ($datas['desc'], 0, 28 * 2, '…','UTF-8'), $datas['img'], array (new UriTemplateActionBuilder ('詳細內容', $datas['url']))));
+
     return $this->reply ($bot, $builder);
   }
   public function searchDont ($bot) {
