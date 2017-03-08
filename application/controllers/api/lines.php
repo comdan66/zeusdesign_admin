@@ -31,14 +31,15 @@ class Lines extends Api_controller {
     parent::__construct ();
     
   }
-  public function test ($str) {
-            $this->load->library ('CreateDemo');
+  public function test () {
+    $this->load->library ('YoutubeGet');
+
 echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump (CreateDemo::pics (3, 8, $keys = $this->searchIWant (urldecode('我想看 豬哥亮'))));
+var_dump (YoutubeGet::search (array ('q' => '犁炮', 'maxResults' => rand (10, 30))));
 exit ();
   }
   private function searchIWant ($str) {
-    preg_match_all ('/我(想|要)*看{0,1}\s*(?P<c>.*)/', $str, $result);
+    preg_match_all ('/我(想|要)*看\s*(?P<c>.*)/', $str, $result);
     if (!$result['c']) return array ();
     return preg_split ('/[\s,]+/', $result['c'][0]);
   }
@@ -163,44 +164,6 @@ exit ();
         default:
           break;
       }
-
-      // if () {
-
-
-        // $messageBuilder = null;
-        // if (preg_match ('/GPS/i', $log->message_text)) {
-        //   $buttonTemplateBuilder = new ButtonTemplateBuilder ('2017 白沙屯媽祖 GPS', '2017 白沙屯媽祖 GPS 即時定位，歲次丁酉年，苗栗通霄白沙屯拱天宮媽祖南下北港朝天宮進香 GPS 系統。', 'https://baishatun.godroad.tw/img/og/index.png', array (new UriTemplateActionBuilder ('開啟 GPS 定位', 'https://baishatun.godroad.tw')));
-        //   $messageBuilder = new TemplateMessageBuilder ('2017 白沙屯媽祖 GPS', $buttonTemplateBuilder);
-        // } else if (preg_match ('/媽祖位置|媽祖在哪|媽祖婆在哪|媽祖在哪裡|媽祖在那|媽祖現在在那|媽祖現在在哪/i', $log->message_text)) {
-        //   $this->load->library ('Point');
-        //   $cfg = AdminConfig::getVal ('master_point');
-        //   $last = $cfg::find ('one', array ('select' => 'lat,lng,lat2,lng2', 'order' => 'id DESC', 'conditions' => array ('enable = ?', Point::IS_ENABLED)));
-        //   $latLng = json_decode (file_get_contents ('https://api.baishatun.godroad.tw/gps.json'));
-        //   $messageBuilder = new LocationMessageBuilder ('白沙屯媽祖現在的位置', $this->Get_Address_From_Google_Maps ($last->lat2 ? $last->lat2 : $last->lat, $last->lng2 ? $last->lng2 : $last->lng), $last->lat2 ? $last->lat2 : $last->lat, $last->lng2 ? $last->lng2 : $last->lng);
-        // } else if ($log->source_type == EventSourceType::USER && preg_match ('/感恩|謝謝/i', $log->message_text)) {
-        //   $messageBuilder = new TextMessageBuilder ('不客氣喔：）');
-        // } else if ($log->source_type == EventSourceType::USER) {
-        //   $messageBuilder = new TextMessageBuilder ('目前我只能接受 "媽祖在哪" 與 "GPS" 的詢問喔～');
-        // } else if (($log->message_text == '狀態回報' || $log->message_text == '回報狀態') && $log->source_type == EventSourceType::GROUP && ($log->source_id == 'Cc6be8ee87731e621d54489b430aed9d5' || $log->source_id == 'Ceacec98c68fcd15e66e93216955d0cd6')) {
-        //   $this->load->library ('Point');
-        //   $cfg = AdminConfig::getVal ('master_point');
-        //   $last = $cfg::find ('one', array ('select' => 'time_at', 'order' => 'id DESC', 'conditions' => array ('enable = ?', Point::IS_ENABLED)));
-        //   $messageBuilder = new TextMessageBuilder ('目前ＧＰＳ已經 ' . (AdminConfig::getVal ('cron') ? '開啟' : '關閉') . " 接收。\n上一次訊號紀錄是 " . $last->time_at->format ('Y-m-d H:i:s'));
-        // } else if (preg_match ('/機器人/i', $log->message_text) && $log->source_type == EventSourceType::GROUP && $log->source_id == 'C8ad2243d1f92cdc01d0dfd6b492efd88') {
-        //   $messageBuilder = new TextMessageBuilder (preg_replace ('/機器人/i', '', $log->message_text));
-        // }
-        // if (!$messageBuilder) return;
-
-        // $response = $bot->replyMessage ($log->reply_token, $messageBuilder);
-
-        // if ($response->isSucceeded ()) {
-        //   $log->ok = LinebotLog::IS_ECHO;
-        //   $log->save ();
-
-        //   echo 'Succeeded!';
-        //   return;
-        // }
-      // }
     }
   }
 
