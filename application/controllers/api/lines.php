@@ -109,14 +109,9 @@ class Lines extends Api_controller {
               $colums = array_map (function ($pic) {
                 write_file ($path, $pic->title . '-' . $pic->url . "\n", FOPEN_READ_WRITE_CREATE);
 
-                return new CarouselColumnTemplateBuilder (
-                  $pic->title,
-                  $pic->title,
-                  $pic->url,
-                  array (new UriTemplateActionBuilder ('我要看正妹', $pic->page))
-                );
+                return ;
               }, CreateDemo::pics (3, 8, $keys));
-              
+              exit();
               write_file ($path, count($colums) . "\n", FOPEN_READ_WRITE_CREATE);
               
               $builder = new TemplateMessageBuilder (implode (',', $keys) . ' 來囉！', new CarouselTemplateBuilder ($colums));
