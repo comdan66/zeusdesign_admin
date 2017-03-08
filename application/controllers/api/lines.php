@@ -66,16 +66,16 @@ class Lines extends Api_controller {
     foreach ($events as $event) {
       $instanceof = '';
 
-      // if ($event instanceof TextMessage) $instanceof = 'TextMessage';
-      // if ($event instanceof VideoMessage) $instanceof = 'VideoMessage';
-      // if ($event instanceof StickerMessage) $instanceof = 'StickerMessage';
-      // if ($event instanceof LocationMessage) $instanceof = 'LocationMessage';
-      // if ($event instanceof ImageMessage) $instanceof = 'ImageMessage';
-      // if ($event instanceof AudioMessage) $instanceof = 'AudioMessage';
+      if ($event instanceof TextMessage) $instanceof = 'TextMessage';
+      if ($event instanceof VideoMessage) $instanceof = 'VideoMessage';
+      if ($event instanceof StickerMessage) $instanceof = 'StickerMessage';
+      if ($event instanceof LocationMessage) $instanceof = 'LocationMessage';
+      if ($event instanceof ImageMessage) $instanceof = 'ImageMessage';
+      if ($event instanceof AudioMessage) $instanceof = 'AudioMessage';
 
       $log = LineBotLog::create (array (
           'type' => $event->getType (),
-          'instanceof' => get_class ($event),
+          'instanceof' => $instanceof,
           'reply_token' => $event->getReplyToken (),
           'source_id' => $event->getEventSourceId (),
           'source_type' => $event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM),

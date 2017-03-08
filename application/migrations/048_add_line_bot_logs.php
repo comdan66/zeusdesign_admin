@@ -12,7 +12,7 @@ class Migration_Add_line_bot_logs extends CI_Migration {
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
         `type` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '類型',
         `reply_token` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '回覆 Token',
-        `instanceof` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '對方類型',
+        `instanceof` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '對方類型',
         
         `source_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '來源 ID',
         `source_type` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '來源類型',
