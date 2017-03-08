@@ -81,6 +81,8 @@ class Lines extends Api_controller {
           'source_id' => $event->getEventSourceId (),
           'source_type' => $event->isUserEvent() ? EventSourceType::USER : ($event->isGroupEvent () ? EventSourceType::GROUP : EventSourceType::ROOM),
           'timestamp' => $event->getTimestamp (),
+          'message_type' => $event->getMessageType (),
+          'message_id' => $event->getMessageId (),
           'status' => LinebotLog::STATUS_INIT,
         );
       if (!LinebotLog::transaction (function () use (&$linebotLog, $params) { return verifyCreateOrm ($linebotLog = LinebotLog::create ( array_intersect_key ($params, LinebotLog::table ()->columns))); })) return false;
@@ -90,15 +92,12 @@ class Lines extends Api_controller {
         case 'TextMessage':
           $params = array (
               'linebot_log_id' => $linebotLog->id,
-              'message_id' => $event->getMessageId (),
-              'message_type' => $event->getMessageType (),
-              'message_text' => $event->getText (),
+              'text' => $event->getText (),
             );
-          if (!LinebotLogMsg::transaction (function () use (&$linebotLogMsg, $params) { return verifyCreateOrm ($linebotLogMsg = LinebotLogMsg::create ( array_intersect_key ($params, LinebotLogMsg::table ()->columns))); })) return false;
+          if (!LinebotLogText::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogText::create ( array_intersect_key ($params, LinebotLogText::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
-
-          // $linebotLogMsg
+          // $linebotLogText
 
           break;
         case 'LocationMessage':

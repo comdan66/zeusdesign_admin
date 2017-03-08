@@ -14,9 +14,11 @@ class Migration_Add_linebot_logs extends CI_Migration {
         `reply_token` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '回覆 Token',
         `instanceof` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '對方類型',
         
-        `source_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '來源 ID',
         `source_type` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '來源類型',
+        `source_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '來源 ID',
         `timestamp` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '時間',
+        `message_type` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '訊息類型',
+        `message_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '訊息 ID',
         
         `status` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '狀態，1 不回應，2 獲取內容，3 符合內容，4 回應內容，5 回應成功',
 
