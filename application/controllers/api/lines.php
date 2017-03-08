@@ -83,7 +83,7 @@ class Lines extends Api_controller {
           'is_echo' => LineBotLog::NO_ECHO,
         ));
 
-      if () {
+      // if () {
 
 
         // $messageBuilder = null;
@@ -119,7 +119,7 @@ class Lines extends Api_controller {
         //   echo 'Succeeded!';
         //   return;
         // }
-      }
+      // }
     }
   }
 
