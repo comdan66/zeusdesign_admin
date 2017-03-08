@@ -202,11 +202,11 @@ class LinebotLogText extends OaModel {
     return $this->reply ($bot, $builder);
   }
   public function searchTest ($bot) {
+    write_file (FCPATH . 'temp/input.json', "~~~~~~~~~" . $this->log->source_id . "\n", FOPEN_READ_WRITE_CREATE);
     if ($this->log->source_id != 'U4a37e32a1d11b3995d2bf299597e432f') return false;
     if (!(isset ($this->text) && ($keys = LinebotLogText::regex ($pattern, $this->text)))) return false;
     $this->log->setStatus (LinebotLog::STATUS_MATCH);
     
-    write_file (FCPATH . 'temp/input.json', "~~~~~~~~~\n", FOPEN_READ_WRITE_CREATE);
     
     $builder = new TemplateMessageBuilder ('dddd', new ConfirmTemplateBuilder ('確定？', array (new MessageTemplateActionBuilder ('123', '456'), new MessageTemplateActionBuilder ('abc', 'def'))));
     // $builder = new TemplateMessageBuilder(
