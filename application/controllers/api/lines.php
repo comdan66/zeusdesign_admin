@@ -34,7 +34,7 @@ class Lines extends Api_controller {
   public function test ($str) {
             $this->load->library ('CreateDemo');
 echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump (CreateDemo::pics (3, 8, $keys = $this->searchIWant (urldecode($str))));
+var_dump (CreateDemo::pics (3, 8, $keys = $this->searchIWant (urldecode('我想看 javascript'))));
 exit ();
   }
   private function searchIWant ($str) {
@@ -110,7 +110,7 @@ exit ();
                 $pic['title'], $pic['title'], $pic['url'],
                 array (new UriTemplateActionBuilder ('我要看 ' . $keys[0], $pic['page']))
               );
-            }, CreateDemo::pics (3, 8, $keys))) {
+            }, CreateDemo::pics (3, 5, $keys))) {
 
               $builder = new TemplateMessageBuilder (implode (',', $keys) . ' 來囉！', new CarouselTemplateBuilder ($colums));
               $linebotLog->setStatus (LinebotLog::STATUS_RESPONSE);
