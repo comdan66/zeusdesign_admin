@@ -7,23 +7,15 @@
  */
 require FCPATH . 'vendor/autoload.php';
 use LINE\LINEBot;
-use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\Constant\EventSourceType;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot\Constant\HTTPHeader;
-use LINE\LINEBot\Event\MessageEvent;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\Event\MessageEvent\VideoMessage;
 use LINE\LINEBot\Event\MessageEvent\StickerMessage;
 use LINE\LINEBot\Event\MessageEvent\LocationMessage;
 use LINE\LINEBot\Event\MessageEvent\ImageMessage;
 use LINE\LINEBot\Event\MessageEvent\AudioMessage;
-use LINE\LINEBot\MessageBuilder\LocationMessageBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
-use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 
 class Lines extends Api_controller {
 
@@ -89,6 +81,16 @@ exit ();
           'status' => LinebotLog::STATUS_INIT,
         );
       if (!LinebotLog::transaction (function () use (&$linebotLog, $params) { return verifyCreateOrm ($linebotLog = LinebotLog::create ( array_intersect_key ($params, LinebotLog::table ()->columns))); })) return false;
+
+      if ($event->getType () == 'follow') {
+        // $params = array (
+        //     'source_id' => $linebotLog->source_id,
+        //     'name' => $instanceof,
+        //     'img_url' => $event->getType () == 'unfollow' ? '' : $event->getReplyToken (),
+        //     'statusMessage' => $event->getEventSourceId (),
+        //   );
+        write_file ($path, json_encode($bot->getProfile ($linebotLog->source_id)) . "\n", FOPEN_READ_WRITE_CREATE);
+      }
 
       if ($event->getType () != 'message') continue;
 
