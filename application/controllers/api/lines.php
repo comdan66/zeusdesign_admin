@@ -32,8 +32,9 @@ class Lines extends Api_controller {
     
   }
   public function test ($str) {
+            $this->load->library ('CreateDemo');
 echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-var_dump ($this->searchIWant ($str));
+var_dump (CreateDemo::pics (3, 8, $keys = $this->searchIWant (urldecode($str))));
 exit ();
   }
   private function searchIWant ($str) {
@@ -100,7 +101,7 @@ exit ();
           if (!LinebotLogText::transaction (function () use (&$linebotLogText, $params) { return verifyCreateOrm ($linebotLogText = LinebotLogText::create ( array_intersect_key ($params, LinebotLogText::table ()->columns))); })) return false;
           $linebotLog->setStatus (LinebotLog::STATUS_CONTENT);
 
-          if ($keys = $this->searchIWant ($linebotLogText->text)) {
+          if ($keys = $this->searchIWant (urldecode ($linebotLogText->text))) {
             $linebotLog->setStatus (LinebotLog::STATUS_MATCH);
           
             $this->load->library ('CreateDemo');
