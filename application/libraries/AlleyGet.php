@@ -21,7 +21,39 @@ class AlleyGet {
     );
     return $t[array_rand ($t)];
   }
-  public static function search ($lat, $lng) {
+  public static function search ($keyword) {
+    $url = "https://apialley.friday.tw/api/2.0/product/search/?keyword=" . $keyword;
+
+    $options = array (
+      CURLOPT_URL => $url,
+      CURLOPT_TIMEOUT => 120,
+      CURLOPT_HEADER => false,
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_AUTOREFERER => true,
+      CURLOPT_CONNECTTIMEOUT => 30,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_USERAGENT => self::userAgent (),
+    );
+
+    $ch = curl_init ($url);
+    curl_setopt_array ($ch, $options);
+    $data = curl_exec ($ch);
+    curl_close ($ch);
+
+    $data = json_decode ($data, true);
+    if (!(isset ($data['items']) && $data['items'])) return array ();
+    
+    return array_slice (array_map (function ($item) {
+      return array (
+          'title' => $item['productName'],
+          'desc' => $item['useRule'],
+          'img' => $item['originImage'],
+          'url' => $item['webSite'],
+        );
+    }, $data['items']), 0, 5);
+  }
+  public static function products ($lat, $lng) {
     $url = "https://apialley.friday.tw/api/2.0/product/?latitude=" . $lat . "&longitude=" . $lng;
 
     $options = array (
