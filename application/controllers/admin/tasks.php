@@ -380,7 +380,7 @@ class Tasks extends Admin_controller {
 
     $new = array ();
       foreach ($posts[$key] as $i => $post)
-        if (($file = array ('name' => $files[$key][$i]['name']['name'], 'type' => $files[$key][$i]['type']['name'], 'tmp_name' => $files[$key][$i]['tmp_name']['name'], 'error' => $files[$key][$i]['error']['name'], 'size' => $files[$key][$i]['size']['name'])) && is_upload_file_format ($file, 20 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png', 'ppt', 'pptx', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'zip')))
+        if (($file = array ('name' => $files[$key][$i]['name']['name'], 'type' => $files[$key][$i]['type']['name'], 'tmp_name' => $files[$key][$i]['tmp_name']['name'], 'error' => $files[$key][$i]['error']['name'], 'size' => $files[$key][$i]['size']['name'])) && is_upload_file_format ($file, 50 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png', 'ppt', 'pptx', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'zip')))
           array_push ($new, array ('title' => ($post['title'] = trim ($post['title'])) ? $post['title'] : $file['name'], 'file' => $file));
 
     return $new;

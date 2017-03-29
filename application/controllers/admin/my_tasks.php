@@ -161,7 +161,7 @@ class My_tasks extends Admin_controller {
     return $this->output_json ($obj->finish == Task::IS_FINISHED);
   }
   private function _validation_update (&$posts, &$file) {
-    $file = $file && is_upload_file_format ($file, 10 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png', 'ppt', 'pptx', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'zip')) ? $file : array ();
+    $file = $file && is_upload_file_format ($file, 50 * 1024 * 1024, array ('gif', 'jpeg', 'jpg', 'png', 'ppt', 'pptx', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'zip')) ? $file : array ();
     $posts['content'] = isset ($posts['content']) && is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])) ? $posts['content'] : '';
     if (!$posts['content'] && !$file) return '請輸入留言、註解 或 選擇檔案！';
     $posts['action'] = $posts['content'] && $file ? '留言與上傳附件檔' : ($posts['content'] && !$file ? '留言' : '上傳附件檔');
