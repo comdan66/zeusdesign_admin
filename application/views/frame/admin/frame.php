@@ -35,7 +35,7 @@
           <ul id='main_menu'>
       <?php if (User::current ()->in_roles (array ('member'))) { ?>
               <li>
-                <label data-role='schedule' data-cnt='<?php echo ($task_cnt = Task::count (array ('conditions' => array ('user_id = ? || (id IN (?))', User::current ()->id, ($task_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'task_id', 'conditions' => array ('user_id = ?', User::current ()->id))), 'task_id')) ? $task_ids : array (0))))) + ($schedule_cnt = Schedule::count (array ('conditions' => array ('user_id = ? AND finish = ? AND year = ? AND month = ? AND day = ?', User::current ()->id, Schedule::NO_FINISHED, date ('Y'), date ('m'), date ('d')))));?>'>
+                <label data-role='schedule' data-cnt='<?php echo ($task_cnt = Task::count (array ('conditions' => array ('finish = ? AND (user_id = ? || (id IN (?)))', Task::NO_FINISHED, User::current ()->id, ($task_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'task_id', 'conditions' => array ('user_id = ?', User::current ()->id))), 'task_id')) ? $task_ids : array (0))))) + ($schedule_cnt = Schedule::count (array ('conditions' => array ('user_id = ? AND finish = ? AND year = ? AND month = ? AND day = ?', User::current ()->id, Schedule::NO_FINISHED, date ('Y'), date ('m'), date ('d')))));?>'>
                   <input type='checkbox' />
                   <span class='icon-u'>個人管理</span>
                   <ul>
