@@ -63,7 +63,7 @@
                     <span></span>
                   </label>
           <?php } else {
-                  echo Task::$finishNames[$obj->finish];
+                  echo '<font color="' . ($obj->finish == Task::NO_FINISHED ? 'red' : '') . '">' . Task::$finishNames[$obj->finish] . '</font>';
                 } ?>
               </td>
 
