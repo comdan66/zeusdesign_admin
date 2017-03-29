@@ -35,7 +35,7 @@
           <ul id='main_menu'>
       <?php if (User::current ()->in_roles (array ('member'))) { ?>
               <li>
-                <label data-role='schedule' data-cnt='<?php echo ($schedule_cnt = Schedule::count (array ('conditions' => array ('user_id = ? AND finish = ? AND year = ? AND month = ? AND day = ?', User::current ()->id, Schedule::NO_FINISHED, date ('Y'), date ('m'), date ('d')))));?>'>
+                <label data-role='schedule' data-cnt='<?php echo ($task_cnt = Task::count (array ('conditions' => array ('user_id = ? || (id IN (?))', User::current ()->id, ($task_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'task_id', 'conditions' => array ('user_id = ?', User::current ()->id))), 'task_id')) ? $task_ids : array (0))))) + ($schedule_cnt = Schedule::count (array ('conditions' => array ('user_id = ? AND finish = ? AND year = ? AND month = ? AND day = ?', User::current ()->id, Schedule::NO_FINISHED, date ('Y'), date ('m'), date ('d')))));?>'>
                   <input type='checkbox' />
                   <span class='icon-u'>個人管理</span>
                   <ul>
@@ -43,7 +43,7 @@
                     <li><a href="<?php echo $url = base_url ('admin', 'schedule-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>行程分類</a></li>
                     <li data-role='schedule' data-cnt='<?php echo $schedule_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'calendar');?>" class='icon-calendar<?php echo $now_url == $url ? ' active' : '';?>'>我的行程</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'my-weights');?>" class='icon-balance-scale<?php echo $now_url == $url ? ' active' : '';?>'>體重記錄</a></li>
-                    <li><a href="<?php echo $url = base_url ('admin', 'my-tasks');?>" class='icon-shield<?php echo $now_url == $url ? ' active' : '';?>'>我的任務</a></li>
+                    <li data-role='task' data-cnt='<?php echo $task_cnt;?>'><a href="<?php echo $url = base_url ('admin', 'my-tasks');?>" class='icon-shield<?php echo $now_url == $url ? ' active' : '';?>'>我的任務</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'my-image-base-tags');?>" class='icon-ta<?php echo $now_url == $url ? ' active' : '';?>'>圖庫分類</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'my-image-bases');?>" class='icon-cs<?php echo $now_url == $url ? ' active' : '';?>'>我的圖庫</a></li>
                     <li><a href="<?php echo $url = base_url ('admin', 'my-salaries');?>" class='icon-moneybag<?php echo $now_url == $url ? ' active' : '';?>'>我的宙思幣</a></li>

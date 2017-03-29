@@ -51,7 +51,6 @@ class My_tasks extends Admin_controller {
     $conditions = conditions ($columns, $configs);
     $task_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'task_id', 'conditions' => array ('user_id = ?', User::current ()->id))), 'task_id');
     OaModel::addConditions ($conditions, 'user_id = ? || (id IN (?))', User::current ()->id, $task_ids ? $task_ids : array (0));
-    
 
     $limit = 10;
     $total = Task::count (array ('conditions' => $conditions));
