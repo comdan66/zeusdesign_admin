@@ -90,8 +90,8 @@
               <td class='center images'>
                 <?php if ($obj->images) { ?>
                   <?php foreach ($obj->images as $image) { ?>
-                          <figure class='_i' href='<?php echo $image->name->url ();?>'>
-                            <img src='<?php echo $image->name->url ();?>' />
+                          <figure class='_i' href='<?php echo $image->name->url ('800w');?>'>
+                            <img src='<?php echo $image->name->url ('800w');?>' />
                             <figcaption><?php echo $obj->name;?></figcaption>
                           </figure>
                   <?php }?>
