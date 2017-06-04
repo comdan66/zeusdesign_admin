@@ -67,6 +67,9 @@ class User extends OaModel {
     if (self::$current !== '') return self::$current;
     return self::$current = ($id = Session::getData ('user_id')) ? User::find_by_id ($id) : null;
   }
+  public static function setCurrent ($user) {
+    return self::$current = $user;
+  }
   public function is_root () {
     return $this->roles && in_array ('root', column_array ($this->roles, 'name'));
   }

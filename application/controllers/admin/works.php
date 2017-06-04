@@ -99,7 +99,7 @@ class Works extends Admin_controller {
 
     if ($posts['tag_ids'])
       foreach ($posts['tag_ids'] as $tag_id)
-        WorkTagMapping::transaction (function () use ($tag_id, $obj) { return verifyCreateOrm (WorkTagMapping::create (array_intersect_key (array ('article_tag_id' => $tag_id, 'article_id' => $obj->id), WorkTagMapping::table ()->columns))); });
+        WorkTagMapping::transaction (function () use ($tag_id, $obj) { return verifyCreateOrm (WorkTagMapping::create (array_intersect_key (array ('work_tag_id' => $tag_id, 'work_id' => $obj->id), WorkTagMapping::table ()->columns))); });
 
     if ($posts['blocks'])
       foreach ($posts['blocks'] as $block)

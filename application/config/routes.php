@@ -93,6 +93,9 @@ Route::group ('api', function () {
   
   Route::resource (array ('demos'), 'demos');
 });
+Route::group ('app', function () {
+  Route::resource (array ('schedules'), 'schedules');
+});
 // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
 // print_r (Route::getRoute ());
 // exit ();
