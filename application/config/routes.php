@@ -9,4 +9,11 @@ Route::get ('admin', 'admin/main@index');
 
 Route::group ('admin', function () {
   Route::resourcePagination (array ('banners'), 'banners');
+  Route::resourcePagination (array ('promos'), 'promos');
+  Route::resourcePagination (array ('contacts'), 'contacts');
+});
+
+Route::group ('api', function () {
+  Route::get ('/pv/(:any)/(:id)', 'pv@index($1, $2)');
+  Route::post ('/contacts', 'contacts@create');
 });

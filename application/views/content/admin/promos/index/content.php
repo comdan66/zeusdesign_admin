@@ -72,7 +72,7 @@
             </label>
           </td>
           <td class='center'>
-            <div class='img _ic'><img src='<?php echo $obj->cover->url ('800w');?>' /></div>
+            <div class='img _ic'><img src='<?php echo $obj->cover->url ('500w');?>' /></div>
           </td>
           <td><?php echo $obj->mini_title (20);?></td>
           <td><?php echo $obj->mini_content (50);?></td>
