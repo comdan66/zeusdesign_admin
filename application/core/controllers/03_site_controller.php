@@ -38,9 +38,9 @@ class Site_controller extends Oa_controller {
   }
 
   private function _add_js () {
-    return $this->add_js (base_url ('res', 'javascript', 'jquery_v1.10.2', 'jquery-1.10.2.min.js'))
-                ->add_js (base_url ('res', 'javascript', 'jquery-rails_d2015_03_09', 'jquery_ujs.js'))
-                ->add_js (base_url ('res', 'javascript', 'imgLiquid_v0.9.944', 'imgLiquid-min.js'))
+    return $this->add_js (base_url ('res', 'js', 'jquery_v1.10.2', 'jquery-1.10.2.min.js'))
+                ->add_js (base_url ('res', 'js', 'jquery-rails_d2015_03_09', 'jquery_ujs.js'))
+                ->add_js (base_url ('res', 'js', 'imgLiquid_v0.9.944', 'imgLiquid-min.js'))
                 ;
   }
 }

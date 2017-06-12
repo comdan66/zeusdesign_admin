@@ -46,14 +46,14 @@ class Admin_controller extends Oa_controller {
   }
 
   private function _add_js () {
-    return $this->add_js (res_url ('res', 'javascript', 'jquery_v1.10.2', 'jquery-1.10.2.min.js'))
-                ->add_js (res_url ('res', 'javascript', 'jquery-rails_d2015_03_09', 'jquery_ujs.js'))
-                ->add_js (res_url ('res', 'javascript', 'jquery_ui_v1.12.0', 'jquery_ui_v1.12.0.js'))
-                ->add_js (res_url ('res', 'javascript', 'jquery-timeago_v1.3.1', 'oas.js'))
-                ->add_js (res_url ('res', 'javascript', 'imgLiquid_v0.9.944', 'imgLiquid-min.js'))
-                ->add_js (res_url ('res', 'javascript', 'ckeditor_d2015_05_18', 'ckeditor.js'), false)
-                ->add_js (res_url ('res', 'javascript', 'ckeditor_d2015_05_18', 'config.js'), false)
-                ->add_js (res_url ('res', 'javascript', 'ckeditor_d2015_05_18', 'adapters', 'jquery.js'), false)
+    return $this->add_js (res_url ('res', 'js', 'jquery_v1.10.2', 'jquery-1.10.2.min.js'))
+                ->add_js (res_url ('res', 'js', 'jquery-rails_d2015_03_09', 'jquery_ujs.js'))
+                ->add_js (res_url ('res', 'js', 'jquery_ui_v1.12.0', 'jquery_ui_v1.12.0.js'))
+                ->add_js (res_url ('res', 'js', 'jquery-timeago_v1.3.1', 'oas.js'))
+                ->add_js (res_url ('res', 'js', 'imgLiquid_v0.9.944', 'imgLiquid-min.js'))
+                ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'ckeditor.js'), false)
+                ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'config.js'), false)
+                ->add_js (res_url ('res', 'js', 'ckeditor_d2015_05_18', 'adapters', 'jquery.js'), false)
                 ;
   }
 }
