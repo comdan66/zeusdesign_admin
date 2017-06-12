@@ -40,7 +40,7 @@ gulp.task ('watch', function () {
     console.log ('\n ' + colors.red ('•') + colors.cyan (' [啟動] ') + '已經啟動監聽 .php、.css、js 檔案。');
   }, 1 * 1000);
 
-  var watcherAdminStyle = chokidar.watch ('./root/resource/font/admin/style.css', {
+  var watcherAdminStyle = chokidar.watch ('./root/res/font/admin/style.css', {
     ignored: /(^|[\/\\])\../,
     persistent: true
   });
@@ -48,7 +48,7 @@ gulp.task ('watch', function () {
   watcherAdminStyle.on ('add', function (path) { gulp.start ('update_admin_font_icon'); })
                    .on ('change', function (path) { gulp.start ('update_admin_font_icon'); });
               
-  var watcherSiteStyle = chokidar.watch ('./root/resource/font/site/style.css', {
+  var watcherSiteStyle = chokidar.watch ('./root/res/font/site/style.css', {
     ignored: /(^|[\/\\])\../,
     persistent: true
   });
@@ -62,7 +62,7 @@ gulp.task ('watch', function () {
 
 gulp.task ('update_admin_font_icon', function () {
 
-  read ('./root/resource/font/admin/style.css', 'utf8', function (err, buffer) {
+  read ('./root/res/font/admin/style.css', 'utf8', function (err, buffer) {
     var t = buffer.match (/\.icon-[a-zA-Z_\-0-9]*:before\s?\{\s*content:\s*"[\\A-Za-z0-9]*";\s*}/g);
       if (!(t && t.length)) return;
 
@@ -74,7 +74,7 @@ gulp.task ('update_admin_font_icon', function () {
 });
 gulp.task ('update_site_font_icon', function () {
 
-  read ('./root/resource/font/site/style.css', 'utf8', function (err, buffer) {
+  read ('./root/res/font/site/style.css', 'utf8', function (err, buffer) {
     var t = buffer.match (/\.icon-[a-zA-Z_\-0-9]*:before\s?\{\s*content:\s*"[\\A-Za-z0-9]*";\s*}/g);
       if (!(t && t.length)) return;
 

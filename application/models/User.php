@@ -47,10 +47,10 @@ class User extends OaModel {
   public function role_names () {
     return array_filter (array_map (function ($role) { return Cfg::setting ('role', 'role_names', $role); }, column_array ($this->roles, 'name')));
   }
-  // public function facebook_link () {
-  //   if (!isset ($this->fid)) return '';
-  //   return 'https://www.facebook.com/' . $this->fid;
-  // }
+  public function facebook_link () {
+    if (!isset ($this->fid)) return '';
+    return 'https://www.facebook.com/' . $this->fid;
+  }
   public function avatar ($w = 100, $h = 100) {
     if ($this->fid) {
       $size = array ();
@@ -58,6 +58,6 @@ class User extends OaModel {
       return 'https://graph.facebook.com/' . $this->fid . '/picture' . (($size = implode ('&', array_filter ($size))) ? '?' . $size : '');
     }
 
-    return res_url ('resource', 'image', 'avatar.png');
+    return res_url ('res', 'image', 'avatar.png');
   }
 }

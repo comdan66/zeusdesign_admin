@@ -6,6 +6,17 @@
  * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
+if (!function_exists ('utf8_strrev')) {
+  function utf8_strrev ($str){
+    preg_match_all ('/./us', $str, $ar);
+    return implode ('', array_reverse ($ar[0]));
+  }
+}
+if (!function_exists ('mini_link')) {
+  function mini_link ($url, $maxLength = 0, $attributes = 'target="_blank"') {
+    return '<a href="' . $url . '" title="' . $url . '"' . ($attributes ? ' ' . $attributes : '') . '>' . ($maxLength > 0 && $maxLength < mb_strlen ($url) / 2 ? mb_strimwidth ($url, 0, $maxLength / 2, '','UTF-8') . '…'. utf8_strrev (mb_strimwidth (utf8_strrev ($url), 0, $maxLength / 2, '','UTF-8')) : $url) . '</a>';
+  }
+}
 if (!function_exists ('is_upload_image_format')) {
   function is_upload_image_format ($file, $types = array (), $check_size = 10485760) { // 10 * 1024 * 1024
     if (!(isset ($file['name']) && isset ($file['type']) && isset ($file['tmp_name']) && isset ($file['error']) && isset ($file['size'])))

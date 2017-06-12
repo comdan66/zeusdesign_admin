@@ -32,7 +32,7 @@ class Platform extends Site_controller {
         'fid' => $fid,
         'account' => '',
         'password' => '',
-        'token' => token ($id),
+        'token' => token ($fid),
         'name' => $name,
         'email' => $email,
         ), User::table ()->columns))); }))

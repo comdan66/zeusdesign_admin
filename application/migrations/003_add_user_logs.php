@@ -6,13 +6,20 @@
  * @link        http://www.ioa.tw/
  */
 
-class Migration_Add_user_roles extends CI_Migration {
+class Migration_Add_user_logs extends CI_Migration {
   public function up () {
     $this->db->query (
-      "CREATE TABLE `user_roles` (
+      "CREATE TABLE `user_logs` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
         `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'User ID(作者)',
-        `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '名稱',
+
+        `icon` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '圖示',
+        `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
+        `desc` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '內容',
+        
+        `backup` text NOT NULL COMMENT '備份 json',
+        `status` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '記錄動作，0 未知，1 讀，2 寫',
+
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',
         PRIMARY KEY (`id`)
@@ -21,7 +28,7 @@ class Migration_Add_user_roles extends CI_Migration {
   }
   public function down () {
     $this->db->query (
-      "DROP TABLE `user_roles`;"
+      "DROP TABLE `user_logs`;"
     );
   }
 }

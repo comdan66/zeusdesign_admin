@@ -18,10 +18,8 @@
 
     <header id='header'>
       <div class='logo'>
-        <span>
-          <i class='icon-grin'></i>
-        </span>
-        <span>主標題 - 管理後台</span>
+        <span><img src='<?php echo res_url('res', 'image', 'login_logo.png');?>'></span>
+        <span>宙思管理系統</span>
       </div>
       <div class='midle'>
         <label class='icon-menu' for='menu_ckb'></label>
@@ -44,27 +42,47 @@
 
     <div id='menu'>
       <header>
-        <span class='icon-amused-face-closed-eyes'></span>
-        <span>主標題</span>
+        <span>宙思</span>
+        <span>管理系統</span>
       </header>
 
       <div class='group'>
-        <span class='icon-home'>後台</span>
+        <span class='icon-u'>個人管理</span>
         <div>
-          <a class='icon-home' href='user.html'>個人頁面</a>
-          <a class='icon-home' href='user.html'>系統通知</a>
+          <a class='icon-home' href=''>個人頁面</a>
+          <a class='icon-calendar2' href='user.html'>我的行事曆</a>
+          <a class='icon-shield' href='user.html'>我的任務</a>
+          <a class='icon-moneybag' href='user.html'>我的宙思幣</a>
         </div>
       </div>
 
       <div class='group'>
-        <span class='icon-file-text2'>文章系統</span>
+        <span class='icon-ea'>官網管理</span>
         <div>
-          <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'article_tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>文章分類</a>
-          <a class='icon-file-text2<?php echo ($url = base_url ('admin', 'articles')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>' href='user.html'>文章列表</a>
+          <a class='icon-im<?php echo ($url = base_url ('admin', 'banners')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>旗幟管理</a>
+          <a class='icon-im<?php echo ($url = base_url ('admin', 'promos')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>促銷管理</a>
+          <a class='icon-em<?php echo ($url = base_url ('admin', 'contacts')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>聯絡宙思</a>
+          <a class='icon-loop2<?php echo ($url = base_url ('admin', 'deploys')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>部署紀錄</a>
         </div>
       </div>
 
-      <footer>© 2017 oaci.tw</footer>
+      <div class='group'>
+        <span class='icon-file-text2'>文章管理</span>
+        <div>
+          <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'article_tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>文章分類</a>
+          <a class='icon-list<?php echo ($url = base_url ('admin', 'articles')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>' href='user.html'>文章列表</a>
+        </div>
+      </div>
+
+      <div class='group'>
+        <span class='icon-g'>作品管理</span>
+        <div>
+          <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'article_tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>作品分類</a>
+          <a class='icon-list<?php echo ($url = base_url ('admin', 'articles')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>' href='user.html'>作品列表</a>
+        </div>
+      </div>
+
+      <footer>© <?php echo date ('Y');?> zeusdesign.com.tw</footer>
     </div><label class='icon-cross' for='menu_ckb'></label>
 
     <div id='user'>
@@ -78,6 +96,10 @@
     </div><label for='user_ckb'></label>
 
     <div id='tip_texts'></div>
+
+    <div id='loading'>
+      <div><span>請稍後..</span></div>
+    </div>
 
   </body>
 </html>

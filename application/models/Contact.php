@@ -1,14 +1,14 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined ('BASEPATH') OR exit ('No direct script access allowed');
 
 /**
  * @author      OA Wu <comdan66@gmail.com>
- * @copyright   Copyright (c) 2017 OA Wu Design
- * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
+ * @copyright   Copyright (c) 2016 OA Wu Design
+ * @link        http://www.ioa.tw/
  */
 
-class UserRole extends OaModel {
+class Contact extends OaModel {
 
-  static $table_name = 'user_roles';
+  static $table_name = 'contacts';
 
   static $has_one = array (
   );
@@ -19,20 +19,32 @@ class UserRole extends OaModel {
   static $belongs_to = array (
   );
 
+  const STATUS_1 = 1;
+  const STATUS_2 = 2;
+
+  static $statusNames = array (
+    self::STATUS_1 => '未讀',
+    self::STATUS_2 => '已讀',
+  );
+
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
-  }
-  public function name () {
-    return Cfg::setting ('role', 'role_names', $this->name);
   }
   public function destroy () {
     return $this->delete ();
   }
+  public function mini_message ($length = 100) {
+    if (!isset ($this->message)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->message), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->message);
+  }
   public function backup ($has = false) {
     $var = array (
       'id'         => $this->id,
-      'user_id'    => $this->user_id,
       'name'       => $this->name,
+      'email'      => $this->email,
+      'message'    => $this->message,
+      'ip'         => $this->ip,
+      'status'     => $this->status,
       'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );

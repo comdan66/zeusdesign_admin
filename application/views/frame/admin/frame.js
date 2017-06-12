@@ -8,6 +8,7 @@ function IsJsonString (str) { try { return JSON.parse (str); } catch (e) { retur
 
 $(function () {
   var $tipTexts = $('#tip_texts');
+  var $loading = $('#loading');
   $('._ic').imgLiquid ({verticalAlign: 'center'});
   $('time[datetime]').timeago ();
 
@@ -120,6 +121,7 @@ $(function () {
     var $t = $('<div />').append (
       $('<span />').text (obj.title)).append (
       $('<span />').text (obj.message)).append (
+      typeof obj.error !== 'undefined' ? $('<span />').html ('※ 錯誤原因如下，您可以截圖給工程人員。').add ($('<div />').text (obj.error)) : null).append (
       $a);
     setTimeout (function () { $a.click (); }, 5500);
     return $tipTexts.prepend ($t.fadeIn ());
@@ -137,9 +139,11 @@ $(function () {
         $that.removeClass ('loading');
         $(this).prop ('checked', result);
       }.bind ($(this)), function (result) {
+
         $that.removeClass ('loading');
         $(this).prop ('checked', !data[column]);
-        if ((result = IsJsonString (result.responseText)) !== null) tipText ({title: '設定錯誤！', message: result.message});
+        if ((t = IsJsonString (result.responseText)) !== null) tipText ({title: '設定錯誤！', message: t.message});
+        else tipText ({title: '設定錯誤！', message: '※ 不明原因錯誤，請重新整理網頁確認。', error: result.responseText});
       }.bind ($(this)));
       
     });
@@ -150,4 +154,33 @@ $(function () {
     if (!confirm (title)) return false;
     else return true;
   });
+
+  $('form.form-type2 .sorts').sortable ({
+    items: 'div.sort',
+    placeholder: 'sort_highlight',
+    update: function () {
+      $(this).find ('.sort').each (function (i) {
+        $(this).attr ('data-i', i + 1);
+      });
+    }
+  });
+
+  function showLoading (str) {
+    return setTimeout (function () {
+      $loading.addClass ('s').find ('span').text (typeof str === 'undefined' ? '請稍候..' : str);
+    }, 300);
+  }
+
+  $('form.loading[method="post"]').submit (function () {
+    if ($(this).data ('is_submit') === true) return false;
+    $(this).data ('is_submit', true);
+
+    var $m = $(this).find ('input[type="hidden"][name="_method"]');
+
+    return showLoading (($m.length && $m.val () == 'put' ? '更新中，' : '新增中，') + '請稍候..');
+  });
+
+  // $('.search label[for="search_conditions"][class="cancel"]').click (function () {
+    
+  // });
 });

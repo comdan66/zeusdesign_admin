@@ -1,11 +1,11 @@
 <div id='box'>
   <header>
     <div class='avatar'>
-      <img src='<?php echo res_url('resource', 'image', 'logo', '2.png');?>' />
+      <img src='<?php echo res_url('res', 'image', 'login_logo.png');?>' />
     </div>
     <div class='title'>
-      <h1>登入標題</h1>
-      <p>副標題</p>
+      <h1>宙思管理系統</h1>
+      <p>Hello 宙思的小夥伴們快進來賺錢囉！</p>
     </div>
   </header>
   
@@ -21,5 +21,5 @@
     <button type='submit'>使用帳密登入</button>
   </form>
 
-  <footer>© 2017 oaci.tw</footer>
+  <footer>© <?php echo date ('Y');?> zeusdesign.com.tw</footer>
 </div>
