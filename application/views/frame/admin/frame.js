@@ -127,6 +127,11 @@ $(function () {
     return $tipTexts.prepend ($t.fadeIn ());
   }
 
+  function updateCounter (key, result) {
+    if (typeof key === 'undefined') return;
+    $('*[data-cntrole*="' + key + '"]').each (function () { $(this).attr ('data-cnt', (result ? -1 : 1) + parseInt ($(this).attr ('data-cnt'), 10)); });
+  }
+
   $('.table-list .switch.ajax[data-column][data-url]').each (function () {
     var $that = $(this), column = $that.data ('column'), url = $that.data ('url'), $inp = $that.find ('input[type="checkbox"]');
 
@@ -135,17 +140,18 @@ $(function () {
       data[column] = $(this).prop ('checked') ? 1 : 0;
 
       $that.addClass ('loading');
+      
       ajaxSetVal (url, data, function (result) {
         $that.removeClass ('loading');
         $(this).prop ('checked', result);
-      }.bind ($(this)), function (result) {
+        updateCounter ($that.data ('forcntrole'), result);
 
+      }.bind ($(this)), function (result) {
         $that.removeClass ('loading');
         $(this).prop ('checked', !data[column]);
         if ((t = IsJsonString (result.responseText)) !== null) tipText ({title: '設定錯誤！', message: t.message});
         else tipText ({title: '設定錯誤！', message: '※ 不明原因錯誤，請重新整理網頁確認。', error: result.responseText});
       }.bind ($(this)));
-      
     });
   });
 
@@ -180,7 +186,5 @@ $(function () {
     return showLoading (($m.length && $m.val () == 'put' ? '更新中，' : '新增中，') + '請稍候..');
   });
 
-  // $('.search label[for="search_conditions"][class="cancel"]').click (function () {
-    
-  // });
+
 });

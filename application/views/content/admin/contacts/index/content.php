@@ -62,7 +62,7 @@
         <tr>
           <td><?php echo $obj->id;?></td>
           <td class='center'>
-            <label class='switch ajax' data-column='status' data-url='<?php echo base_url ($uri_1, 'status', $obj->id);?>'>
+            <label class='switch ajax' data-forcntrole='contact' data-column='status' data-url='<?php echo base_url ($uri_1, 'status', $obj->id);?>'>
               <input type='checkbox'<?php echo $obj->status == Contact::STATUS_2 ? ' checked' : '';?> />
               <span></span>
             </label>

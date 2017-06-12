@@ -57,11 +57,11 @@
       </div>
 
       <div class='group'>
-        <span class='icon-ea'>官網管理</span>
+        <span class='icon-ea' data-cntrole='contact' data-cnt='<?php echo ($contact_cnt = Contact::count (array ('conditions' => array ('status = ?', Contact::STATUS_1))));?>'>官網管理</span>
         <div>
           <a class='icon-im<?php echo ($url = base_url ('admin', 'banners')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>旗幟管理</a>
           <a class='icon-im<?php echo ($url = base_url ('admin', 'promos')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>促銷管理</a>
-          <a class='icon-em<?php echo ($url = base_url ('admin', 'contacts')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>聯絡宙思</a>
+          <a data-cntrole='contact' data-cnt='<?php echo $contact_cnt;?>' class='icon-em<?php echo ($url = base_url ('admin', 'contacts')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>聯絡宙思</a>
           <a class='icon-loop2<?php echo ($url = base_url ('admin', 'deploys')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>部署紀錄</a>
         </div>
       </div>
