@@ -74,10 +74,7 @@ class Contacts extends Admin_controller {
   }
 
   public function show () {
-    UserLog::logRead (
-      $this->icon,
-      '檢視了一項' . $this->title
-      );
+    UserLog::logRead ($this->icon, '檢視了一項' . $this->title);
 
     return $this->load_view (array (
         'obj' => $this->obj,

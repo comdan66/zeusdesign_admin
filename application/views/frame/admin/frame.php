@@ -69,7 +69,7 @@
       <div class='group'>
         <span class='icon-file-text2'>文章管理</span>
         <div>
-          <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'article_tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>文章分類</a>
+          <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'article-tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>文章分類</a>
           <a class='icon-list<?php echo ($url = base_url ('admin', 'articles')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>' href='user.html'>文章列表</a>
         </div>
       </div>
@@ -77,8 +77,8 @@
       <div class='group'>
         <span class='icon-g'>作品管理</span>
         <div>
-          <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'article_tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>作品分類</a>
-          <a class='icon-list<?php echo ($url = base_url ('admin', 'articles')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>' href='user.html'>作品列表</a>
+          <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'work-tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>作品分類</a>
+          <a class='icon-list<?php echo ($url = base_url ('admin', 'works')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>' href='user.html'>作品列表</a>
         </div>
       </div>
 

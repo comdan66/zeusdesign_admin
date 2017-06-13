@@ -13,7 +13,7 @@ class Migration_Add_user_logs extends CI_Migration {
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
         `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'User ID(作者)',
 
-        `icon` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '圖示',
+        `icon` varchar(25) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '圖示',
         `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
         `desc` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '內容',
         
