@@ -70,8 +70,8 @@ class Route {
 		self::get ($prefix . implode ('/(:id)/', $uris) . '/(:id)' .  '/show', $prefix . $controller . '@show($1' . ($c > 1 ? ', ' . implode (', ', array_map (function ($a) { return '$' . $a; }, range (2, $c))) : '') . ')');
 		
 		// self::post ($prefix . implode ('/(:id)/', $uris) . '/(:id)' .  '/sort/(:any)', $prefix . $controller . '@sort($1' . (', ' . implode (', ', array_map (function ($a) { return '$' . $a; }, range (2, $c + 1)))) . ')');
-		self::get ($prefix . implode ('/(:id)/', $uris) . '/sort', $prefix . $controller . '@sort(' . ($c > 1 ? ', ' . implode (', ', array_map (function ($a) { return '$' . $a; }, range (2, $c))) : '') . ')');
-		self::put ($prefix . implode ('/(:id)/', $uris) . '/sort', $prefix . $controller . '@sort_update(' . ($c > 1 ? ', ' . implode (', ', array_map (function ($a) { return '$' . $a; }, range (2, $c))) : '') . ')');
+		self::get ($prefix . implode ('/(:id)/', $uris) . '/sort', $prefix . $controller . '@sort($1' . ($c > 1 ? ', ' . implode (', ', array_map (function ($a) { return '$' . $a; }, range (2, $c))) : '') . ')');
+		self::put ($prefix . implode ('/(:id)/', $uris) . '/sort', $prefix . $controller . '@sort_update($1' . ($c > 1 ? ', ' . implode (', ', array_map (function ($a) { return '$' . $a; }, range (2, $c))) : '') . ')');
 	}
 
 	public static function group ($prefix, $callback) {
