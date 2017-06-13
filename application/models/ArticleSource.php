@@ -6,9 +6,9 @@
  * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
-class Contact extends OaModel {
+class ArticleSource extends OaModel {
 
-  static $table_name = 'contacts';
+  static $table_name = 'article_sources';
 
   static $has_one = array (
   );
@@ -19,32 +19,19 @@ class Contact extends OaModel {
   static $belongs_to = array (
   );
 
-  const STATUS_1 = 1;
-  const STATUS_2 = 2;
-
-  static $statusNames = array (
-    self::STATUS_1 => '未讀',
-    self::STATUS_2 => '已讀',
-  );
-
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
   public function destroy () {
     return $this->delete ();
   }
-  public function mini_message ($length = 100) {
-    if (!isset ($this->message)) return '';
-    return $length ? mb_strimwidth (remove_ckedit_tag ($this->message), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->message);
-  }
   public function backup ($has = false) {
     $var = array (
       'id'         => $this->id,
-      'name'       => $this->name,
-      'email'      => $this->email,
-      'message'    => $this->message,
-      'ip'         => $this->ip,
-      'status'     => $this->status,
+      'article_id' => $this->article_id,
+      'title'      => $this->title,
+      'href'       => $this->href,
+      'sort'       => $this->sort,
       'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );

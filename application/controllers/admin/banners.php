@@ -236,27 +236,27 @@ class Banners extends Admin_controller {
   private function _validation_create (&$posts, &$cover) {
     if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && in_array ($posts['status'], array_keys (Banner::$statusNames)))) $posts['status'] = Banner::STATUS_1;
     
-    if (!(isset ($cover) && is_upload_image_format ($cover, array ('gif', 'jpeg', 'jpg', 'png')))) return '「' . $this->title . '封面」發生錯誤！';
+    if (!(isset ($cover) && is_upload_image_format ($cover, array ('gif', 'jpeg', 'jpg', 'png')))) return '「' . $this->title . '封面」格式錯誤！';
 
-    if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「' . $this->title . '標題」發生錯誤！';
-    if (!(isset ($posts['content']) && is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '「' . $this->title . '內容」發生錯誤！';
-    if (!(isset ($posts['link']) && is_string ($posts['link']) && ($posts['link'] = trim ($posts['link'])))) return '「' . $this->title . '鏈結」發生錯誤！';
+    if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「' . $this->title . '標題」格式錯誤！';
+    if (!(isset ($posts['content']) && is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '「' . $this->title . '內容」格式錯誤！';
+    if (!(isset ($posts['link']) && is_string ($posts['link']) && ($posts['link'] = trim ($posts['link'])))) return '「' . $this->title . '鏈結」格式錯誤！';
 
-    if (!(isset ($posts['target']) && is_string ($posts['target']) && is_numeric ($posts['target'] = trim ($posts['target'])) && in_array ($posts['target'], array_keys (Banner::$targetNames)))) return '「鏈結開啟方式」發生錯誤！';
+    if (!(isset ($posts['target']) && is_string ($posts['target']) && is_numeric ($posts['target'] = trim ($posts['target'])) && in_array ($posts['target'], array_keys (Banner::$targetNames)))) return '「鏈結開啟方式」格式錯誤！';
 
     return '';
   }
   private function _validation_update (&$posts, &$cover, $obj) {
     if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && in_array ($posts['status'], array_keys (Banner::$statusNames)))) $posts['status'] = Banner::STATUS_1;
     
-    if (!((string)$obj->cover || isset ($cover))) return '「' . $this->title . '封面」發生錯誤！';
-    if (isset ($cover) && !(is_upload_image_format ($cover, array ('gif', 'jpeg', 'jpg', 'png')))) return '「' . $this->title . '封面」發生錯誤！';
+    if (!((string)$obj->cover || isset ($cover))) return '「' . $this->title . '封面」格式錯誤！';
+    if (isset ($cover) && !(is_upload_image_format ($cover, array ('gif', 'jpeg', 'jpg', 'png')))) return '「' . $this->title . '封面」格式錯誤！';
 
-    if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「' . $this->title . '標題」發生錯誤！';
-    if (!(isset ($posts['content']) && is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '「' . $this->title . '內容」發生錯誤！';
-    if (!(isset ($posts['link']) && is_string ($posts['link']) && ($posts['link'] = trim ($posts['link'])))) return '「' . $this->title . '鏈結」發生錯誤！';
+    if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「' . $this->title . '標題」格式錯誤！';
+    if (!(isset ($posts['content']) && is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '「' . $this->title . '內容」格式錯誤！';
+    if (!(isset ($posts['link']) && is_string ($posts['link']) && ($posts['link'] = trim ($posts['link'])))) return '「' . $this->title . '鏈結」格式錯誤！';
 
-    if (!(isset ($posts['target']) && is_string ($posts['target']) && is_numeric ($posts['target'] = trim ($posts['target'])) && in_array ($posts['target'], array_keys (Banner::$targetNames)))) return '「鏈結開啟方式」發生錯誤！';
+    if (!(isset ($posts['target']) && is_string ($posts['target']) && is_numeric ($posts['target'] = trim ($posts['target'])) && in_array ($posts['target'], array_keys (Banner::$targetNames)))) return '「鏈結開啟方式」格式錯誤！';
 
     return '';
   }

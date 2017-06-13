@@ -1,9 +1,9 @@
-<?php defined ('BASEPATH') OR exit ('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * @author      OA Wu <comdan66@gmail.com>
- * @copyright   Copyright (c) 2016 OA Wu Design
- * @link        http://www.ioa.tw/
+ * @copyright   Copyright (c) 2017 OA Wu Design
+ * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
 class Banner extends OaModel {
@@ -58,21 +58,6 @@ class Banner extends OaModel {
     return $this->delete ();
   }
 
-  public function to_api (array $opt = array ()) {
-    return array (
-        'id'      => $this->id,
-        'title'   => $this->title,
-        'content' => $this->content,
-        'link'    => $this->link,
-        'sort'    => $this->sort,
-        'target'  => $this->target,
-        'status'  => $this->status,
-        'cover'   => array (
-            'ori' => $this->cover->url (),
-            'w800' => $this->cover->url ('800w'),
-          ),
-      );
-  }
   public function backup ($has = false) {
     $var = array (
       'id'         => $this->id,
