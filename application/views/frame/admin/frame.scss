@@ -431,6 +431,7 @@ html {
         + div {
           border-top: 1px solid rgba(146, 149, 153, .200);
           border-bottom: 1px solid rgba(146, 149, 153, .200);
+          padding-top: 5px;
           @include opacity(1);
 
           @for $i from 1 through 10 {

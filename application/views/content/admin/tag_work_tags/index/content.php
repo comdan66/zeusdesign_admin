@@ -1,5 +1,9 @@
 <h1<?php echo isset ($icon) && $icon ? ' class="' . $icon . '"' : '';?>><?php echo $title;?>列表</h1>
 
+<div class='panel back'>
+  <a class='icon-keyboard_arrow_left' href='<?php echo $_url;?>'>上層表頁</a>
+</div>
+
 <div class='search'>
   <input type='checkbox' id='search_conditions' class='hckb'<?php echo $isSearch = array_filter (column_array ($searches, 'value'), function ($t) { return $t !== null; }) ? ' checked' : '';?> />
   
@@ -9,7 +13,8 @@
   </div>
 
   <div class='right'>
-    <a class='icon-r' href='<?php echo base_url ($uri_1, 'add');?>'>新增</a>
+    <a class='icon-r' href='<?php echo base_url ($uri_1, $parent->id, $uri_2, 'add');?>'>新增</a>
+    <a class='icon-d' href='<?php echo base_url ($uri_1, $parent->id, $uri_2, 'sort');?>'>排序</a>
   </div>
 
   <form class='conditions'>
@@ -41,7 +46,7 @@
 
     <div class='btns'>
       <button type='submit'>搜尋</button>
-      <a href='<?php echo base_url ($uri_1);?>'>取消</a>
+      <a href='<?php echo base_url ($uri_1, $parent->id, $uri_2);?>'>取消</a>
     </div>
 
   </form>
@@ -51,8 +56,8 @@
   <table class='table-list'>
     <thead>
       <tr>
-        <th width='70'>#<?php echo listSort ($uri_1, 'id');?></th>
-        <th >名稱<?php echo listSort ($uri_1, 'name');?></th>
+        <th width='70'>#<?php echo listSort (array ($uri_1, $parent->id, $uri_2), 'id');?></th>
+        <th >名稱<?php echo listSort (array ($uri_1, $parent->id, $uri_2), 'name');?></th>
         <th width='70'>編輯</th>
       </tr>
     </thead>
@@ -62,9 +67,9 @@
           <td><?php echo $obj->id;?></td>
           <td><?php echo $obj->name;?></td>
           <td>
-            <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
+            <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id, 'edit');?>"></a>
             /
-            <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
+            <a class='icon-bin' href="<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id);?>" data-method='delete'></a>
           </td>
         </tr>
 <?php } ?>

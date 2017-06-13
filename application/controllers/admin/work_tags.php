@@ -1,3 +1,4 @@
+
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
@@ -6,7 +7,7 @@
  * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
-class Article_tags extends Admin_controller {
+class Work_tags extends Admin_controller {
   private $uri_1 = null;
   private $obj = null;
   private $icon = null;
@@ -15,15 +16,15 @@ class Article_tags extends Admin_controller {
   public function __construct () {
     parent::__construct ();
     
-    if (!User::current ()->in_roles (array ('article')))
+    if (!User::current ()->in_roles (array ('work')))
       return redirect_message (array ('admin'), array ('_fd' => '您的權限不足，或者頁面不存在。'));
     
-    $this->uri_1 = 'admin/article-tags';
+    $this->uri_1 = 'admin/work-tags';
     $this->icon = 'icon-price-tags';
-    $this->title = '文章分類';
+    $this->title = '作品分類';
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
-      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = ArticleTag::find ('one', array ('conditions' => array ('id = ?', $id))))))
+      if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = WorkTag::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array ('_fd' => '找不到該筆資料。'));
 
     $this->add_param ('uri_1', $this->uri_1)
@@ -38,7 +39,10 @@ class Article_tags extends Admin_controller {
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
-    $objs = conditions ($searches, $configs, $offset, 'ArticleTag', array ('order' => 'id DESC'));
+    $objs = conditions ($searches, $configs, $offset, 'WorkTag', array ('order' => 'sort DESC, id DESC', 'include' => array ('tags')), function ($conditions) {
+      OaModel::addConditions ($conditions, 'work_tag_id = ?', 0);
+      return $conditions;
+    });
 
     UserLog::logRead (
       $this->icon,
@@ -65,9 +69,11 @@ class Article_tags extends Admin_controller {
       return redirect_message (array ($this->uri_1, 'add'), array ('_fd' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
+    $posts['work_tag_id'] = 0;
+    $posts['sort'] = (($posts['sort'] = WorkTag::first (array ('select' => 'sort', 'order' => 'sort DESC', 'conditions' => array ('work_tag_id = ?', 0)))) ? $posts['sort']->sort : 0) + 1;
 
-    if (($msg = $this->_validation_create ($posts)) || (!ArticleTag::transaction (function () use (&$obj, $posts) {
-      return verifyCreateOrm ($obj = ArticleTag::create (array_intersect_key ($posts, ArticleTag::table ()->columns)));
+    if (($msg = $this->_validation_create ($posts)) || (!WorkTag::transaction (function () use (&$obj, $posts) {
+      return verifyCreateOrm ($obj = WorkTag::create (array_intersect_key ($posts, WorkTag::table ()->columns)));
     }) && $msg = '新增失敗！')) return redirect_message (array ($this->uri_1, 'add'), array ('_fd' => $msg, 'posts' => $posts));
 
     UserLog::logWrite (
@@ -102,7 +108,7 @@ class Article_tags extends Admin_controller {
       foreach ($columns as $column => $value)
         $obj->$column = $value;
 
-    if (!ArticleTag::transaction (function () use ($obj, $posts) {
+    if (!WorkTag::transaction (function () use ($obj, $posts) {
       return $obj->save ();
     })) return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_fd' => '更新失敗！', 'posts' => $posts));
 
@@ -119,7 +125,7 @@ class Article_tags extends Admin_controller {
     $obj = $this->obj;
     $backup = $obj->backup (true);
 
-    if (!ArticleTag::transaction (function () use ($obj) { return $obj->destroy (); }))
+    if (!WorkTag::transaction (function () use ($obj) { return $obj->destroy (); }))
       return redirect_message (array ($this->uri_1), array ('_fd' => '刪除失敗！'));
 
     UserLog::logWrite (
@@ -129,6 +135,56 @@ class Article_tags extends Admin_controller {
       $backup);
 
     return redirect_message (array ($this->uri_1), array ('_fi' => '刪除成功！'));
+  }
+  public function sort ($offset = 0) {
+    $searches = array ();
+    $configs = array_merge (explode ('/', $this->uri_1), array ('sort', '%s'));
+    $objs = conditions ($searches, $configs, $offset, 'WorkTag', array ('order' => 'sort DESC, id DESC'), function ($conditions) {
+      OaModel::addConditions ($conditions, 'work_tag_id = ?', 0);
+      return $conditions;
+    }, 0);
+
+    UserLog::logRead (
+      $this->icon,
+      '檢視了旗幟排序');
+
+    return $this->load_view (array (
+        'objs' => $objs,
+        'total' => $offset,
+        'searches' => $searches,
+        'pagination' => $this->_get_pagination ($configs),
+      ));
+  }
+  public function sort_update ($offset = 0) {
+    $obj = $this->obj;
+
+    if (!$this->has_post ())
+      return redirect_message (array ($this->uri_1, 'sort'), array ('_fd' => '非 POST 方法，錯誤的頁面請求。'));
+
+    $posts = OAInput::post ();
+    
+    $validation = function (&$posts) {
+      return !(isset ($posts['ids']) && is_array ($posts['ids'])) ? '「排序」發生錯誤！' : '';
+    };
+
+    if ($msg = $validation ($posts))
+      return redirect_message (array ($this->uri_1, 'sort'), array ('_fd' => $msg, 'posts' => $posts));
+
+    $objs = array_combine (column_array ($objs = WorkTag::find ('all', array ('select' => 'id, sort, updated_at', 'conditions' => array ('id IN (?)', $posts['ids'] ? $posts['ids'] : array (0)))), 'id'), $objs);
+    $c = count ($objs);
+    $backup = column_array ($objs, 'sort');
+
+    foreach ($posts['ids'] as $sort => $id)
+      if (isset ($objs[$id]) && ($objs[$id]->sort = $c - $sort) && !$objs[$id]->save ())
+        return redirect_message (array ($this->uri_1, 'sort'), array ('_fd' => '排序錯誤。', 'posts' => $posts));
+
+    UserLog::logWrite (
+      $this->icon,
+      '調整' . $this->title . '排序',
+      '調整細節記錄可詢問工程師',
+      array ('id:sort', $backup, column_array ($objs, 'sort')));
+
+    return redirect_message (array ($this->uri_1, 'sort'), array ('_fi' => '排序成功。'));
   }
   private function _validation_create (&$posts) {
     if (!(isset ($posts['name']) && is_string ($posts['name']) && ($posts['name'] = trim ($posts['name'])))) return '「' . $this->title . '名稱」格式錯誤！';

@@ -58,7 +58,7 @@
         <th width='180'>標題<?php echo listSort ($uri_1, 'title');?></th>
         <th >內容</th>
         <th width='50'>開啟</th>
-        <th width='90'>編輯</th>
+        <th width='100'>編輯</th>
       </tr>
     </thead>
     <tbody>

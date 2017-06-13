@@ -53,7 +53,7 @@ if (!function_exists ('listSort')) {
             array_push ($qs, implode ('&', array_map (function ($t) use ($k) { return $k . '[]=' . $t;}, $val)));
 
     $qs = implode ('&amp;', $qs);
-
+    $url = is_array ($url) ? implode ('/', $url) : $url;
     if (!($sort = (OAInput::get ('_s') !== null) && (count ($s = array_filter (array_map (function ($t) { return trim ($t); }, explode (':', OAInput::get ('_s'))))) > 1) ? $s : '') || $sort[0] != $key)
       return '<a href="' . base_url ($url, '?' . ($qs ? $qs . '&amp;' : '') . '_s=' . $key . ':asc') . '"></a>';
     return '<a class=' . strtolower ($sort[1]) . ' href="' . base_url ($url, '?' . ($qs ? $qs . '&amp;' : '') . '_s=' . $key . ':' . (strtolower ($sort[1]) == 'asc' ? 'desc' : 'asc')) . '"></a>';

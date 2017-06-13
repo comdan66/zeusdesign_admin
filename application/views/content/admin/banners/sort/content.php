@@ -4,7 +4,7 @@
   <a class='icon-keyboard_arrow_left' href='<?php echo base_url ($uri_1);?>'>回列表頁</a>
 </div>
 
-<form data-desc='請拖曳排序位置。' class='form-type2 loading' action='<?php echo base_url ($uri_1, 'update_sort');?>' method='post'>
+<form data-desc='請拖曳排序位置。' class='form-type2 loading' action='' method='post'>
   <input type='hidden' name='_method' value='put' />
 
   <div class='sorts'>

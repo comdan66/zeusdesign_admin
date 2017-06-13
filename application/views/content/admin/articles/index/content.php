@@ -54,11 +54,10 @@
         <th width='70'>#<?php echo listSort ($uri_1, 'id');?></th>
         <th width='70' class='center'>上架</th>
         <th width='70' class='center'>封面</th>
-        <th width='110'>作者</th>
         <th width='160'>標題<?php echo listSort ($uri_1, 'title');?></th>
         <th >內容</th>
         <th width='80' class='center'>PV<?php echo listSort ($uri_1, 'pv');?></th>
-        <th width='90'>編輯</th>
+        <th width='100'>編輯</th>
       </tr>
     </thead>
     <tbody>
@@ -74,7 +73,6 @@
           <td class='center'>
             <div class='img _ic'><img src='<?php echo $obj->cover->url ('450x180c');?>' /></div>
           </td>
-          <td><?php echo $obj->user->name;?></td>
           <td><?php echo $obj->mini_title (20);?></td>
           <td><?php echo $obj->mini_content (50);?></td>
           <td class='center'><?php echo $obj->pv;?></td>

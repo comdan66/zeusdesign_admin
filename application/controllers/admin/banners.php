@@ -199,7 +199,7 @@ class Banners extends Admin_controller {
         'pagination' => $this->_get_pagination ($configs),
       ));
   }
-  public function update_sort ($offset = 0) {
+  public function sort_update ($offset = 0) {
     $obj = $this->obj;
 
     if (!$this->has_post ())

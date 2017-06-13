@@ -15,7 +15,7 @@ class Articles extends Admin_controller {
   public function __construct () {
     parent::__construct ();
     
-    if (!User::current ()->in_roles (array ('website')))
+    if (!User::current ()->in_roles (array ('article')))
       return redirect_message (array ('admin'), array ('_fd' => '您的權限不足，或者頁面不存在。'));
     
     $this->uri_1 = 'admin/articles';
@@ -41,7 +41,7 @@ class Articles extends Admin_controller {
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
-    $objs = conditions ($searches, $configs, $offset, 'Article', array ('order' => 'id DESC', 'include' => array ('user')));
+    $objs = conditions ($searches, $configs, $offset, 'Article', array ('order' => 'id DESC'));
 
     UserLog::logRead (
       $this->icon,

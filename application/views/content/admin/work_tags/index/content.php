@@ -10,6 +10,7 @@
 
   <div class='right'>
     <a class='icon-r' href='<?php echo base_url ($uri_1, 'add');?>'>新增</a>
+    <a class='icon-d' href='<?php echo base_url ($uri_1, 'sort');?>'>排序</a>
   </div>
 
   <form class='conditions'>
@@ -53,7 +54,8 @@
       <tr>
         <th width='70'>#<?php echo listSort ($uri_1, 'id');?></th>
         <th >名稱<?php echo listSort ($uri_1, 'name');?></th>
-        <th width='70'>編輯</th>
+        <th width='100'>子分類數量</th>
+        <th width='100'>編輯</th>
       </tr>
     </thead>
     <tbody>
@@ -61,7 +63,10 @@
         <tr>
           <td><?php echo $obj->id;?></td>
           <td><?php echo $obj->name;?></td>
+          <td><?php echo count ($obj->tags);?></td>
           <td>
+            <a class='icon-list' href="<?php echo base_url ('admin', 'tag', $obj->id, 'work-tags');?>"></a>
+            /
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
             /
             <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
