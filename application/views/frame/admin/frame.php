@@ -18,8 +18,8 @@
 
     <header id='header'>
       <div class='logo'>
-        <span><img src='<?php echo res_url('res', 'image', 'login_logo.png');?>'></span>
-        <span>宙思管理系統</span>
+        <span><i>Ｚ</i></span>
+        <span>Zeus Design Studio!</span>
       </div>
       <div class='midle'>
         <label class='icon-menu' for='menu_ckb'></label>

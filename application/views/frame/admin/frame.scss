@@ -168,6 +168,19 @@ html {
         width: 35px;
         height: 35px;
       }
+      i {
+        font-style: normal;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        margin-top: 2px;
+        line-height: 30px - 2px;
+        @include border-radius(50%);
+        border: 1px solid white;
+        font-weight: bold;
+        font-size: 20px;
+        font-family: 'Open sans', Comfortaa, 'Helvetica Neue', Helvetica, Arial, 'Hiragino Maru Gothic ProN', 'メイリオ','ヒラギノ丸ゴ ProN W4', '微軟正黑體', Meiryo, 'Droid Sans';
+      }
     }
   }
   .avatar {
