@@ -1,9 +1,5 @@
 <h1<?php echo isset ($icon) && $icon ? ' class="' . $icon . '"' : '';?>><?php echo $title;?>列表</h1>
 
-<div class='panel back'>
-  <a class='icon-keyboard_arrow_left' href='<?php echo $_url;?>'>上層表頁</a>
-</div>
-
 <div class='search'>
   <input type='checkbox' id='search_conditions' class='hckb'<?php echo $isSearch = array_filter (column_array ($searches, 'value'), function ($t) { return $t !== null; }) ? ' checked' : '';?> />
   
@@ -13,8 +9,7 @@
   </div>
 
   <div class='right'>
-    <a class='icon-r' href='<?php echo base_url ($uri_1, $parent->id, $uri_2, 'add');?>'>新增</a>
-    <a class='icon-d' href='<?php echo base_url ($uri_1, $parent->id, $uri_2, 'sort');?>'>排序</a>
+    <a class='icon-r' href='<?php echo base_url ($uri_1, 'add');?>'>新增</a>
   </div>
 
   <form class='conditions'>
@@ -46,30 +41,59 @@
 
     <div class='btns'>
       <button type='submit'>搜尋</button>
-      <a href='<?php echo base_url ($uri_1, $parent->id, $uri_2);?>'>取消</a>
+      <a href='<?php echo base_url ($uri_1);?>'>取消</a>
     </div>
 
   </form>
 </div>
 
 <div class='panel'>
-  <table class='table-list'>
+  <table class='table-list m2d'>
     <thead>
       <tr>
-        <th width='60'>#<?php echo listSort (array ($uri_1, $parent->id, $uri_2), 'id');?></th>
-        <th >名稱<?php echo listSort (array ($uri_1, $parent->id, $uri_2), 'name');?></th>
-        <th width='70'>編輯</th>
+        <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
+        <th width='60' class='center'>上架</th>
+        <th width='60' class='center'>封面</th>
+        <th width='160'>標題<?php echo listSort ($uri_1, 'title');?></th>
+        <th >內容</th>
+        <th width='80' class='center'>PV<?php echo listSort ($uri_1, 'pv');?></th>
+        <th width='100'>編輯</th>
       </tr>
     </thead>
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
           <td><?php echo $obj->id;?></td>
-          <td><?php echo $obj->name;?></td>
+          <td class='center'>
+            <label class='switch ajax' data-column='status' data-url='<?php echo base_url ($uri_1, 'status', $obj->id);?>'>
+              <input type='checkbox'<?php echo $obj->status == Banner::STATUS_2 ? ' checked' : '';?> />
+              <span></span>
+            </label>
+          </td>
+          <td class='center'>
+            <div class='img _ic'><img src='<?php echo $obj->cover->url ('300w');?>' /></div>
+          </td>
+          <td><?php echo $obj->mini_title (20);?></td>
+          <td><?php echo $obj->mini_content (50);?></td>
+          <td class='center'><?php echo $obj->pv;?></td>
           <td>
-            <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id, 'edit');?>"></a>
+            <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
             /
-            <a class='icon-bin' href="<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id);?>" data-method='delete'></a>
+            <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
+            /
+            <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
+          </td>
+        </tr>
+        <tr>
+          <td colspan='2'>
+            其他圖片
+          </td>
+          <td colspan='5'>
+            <div class='imgs<?php echo $obj->images ? '' : ' e';?>'>
+        <?php foreach ($obj->images as $image) { ?>
+                <div class='img _ic'><img src='<?php echo $image->name->url ('800w');?>' /></div>
+        <?php }?>
+            </div>
           </td>
         </tr>
 <?php } ?>

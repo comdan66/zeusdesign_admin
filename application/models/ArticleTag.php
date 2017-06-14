@@ -25,6 +25,8 @@ class ArticleTag extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
   public function destroy () {
+    if (!isset ($this->id)) return false;
+    
     if ($this->mappings)
       foreach ($this->mappings as $mapping)
         if (!$mapping->destroy ())

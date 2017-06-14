@@ -6,13 +6,12 @@
  * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
-class CkeditorImageNameImageUploader extends OrmImageUploader {
+class WorkImageNameImageUploader extends OrmImageUploader {
 
   public function getVersions () {
     return array (
         '' => array (),
-        '200h' => array ('resize', 200, 200, 'height'),
-        '800h' => array ('resize', 800, 800, 'height'),
+        '800w' => array ('resize', 800, 800, 'width')
       );
   }
 }

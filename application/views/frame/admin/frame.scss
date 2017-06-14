@@ -1061,7 +1061,7 @@ label.radio {
       display: inline-block;
       height: 100%;
       font-size: 30px;
-      margin-top: 2px;
+      margin-top: 4px;
       margin-right: 8px;
       @include opacity(.65);
     }
@@ -1082,7 +1082,7 @@ label.radio {
       margin-bottom: 4px;
       font-size: 25px;
       &:before {
-        margin-top: 1px;
+        margin-top: 2px;
       }
       &[data-title] {
         &:after {
@@ -1409,6 +1409,7 @@ table.table-list {
         line-height: 44px;
         padding: 0 5px;
         text-align: right;
+        font-size: 14px;
 
         &:first-child {
           text-align: center;
@@ -1464,6 +1465,8 @@ table.table-list {
         word-break: break-all;
         padding: 10px 5px;
         text-align: right;
+        font-size: 14px;
+        color: rgba(87, 87, 87, 1.00);
 
         &:first-child {
           text-align: center;
@@ -1485,13 +1488,34 @@ table.table-list {
             @include opacity(.5);
           }
         }
+        .imgs {
+          display: inline-block;
+          width: 100%;
+          height: 100%;
 
+          @include clearfix();
+          
+          .img {
+            float: left;
+            margin: 0 2.5px;
+            margin-bottom: 5px;
+          }
+          &.e, &:empty {
+            height: 21px;
+            line-height: 21px;
+            &:before {
+              content: '無';
+              font-style: italic;
+              color: rgba(190, 190, 190, 1);
+            }
+          }
+        }
         .img {
           display: inline-block;
-          width: 50px;
-          height: 50px;
+          width: 45px;
+          height: 45px;
           overflow: hidden;
-          @include box-shadow(0 0 1px rgba(0,0,0,0.3));
+          @include box-shadow(0 0 1px rgba(0, 0, 0, .5));
           // @include border-radius(2px);
 
           img {
@@ -1521,6 +1545,45 @@ table.table-list {
     padding-top: 12px;
     color: rgba(135, 135, 135, 1.00);
     border-top: 1px dashed rgba(0, 0, 0, .2);
+  }
+
+  &.m2d {
+    > tbody {
+      > tr {
+        background-color: rgba(255, 255, 255, 1.00);
+
+        &:nth-child(4n + 1), &:nth-child(4n + 2) {
+          background-color: rgba(249, 249, 249, 1.00);
+        }
+        &:nth-child(2n + 2) {
+          > td {
+            border-top-color: rgba(235, 235, 235, 1.00);
+          }
+        }
+        &:nth-child(2n + 1) {
+          > td {
+            border-top-width: 2px;
+          }
+        }
+        &:nth-child(2n + 2) {
+          > td {
+            &[colspan] {
+              font-size: 14px;
+              @include opacity(1);
+              
+              &:first-child {
+                font-weight: bold;
+                text-align: right;
+                
+                + td {
+                  text-align: left;
+                }
+              }
+            }
+          }  
+        }
+      }
+    }
   }
 }
 
@@ -2618,5 +2681,62 @@ form.form-type2 {
   }
   100% {
     @include rotate(360deg);
+  }
+}
+
+
+.tags2d {
+  position: relative;
+  font-size: 13px;
+  .dis {
+    @include opacity(.5);
+    &:before {
+      content: '\e911' !important;
+      font-family: "admin";
+    }
+  }
+  .enb {
+    &:before {
+      content: '\e912' !important;
+      font-family: "admin";
+    }
+  }
+  .tag {
+    display: inline-block;
+    width: 200px;
+    margin: 10px;
+    
+
+    label {
+      cursor: pointer;
+      @include overflow-docx3();
+
+      input[type='checkbox'] {
+        margin-top: 5px;
+        @include opacity(1);
+        position: relative;
+        z-index: auto;
+      }
+      &.main {
+        display: inline-block;
+        width: 100%;
+        font-weight: bold;
+      }
+      &.sub {
+        display: inline-block;
+        width: 100%;
+        margin-top: 10px;
+
+        &:before {
+          content: '-';
+          margin: 0 5px;
+          margin-left: 30px;
+        }
+
+        + .main {
+          margin-top: 10px;
+        } 
+      }
+    }
   }
 }

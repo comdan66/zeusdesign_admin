@@ -52,12 +52,12 @@
   <table class='table-list'>
     <thead>
       <tr>
-        <th width='70'>#<?php echo listSort ($uri_1, 'id');?></th>
-        <th width='70' class='center'>上架</th>
-        <th width='70' class='center'>封面</th>
+        <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
+        <th width='60' class='center'>上架</th>
+        <th width='60' class='center'>封面</th>
         <th width='180'>標題<?php echo listSort ($uri_1, 'title');?></th>
         <th >內容</th>
-        <th width='50'>開啟</th>
+        <th width='60'>開啟</th>
         <th width='100'>編輯</th>
       </tr>
     </thead>

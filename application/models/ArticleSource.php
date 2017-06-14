@@ -23,6 +23,7 @@ class ArticleSource extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
   public function destroy () {
+    if (!isset ($this->id)) return false;
     return $this->delete ();
   }
   public function backup ($has = false) {

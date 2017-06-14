@@ -52,7 +52,7 @@
   <table class='table-list'>
     <thead>
       <tr>
-        <th width='70'>#<?php echo listSort ($uri_1, 'id');?></th>
+        <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
         <th >名稱<?php echo listSort ($uri_1, 'name');?></th>
         <th width='100'>子分類數量</th>
         <th width='100'>編輯</th>

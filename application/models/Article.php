@@ -47,6 +47,8 @@ class Article extends OaModel {
   }
 
   public function destroy () {
+    if (!isset ($this->id)) return false;
+    
     if ($this->mappings)
       foreach ($this->mappings as $mapping)
         if (!$mapping->destroy ())

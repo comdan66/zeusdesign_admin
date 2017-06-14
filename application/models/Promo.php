@@ -53,8 +53,8 @@ class Promo extends OaModel {
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->link), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->link);
   }
   public function destroy () {
-    if (!isset ($this->id))
-      return false;
+    if (!isset ($this->id)) return false;
+    
     return $this->delete ();
   }
 

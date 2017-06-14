@@ -1,9 +1,9 @@
-<?php defined ('BASEPATH') OR exit ('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * @author      OA Wu <comdan66@gmail.com>
- * @copyright   Copyright (c) 2016 OA Wu Design
- * @link        http://www.ioa.tw/
+ * @copyright   Copyright (c) 2017 OA Wu Design
+ * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
 class ArticleTagMapping extends OaModel {
@@ -26,6 +26,8 @@ class ArticleTagMapping extends OaModel {
   }
 
   public function destroy () {
+    if (!isset ($this->id)) return false;
+    
     return $this->delete ();
   }
   public function backup ($has = false) {

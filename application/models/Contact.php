@@ -31,6 +31,8 @@ class Contact extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
   public function destroy () {
+    if (!isset ($this->id)) return false;
+    
     return $this->delete ();
   }
   public function mini_message ($length = 100) {

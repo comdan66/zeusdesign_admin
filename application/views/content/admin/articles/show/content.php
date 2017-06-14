@@ -45,13 +45,12 @@
       </span>
     </div>
 
-    <div class='row muti' data-vals='<?php echo json_encode ($sources);?>' data-cnt='<?php echo count ($row_muti);?>' data-attrs='<?php echo json_encode ($row_muti);?>'>
+    <div class='row muti'>
       <b><?php echo $title;?>參考</b>
       <span class='list<?php echo !$obj->sources ? ' e' : '';?>' data-cnt='2'>
-    <?php foreach ($obj->sources as $source) { ?>
-        <div><span><?php echo $source->title;?></span><a href='<?php echo $source->href;?>' target='_blank'><?php echo $source->href;?></a></div>
-    <?php } ?>
-
+  <?php foreach ($obj->sources as $source) { ?>
+          <div><span><?php echo $source->title;?></span><a href='<?php echo $source->href;?>' target='_blank'><?php echo $source->href;?></a></div>
+  <?php } ?>
       </span>
     </div>
 

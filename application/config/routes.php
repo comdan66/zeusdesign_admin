@@ -15,6 +15,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('articles'), 'articles');
   Route::resourcePagination (array ('work_tags'), 'work_tags');
   Route::resourcePagination (array ('tag', 'work_tags'), 'tag_work_tags');
+  Route::resourcePagination (array ('works'), 'works');
 });
 
 Route::group ('api', function () {
