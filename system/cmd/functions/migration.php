@@ -20,7 +20,7 @@ if (!function_exists ('run_migration')) {
     if ((($version === null) && !is_bool ($version = $CI->migration->latest ())) || !is_bool ($version = $CI->migration->version ($version)))
         array_push ($results, '目前 Migration 已經更新到 ' . sprintf ("%03s", $version) . ' 版本!');
     else
-        array_push ($results, 'Migration 版本沒有任何更動!');
+        array_push ($results, 'Migration 版本沒有任何更動!' . ($CI->migration->error_string () ? $CI->migration->error_string () : ''));
 
     return $results;
   }

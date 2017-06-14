@@ -94,6 +94,9 @@ class CI_Migration {
 	 */
 	public function version($target_version)
 	{
+		if (!is_numeric($target_version))
+			return false;
+
 		$start = $current_version = $this->_get_version();
 		$stop = $target_version;
 
@@ -176,7 +179,7 @@ class CI_Migration {
 			}
 			else
 			{
-				$this->_error_string = sprintf($this->lang->line('migration_invalid_filename'), $file);
+				$this->_error_string = sprintf('錯誤的檔案名稱：%s', $file);
 				return FALSE;
 			}
 		}
