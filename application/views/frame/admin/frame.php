@@ -82,6 +82,14 @@
         </div>
       </div>
 
+      <div class='group'>
+        <span class='icon-bil'>帳務管理</span>
+        <div>
+          <a class='icon-b<?php echo ($url = base_url ('admin', 'companies')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>配合廠商</a>
+          <a class='icon-list<?php echo ($url = base_url ('admin', 'works')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>' href='user.html'>作品列表</a>
+        </div>
+      </div>
+
       <footer>© <?php echo date ('Y');?> zeusdesign.com.tw</footer>
     </div><label class='icon-cross' for='menu_ckb'></label>
 

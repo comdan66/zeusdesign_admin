@@ -84,13 +84,12 @@
 
 <?php
     foreach (WorkItem::$typeNames as $type => $typeName) { ?>
-      <div class='row muti' data-vals='<?php echo json_encode ($sources[$type]);?>' data-cnt='<?php echo count ($row_muti[$type]);?>' data-attrs='<?php echo json_encode ($row_muti[$type]);?>'>
+      <div class='row muti' data-vals='<?php echo json_encode ($items[$type]);?>' data-cnt='<?php echo count ($row_muti[$type]);?>' data-attrs='<?php echo json_encode ($row_muti[$type]);?>'>
         <b><?php echo $title;?> <?php echo $typeName;?></b>
         <span><a></a></span>
       </div>
 <?php
-    }
-    ?>
+    } ?>
 
     <div class='row'>
       <button type='submit'>確定送出</button>

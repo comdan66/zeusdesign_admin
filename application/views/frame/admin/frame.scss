@@ -767,6 +767,29 @@ html {
       }
     }
   }
+  > header {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 16px;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(221, 221, 221, 1.00);
+
+    .table-list {
+      margin-top: 0;
+      > tbody {
+        > tr {
+          > td {
+            &[data-before] {
+              &:before {
+                content: attr(data-before);
+                color: rgba(180, 180, 180, 1);                
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 
@@ -1045,6 +1068,13 @@ label.radio {
 }
 
 #main {
+  h2 {
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    margin: 0;
+    margin-top: 32px;
+  }
   h1 {
     display: inline-block;
     width: 100%;
@@ -1291,95 +1321,116 @@ label.radio {
 
 
 @mixin mini-table-list{
-  position: relative;
-  display: inline-block;
-  @include clearfix();
-  border: 1px solid rgba(221, 221, 221, 1.00);
-  
-  > thead {
-    float: left;
-
-    display: inline-block;
-    width: 100px;
-
-    > tr {
-      display: inline-block;
-      width: 100%;
-
-      > th {
-        display: inline-block;
-        width: 100%;
-        height: 55px;
-        line-height: 55px;
-        padding: 0 5px;
-        text-align: right !important;
-        border: 0;
-        @include overflow-docx3();
-        border-right: 2px solid rgba(221, 221, 221, 1.00);
-        border-bottom: 1px solid rgba(221, 221, 221, 1.00);
-        background-color: rgba(249, 249, 249, 1.00);
-
-        &:last-child {
-            border-bottom: 0;
-        }
-        > div {
-          display: none;
+  &.header {
+    > thead, > tbody {
+      > tr {
+        > th, > td {
+          &:not(.mobile) {
+            display: none;
+          }
         }
       }
     }
   }
-  > tbody {
-    float: left;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-
-    width: calc(100% - 100px);
-    overflow-x: auto;
-    white-space: nowrap;
+  &:not(.header) {
+    position: relative;
+    display: inline-block;
+    @include clearfix();
+    border: 1px solid rgba(221, 221, 221, 1.00);
     
-    > tr {
+    > thead {
+      float: left;
+
       display: inline-block;
-      max-width: 200px;
+      width: 100px;
 
-      > td {
-        display: block;
-        height: 55px;
-        line-height: 55px;
+      > tr {
+        display: inline-block;
+        width: 100%;
 
-        padding: 0 5px;
-        margin: 0;
-        text-align: left !important;
-        border: 0;
-        background-color: white;
-        border-right: 1px solid rgba(221, 221, 221, 1.00);
-        border-bottom: 1px solid rgba(221, 221, 221, 1.00);
-        @include overflow-docx3();
-        
-        &:last-child {
-          border-bottom: 0;
-        }
-        @for $i from 1 through 13 {
-          &[colspan="#{$i}"] {
-            height: 55px * $i;
-            line-height: 55px * $i;
+        > th {
+          display: inline-block;
+          width: 100%;
+          height: 55px;
+          line-height: 55px;
+          padding: 0 5px;
+          text-align: right !important;
+          border: 0;
+          @include overflow-docx3();
+          border-right: 2px solid rgba(221, 221, 221, 1.00);
+          border-bottom: 1px solid rgba(221, 221, 221, 1.00);
+          background-color: rgba(249, 249, 249, 1.00);
+
+          &:last-child {
+              border-bottom: 0;
+          }
+          > div {
+            display: none;
           }
         }
-        a {
-        }
-        label.switch {
-          margin-top: 15px;
-        }
-        .img {
-          display: inline-block;
-          height: 45px;
-          width: 45px;
-          margin-top: 5px;
-        }
       }
-      &:last-child {
+    }
+    > tbody {
+      float: left;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+
+      width: calc(100% - 100px);
+      overflow-x: auto;
+      white-space: nowrap;
+      
+      > tr {
+        display: inline-block;
+        max-width: 200px;
+
         > td {
-          border-right: 0;
+          display: block;
+          height: 55px;
+          line-height: 55px;
+
+          padding: 0 5px;
+          margin: 0;
+          text-align: left !important;
+          border: 0;
+          background-color: white;
+          border-right: 1px solid rgba(221, 221, 221, 1.00);
+          border-bottom: 1px solid rgba(221, 221, 221, 1.00);
+          @include overflow-docx3();
+          
+          &:last-child {
+            border-bottom: 0;
+          }
+          @for $i from 1 through 13 {
+            &[colspan="#{$i}"] {
+              height: 55px * $i;
+              line-height: 55px * $i;
+            }
+          }
+          a {
+          }
+          label.switch {
+            margin-top: 15px;
+          }
+          .img {
+            display: inline-block;
+            height: 45px;
+            width: 45px;
+            margin-top: 5px;
+          }
+          .row {
+            height: auto;
+            line-height: 55px;
+            display: inline;
+            + .row {
+              margin-left: 8px;
+            }
+          }
+        }
+        &:last-child {
+          > td {
+            border-right: 0;
+          }
         }
       }
     }
@@ -1423,7 +1474,7 @@ table.table-list {
         &.right {
           text-align: right;
         }
-        a {
+        &:not(.h) a {
           display: inline-block;
           margin-left: 4px;
           margin-top: 0;
@@ -1459,14 +1510,22 @@ table.table-list {
   > tbody {
     > tr {
       background-color: white;
+      &:nth-child(even) {
+        background-color: rgba(249, 249, 249, 1.00);
+      }
 
+      &:first-child {
+        > td {
+          border-top: 0;
+        }
+      }
       > td {
-        border-top: 1px solid rgba(221, 221, 221, 1.00);
         word-break: break-all;
         padding: 10px 5px;
         text-align: right;
         font-size: 14px;
         color: rgba(87, 87, 87, 1.00);
+        border-top: 1px solid rgba(221, 221, 221, 1.00);
 
         &:first-child {
           text-align: center;
@@ -1526,9 +1585,26 @@ table.table-list {
           font-size: 13px;
           @include opacity(.65);
         }
+          .row {
+            height: 22px;
+            line-height: 22px;
+          }
       }
-      &:nth-child(odd) {
-        background-color: rgba(249, 249, 249, 1.00);
+    }
+  }
+
+  > thead {
+    + tbody {
+      > tr {
+        &:nth-child(even) {
+          background-color: white;
+        }
+        &:nth-child(odd) {
+          background-color: rgba(249, 249, 249, 1.00);
+        }
+        td:first-child {
+          border-top: 1px solid rgba(221, 221, 221, 1.00);
+        }
       }
     }
   }
@@ -1585,14 +1661,24 @@ table.table-list {
       }
     }
   }
-}
-
-#menu_ckb:not(:checked) {
-  @include range-width(750px, 950px) {
-    ~ * table.table-list {
+  &.w1100 {
+    @include range-width(0, 1100px) {
       @include mini-table-list;
     }
   }
+}
+
+#menu_ckb:not(:checked) {
+    ~ * table.table-list {
+      @include range-width(750px, 950px) {
+        @include mini-table-list;
+      }
+      &.w1100 {
+        @include range-width(0, 1100px) {
+          @include mini-table-list;
+        }
+      } 
+    }
 }
 
 
@@ -1625,7 +1711,11 @@ form.form-type1 {
     margin-bottom: 8px !important;
   };
 
-
+  &.left {
+    .row {
+      max-width: 100%;
+    }
+  }
   .row {
     display: block;
     width: 100%;
@@ -2226,7 +2316,11 @@ form .row.muti {
     margin-bottom: 8px !important;
   };
 
-
+  &.left {
+    .row {
+      max-width: 100%;
+    }
+  }
   .row {
     display: block;
     width: 100%;
@@ -2424,8 +2518,9 @@ form .row.muti {
       margin-top: 16px;
     }
     &.min {
-      height: 23px;
-      line-height: 23px;
+
+      // height: 23px;
+      // line-height: 23px;
       > * {
         display: inline-block;
       }
@@ -2435,7 +2530,7 @@ form .row.muti {
       }
       > span {
         width: auto;
-        height: 23px;
+        min-height: 23px;
         line-height: 23px;
         padding: 0 8px;
         margin-top: 0;

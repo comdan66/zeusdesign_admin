@@ -1,7 +1,7 @@
 <h1<?php echo isset ($icon) && $icon ? ' class="' . $icon . '"' : '';?>>修改<?php echo $title;?></h1>
 
 <div class='panel'>
-  <form class='form-type1 loading' action='<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id);?>' method='post' enctype='multipart/form-data'>
+  <form class='form-type1 loading' action='<?php echo base_url ($uri_1, $parent->id, $uri_2, $obj->id);?>' method='post'>
     <input type='hidden' name='_method' value='put' />
 
     <div class='row'>

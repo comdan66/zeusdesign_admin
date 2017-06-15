@@ -62,7 +62,7 @@ class Articles extends Admin_controller {
     $sources = isset ($posts['sources']) ? $posts['sources'] : array ();
 
     $row_muti = array (
-        array ('type' => 'text', 'name' => 'sources', 'key' => 'title', 'placeholder' => '標題文字'),
+        array ('type' => 'text', 'name' => 'sources', 'key' => 'title', 'placeholder' => '標題'),
         array ('type' => 'text', 'name' => 'sources', 'key' => 'href', 'placeholder' => '網址'),
       );
 
@@ -109,7 +109,7 @@ class Articles extends Admin_controller {
     $sources = isset ($posts['sources']) ? $posts['sources'] : array_map (function ($source) { return array ('title' => $source->title, 'href' => $source->href); }, $this->obj->sources);
 
     $row_muti = array (
-        array ('type' => 'text', 'name' => 'sources', 'key' => 'title', 'placeholder' => '標題文字'),
+        array ('type' => 'text', 'name' => 'sources', 'key' => 'title', 'placeholder' => '標題'),
         array ('type' => 'text', 'name' => 'sources', 'key' => 'href', 'placeholder' => '網址'),
       );
 
