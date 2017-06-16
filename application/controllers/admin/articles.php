@@ -93,7 +93,7 @@ class Articles extends Admin_controller {
 
     if ($posts['sources'])
       foreach ($posts['sources'] as $i => $source)
-        ArticleSource::transaction (function () use ($i, $source, $obj) { return verifyCreateOrm (ArticleSource::create (array_intersect_key (array_merge ($source, array ('sort' => $i, 'article_id' => $obj->id)), ArticleSource::table ()->columns))); });
+        ArticleSource::transaction (function () use ($i, $source, $obj) { return verifyCreateOrm (ArticleSource::create (array_intersect_key (array_merge ($source, array ('article_id' => $obj->id)), ArticleSource::table ()->columns))); });
     
     UserLog::logWrite (
       $this->icon,
@@ -161,7 +161,7 @@ class Articles extends Admin_controller {
 
     if ($posts['sources'])
       foreach ($posts['sources'] as $i => $source)
-        ArticleSource::transaction (function () use ($i, $source, $obj) { return verifyCreateOrm (ArticleSource::create (array_intersect_key (array_merge ($source, array ('sort' => $i, 'article_id' => $obj->id)), ArticleSource::table ()->columns))); });
+        ArticleSource::transaction (function () use ($i, $source, $obj) { return verifyCreateOrm (ArticleSource::create (array_intersect_key (array_merge ($source, array ('article_id' => $obj->id)), ArticleSource::table ()->columns))); });
 
     UserLog::logWrite (
       $this->icon,
@@ -227,53 +227,6 @@ class Articles extends Admin_controller {
 
     return $this->output_json ($obj->status == Article::STATUS_2);
   }
-  public function sort ($offset = 0) {
-    $searches = array ();
-    $configs = array_merge (explode ('/', $this->uri_1), array ('sort', '%s'));
-    $objs = conditions ($searches, $configs, $offset, 'Article', array ('order' => 'id DESC'), null, 0);
-
-    UserLog::logRead (
-      $this->icon,
-      '檢視了旗幟排序');
-
-    return $this->load_view (array (
-        'objs' => $objs,
-        'total' => $offset,
-        'searches' => $searches,
-        'pagination' => $this->_get_pagination ($configs),
-      ));
-  }
-  public function update_sort ($offset = 0) {
-    $obj = $this->obj;
-
-    if (!$this->has_post ())
-      return redirect_message (array ($this->uri_1, 'sort'), array ('_fd' => '非 POST 方法，錯誤的頁面請求。'));
-
-    $posts = OAInput::post ();
-    
-    $validation = function (&$posts) {
-      return !(isset ($posts['ids']) && is_array ($posts['ids'])) ? '「排序」發生錯誤！' : '';
-    };
-
-    if ($msg = $validation ($posts))
-      return redirect_message (array ($this->uri_1, 'sort'), array ('_fd' => $msg, 'posts' => $posts));
-
-    $objs = array_combine (column_array ($objs = Article::find ('all', array ('select' => 'id, sort, updated_at', 'conditions' => array ('id IN (?)', $posts['ids'] ? $posts['ids'] : array (0)))), 'id'), $objs);
-    $c = count ($objs);
-    $backup = column_array ($objs, 'sort');
-
-    foreach ($posts['ids'] as $sort => $id)
-      if (isset ($objs[$id]) && ($objs[$id]->sort = $c - $sort) && !$objs[$id]->save ())
-        return redirect_message (array ($this->uri_1, 'sort'), array ('_fd' => '排序錯誤。', 'posts' => $posts));
-
-    UserLog::logWrite (
-      $this->icon,
-      '調整' . $this->title . '排序',
-      '調整細節記錄可詢問工程師',
-      array ('id:sort', $backup, column_array ($objs, 'sort')));
-
-    return redirect_message (array ($this->uri_1, 'sort'), array ('_fi' => '排序成功。'));
-  }
   private function _validation_create (&$posts, &$cover) {
     if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && in_array ($posts['status'], array_keys (Article::$statusNames)))) $posts['status'] = Article::STATUS_1;
     if (!(isset ($posts['user_id']) && is_string ($posts['user_id']) && is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find_by_id ($posts['user_id']))) return '「文章作者」發生錯誤！';
@@ -283,7 +236,14 @@ class Articles extends Admin_controller {
     if (!(isset ($posts['content']) && is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '「' . $this->title . '內容」格式錯誤！';
 
     $posts['tag_ids'] = isset ($posts['tag_ids']) && is_array ($posts['tag_ids']) && $posts['tag_ids'] ? column_array (ArticleTag::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['tag_ids']))), 'id') : array ();
-    $posts['sources'] = isset ($posts['sources']) && is_array ($posts['sources']) && $posts['sources'] ? array_values (array_filter ($posts['sources'], function ($source) { return (isset ($source['title']) && is_string ($source['title']) &&  ($source['title'] = trim ($source['title']))) || (isset ($source['href']) && is_string ($source['href']) &&  ($source['href'] = trim ($source['href']))); })) : array ();
+
+    $posts['sources'] = isset ($posts['sources']) && is_array ($posts['sources']) && $posts['sources'] ? array_values (array_filter (array_map (function ($source) {
+      if (!(isset ($source['title']) && is_string ($source['title']) && ($source['title'] = trim ($source['title'])))) $source['title'] = '';
+      if (!(isset ($source['href']) && is_string ($source['href']) && ($source['href'] = trim ($source['href'])))) $source['href'] = '';
+      return $source;
+    }, $posts['sources']), function ($source) {
+      return $source['title'] || $source['href'];
+    })) : array ();
 
     return '';
   }
@@ -297,7 +257,14 @@ class Articles extends Admin_controller {
     if (!(isset ($posts['content']) && is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '「' . $this->title . '內容」格式錯誤！';
 
     $posts['tag_ids'] = isset ($posts['tag_ids']) && is_array ($posts['tag_ids']) && $posts['tag_ids'] ? column_array (ArticleTag::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['tag_ids']))), 'id') : array ();
-    $posts['sources'] = isset ($posts['sources']) && is_array ($posts['sources']) && $posts['sources'] ? array_values (array_filter ($posts['sources'], function ($source) { return (isset ($source['title']) && is_string ($source['title']) &&  ($source['title'] = trim ($source['title']))) || (isset ($source['href']) && is_string ($source['href']) &&  ($source['href'] = trim ($source['href']))); })) : array ();
+    
+    $posts['sources'] = isset ($posts['sources']) && is_array ($posts['sources']) && $posts['sources'] ? array_values (array_filter (array_map (function ($source) {
+      if (!(isset ($source['title']) && is_string ($source['title']) && ($source['title'] = trim ($source['title'])))) $source['title'] = '';
+      if (!(isset ($source['href']) && is_string ($source['href']) && ($source['href'] = trim ($source['href'])))) $source['href'] = '';
+      return $source;
+    }, $posts['sources']), function ($source) {
+      return $source['title'] || $source['href'];
+    })) : array ();
 
     return '';
   }

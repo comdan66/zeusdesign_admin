@@ -17,7 +17,6 @@ class Work extends OaModel {
     array ('mappings', 'class_name' => 'WorkTagMapping'),
     array ('images', 'class_name' => 'WorkImage'),
     array ('tags', 'class_name' => 'WorkTag', 'through' => 'mappings'),
-
     array ('items', 'class_name' => 'WorkItem'),
   );
 

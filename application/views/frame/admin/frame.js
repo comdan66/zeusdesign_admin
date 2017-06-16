@@ -98,9 +98,13 @@ $(function () {
         });
 
       $span.find ('a').click (function () {
-        that.fm ($row.data ('i')).insertBefore ($span);
+        var $t = that.fm ($row.data ('i')).insertBefore ($span);
         $row.data ('i', parseInt ($row.data ('i'), 10) + 1);
-      }).click ();
+        setTimeout (function () { $t.find ('input').first ().focus (); }, 100);
+      });
+
+      that.fm ($row.data ('i')).insertBefore ($span);
+      $row.data ('i', parseInt ($row.data ('i'), 10) + 1);
     });
   }
 

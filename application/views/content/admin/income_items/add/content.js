@@ -66,9 +66,16 @@ $(function () {
         });
 
       $span.find ('a').click (function () {
+        var $t = that.fm ($row.data ('i')).insertBefore ($span);
+        $row.data ('i', parseInt ($row.data ('i'), 10) + 1);
+        setTimeout (function () { $t.find ('input').first ().focus (); }, 100);
+      });
+
+      if (!$row.find ('>div').length) {
         that.fm ($row.data ('i')).insertBefore ($span);
         $row.data ('i', parseInt ($row.data ('i'), 10) + 1);
-      });
+      }
+      
     });
   }
 

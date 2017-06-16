@@ -15,7 +15,6 @@ class Migration_Add_company_pm_items extends CI_Migration {
         
         `type` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '類型，1 E-Mail，2 Phone',
         `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '內容',
-        `sort` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '排列順序，上至下 ASC',
 
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',

@@ -109,7 +109,7 @@ class Company_pms extends Admin_controller {
     foreach (array_keys (CompanyPmItem::$typeNames) as $type)
       if ($posts['items' . $type])
         foreach ($posts['items' . $type] as $i => $item)
-          CompanyPmItem::transaction (function () use ($i, $item, $obj, $type) { return verifyCreateOrm (CompanyPmItem::create (array_intersect_key (array_merge ($item, array ('sort' => $i, 'company_pm_id' => $obj->id, 'type' => $type)), CompanyPmItem::table ()->columns))); });
+          CompanyPmItem::transaction (function () use ($i, $item, $obj, $type) { return verifyCreateOrm (CompanyPmItem::create (array_intersect_key (array_merge ($item, array ('company_pm_id' => $obj->id, 'type' => $type)), CompanyPmItem::table ()->columns))); });
     
     UserLog::logWrite (
       $this->icon,
@@ -165,7 +165,7 @@ class Company_pms extends Admin_controller {
     foreach (array_keys (CompanyPmItem::$typeNames) as $type)
       if ($posts['items' . $type])
         foreach ($posts['items' . $type] as $i => $source)
-          CompanyPmItem::transaction (function () use ($i, $source, $obj, $type) { return verifyCreateOrm (CompanyPmItem::create (array_intersect_key (array_merge ($source, array ('sort' => $i, 'company_pm_id' => $obj->id, 'type' => $type)), CompanyPmItem::table ()->columns))); });
+          CompanyPmItem::transaction (function () use ($i, $source, $obj, $type) { return verifyCreateOrm (CompanyPmItem::create (array_intersect_key (array_merge ($source, array ('company_pm_id' => $obj->id, 'type' => $type)), CompanyPmItem::table ()->columns))); });
 
     UserLog::logWrite (
       $this->icon,
@@ -206,7 +206,12 @@ class Company_pms extends Admin_controller {
     if (isset ($posts['memo']) && !(is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])))) $posts['memo'] = '';
 
     foreach (array_keys (CompanyPmItem::$typeNames) as $type)
-      $posts['items' . $type] = isset ($posts['items' . $type]) && is_array ($posts['items' . $type]) && $posts['items' . $type] ? array_values (array_filter ($posts['items' . $type], function ($item) { return isset ($item['content']) && is_string ($item['content']) && ($item['content'] = trim ($item['content'])); })) : array ();
+      $posts['items' . $type] = isset ($posts['items' . $type]) && is_array ($posts['items' . $type]) && $posts['items' . $type] ? array_values (array_filter (array_map (function ($item) {
+        if (!(isset ($item['content']) && is_string ($item['content']) && ($item['content'] = trim ($item['content'])))) $item['content'] = '';
+        return $item;
+      }, $posts['items' . $type]), function ($item) {
+        return $item['content'];
+      })) : array ();
 
     return '';
   }

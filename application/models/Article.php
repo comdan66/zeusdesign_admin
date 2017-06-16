@@ -16,7 +16,7 @@ class Article extends OaModel {
   static $has_many = array (
     array ('mappings', 'class_name' => 'ArticleTagMapping'),
     array ('tags',     'class_name' => 'ArticleTag',    'through' => 'mappings'),
-    array ('sources',  'class_name' => 'ArticleSource', 'order' => 'sort ASC')
+    array ('sources',  'class_name' => 'ArticleSource')
   );
 
   static $belongs_to = array (

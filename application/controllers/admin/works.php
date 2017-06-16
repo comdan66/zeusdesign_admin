@@ -98,7 +98,7 @@ class Works extends Admin_controller {
     foreach (array_keys (WorkItem::$typeNames) as $type)
       if ($posts['items' . $type])
         foreach ($posts['items' . $type] as $i => $item)
-          WorkItem::transaction (function () use ($i, $item, $obj, $type) { return verifyCreateOrm (WorkItem::create (array_intersect_key (array_merge ($item, array ('sort' => $i, 'work_id' => $obj->id, 'type' => $type)), WorkItem::table ()->columns))); });
+          WorkItem::transaction (function () use ($i, $item, $obj, $type) { return verifyCreateOrm (WorkItem::create (array_intersect_key (array_merge ($item, array ('work_id' => $obj->id, 'type' => $type)), WorkItem::table ()->columns))); });
     
     if ($images)
       foreach ($images as $image)
@@ -175,7 +175,7 @@ class Works extends Admin_controller {
     foreach (array_keys (WorkItem::$typeNames) as $type)
       if ($posts['items' . $type])
         foreach ($posts['items' . $type] as $i => $item)
-          WorkItem::transaction (function () use ($i, $item, $obj, $type) { return verifyCreateOrm (WorkItem::create (array_intersect_key (array_merge ($item, array ('sort' => $i, 'work_id' => $obj->id, 'type' => $type)), WorkItem::table ()->columns))); });
+          WorkItem::transaction (function () use ($i, $item, $obj, $type) { return verifyCreateOrm (WorkItem::create (array_intersect_key (array_merge ($item, array ('work_id' => $obj->id, 'type' => $type)), WorkItem::table ()->columns))); });
 
     if (($del_ids = array_diff (column_array ($obj->images, 'id'), $posts['oldimg'])) && ($imgs = WorkImage::find ('all', array ('select' => 'id, name', 'conditions' => array ('id IN (?)', $del_ids)))))
       foreach ($imgs as $img)
@@ -265,7 +265,13 @@ class Works extends Admin_controller {
     if (!(isset ($posts['content']) && is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '「' . $this->title . '內容」格式錯誤！';
 
     foreach (array_keys (WorkItem::$typeNames) as $type)
-      $posts['items' . $type] = isset ($posts['items' . $type]) && is_array ($posts['items' . $type]) && $posts['items' . $type] ? array_values (array_filter ($posts['items' . $type], function ($item) { return (isset ($item['title']) && is_string ($item['title']) &&  ($item['title'] = trim ($item['title']))) || (isset ($item['href']) && is_string ($item['href']) &&  ($item['href'] = trim ($item['href']))); })) : array ();
+      $posts['items' . $type] = isset ($posts['items' . $type]) && is_array ($posts['items' . $type]) && $posts['items' . $type] ? array_values (array_filter (array_map (function ($item) {
+        if (!(isset ($item['title']) && is_string ($item['title']) && ($item['title'] = trim ($item['title'])))) $item['title'] = '';
+        if (!(isset ($item['href']) && is_string ($item['href']) && ($item['href'] = trim ($item['href'])))) $item['href'] = '';
+        return $item;
+      }, $posts['items' . $type]), function ($item) {
+        return $item['title'] || $item['href'];
+      })) : array ();
 
     return '';
   }
@@ -281,7 +287,15 @@ class Works extends Admin_controller {
     if (!(isset ($posts['content']) && is_string ($posts['content']) && ($posts['content'] = trim ($posts['content'])))) return '「' . $this->title . '內容」格式錯誤！';
 
     foreach (array_keys (WorkItem::$typeNames) as $type)
-      $posts['items' . $type] = isset ($posts['items' . $type]) && is_array ($posts['items' . $type]) && $posts['items' . $type] ? array_values (array_filter ($posts['items' . $type], function ($item) { return (isset ($item['title']) && is_string ($item['title']) &&  ($item['title'] = trim ($item['title']))) || (isset ($item['href']) && is_string ($item['href']) &&  ($item['href'] = trim ($item['href']))); })) : array ();
+      
+    foreach (array_keys (WorkItem::$typeNames) as $type)
+      $posts['items' . $type] = isset ($posts['items' . $type]) && is_array ($posts['items' . $type]) && $posts['items' . $type] ? array_values (array_filter (array_map (function ($item) {
+        if (!(isset ($item['title']) && is_string ($item['title']) && ($item['title'] = trim ($item['title'])))) $item['title'] = '';
+        if (!(isset ($item['href']) && is_string ($item['href']) && ($item['href'] = trim ($item['href'])))) $item['href'] = '';
+        return $item;
+      }, $posts['items' . $type]), function ($item) {
+        return $item['title'] || $item['href'];
+      })) : array ();
 
     $posts['oldimg'] = isset ($posts['oldimg']) ? column_array (WorkImage::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['oldimg']))), 'id') : array ();
 
