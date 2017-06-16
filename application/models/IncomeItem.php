@@ -20,10 +20,18 @@ class IncomeItem extends OaModel {
   );
 
   static $belongs_to = array (
+    array ('user',  'class_name' => 'User'),
+    array ('income',  'class_name' => 'Income')
   );
+
+  private $money = null;
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
+  }
+  public function money () {
+    if ($this->money !== null) return $this->money;
+    return $this->money = array_sum (column_array ($this->details, 'all_money'));
   }
   public function destroy () {
     if (!isset ($this->id)) return false;

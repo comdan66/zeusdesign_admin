@@ -9,8 +9,32 @@
     </div>
 
     <div class='row'>
-      <b><?php echo $title;?>結束日期</b>
-      <input type='text' name='close_date' value='<?php echo isset ($posts['close_date']) ? $posts['close_date'] : '';?>' placeholder='請輸入<?php echo $title;?>結束日期..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>結束日期!' />
+      <b class='need'><?php echo $title;?>負責人</b>
+      <select name='user_id'>
+  <?php if ($users = User::all (array ('select' => 'id, name'))) {
+          foreach ($users as $user) { ?>
+            <option value='<?php echo $user->id;?>'<?php echo (isset ($posts['user_id']) ? $posts['user_id'] : User::current ()->id) == $user->id ? ' selected': '';?>><?php echo $user->name;?></option>
+    <?php }
+        }?>
+      </select>
+    </div>
+
+    <div class='row'>
+      <b>相關照片</b>
+      <div class='drop_imgs'>
+        
+        <div class='drop_img'>
+          <img src='' />
+          <input type='file' name='images[]' />
+          <a class='icon-bin'></a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class='row'>
+      <b class='need'><?php echo $title;?>結束日期</b>
+      <input type='date' name='close_date' value='<?php echo isset ($posts['close_date']) ? $posts['close_date'] : '';?>' placeholder='請輸入<?php echo $title;?>結束日期..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>結束日期!' />
     </div>
     
     <div class='row'>
@@ -18,11 +42,10 @@
       <input type='text' name='memo' value='<?php echo isset ($posts['memo']) ? $posts['memo'] : '';?>' placeholder='請輸入<?php echo $title;?>備註..' maxlength='200' title='輸入<?php echo $title;?>備註!' />
     </div>
 
-    <div class='row muti2' data-vals='<?php echo json_encode ($sources);?>' data-attrs='<?php echo json_encode ($row_muti);?>'>
+    <div class='row muti2' data-vals='<?php echo json_encode ($details);?>' data-attrs='<?php echo json_encode ($row_muti);?>'>
       <b class='need'><?php echo $title;?>細項</b>
       <span><a></a></span>
     </div>
-
 
     <div class='row'>
       <button type='submit'>確定送出</button>

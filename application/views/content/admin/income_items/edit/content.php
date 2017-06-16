@@ -4,49 +4,58 @@
   <form class='form-type1 loading' action='<?php echo base_url ($uri_1, $obj->id);?>' method='post' enctype='multipart/form-data'>
     <input type='hidden' name='_method' value='put' />
 
-    <div class='row min'>
-      <b class='need'>是否上架</b>
-      <label class='switch'>
-        <input type='checkbox' name='status'<?php echo (isset ($posts['status']) ? $posts['status'] : $obj->status) == Banner::STATUS_2 ? ' checked' : '';?> value='<?php echo Banner::STATUS_2;?>' />
-        <span></span>
-      </label>
-    </div>
-
-    <div class='row'>
-      <b class='need' data-title='預覽僅示意，未按比例。'><?php echo $title;?>封面</b>
-      <div class='drop_img'>
-        <img src='<?php echo $obj->cover->url ();?>' />
-        <input type='file' name='cover' />
-      </div>
-    </div>
-
-
     <div class='row'>
       <b class='need'><?php echo $title;?>標題</b>
       <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : $obj->title;?>' placeholder='請輸入<?php echo $title;?>標題..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>標題!' autofocus />
     </div>
+
+    <div class='row'>
+      <b class='need'><?php echo $title;?>負責人</b>
+      <select name='user_id'>
+  <?php if ($users = User::all (array ('select' => 'id, name'))) {
+          foreach ($users as $user) { ?>
+            <option value='<?php echo $user->id;?>'<?php echo (isset ($posts['user_id']) ? $posts['user_id'] : $obj->user_id) == $user->id ? ' selected': '';?>><?php echo $user->name;?></option>
+    <?php }
+        }?>
+      </select>
+    </div>
+
+    <div class='row'>
+      <b>相關照片</b>
+      <div class='drop_imgs'>
+        
+  <?php foreach ($obj->images as $image) { ?>
+          <div class='drop_img'>
+            <img src='<?php echo $image->name->url ();?>' />
+            <input type='hidden' name='oldimg[]' value='<?php echo $image->id; ?>' />
+            <input type='file' name='images[]' />
+            <a class='icon-bin'></a>
+          </div>
+  <?php }?>
+
+        <div class='drop_img'>
+          <img src='' />
+          <input type='file' name='images[]' />
+          <a class='icon-bin'></a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class='row'>
+      <b class='need'><?php echo $title;?>結束日期</b>
+      <input type='date' name='close_date' value='<?php echo isset ($posts['close_date']) ? $posts['close_date'] : $obj->close_date ? $obj->close_date->format ('Y-m-d') : '';?>' placeholder='請輸入<?php echo $title;?>結束日期..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>結束日期!' />
+    </div>
     
     <div class='row'>
-      <b class='need'><?php echo $title;?>內容</b>
-      <textarea class='pure' name='content' placeholder='請輸入<?php echo $title;?>內容..'><?php echo isset ($posts['content']) ? $posts['content'] : $obj->content;?></textarea>
+      <b><?php echo $title;?>備註</b>
+      <input type='text' name='memo' value='<?php echo isset ($posts['memo']) ? $posts['memo'] : $obj->memo;?>' placeholder='請輸入<?php echo $title;?>備註..' maxlength='200' title='輸入<?php echo $title;?>備註!' />
     </div>
 
-
-    <div class='row'>
-      <b class='need'><?php echo $title;?>鏈結</b>
-      <input type='text' name='link' value='<?php echo isset ($posts['link']) ? $posts['link'] : $obj->link;?>' placeholder='請輸入<?php echo $title;?>鏈結..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>鏈結!' />
+    <div class='row muti2' data-vals='<?php echo json_encode ($details);?>' data-attrs='<?php echo json_encode ($row_muti);?>'>
+      <b class='need'><?php echo $title;?>細項</b>
+      <span><a></a></span>
     </div>
-
-    <div class='row'>
-      <b class='need'>鏈結開啟方式</b>
-<?php foreach (Banner::$targetNames as $key => $targetName) { ?>
-        <label class='radio'>
-          <input type='radio' name='target' value='<?php echo $key;?>'<?php echo (isset ($posts['target']) ? $posts['target'] : $obj->target) == $key ? ' checked' : '';?>>
-          <span></span><?php echo $targetName;?>
-        </label>
-<?php } ?>
-    </div>
-
 
     <div class='row'>
       <button type='submit'>確定送出</button>

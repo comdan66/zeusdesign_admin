@@ -6,6 +6,17 @@
  * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
+if ( !function_exists ('is_datetime')) {
+  function is_datetime ($date) {
+    return (DateTime::createFromFormat('Y-m-d H:i:s', $date) !== false);
+  }
+}
+
+if ( !function_exists ('is_date')) {
+  function is_date ($date) {
+    return (DateTime::createFromFormat('Y-m-d', $date) !== false);
+  }
+}
 if (!function_exists ('utf8_strrev')) {
   function utf8_strrev ($str){
     preg_match_all ('/./us', $str, $ar);
