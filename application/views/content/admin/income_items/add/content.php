@@ -1,0 +1,33 @@
+<h1<?php echo isset ($icon) && $icon ? ' class="' . $icon . '"' : '';?>>新增<?php echo $title;?></h1>
+
+<div class='panel'>
+  <form class='form-type1 loading' action='<?php echo base_url ($uri_1);?>' method='post' enctype='multipart/form-data'>
+
+    <div class='row'>
+      <b class='need'><?php echo $title;?>標題</b>
+      <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : '';?>' placeholder='請輸入<?php echo $title;?>標題..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>標題!' autofocus />
+    </div>
+
+    <div class='row'>
+      <b><?php echo $title;?>結束日期</b>
+      <input type='text' name='close_date' value='<?php echo isset ($posts['close_date']) ? $posts['close_date'] : '';?>' placeholder='請輸入<?php echo $title;?>結束日期..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>結束日期!' />
+    </div>
+    
+    <div class='row'>
+      <b><?php echo $title;?>備註</b>
+      <input type='text' name='memo' value='<?php echo isset ($posts['memo']) ? $posts['memo'] : '';?>' placeholder='請輸入<?php echo $title;?>備註..' maxlength='200' title='輸入<?php echo $title;?>備註!' />
+    </div>
+
+    <div class='row muti2' data-vals='<?php echo json_encode ($sources);?>' data-attrs='<?php echo json_encode ($row_muti);?>'>
+      <b class='need'><?php echo $title;?>細項</b>
+      <span><a></a></span>
+    </div>
+
+
+    <div class='row'>
+      <button type='submit'>確定送出</button>
+      <button type='reset'>重新填寫</button>
+      <a href='<?php echo base_url ($uri_1);?>'>回列表頁</a>
+    </div>
+  </form>
+</div>

@@ -75,8 +75,8 @@ class Article extends OaModel {
     );
     return $has ? array (
         '_' => $var,
-        'mappings' => $this->subBackup ('ArticleTagMapping'),
-        'sources' => $this->subBackup ('ArticleSource'),
+        'mappings' => $this->subBackup ('ArticleTagMapping', $has),
+        'sources' => $this->subBackup ('ArticleSource', $has),
       ) : $var;
   }
 }

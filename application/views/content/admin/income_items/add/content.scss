@@ -1,0 +1,164 @@
+/**
+ * @author      OA Wu <comdan66@gmail.com>
+ * @copyright   Copyright (c) 2016 OA Wu Design
+ */
+
+@import "_oa";
+
+form .row.muti2 {
+  > span, > div {
+    margin-top: 8px;
+    display: inline-block;
+    width: 100%;
+    
+    
+    > * {
+      &:last-child {
+        float: right;
+        position: relative;
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+        margin-left: 4px;
+        margin-top: (40px - 25px) / 2;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+        @include border-radius(50%);
+        @include box-shadow(inset 1px 1px 1px rgba(255, 255, 255, 0.15), inset -1px -1px 1px rgba(0, 0, 0, 0.15));
+        @include transition(box-shadow .1s, background-color .1s);
+
+        &:before, &:after {
+          content: '';
+          position: absolute;
+          left: 5px;
+          top: calc(50% - 2px / 2);
+          display: inline-block;
+          width: calc(100% - 5px * 2);
+          height: 2px;
+          @include border-radius(2px);
+          @include transition(transform .3s);
+        }
+
+        &:hover {
+          @include box-shadow(inset -1px -1px 2px rgba(0, 0, 0, 0.25), inset 1px 1px 2px rgba(255, 255, 255, 0.25));
+          @include text-shadow(0 0 1px rgba(0, 0, 0, 0.25));
+          
+          &:before, &:after {
+            background-color: rgba(255, 255, 255, 1.00);
+          }
+        }
+        &:active {
+          @include box-shadow(inset 1px 1px 1px rgba(0, 0, 0, 0.1));
+        }
+      }
+    }
+  }
+  > span {
+    height: 40px;
+    > * {
+      &:last-child {
+        background-color: rgba(64, 176, 166, 1.00);
+
+        &:after {
+          content: '';
+          position: absolute;
+          top: 5px;
+          left: calc(50% - 2px / 2);
+          display: inline-block;
+          height: calc(100% - 5px * 2);
+          width: 2px;
+          @include border-radius(2px);
+          @include transition(transform .3s);
+        }
+        &:before, &:after {
+          background-color: rgba(240, 245, 245, 1.00);
+        }
+
+        &:hover {
+          background-color: rgba(0, 150, 136, 1.00);
+          &:before {
+            @include rotate(180deg);
+          }
+          &:after {
+            @include rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+  > div {
+    + div {
+      margin-top: 20px;
+    }
+    @include clearfix();
+    > * {
+      display: inline-block;
+      float: left;
+      &:nth-child(1) {
+        width: 16px;
+        height: 20px * 2;
+        margin-right: 4px;
+
+        > * {
+          display: block;
+          text-align: center;
+          width: 16px;
+          height: 20px;
+          line-height: 20px;
+          cursor: pointer;
+
+          &:before {
+            content: "\e90d";
+            font-family: "admin"; speak: none; font-style: normal; font-weight: normal; font-variant: normal;
+          }
+          + * {
+            &:before {
+              content: "\e90f";
+            }
+          }
+        }
+      }
+
+      &:nth-child(2) {
+        width: calc((100% - 25px - 16px - 8px));
+        > * {
+          margin-top: 5px;
+        }
+        input {
+          @include input;
+          width: 100%;
+        }
+        select {
+          height: 30px;
+          width: 100%;
+          border: 1px solid rgba(39, 40, 34, .25);
+          font-size: 15px;
+
+          &:focus {
+            outline: 0;
+            border: 1px solid rgba(102, 175, 233, 1);
+            @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6));
+          }
+        }
+      }
+      &:nth-child(3) {
+        background-color: rgba(237, 95, 83, 1.00);
+
+        &:before, &:after {
+          background-color: rgba(250, 210, 210, 1.00);
+        }
+
+        &:hover {
+          background-color: rgba(234, 67, 53, 1.00);
+          &:before {
+            @include rotate(45deg + 90deg);
+          }
+          &:after {
+            @include rotate(-45deg - 90deg);
+          }
+        }
+      }
+    }
+  }
+}

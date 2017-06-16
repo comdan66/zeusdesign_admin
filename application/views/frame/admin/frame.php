@@ -50,9 +50,9 @@
         <span class='icon-u'>個人管理</span>
         <div>
           <a class='icon-home' href=''>個人頁面</a>
-          <a class='icon-calendar2' href='user.html'>我的行事曆</a>
-          <a class='icon-shield' href='user.html'>我的任務</a>
-          <a class='icon-moneybag' href='user.html'>我的宙思幣</a>
+          <a class='icon-calendar2'>我的行事曆</a>
+          <a class='icon-shield'>我的任務</a>
+          <a class='icon-moneybag'>我的宙思幣</a>
         </div>
       </div>
 
@@ -70,7 +70,7 @@
         <span class='icon-file-text2'>文章管理</span>
         <div>
           <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'article-tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>文章分類</a>
-          <a class='icon-list<?php echo ($url = base_url ('admin', 'articles')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>' href='user.html'>文章列表</a>
+          <a class='icon-list<?php echo ($url = base_url ('admin', 'articles')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>文章列表</a>
         </div>
       </div>
 
@@ -78,7 +78,7 @@
         <span class='icon-g'>作品管理</span>
         <div>
           <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'work-tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>作品分類</a>
-          <a class='icon-list<?php echo ($url = base_url ('admin', 'works')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>' href='user.html'>作品列表</a>
+          <a class='icon-list<?php echo ($url = base_url ('admin', 'works')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>作品列表</a>
         </div>
       </div>
 
@@ -86,7 +86,7 @@
         <span class='icon-bil'>帳務管理</span>
         <div>
           <a class='icon-b<?php echo ($url = base_url ('admin', 'companies')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>配合廠商</a>
-          <a class='icon-list<?php echo ($url = base_url ('admin', 'works')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>' href='user.html'>作品列表</a>
+          <a class='icon-ti<?php echo ($url = base_url ('admin', 'income-items')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>帳務列表</a>
         </div>
       </div>
 

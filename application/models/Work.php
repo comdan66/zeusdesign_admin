@@ -89,9 +89,9 @@ class Work extends OaModel {
     );
     return $has ? array (
         '_' => $var,
-        'mappings' => $this->subBackup ('WorkTagMapping'),
-        'images'   => $this->subBackup ('WorkImage'),
-        'items'   => $this->subBackup ('WorkItem'),
+        'mappings' => $this->subBackup ('WorkTagMapping', $has),
+        'images'   => $this->subBackup ('WorkImage', $has),
+        'items'   => $this->subBackup ('WorkItem', $has),
       ) : $var;
   }
 }

@@ -56,7 +56,7 @@ class CompanyPm extends OaModel {
     );
     return $has ? array (
         '_' => $var,
-        'items' => $this->subBackup ('CompanyPmItem'),
+        'items' => $this->subBackup ('CompanyPmItem', $has),
       ) : $var;
   }
 }

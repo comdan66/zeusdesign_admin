@@ -27,6 +27,16 @@ class Company extends OaModel {
     if (!isset ($this->address)) return '';
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->address), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->address);
   }
+  public function destroy () {
+    if (!isset ($this->id)) return false;
+
+    if ($this->pms)
+      foreach ($this->pms as $pm)
+        if (!$pm->destroy ())
+          return false;
+
+    return $this->delete ();
+  }
   public function backup ($has = false) {
     $var = array (
       'id'          => $this->id,
@@ -40,17 +50,7 @@ class Company extends OaModel {
     );
     return $has ? array (
         '_' => $var,
-        'pms' => $this->subBackup ('CompanyPm', true),
+        'pms' => $this->subBackup ('CompanyPm', $has),
       ) : $var;
-  }
-  public function destroy () {
-    if (!isset ($this->id)) return false;
-
-    if ($this->pms)
-      foreach ($this->pms as $pm)
-        if (!$pm->destroy ())
-          return false;
-
-    return $this->delete ();
   }
 }

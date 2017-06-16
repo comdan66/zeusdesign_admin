@@ -6,25 +6,20 @@
  * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
-class CompanyPmItem extends OaModel {
+class IncomeItem extends OaModel {
 
-  static $table_name = 'company_pm_items';
+  static $table_name = 'income_items';
 
   static $has_one = array (
   );
 
   static $has_many = array (
+    array ('images',  'class_name' => 'IncomeItemImage'),
+    array ('details',  'class_name' => 'IncomeItemDetail'),
+    array ('users',  'class_name' => 'User', 'through' => 'zbs')
   );
 
   static $belongs_to = array (
-  );
-
-  const TYPE_1 = 1;
-  const TYPE_2 = 2;
-
-  static $typeNames = array (
-    self::TYPE_1 => 'E-Mail',
-    self::TYPE_2 => '手機',
   );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
@@ -32,20 +27,35 @@ class CompanyPmItem extends OaModel {
   }
   public function destroy () {
     if (!isset ($this->id)) return false;
+    
+    if ($this->images)
+      foreach ($this->images as $image)
+        if (!$image->destroy ())
+          return false;
+    
+    if ($this->details)
+      foreach ($this->details as $detail)
+        if (!$detail->destroy ())
+          return false;
 
     return $this->delete ();
   }
   public function backup ($has = false) {
     $var = array (
       'id'            => $this->id,
+      'income_id'     => $this->income_id,
+      'user_id'       => $this->user_id,
       'company_pm_id' => $this->company_pm_id,
-      'type'          => $this->type,
-      'content'       => $this->content,
+      'title'         => $this->title,
+      'close_date'    => $this->close_date ? $this->close_date->format ('Y-m-d') : '',
+      'memo'          => $this->memo,
       'updated_at'    => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at'    => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
     return $has ? array (
-        '_' => $var
+        '_' => $var,
+        'images' => $this->subBackup ('IncomeItemImage', $has),
+        'details' => $this->subBackup ('IncomeItemDetail', $has),
       ) : $var;
   }
 }

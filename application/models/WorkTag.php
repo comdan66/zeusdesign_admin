@@ -54,8 +54,8 @@ class WorkTag extends OaModel {
     );
     return $has ? array (
         '_' => $var,
-        'mappings' => $this->subBackup ('WorkTagMapping'),
-        'tags' => $this->subBackup ('WorkTag'),
+        'mappings' => $this->subBackup ('WorkTagMapping', $has),
+        'tags' => $this->subBackup ('WorkTag', $has),
       ) : $var;
   }
 }
