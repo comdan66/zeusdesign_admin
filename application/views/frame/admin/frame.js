@@ -191,4 +191,35 @@ $(function () {
   });
 
 
+  $('.search .dysltckb').each (function () {
+    var $that = $(this);
+    var $select = $that.find ('select');
+    var name = $select.attr ('data-name');
+    var $checkboxs = $that.find ('.checkboxs');
+    var val = (typeof $select.data ('val') === 'undefined' ? [] : $select.data ('val')).map (function (t) {
+      return parseInt (t, 10);
+    });
+
+
+    $select.change (function () {
+      var ckbs = $(this).data ('ckbs').filter (function (t) {
+        return t.parent_id == $(this).val ();
+      }.bind ($(this)));
+
+      $checkboxs.empty ().append (ckbs.map (function (t) {
+        return $('<label />').addClass ('checkbox').append (
+          $('<input />').attr ('type', 'checkbox').attr ('name', name).val (t.value).prop ('checked', $.inArray (t.value, val) != -1)).append (
+          $('<span />')).append (
+          t.text);
+      }));
+    });
+
+    if (val.length) {
+      var ckbs = $select.data ('ckbs').filter (function (t) { return $.inArray (t.value, val) != -1; }.bind ($(this))).map (function (t) { return t.parent_id; });
+      $select.find ('option').each (function () {
+        $(this).prop ('selected', $.inArray (parseInt ($(this).val (), 10), ckbs) != -1);
+      });
+      $select.change ();
+    }
+  });
 });

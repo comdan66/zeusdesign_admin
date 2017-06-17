@@ -5,7 +5,7 @@
   
   <div class='left'>
     <label class='icon-search' for='search_conditions'></label>
-    <span><b>搜尋條件：</b><?php echo $isSearch ? implode (',', array_filter (array_map (function ($search) { return $search['value'] !== null ? $search['text'] : null; }, $searches), function ($t) { return $t !== null; })) : '無';?>，共 <b><?php echo number_format ($total);?></b> 筆。</span>
+    <span><b>搜尋條件：</b><?php echo $isSearch ? implode (',', array_filter (array_map (function ($search) { return $search['value'] !== null ? isset ($search['text']) ? $search['text'] : (isset ($search['text1']) ? $search['text1'] : (isset ($search['text2']) ? $search['text2'] : null)) : null; }, $searches), function ($t) { return $t !== null; })) : '無';?>，共 <b><?php echo number_format ($total);?></b> 筆。</span>
   </div>
 
   <div class='right'>
@@ -37,7 +37,19 @@
 <?php     } ?>
         </div>
 <?php }
+      if ($search['el'] == 'dysltckb' && $search['items1'] && $search['items2']) { ?>
+        <div class='dysltckb'>
+          <select data-name='<?php echo $name;?>' data-ckbs='<?php echo json_encode ($search['items2']);?>'<?php echo $search['value'] !== null ? " data-val='" . (is_array ($search['value']) ? json_encode ($search['value']) : '') . "'" : '';?>>
+            <option value=''>依照<?php echo $search['text1'];?>挑選<?php echo $search['text2'];?>搜尋</option>
+      <?php foreach ($search['items1'] as $item) { ?>
+              <option value='<?php echo $item['value'];?>'><?php echo $item['text'];?></option>
+      <?php } ?>
+          </select>
+          <div class='checkboxs' title='依照<?php echo $search['text2'];?>搜尋'></div>
+        </div>
+<?php }
     } ?>
+
 
     <div class='btns'>
       <button type='submit'>搜尋</button>

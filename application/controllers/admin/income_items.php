@@ -35,6 +35,9 @@ class Income_items extends Admin_controller {
   public function index ($offset = 0) {
     $searches = array (
         'title'   => array ('el' => 'input', 'text' => '標題', 'sql' => 'title LIKE ?'),
+        'status' => array ('el' => 'select', 'text' => '狀態', 'sql' => function ($a) { return $a ? 'income_id != 0' : 'income_id = 0'; }, 'vs' => '$val' . " ? " . '1' . " : " . '0' . "", 'items' => array (array ('text' => '已請款', 'value' => '1'), array ('text' => '未請款', 'value' => '0'))),
+        'user_id[]' => array ('el' => 'checkbox', 'text' => '負責人', 'sql' => 'user_id IN (?)', 'items' => array_map (function ($u) { return array ('text' => $u->name, 'value' => $u->id); }, User::all ())),
+        'pms[]' => array ('el' => 'dysltckb', 'text1' => '請選擇公司', 'text2' => '窗口、PM', 'sql' => 'company_pm_id IN (?)', 'items1' => array_map (function ($u) { return array ('text' => $u->name, 'value' => $u->id); }, Company::all ()), 'items2' => array_map (function ($u) { return array ('text' => $u->name, 'value' => $u->id); }, Company::all ()), 'items2' => array_map (function ($u) { return array ('text' => $u->name, 'value' => $u->id); }, Company::all ()), 'items2' => array_map (function ($u) { return array ('text' => $u->name, 'parent_id' => $u->company_id, 'value' => $u->id); }, CompanyPm::all ())),
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));

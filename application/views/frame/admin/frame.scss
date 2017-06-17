@@ -1221,6 +1221,28 @@ label.radio {
       width: 100%;
       margin-top: 12px;
     }
+    .dysltckb {
+      > * {
+        display: inline-block;
+        width: 100%;
+        margin-top: 12px;
+      }
+      select {
+        + * {
+          // margin-top: 0;
+        }
+      }
+      .checkboxs {
+        &:empty {
+          &:after {
+            content: '無';
+            font-style: italic;
+            margin-top: 8px;
+            @include opacity(.75);
+          }
+        }
+      }
+    }
     input {
       &[type='text'], &[type='number'], &[type='date'] {
         @include input;

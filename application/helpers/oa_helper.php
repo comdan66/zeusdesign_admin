@@ -82,7 +82,7 @@ if (!function_exists ('conditions')) {
       }
       if (OAInput::get ($key) === null && ($search['value'] = null) === null)
         continue;
-      else if (in_array ($search['el'], array ('input', 'select', 'textarea')) && OAInput::get ($key) === '' && ($search['value'] = null) === null)
+      else if (in_array ($search['el'], array ('input', 'select', 'textarea', 'dysltckb', 'checkbox')) && OAInput::get ($key) === '' && ($search['value'] = null) === null)
         continue;
       else {
         $search['value'] = OAInput::get ($key);
@@ -91,8 +91,15 @@ if (!function_exists ('conditions')) {
       if (isset ($search['vs'])) {
         $val = $search['value'];
         eval('$val = ' . $search['vs'] . ';');
+
+        if (is_callable ($search['sql']))
+          $search['sql'] = $search['sql']($val);
+
         OaModel::addConditions ($conditions, $search['sql'], $val ? $val : array (0));
       } else {
+        if (is_callable ($search['sql']))
+          $search['sql'] = $search['sql']($search['value']);
+
         OaModel::addConditions ($conditions, $search['sql'], strpos (strtolower ($search['sql']), ' like ') !== false ? '%' . (is_array ($search['value']) ? implode (',', $search['value']) : $search['value']) . '%' : $search['value']);
       }
     }
