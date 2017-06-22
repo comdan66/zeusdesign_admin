@@ -28,8 +28,6 @@ $(function () {
       var $pgn = $(r.pagination);
       $pgn.find ('a[href^="http"]').click (function () {
         loadData ($(this).attr ('href'));
-        
-console.error ('x');
         return false;
       });
       $_pgn.empty ().append ($pgn);
@@ -54,7 +52,7 @@ console.error ('x');
           $('<td />').text (t.user)).append (
           $('<td />').append ($('<div />').addClass ('row').text (t.pm)).append ($('<div />').addClass ('row').addClass ('sub').text (t.company))).append (
           $('<td />').append (t.detail.map (function (u) {
-            return $('<div />').addClass ('row').text (u.user + ' / ' + u.money + '元');
+            return $('<div />').addClass ('row').addClass (u.status ? 'finish' : '').text (u.user + ' / ' + u.money + '元');
           }))).append (
           $('<td />').text (t.money + '元')).append (
           $('<td />').text (t.close_date)).append (

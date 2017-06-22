@@ -15,7 +15,6 @@ class User extends OaModel {
 
   static $has_many = array (
     array ('roles', 'class_name' => 'UserRole'),
-    array ('zbs', 'class_name' => 'IncomeItemDetail'),
   );
 
   static $belongs_to = array (

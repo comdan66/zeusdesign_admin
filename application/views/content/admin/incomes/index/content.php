@@ -9,7 +9,7 @@
   </div>
 
   <div class='right'>
-    <a class='icon-r' href='<?php echo base_url ($uri_1, 'add');?>'>新增</a>
+    <!-- <a class='icon-r' href='<?php echo base_url ($uri_1, 'add');?>'>新增</a> -->
   </div>
 
   <form class='conditions'>
@@ -53,11 +53,13 @@
       <tr>
         <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
         <th width='70'>是否入帳</th>
-        <th width='120'>發票日期</th>
+        <th width='90'>發票日期</th>
         <th >請款項目</th>
-        <th width='120'>備註</th>
-        <th width='120'>金額<?php echo listSort ($uri_1, 'money');?></th>
-        <th width='100'>編輯</th>
+        <th >人員薪資</th>
+        <th width='80'>放款進度</th>
+        <th width='90'>金額<?php echo listSort ($uri_1, 'money');?></th>
+        <th width='130'>備註</th>
+        <th width='90'>編輯</th>
       </tr>
     </thead>
     <tbody>
@@ -65,17 +67,18 @@
         <tr>
           <td><?php echo $obj->id;?></td>
           <td class='center'>
-            <label class='switch ajax' data-column='status' data-url='<?php echo base_url ($uri_1, 'status', $obj->id);?>'>
-              <input type='checkbox'<?php echo $obj->status == Income::STATUS_2 ? ' checked' : '';?> />
-              <span></span>
-            </label>
+            <label class='switch ajax' data-column='status' data-url='<?php echo base_url ($uri_1, 'status', $obj->id);?>'><input type='checkbox'<?php echo $obj->status == Income::STATUS_2 ? ' checked' : '';?> /><span></span></label>
           </td>
           <td><?php echo $obj->invoice_date ? $obj->invoice_date->format ('Y-m-d') : '';?></td>
-          <td><?php echo $obj->items ? implode ('', array_map (function ($item) {
-            return '<div class="row">' . $item->title . ' / ' . number_format ($item->money ()) . '元</div>';
+          <td><?php echo $obj->items ? implode ('', array_map (function ($t) {
+            return '<div class="row">' . $t->title . ' / ' . number_format ($t->money ()) . '元</div>';
           }, $obj->items)) : '';?></td>
-          <td><?php echo $obj->memo;?></td>
+          <td><?php echo $obj->zbs ? implode ('', array_map (function ($zb) {
+            return '<div class="row' . ($zb->status == Zb::STATUS_2 ? ' finish' : '') . '">' . $zb->user->name . ' / ' . number_format ($zb->money) . '元</div>';
+          }, $obj->zbs)) : '';?></td>
+          <td style='color: <?php echo $obj->progress () < 100 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>;'><?php echo $obj->progress ()?>%</td>
           <td><?php echo number_format ($obj->money);?>元</td>
+          <td><?php echo $obj->memo;?></td>
           <td>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
             /

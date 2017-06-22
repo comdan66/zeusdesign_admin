@@ -1,0 +1,65 @@
+/**
+ * @author      OA Wu <comdan66@gmail.com>
+ * @copyright   Copyright (c) 2016 OA Wu Design
+ */
+
+@import "_oa";
+
+.panel {
+  + .panel {
+    margin-top: 0;
+  }
+  > header {
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
+  > .table-list {
+    display: none;
+  }
+  @include transition(margin-top .3s, margin-bottom .3s);
+  
+  &.s {
+    &:not(:first-child) {
+      margin-top: 16px;
+    }
+    border: 2px solid rgba(66, 133, 244, .5);
+    + .panel {
+      margin-top: 16px;
+    }
+
+    > .table-list {
+      display: table;
+    }
+    
+    > header {
+      border-bottom: 1px solid rgba(221, 221, 221, 1.00);
+      margin-bottom: 16px;
+    }
+  }
+
+  @include range-width(0, 600px) {
+    > header {
+      border-bottom: 1px solid rgba(221, 221, 221, 1.00);
+      margin-bottom: 16px;
+    }
+    + .panel {
+      margin-top: 16px !important;
+    }
+  }
+}
+.cik {
+  cursor: pointer;
+}
+#menu_ckb:not(:checked) {
+  ~ * .panel {
+    @include range-width(750px, 950px) {
+      > header {
+        border-bottom: 1px solid rgba(221, 221, 221, 1.00);
+        margin-bottom: 16px;
+      }
+      + .panel {
+        margin-top: 16px !important;
+      }
+    }
+  }
+}

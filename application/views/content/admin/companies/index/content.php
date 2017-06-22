@@ -54,9 +54,13 @@ foreach ($objs as $obj) { ?>
       <table class='table-list header'>
         <tbody>
             <tr>
-              <td class='left mobile'><b><?php echo $obj->name;?></b></td>
-              <td width='140' data-before='電話：'><?php echo $obj->phone;?></td>
-              <td width='140' data-before='統編：'><?php echo $obj->tax_no;?></td>
+              <td class='left mobile cik'><b><?php echo $obj->name;?></b></td>
+        <?php if ($obj->phone) { ?>
+                <td width='160' data-before='電話：'><?php echo $obj->phone;?></td>
+        <?php }
+              if ($obj->tax_no) { ?>
+                <td width='140' data-before='統編：'><?php echo $obj->tax_no;?></td>
+        <?php } ?>
 
               <td class='mobile' width='120'>
                 <a class='icon-r' href="<?php echo base_url ('admin/company', $obj->id, 'pms', 'add');?>"></a>

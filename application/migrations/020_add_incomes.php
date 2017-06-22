@@ -16,7 +16,7 @@ class Migration_Add_incomes extends CI_Migration {
         `status` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '是否入帳，1 未入帳，2 已入帳',
         `memo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '備註',
         `money` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '總金額',
-
+        
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',
         PRIMARY KEY (`id`)

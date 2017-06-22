@@ -10,7 +10,7 @@
         <th width='90'>結束日期</th>
         <th width='180'>標題</th>
         <th width='120'>負責人</th>
-        <th width='130'>PM</th>
+        <th width='150'>PM</th>
         <th >細項</th>
         <th width='100'>總金額</th>
         <th width='50'>檢視</th>

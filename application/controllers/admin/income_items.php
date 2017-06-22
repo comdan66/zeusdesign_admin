@@ -81,7 +81,7 @@ class Income_items extends Admin_controller {
           'user' => $obj->user->name,
           'pm' => $obj->company_pm_id && $obj->pm ? $obj->pm->name : '',
           'company' => $obj->company_pm_id && $obj->pm && $obj->pm->company ? $obj->pm->company->name : '',
-          'detail' => array_map (function ($detail) { return array ('user' => $detail->user->name, 'money' => number_format ($detail->all_money)); }, $obj->details),
+          'detail' => array_map (function ($detail) { return array ('user' => $detail->user->name, 'money' => number_format ($detail->all_money), 'status' => $detail->zb_id && $detail->zb && $detail->zb->status == Zb::STATUS_2); }, $obj->details),
           'money' => number_format ($obj->money ()),
           'status' => $obj->hasIncome () ? true : false,
           'links' => array (

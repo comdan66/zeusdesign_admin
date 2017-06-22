@@ -735,6 +735,20 @@ html {
 
   h2 {
     margin-top: 0 !important;
+
+    &.float {
+      line-height: 30px;
+      height: 30px;
+      @include clearfix();
+      
+      > label {
+        margin-top: 4px;
+        margin-right: 8px;
+      }
+      b {
+        color: rgba(195, 58, 47, 1.00);
+      }
+    }
   }
 }
 .panel {
@@ -815,9 +829,9 @@ html {
   > header {
     display: inline-block;
     width: 100%;
-    margin-bottom: 16px;
     overflow: hidden;
     border-bottom: 1px solid rgba(221, 221, 221, 1.00);
+    margin-bottom: 16px;
 
     .table-list {
       margin-top: 0;
@@ -1666,6 +1680,10 @@ table.table-list {
             height: 18px;
             line-height: 18px;
           }
+          &.finish {
+            text-decoration: line-through;
+            @include opacity(.75);
+          }
         }
       }
     }
@@ -1705,7 +1723,7 @@ table.table-list {
     width: 100%;
     font-size: 13px;
     margin-top: 4px;
-    padding-top: 12px;
+    padding-top: 8px;
     color: rgba(135, 135, 135, 1.00);
     border-top: 1px dashed rgba(0, 0, 0, .2);
     
@@ -1714,22 +1732,24 @@ table.table-list {
     line-height: 25px - 12px;
     b {
       font-size: 15px;
-      color: rgba(195, 58, 47, 1.00);
       line-height: 23px - 12px;
+      &:not(.n) {
+        color: rgba(195, 58, 47, 1.00);
+      }
     }
   }
 
   &.m2d {
     > tbody {
       > tr {
-        background-color: rgba(255, 255, 255, 1.00);
+        background-color: rgba(255, 255, 255, 1.00) !important;
 
         &:nth-child(4n + 1), &:nth-child(4n + 2) {
-          background-color: rgba(249, 249, 249, 1.00);
+          background-color: rgba(249, 249, 249, 1.00) !important;
         }
         &:nth-child(2n + 2) {
           > td {
-            border-top-color: rgba(235, 235, 235, 1.00);
+            border-top-color: rgba(235, 235, 235, 1.00) !important;
           }
         }
         &:nth-child(2n + 1) {
@@ -1775,26 +1795,26 @@ table.table-list {
 }
 
 #menu_ckb:not(:checked) {
-    ~ * table.table-list {
-      @include range-width(750px, 950px) {
+  ~ * table.table-list {
+    @include range-width(750px, 950px) {
+      @include mini-table-list;
+    }
+    &.w1100 {
+      @include range-width(0, 1100px) {
         @include mini-table-list;
       }
-      &.w1100 {
-        @include range-width(0, 1100px) {
-          @include mini-table-list;
-        }
-      } 
-      &.w1200 {
-        @include range-width(0, 1200px) {
-          @include mini-table-list;
-        }
-      } 
-      &.w1300 {
-        @include range-width(0, 1300px) {
-          @include mini-table-list;
-        }
-      } 
-    }
+    } 
+    &.w1200 {
+      @include range-width(0, 1200px) {
+        @include mini-table-list;
+      }
+    } 
+    &.w1300 {
+      @include range-width(0, 1300px) {
+        @include mini-table-list;
+      }
+    } 
+  }
 }
 
 

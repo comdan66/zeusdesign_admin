@@ -37,8 +37,8 @@ class Incomes extends Admin_controller {
 
     $posts = OAInput::post ();
 
-    $validation = function (&$posts) {
-      if (!(isset ($posts['ids']) && $posts['ids'] && is_array ($posts['ids']) && ($posts['ids'] = column_array (IncomeItem::find ('all', array ('select' => 'id, income_id, updated_at', 'conditions' => array ('id IN (?) AND income_id = 0', $posts['ids']))), 'id')))) return '「請款」資料有誤！';
+    $validation = function (&$posts, &$objs) {
+      if (!(isset ($posts['ids']) && $posts['ids'] && is_array ($posts['ids']) && ($posts['ids'] = column_array ($objs = IncomeItem::find ('all', array ('select' => 'id, income_id, updated_at', 'include' => array ('details'), 'conditions' => array ('id IN (?) AND income_id = 0', $posts['ids']))), 'id')))) return '「請款」資料有誤！';
 
       if (!(isset ($posts['money']) && is_string ($posts['money']) && is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] > 0))) return '「總金額」資料有誤！';
       if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Income::STATUS_2 : Income::STATUS_1) && in_array ($posts['status'], array_keys (Income::$statusNames)))) $posts['status'] = Income::STATUS_1;
@@ -48,13 +48,40 @@ class Incomes extends Admin_controller {
       return '';
     };
 
-    if (($msg = $validation ($posts)) || (!Income::transaction (function () use (&$obj, $posts) {
+    if (($msg = $validation ($posts, $objs)) || (!Income::transaction (function () use (&$obj, $posts, $objs) {
       if (!verifyCreateOrm ($obj = Income::create (array_intersect_key ($posts, Income::table ()->columns)))) return false;
-      IncomeItem::update_all (array (
-        'set' => 'income_id = ' . $obj->id,
-        'conditions' => array ('id IN (?) AND income_id = 0', $posts['ids'])
-      ));
+
+      $users = array ();
+      foreach ($objs as $o)
+        foreach ($o->details as $detail) {
+          if (($o->income_id = $obj->id) && !$o->save ())
+            return false;
+
+          if (!isset ($users[$detail->user_id]))
+            $users[$detail->user_id] = array ('money' => 0, 'detail_ids' => array ());
+        
+          $users[$detail->user_id]['money'] += $detail->all_money;
+          array_push ($users[$detail->user_id]['detail_ids'], $detail->id);
+        }
+
+      if (!$users) return false;
+
+      foreach ($users as $user_id => $user)
+        if (!(verifyCreateOrm ($z = Zb::create (array (
+                            'user_id' => $user_id,
+                            'income_id' => $obj->id,
+                            'money' => $user['money'],
+                            'percentage' => $user['money'] / $posts['money']
+                          ))) && IncomeItemDetail::update_all (array ('set' => 'zb_id = ' . $z->id, 'conditions' => array ('id IN (?)', $user['detail_ids'])))))
+          return false;
+      return true;
     }) && $msg = '新增失敗！')) return redirect_message (array ('admin', 'income_items', 'check'), array ('_fd' => $msg, 'posts' => $posts));
+
+    UserLog::logWrite (
+      $this->icon,
+      '新增一項' . $this->title . '',
+      '此項' . $this->title . '為：「' . ($obj->has_tax () ? '有開發票' : '未開發票') . '」，目前狀態：「' . Income::$statusNames[$obj->status] . '」',
+      $obj->backup ());
 
     return redirect_message (array ($this->uri_1, $obj->id, 'show'), array ('_fi' => '新增成功，已經成立一張入帳！'));
   }
@@ -169,17 +196,8 @@ class Incomes extends Admin_controller {
   public function show () {
     UserLog::logRead ($this->icon, '檢視了一項' . $this->title);
 
-    $users = array ();
-    foreach ($this->obj->items as $item)
-      foreach ($item->details as $detail)
-        if (!isset ($users[$detail->user_id]))
-          $users[$detail->user_id] = array ('user' => $detail->user, 'details' => array ($detail));
-        else
-          array_push ($users[$detail->user_id]['details'], $detail);
-
     return $this->load_view (array (
         'obj' => $this->obj,
-        'users' => $users,
       ));
   }
   public function status () {
@@ -210,6 +228,41 @@ class Incomes extends Admin_controller {
       $this->icon,
       Income::$statusNames[$obj->status] . '一項' . $this->title,
       '將一筆' . $this->title . '調整為「' . Income::$statusNames[$obj->status] . '」',
+      array ($backup, $obj->backup (true)));
+
+    return $this->output_json ($obj->status == Income::STATUS_2);
+  }
+  public function zb_status ($id) {
+    if (!($id && ($this->obj = Zb::find ('one', array ('conditions' => array ('id = ?', $id))))))
+      return $this->output_error_json ('找不到該筆資料。');
+
+    $obj = $this->obj;
+
+    if (!$this->has_post ())
+      return $this->output_error_json ('非 POST 方法，錯誤的頁面請求。');
+
+    $posts = OAInput::post ();
+    $backup = $obj->backup (true);
+
+    $validation = function (&$posts) {
+      return !(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Zb::STATUS_2 : Zb::STATUS_1) && in_array ($posts['status'], array_keys (Zb::$statusNames))) ? '「設定給付」發生錯誤！' : '';
+    };
+
+    if ($msg = $validation ($posts))
+      return $this->output_error_json ($msg);
+
+    if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
+      foreach ($columns as $column => $value)
+        $obj->$column = $value;
+
+    if (!Income::transaction (function () use ($obj, $posts) {
+      return $obj->save ();
+    })) return $this->output_error_json ('更新失敗！');
+
+    UserLog::logWrite (
+      'icon-moneybag',
+      Zb::$statusNames[$obj->status] . '一項薪資',
+      '將一筆請款單新增調整為「' . Zb::$statusNames[$obj->status] . '」',
       array ($backup, $obj->backup (true)));
 
     return $this->output_json ($obj->status == Income::STATUS_2);

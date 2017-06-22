@@ -19,7 +19,7 @@
         <th width='90'>結束日期</th>
         <th width='180'>標題</th>
         <th width='120'>負責人</th>
-        <th width='130'>PM</th>
+        <th width='150'>PM</th>
         <th >細項</th>
         <th width='100'>總金額</th>
         <th width='50'>檢視</th>
@@ -79,6 +79,11 @@
     </div>
 
     <div class='row'>
+      <b data-title='「含稅金額」減去「宙思收入」用來給付薪資。'>放款金額</b>
+      <span><?php echo number_format ($obj->use_money ());?>元</span>
+    </div>
+
+    <div class='row'>
       <b><?php echo $title;?>備註</b>
       <span><?php echo $obj->memo;?></span>
     </div> 
@@ -88,10 +93,12 @@
 
 
 <?php
-foreach ($users as $user) {
-  $money = 0;?>
+foreach ($obj->zbs as $zb) { ?>
   <div class='panel'>
-    <h2>給付「<?php echo $user['user']->name;?>」</h2>
+    <h2 class='float'><label class='switch ajax' data-column='status' data-url='<?php echo base_url ($uri_1, 'zb_status', $zb->id);?>'>
+      <input type='checkbox'<?php echo $zb->status == Zb::STATUS_2 ? ' checked' : '';?> />
+      <span></span>
+    </label><span>給付「<?php echo $zb->user->name;?>」薪資 <b><?php echo number_format ($zb->pay ());?></b> 元</b>。</span></h2>
     <table class='table-list'>
       <thead>
         <tr>
@@ -103,8 +110,7 @@ foreach ($users as $user) {
         </tr>
       </thead>
       <tbody>
-  <?php foreach ($user['details'] as $detail) {
-          $money += $detail->all_money;?>
+  <?php foreach ($zb->details as $detail) { ?>
           <tr>
             <td></td>
             <td><?php echo $detail->item->title . ($detail->title ? ' - ' . $detail->title : '');?></td>
@@ -115,8 +121,9 @@ foreach ($users as $user) {
   <?php }?>
       </tbody>
     </table>
-    <span class='right'>「未稅金額」：<b><?php echo number_format ($money);?></b> 元，「含稅金額」：<b><?php echo number_format ($a = round ($money * $obj->tax_rate ()));?></b> 元，「宙思收入」：<b><?php echo number_format ($b = round ($a * $obj->zeus_rate ()));?></b> 元。</span>
-    <span class='right'>「放款金額」為 <b><?php echo number_format ($a - $b);?></b> 元。</span>
+    <span class='right'><?php echo $zb->user->name;?> 此次請款的總金額 <b class='n'><?php echo number_format ($zb->money);?></b> 元，佔全部金額的 <b class='n'><?php echo number_format ($zb->percentage () * 100, 2);?>%</b>。</span>
+    <span class='right'>所以放款金額 <?php echo number_format ($obj->use_money ());?>元 x <?php echo number_format ($zb->percentage () * 100, 2);?>% 的結果是 <b><?php echo number_format ($zb->pay ());?></b> 元。</span>
+    
 
   </div>
   <?php
