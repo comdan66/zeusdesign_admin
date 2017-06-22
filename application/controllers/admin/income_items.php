@@ -15,7 +15,7 @@ class Income_items extends Admin_controller {
   public function __construct () {
     parent::__construct ();
     
-    if (!User::current ()->in_roles (array ('website')))
+    if (!User::current ()->in_roles (array ('income')))
       return redirect_message (array ('admin'), array ('_fd' => '您的權限不足，或者頁面不存在。'));
     
     $this->uri_1 = 'admin/income-items';
@@ -32,29 +32,83 @@ class Income_items extends Admin_controller {
          ->add_param ('_url', base_url ($this->uri_1));
   }
 
-  public function index ($offset = 0) {
-    $searches = array (
-        'title'   => array ('el' => 'input', 'text' => '標題', 'sql' => 'title LIKE ?'),
-        'status' => array ('el' => 'select', 'text' => '狀態', 'sql' => function ($a) { return $a ? 'income_id != 0' : 'income_id = 0'; }, 'vs' => '$val' . " ? " . '1' . " : " . '0' . "", 'items' => array (array ('text' => '已請款', 'value' => '1'), array ('text' => '未請款', 'value' => '0'))),
-        'user_id[]' => array ('el' => 'checkbox', 'text' => '負責人', 'sql' => 'user_id IN (?)', 'items' => array_map (function ($u) { return array ('text' => $u->name, 'value' => $u->id); }, User::all ())),
-        'pms[]' => array ('el' => 'dysltckb', 'text1' => '請選擇公司', 'text2' => '窗口、PM', 'sql' => 'company_pm_id IN (?)', 'items1' => array_map (function ($u) { return array ('text' => $u->name, 'value' => $u->id); }, Company::all ()), 'items2' => array_map (function ($u) { return array ('text' => $u->name, 'value' => $u->id); }, Company::all ()), 'items2' => array_map (function ($u) { return array ('text' => $u->name, 'value' => $u->id); }, Company::all ()), 'items2' => array_map (function ($u) { return array ('text' => $u->name, 'parent_id' => $u->company_id, 'value' => $u->id); }, CompanyPm::all ())),
-      );
+  public function check () {
+    $posts = Session::getData ('posts', true);
 
-    $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
-    $objs = conditions ($searches, $configs, $offset, 'IncomeItem', array ('order' => 'id DESC', 'include' => array ('details', 'user', 'income')));
+    if (!$posts = OAInput::post ())
+      $posts = Session::getData ('posts', true);
+
+    if (!(isset ($posts['ids']) && $posts['ids'] && is_array ($posts['ids']) && ($objs = IncomeItem::find ('all', array ('include' => array ('details', 'user', 'income', 'pm'), 'conditions' => array ('id IN (?) AND income_id = 0', $posts['ids']))))))
+      return redirect_message (array ($this->uri_1), array ('_fd' => '選取資訊錯誤，請重新選取！', 'posts' => $posts));
+
+    UserLog::logRead (
+      $this->icon,
+      '進入確認' . $this->title . '程序',
+      '準備合併' . count ($objs) . '筆請款',
+      $posts['ids']);
+
+    return $this->load_view (array (
+        'objs' => $objs,
+        'posts' => $posts,
+      ));
+  }
+  public function ajax ($offset = 0) {
+    $uri_1 = $this->uri_1;
+    $posts = OAInput::post ();
+
+    $conditions = array ();
+    if (isset ($posts['title']) && ($posts['title'] = trim ($posts['title'])) && is_string ($posts['title']))
+      OaModel::addConditions ($conditions, 'title = ?', '%' . $posts['title'] . '%');
+
+    if (isset ($posts['status']) && ($posts['status'] = trim ($posts['status'])) !== '' && is_numeric ($posts['status']))
+      OaModel::addConditions ($conditions, 'income_id ' . ($posts['status'] ? '!=' : '=') . ' 0');
+
+    if (isset ($posts['user_ids']) && $posts['user_ids'] && is_array ($posts['user_ids']))
+      OaModel::addConditions ($conditions, 'user_id IN (?)', $posts['user_ids']);
+
+    if (isset ($posts['pms']) && $posts['pms'] && is_array ($posts['pms']))
+      OaModel::addConditions ($conditions, 'company_pm_id IN (?)', $posts['pms']);
+
+    $searches = array ();
+    $configs = array ('admin', 'income_items', 'ajax', '%s');
+    $objs = array_map (function ($obj) use ($uri_1) {
+      return array (
+          'id' => $obj->id,
+          'income_id' => $obj->income_id,
+          'src' => $obj->images ? $obj->images[0]->name->url ('800w') : '',
+          'close_date' => $obj->close_date ? $obj->close_date->format ('Y-m-d') : '',
+          'title' => $obj->title,
+          'user' => $obj->user->name,
+          'pm' => $obj->company_pm_id && $obj->pm ? $obj->pm->name : '',
+          'company' => $obj->company_pm_id && $obj->pm && $obj->pm->company ? $obj->pm->company->name : '',
+          'detail' => array_map (function ($detail) { return array ('user' => $detail->user->name, 'money' => number_format ($detail->all_money)); }, $obj->details),
+          'money' => number_format ($obj->money ()),
+          'status' => $obj->hasIncome () ? true : false,
+          'links' => array (
+              'show' => base_url ($uri_1, $obj->id, 'show'),
+              'edit' => base_url ($uri_1, $obj->id, 'edit'),
+              'delete' => base_url ($uri_1, $obj->id),
+              'income' => base_url ('admin', 'incomes', $obj->income_id, 'show'),
+            )
+        );
+    }, conditions ($searches, $configs, $offset, 'IncomeItem', array ('order' => 'id DESC', 'include' => array ('details', 'user', 'income', 'pm', 'image')), function ($c) use ($conditions) {
+      return $conditions;
+    }));
 
     UserLog::logRead (
       $this->icon,
       '檢視了' . $this->title . '列表',
       '搜尋條件細節可詢問工程師',
-      $configs);
+      array ($configs, $conditions));
 
-    return $this->load_view (array (
+    return $this->output_json (array (
         'objs' => $objs,
         'total' => $offset,
-        'searches' => $searches,
         'pagination' => $this->_get_pagination ($configs),
       ));
+  }
+  public function index ($offset = 0) {
+    return $this->load_view ();
   }
   public function add () {
     $posts = Session::getData ('posts', true);

@@ -107,6 +107,7 @@ if (!function_exists ('conditions')) {
     if ($cndFunc && ($c = $cndFunc ($conditions)))
       $conditions = $c;
 
+
     $total = $modelName::count (array ('conditions' => $conditions));
 
     $qs = array ();

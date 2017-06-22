@@ -17,7 +17,7 @@
 <?php
     foreach ($searches as $name => $search) {
       if ($search['el'] == 'input') { ?>
-        <input type='text' name='<?php echo $name;?>' placeholder='依照<?php echo $search['text'];?>搜尋..' value='<?php echo $search['value'] === null ? '' : $search['value'];?>'>
+        <input type='<?php echo isset ($search['type']) ? $search['type'] : 'text';?>' name='<?php echo $name;?>' placeholder='依照<?php echo $search['text'];?>搜尋..' value='<?php echo $search['value'] === null ? '' : $search['value'];?>'>
 <?php }
       if ($search['el'] == 'select' && $search['items']) { ?>
         <select name='<?php echo $name;?>'>

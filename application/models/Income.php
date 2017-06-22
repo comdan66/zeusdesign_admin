@@ -32,12 +32,31 @@ class Income extends OaModel {
   const TYPE_2 = 2;
 
   static $typeNames = array (
-    self::TYPE_1 => '有發票',
-    self::TYPE_2 => '沒發票',
+    self::TYPE_1 => '未發票',
+    self::TYPE_2 => '有發票',
   );
+
+  // private $money = null;
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
+  }
+
+  public function has_tax () {
+    return $this->invoice_date ? true : false;
+  }
+  public function tax_rate () {
+    return $this->has_tax () ? 1.05 : 1;
+  }
+  public function tax_money () {
+    return round ($this->money * $this->tax_rate ());
+  }
+
+  public function zeus_rate () {
+    return $this->has_tax () ? 0.2 : 0.1;
+  }
+  public function zeus_money () {
+    return round ($this->tax_money () * $this->zeus_rate ());
   }
   public function destroy () {
     if (!isset ($this->id)) return false;
@@ -54,7 +73,7 @@ class Income extends OaModel {
       'id'           => $this->id,
       'invoice_date' => $this->invoice_date ? $this->invoice_date->format ('Y-m-d') : '',
       'status'       => $this->status,
-      'type'         => $this->type,
+      'money'        => $this->money,
       'memo'         => $this->memo,
       'updated_at'   => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at'   => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',

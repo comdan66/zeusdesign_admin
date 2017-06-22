@@ -11,6 +11,7 @@ class IncomeItem extends OaModel {
   static $table_name = 'income_items';
 
   static $has_one = array (
+    array ('image',  'class_name' => 'IncomeItemImage'),
   );
 
   static $has_many = array (
@@ -21,13 +22,17 @@ class IncomeItem extends OaModel {
 
   static $belongs_to = array (
     array ('user',  'class_name' => 'User'),
-    array ('income',  'class_name' => 'Income')
+    array ('income',  'class_name' => 'Income'),
+    array ('pm',  'class_name' => 'CompanyPm')
   );
 
   private $money = null;
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
+  }
+  public function hasIncome () {
+    return $this->income_id && $this->income;
   }
   public function money () {
     if ($this->money !== null) return $this->money;

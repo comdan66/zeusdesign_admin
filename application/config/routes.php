@@ -22,6 +22,9 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('income_items'), 'income_items');
   Route::resourcePagination (array ('incomes'), 'incomes');
   Route::resourcePagination (array ('income-item-details'), 'income_item_details');
+  
+  // Route::post ('/income_items/ajax/', 'income_items@ajax(0)');
+  // Route::post ('/income_items/ajax/(:id)', 'income_items@ajax($1)');
 });
 
 Route::group ('api', function () {
@@ -30,5 +33,5 @@ Route::group ('api', function () {
 });
 
 // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-// var_dump (Route::getRoute ());
+// print_r (Route::getRoute ());
 // exit ();

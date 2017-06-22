@@ -15,7 +15,7 @@ class Migration_Add_companies extends CI_Migration {
         `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '名稱',
         `tax_no` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '統一編號',
         `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '地址',
-        `phone` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '電話',
+        `phone` varchar(25) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '電話',
         `memo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '備註',
 
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',

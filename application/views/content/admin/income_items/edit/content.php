@@ -21,7 +21,25 @@
     </div>
 
     <div class='row'>
-      <b>相關照片</b>
+      <b class='need'><?php echo $title;?>窗口PM</b>
+      <select name='company_pm_id'>
+          <option value='0' selected>請選擇聯絡人</option>
+    <?php if ($companies = Company::all (array ('select' => 'id, name'))) {
+            foreach ($companies as $company) { ?>
+              <optgroup label='<?php echo $company->name;?>'>
+          <?php if ($company->pms) {
+                  foreach ($company->pms as $pm) { ?>
+                    <option value='<?php echo $pm->id;?>'<?php echo (isset ($posts['company_pm_id']) ? $posts['company_pm_id'] : $obj->company_pm_id) == $pm->id ? ' selected': '';?>><?php echo $pm->name;?></option>
+            <?php }
+                } ?>
+              </optgroup>
+      <?php }
+          } ?>
+        </select>
+    </div>
+
+    <div class='row'>
+      <b>相關圖片</b>
       <div class='drop_imgs'>
         
   <?php foreach ($obj->images as $image) { ?>
@@ -43,7 +61,7 @@
     </div>
 
     <div class='row'>
-      <b class='need'><?php echo $title;?>結束日期</b>
+      <b class='need'>專案結束日期</b>
       <input type='date' name='close_date' value='<?php echo isset ($posts['close_date']) ? $posts['close_date'] : $obj->close_date ? $obj->close_date->format ('Y-m-d') : '';?>' placeholder='請輸入<?php echo $title;?>結束日期..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>結束日期!' />
     </div>
     

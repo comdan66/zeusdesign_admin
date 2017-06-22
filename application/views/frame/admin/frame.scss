@@ -732,19 +732,64 @@ html {
     margin-top: 8px;
   };
   @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+
+  h2 {
+    margin-top: 0 !important;
+  }
 }
 .panel {
   >*:first-child {
     margin-top: 0;
   }
-  &.back {
+  &.note {
+    display: none;
+    &.s {
+      display: inline-block;
+    }
     @include clearfix();
-    
-    a {
+    button {
+      @include button(rgba(74, 133, 245, 1.00));
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+    }
+    >* {
       float: left;
       display: inline-block;
       height: 30px;
       line-height: 30px;
+
+      &:before {
+        font-size: 24px;
+        display: inline-block;
+        margin-top: 2px;
+      }
+      &:nth-child(1) {
+        max-width: calc(100% - 120px);
+      }
+      &:nth-child(2) {
+        float: right;
+        width: 120px;
+        text-align: center;
+
+        &:before {
+          font-size: 14px;
+          margin-top: 2px;
+          margin-right: 2px;
+        }
+      }
+    }
+  }
+  &.back {
+    @include clearfix();
+    
+    >* {
+      float: left;
+      display: inline-block;
+      &:not(.show-type1) {
+        height: 30px;
+        line-height: 30px;
+      }
 
       &:before {
         font-size: 24px;
@@ -1434,6 +1479,9 @@ label.radio {
           label.switch {
             margin-top: 15px;
           }
+          label.checkbox {
+            margin-top: 15px;
+          }
           .img {
             display: inline-block;
             height: 45px;
@@ -1444,6 +1492,7 @@ label.radio {
             height: auto;
             line-height: 55px;
             display: inline;
+
             + .row {
               margin-left: 8px;
             }
@@ -1607,10 +1656,17 @@ table.table-list {
           font-size: 13px;
           @include opacity(.65);
         }
-          .row {
-            height: 22px;
-            line-height: 22px;
+        .row {
+          height: 22px;
+          line-height: 22px;
+          @include overflow-docx3();
+          &.sub {
+            @include opacity(.75);
+            font-size: 10px;
+            height: 18px;
+            line-height: 18px;
           }
+        }
       }
     }
   }
@@ -1643,6 +1699,24 @@ table.table-list {
     padding-top: 12px;
     color: rgba(135, 135, 135, 1.00);
     border-top: 1px dashed rgba(0, 0, 0, .2);
+  }
+  ~ span.right {
+    display: inline-block;
+    width: 100%;
+    font-size: 13px;
+    margin-top: 4px;
+    padding-top: 12px;
+    color: rgba(135, 135, 135, 1.00);
+    border-top: 1px dashed rgba(0, 0, 0, .2);
+    
+    text-align: right;
+    height: 25px;
+    line-height: 25px - 12px;
+    b {
+      font-size: 15px;
+      color: rgba(195, 58, 47, 1.00);
+      line-height: 23px - 12px;
+    }
   }
 
   &.m2d {
@@ -1688,6 +1762,16 @@ table.table-list {
       @include mini-table-list;
     }
   }
+  &.w1200 {
+    @include range-width(0, 1200px) {
+      @include mini-table-list;
+    }
+  }
+  &.w1300 {
+    @include range-width(0, 1300px) {
+      @include mini-table-list;
+    }
+  }
 }
 
 #menu_ckb:not(:checked) {
@@ -1697,6 +1781,16 @@ table.table-list {
       }
       &.w1100 {
         @include range-width(0, 1100px) {
+          @include mini-table-list;
+        }
+      } 
+      &.w1200 {
+        @include range-width(0, 1200px) {
+          @include mini-table-list;
+        }
+      } 
+      &.w1300 {
+        @include range-width(0, 1300px) {
           @include mini-table-list;
         }
       } 
@@ -1900,6 +1994,12 @@ form.form-type1 {
       b {
         width: auto;
         margin-right: 4px;
+
+        &[data-title] {
+          &:after {
+            margin-top: -3px;
+          }
+        }
       }
     }
     &:last-child {
@@ -2360,6 +2460,20 @@ form .row.muti {
       display: inline-block;
       width: 100%;
       min-height: 23px;
+      
+      &[data-title] {
+        &:after {
+          content: attr(data-title);
+          display: block;
+          font-weight: normal;
+          font-size: 10px;
+          color: rgba(125, 125, 125, 1.00);
+          width: 100%;
+          margin-top: 2px;
+          margin-bottom: 4px;
+        }
+      }
+      
     }
     > span {
       display: inline-block;
@@ -2558,6 +2672,7 @@ form .row.muti {
         margin-top: 0;
       }
     }
+
   }
 }
 form.form-type2 {

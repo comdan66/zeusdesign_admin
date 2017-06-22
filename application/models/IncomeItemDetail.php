@@ -17,7 +17,8 @@ class IncomeItemDetail extends OaModel {
   );
 
   static $belongs_to = array (
-    array ('user',  'class_name' => 'User')
+    array ('user',  'class_name' => 'User'),
+    array ('item',  'class_name' => 'IncomeItem')
   );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
@@ -38,7 +39,6 @@ class IncomeItemDetail extends OaModel {
       'sgl_money'      => $this->sgl_money,
       'all_money'      => $this->all_money,
       'status'         => $this->status,
-      'memo'           => $this->memo,
       'updated_at'     => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at'     => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );

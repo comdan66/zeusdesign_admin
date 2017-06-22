@@ -20,6 +20,7 @@ class CompanyPm extends OaModel {
   );
 
   static $belongs_to = array (
+    array ('company', 'class_name' => 'Company'),
   );
 
   private $typeItems = array ();

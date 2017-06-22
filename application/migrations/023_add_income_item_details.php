@@ -19,7 +19,6 @@ class Migration_Add_income_item_details extends CI_Migration {
         `sgl_money` int(11) unsigned DEFAULT 0 COMMENT '單價',
         `all_money` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '總金額',
         `status` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '是否放款，1 未放款，2 已放款',
-        `memo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '備註',
 
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',
