@@ -46,45 +46,37 @@
 </div>
 
 <div class='panel'>
-  <table class='table-list w1200'>
+  <span class='unit'>未領總金額：<b class='n'>NT$</b> <b><?php echo number_format ($status1->a);?></b> <b class='n'>元</b> / 已領總金額：<b class='n'>NT$</b> <b><?php echo number_format ($status2->a);?></b> <b class='n'>元</b>。</span>
+</div>
+
+<div class='panel'>
+  <table class='table-list'>
     <thead>
       <tr>
         <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
-  <?php if (User::current ()->in_roles (array ('income_admin'))) {?>
-          <th width='70'>是否入帳</th>
-  <?php }?>
-        <th width='90'>發票日期</th>
-        <th width='150'>標題</th>
-        <th >人員薪資</th>
-        <th width='80'>放款進度</th>
-        <th width='90'>金額<?php echo listSort ($uri_1, 'money');?></th>
-        <th width='120'>備註</th>
-        <th width='90'>編輯</th>
+        <th width='150'>入帳標題</th>
+        <th >細項</th>
+        <th width='100'>未稅金額<?php echo listSort ($uri_1, 'money');?></th>
+        <th width='100'>實領金額</th>
+        <th width='80'>有無發票</th>
+        <th width='60'>狀態</th>
+        <th width='50'>檢視</th>
       </tr>
     </thead>
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
           <td><?php echo $obj->id;?></td>
-    <?php if (User::current ()->in_roles (array ('income_admin'))) {?>
-            <td class='center'>
-              <label class='switch ajax' data-column='status' data-url='<?php echo base_url ($uri_1, 'status', $obj->id);?>'><input type='checkbox'<?php echo $obj->status == Income::STATUS_2 ? ' checked' : '';?> /><span></span></label>
-            </td>
-    <?php }?>
-          <td><?php echo $obj->invoice_date ? $obj->invoice_date->format ('Y-m-d') : '';?></td>
-          <td><?php echo $obj->title;?></td>
-          <td><?php echo $obj->zbs ? implode ('', array_map (function ($zb) {
-            return '<div class="row' . ($zb->status == Zb::STATUS_2 ? ' finish' : '') . '">' . $zb->user->name . ' / ' . number_format ($zb->money) . '元</div>';
-          }, $obj->zbs)) : '';?></td>
-          <td style='color: <?php echo $obj->progress () < 100 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>;'><?php echo $obj->progress ()?>%</td>
+          <td><?php echo $obj->income ? $obj->income->title : '';?></td>
+          <td><?php echo $obj->details ? implode ('', array_map (function ($detail) {
+            return '<div class="row">' . $detail->item->title . ' / ' . ($detail->title ? $detail->title . ' / ' : '') . number_format ($detail->all_money) . '元</div>';
+          }, IncomeItemDetail::find ('all', array ('include' => array ('item'), 'conditions' => array ('zb_id = ?', $obj->id))))) : '';?></td>
           <td><?php echo number_format ($obj->money);?>元</td>
-          <td><?php echo $obj->memo;?></td>
+          <td><?php echo number_format ($obj->pay ());?>元</td>
+          <td><?php echo $obj->income->has_tax () ? '有開' : '沒開';?>發票</td>
+          <td style='color: <?php echo $obj->status == Zb::STATUS_1 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>;'><?php echo Zb::$statusNames[$obj->status];?></td>
           <td>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
-            /
-            <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
-            /
-            <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
           </td>
         </tr>
 <?php } ?>

@@ -5,7 +5,7 @@
   
   <div class='left'>
     <label class='icon-search' for='search_conditions'></label>
-    <span><b>條件搜尋</b>。共 <b id='_tl'>12</b> 筆。</span>
+    <span><b>條件搜尋</b>。共 <b id='_tl'>0</b> 筆。</span>
   </div>
 
   <div class='right'>
@@ -48,7 +48,7 @@
   </div>
 </div>
 
-<form action='<?php echo base_url ('admin', 'income_items', 'check');?>' class='panel note' id='_no' method='post'>
+<form action='<?php echo base_url ('admin', 'incomes', 'add');?>' class='panel note' id='_no' method='post'>
   <span>已經勾選 <b>0</b>筆。</span>
   <button type='submit' class='icon-fa'>合併入帳單</button>
 </form>

@@ -2,10 +2,6 @@
 
 <div class='panel back'>
   <a class='icon-keyboard_arrow_left' href='<?php echo base_url ($uri_1);?>'>回列表頁</a>
-
-
-  <a class='icon-bin' href='<?php echo base_url ($uri_1, $obj->id);?>' data-method='delete'>刪除</a>
-  <a class='icon-pencil2' href='<?php echo base_url ($uri_1, $obj->id, 'edit');?>'>編輯</a>
 </div>
 
 <?php $money = 0; ?>
@@ -22,7 +18,6 @@
         <th width='150'>PM</th>
         <th >細項</th>
         <th width='100'>總金額</th>
-        <th width='50'>檢視</th>
       </tr>
     </thead>
     <tbody>
@@ -36,7 +31,6 @@
           <td><div class='row'><?php echo $item->pm->name;?></div><div class='row sub'><?php echo $item->pm->company->name;?></div></td>
           <td><?php echo implode ('', array_map (function ($detail) { return '<div class="row">' . (isset ($users[$detail->user_id]) ? $users[$detail->user_id]->name . ' / ' : ' / ') . number_format ($detail->all_money) . '元</div>'; }, $item->details));?></td>
           <td><?php echo number_format ($item->money ());?>元</td>
-          <td><a class='icon-eye' href="<?php echo base_url ('admin', 'income-items', $item->id, 'show');?>" target='_blank'></a></td>
         </tr>
 <?php } ?>
     </tbody>
@@ -95,15 +89,7 @@
 <?php foreach (Zb::find ('all', array ('conditions' => array ('income_id = ?', $obj->id))) as $zb) { ?>
   <div class='panel'>
     <h2 class='float'>
-
-<?php if (User::current ()->in_roles (array ('income_admin'))) {?>
-        <label class='switch ajax' data-column='status' data-url='<?php echo base_url ($uri_1, 'zb_status', $zb->id);?>'>
-          <input type='checkbox'<?php echo $zb->status == Zb::STATUS_2 ? ' checked' : '';?> />
-          <span></span>
-        </label>
-<?php }?>
-
-    <span><?php echo !User::current ()->in_roles (array ('income_admin')) && $zb->status == Zb::STATUS_2 ? '已' : '未';?>給付「<?php echo isset ($users[$zb->user_id]) ? $users[$zb->user_id]->name : '';?>」薪資 <b><?php echo number_format ($zb->pay ());?></b> 元</b>。</span></h2>
+    <span><?php echo $zb->status == Zb::STATUS_2 ? '已' : '未';?>給付「<?php echo isset ($users[$zb->user_id]) ? $users[$zb->user_id]->name : '';?>」薪資 <b><?php echo number_format ($zb->pay ());?></b> 元</b>。</span></h2>
     <table class='table-list'>
       <thead>
         <tr>

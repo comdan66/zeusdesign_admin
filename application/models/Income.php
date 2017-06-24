@@ -83,6 +83,7 @@ class Income extends OaModel {
       'id'           => $this->id,
       'invoice_date' => $this->invoice_date ? $this->invoice_date->format ('Y-m-d') : '',
       'status'       => $this->status,
+      'title'        => $this->title,
       'money'        => $this->money,
       'memo'         => $this->memo,
       'updated_at'   => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',

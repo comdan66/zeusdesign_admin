@@ -32,26 +32,6 @@ class Income_items extends Admin_controller {
          ->add_param ('_url', base_url ($this->uri_1));
   }
 
-  public function check () {
-    $posts = Session::getData ('posts', true);
-
-    if (!$posts = OAInput::post ())
-      $posts = Session::getData ('posts', true);
-
-    if (!(isset ($posts['ids']) && $posts['ids'] && is_array ($posts['ids']) && ($objs = IncomeItem::find ('all', array ('include' => array ('details', 'user', 'income', 'pm'), 'conditions' => array ('id IN (?) AND income_id = 0', $posts['ids']))))))
-      return redirect_message (array ($this->uri_1), array ('_fd' => '選取資訊錯誤，請重新選取！', 'posts' => $posts));
-
-    UserLog::logRead (
-      $this->icon,
-      '進入確認' . $this->title . '程序',
-      '準備合併' . count ($objs) . '筆請款',
-      $posts['ids']);
-
-    return $this->load_view (array (
-        'objs' => $objs,
-        'posts' => $posts,
-      ));
-  }
   public function ajax ($offset = 0) {
     $uri_1 = $this->uri_1;
     $posts = OAInput::post ();
@@ -71,17 +51,25 @@ class Income_items extends Admin_controller {
 
     $searches = array ();
     $configs = array ('admin', 'income_items', 'ajax', '%s');
-    $objs = array_map (function ($obj) use ($uri_1) {
+    
+    $objs = conditions ($searches, $configs, $offset, 'IncomeItem', array ('order' => 'id DESC', 'include' => array ('images', 'details', 'income')), function ($c) use ($conditions) { return $conditions; });
+    
+    $pms = ($pms = column_array ($objs, 'company_pm_id')) ? CompanyPm::find ('all', array ('include' => array ('company'), 'conditions' => array ('id IN (?)', $pms))) : array ();
+    $pms = array_combine (column_array ($pms, 'id'), $pms);
+
+    $users = User::idAll ();
+
+    $objs = array_map (function ($obj) use ($uri_1, $pms, $users) {
       return array (
           'id' => $obj->id,
           'income_id' => $obj->income_id,
           'src' => $obj->images ? $obj->images[0]->name->url ('800w') : '',
           'close_date' => $obj->close_date ? $obj->close_date->format ('Y-m-d') : '',
           'title' => $obj->title,
-          'user' => $obj->user->name,
-          'pm' => $obj->company_pm_id && $obj->pm ? $obj->pm->name : '',
-          'company' => $obj->company_pm_id && $obj->pm && $obj->pm->company ? $obj->pm->company->name : '',
-          'detail' => array_map (function ($detail) { return array ('user' => $detail->user->name, 'money' => number_format ($detail->all_money), 'status' => $detail->zb_id && $detail->zb && $detail->zb->status == Zb::STATUS_2); }, $obj->details),
+          'user' => isset ($users[$obj->user_id]) ? $users[$obj->user_id]->name : '',
+          'pm' => $obj->company_pm_id && isset ($pms[$obj->company_pm_id]) ? $pms[$obj->company_pm_id]->name : '',
+          'company' => $obj->company_pm_id && isset ($pms[$obj->company_pm_id]) && $pms[$obj->company_pm_id]->company ? $pms[$obj->company_pm_id]->company->name : '',
+          'detail' => array_map (function ($detail) use ($users) { return array ('user' => isset ($users[$detail->user_id]) ? $users[$detail->user_id]->name : '', 'money' => number_format ($detail->all_money), 'status' => $detail->zb_id && $detail->zb && $detail->zb->status == Zb::STATUS_2); }, $obj->details),
           'money' => number_format ($obj->money ()),
           'status' => $obj->hasIncome () ? true : false,
           'links' => array (
@@ -91,9 +79,7 @@ class Income_items extends Admin_controller {
               'income' => base_url ('admin', 'incomes', $obj->income_id, 'show'),
             )
         );
-    }, conditions ($searches, $configs, $offset, 'IncomeItem', array ('order' => 'id DESC', 'include' => array ('details', 'user', 'income', 'pm', 'image')), function ($c) use ($conditions) {
-      return $conditions;
-    }));
+    }, $objs);
 
     UserLog::logRead (
       $this->icon,

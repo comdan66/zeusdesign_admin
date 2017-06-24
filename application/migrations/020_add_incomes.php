@@ -14,6 +14,7 @@ class Migration_Add_incomes extends CI_Migration {
 
         `invoice_date` date DEFAULT NULL COMMENT '發票日期',
         `status` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '是否入帳，1 未入帳，2 已入帳',
+        `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
         `memo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '備註',
         `money` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '總金額',
         

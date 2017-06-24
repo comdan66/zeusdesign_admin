@@ -1,0 +1,410 @@
+/**
+ * @author      OA Wu <comdan66@gmail.com>
+ * @copyright   Copyright (c) 2017 OA Wu Design
+ * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
+ */
+
+@import "_oa";
+
+@mixin mini-calendar () {
+  .title {
+    .now {
+      &:after {
+        content: '民國' attr(data-l) '年';
+      }
+    }
+  }
+  .months {
+    .month {
+      display: inline-block;
+      .weeks, .days {
+        display: inline-block;
+
+        > div {
+          display: inline-block;
+          width: 100%;
+          border: 0;
+          border-top: 1px solid rgba(221, 221, 221, 1.00);
+        }
+      }
+      .weeks {
+        display: none;
+        > div {
+          &:before {
+            display: none;
+          }
+        }
+      }
+      .days {
+        > div {
+          min-height: 100px;
+          height: auto;
+
+          &.today {
+            border: 3px solid rgba(80, 142, 245, 1.00);
+          }
+          &.not-this-month {
+            display: none;
+          }
+          &[data-m][data-d] {
+            &:after {
+              content: attr(data-m) '/' attr(data-d);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.calendar {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+
+  .title {
+    display: inline-block;
+    width: 100%;
+    height: 35px;
+    @include clearfix();
+
+    > * {
+      float: left;
+      display: inline-block;
+      width: 50%;
+      height: 35px;
+      line-height: 35px;
+    }
+    .now {
+      padding-left: 4px;
+      font-size: 17px;
+      width: calc(100% - 100px);
+      
+      &:before {
+        content: attr(data-y) '年 · ' attr(data-m) '月';
+      }
+      &:after {
+        content: '民國' attr(data-l) '年 · 歲次' attr(data-gz) '年【' attr(data-a) '】';
+        font-size: 13px;
+        @include opacity(.75);
+        margin-left: 4px;
+      }
+    }
+    .arr {
+      width: 100px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      align-items: center;
+
+      a {
+        display: inline-block;
+        width: 30px;
+        height: 25px;
+        line-height: 25px - 2px;
+        text-align: center;
+        color: rgba(87, 87, 87, 1.00);
+        cursor: pointer;
+        font-size: 18px;
+        background-color: rgba(255, 255, 255, 1.00);
+        border: 1px solid rgba(210, 210, 210, 1.00);
+        @include transition(background-color .3s);
+
+        &:hover {
+          background-color: rgba(240, 240, 240, 1.00);
+        }
+
+        &:before {
+          font-family: "admin"; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; 
+        }
+        &:nth-child(1) {
+          margin-right: 4px;
+          // width: 25px;
+          // height: 25px;
+          // @include border-radius(50%);
+          @include border-radius(2px);
+
+          &:before {
+            content: "·";
+            font-weight: bold;
+          }
+        }
+        &:nth-child(2) {
+          border-right: 0;
+          @include border-left-radius(2px);
+          &:before {
+            content: "\e314";
+          }
+        }
+        &:nth-child(3) {
+          @include border-right-radius(2px);
+          &:before {
+            content: "\e315";
+          }
+        }
+      }
+    }
+  }
+
+  .months {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-top: 12px;
+    overflow: hidden;
+
+    .month {
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-color: white;
+      @include transition(left .5s, opacity .3s);
+      @include opacity(0);
+      
+      @for $i from 1 through 3 {
+        &:nth-child(#{$i}) {
+          left: ($i - 2) * 100%;
+          @if $i - 2 == 0 {
+            position: relative;
+            @include opacity(1);
+          }
+        }
+      }
+
+      display: table;
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+      table-layout: fixed;
+
+
+      .weeks, .days {
+        display: table-row;
+        width: 100%;
+        // @include clearfix();
+        
+        > div {
+          // float: left;
+          display: table-cell;
+          width: calc(100% / 7);
+          border: 1px solid rgba(221, 221, 221, 1.00);
+
+          &:first-child, &:last-child {
+            background-color: rgba(255, 245, 245, 1.00);
+            &[data-d] {
+              &:after {
+                color: rgba(236, 83, 70, 1.00);
+              }
+            }
+          }
+        }
+      }
+      .weeks {
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: rgba(250, 250, 250, 1.00);
+        
+        > div {
+          font-weight: bold;
+          font-size: 14px;
+          color: rgba(150, 150, 150, 1.00);
+          &:first-child, &:last-child {
+            color: rgba(236, 83, 70, 1.00);
+          }
+          &:before {
+            content: '星期'
+          }
+        }
+      }
+      .days {
+        > div {
+          position: relative;
+          height: 100px;
+          padding: 0 4px;
+          padding-top: 22px;
+          padding-bottom: 8px;
+          cursor: pointer;
+          @include transition(background-color .3s);
+          @include range-width(1550px) {
+            height: 14  0px;
+          }
+
+          &[data-l] {
+            &:before {
+              content: attr(data-l);
+              position: absolute;
+              top: 2px;
+              left: 0;
+              display: inline-block;
+              width: calc(100% - 50px);
+              height: 18px;
+              font-size: 10px;
+              padding: 0 4px;
+              color: rgba(236, 83, 70, 1.00);
+              @include overflow-docx3();
+              // @include scale(.85);
+              color: rgba(185, 185, 185, 1.00);
+            }
+            &.new-lunar {
+              &:before {
+                font-weight: bold;
+                color: rgba(181, 87, 76, 1.00);
+              }
+            }
+          }
+          &[data-d] {
+            &:after {
+              content: attr(data-d);
+              position: absolute;
+              top: 2px;
+              right: 0;
+              display: inline-block;
+              width: 50px;
+              height: 18px;
+              line-height: 18px;
+              text-align: right;
+              font-size: 16px;
+              padding: 0 4px;
+              color: rgba(95, 95, 95, 1.00);
+              @include opacity(.85);
+            }
+          }
+
+          &.holiday {
+            background-color: rgba(255, 245, 245, 1.00);
+            &[data-d] {
+              &:after {
+                color: rgba(236, 83, 70, 1.00);
+              }
+            }
+          }
+
+          &:hover {
+            background-color: rgba(240, 250, 250, 1.00);
+          }
+          &.today {
+            border: 3px solid rgba(80, 142, 245, 1.00);
+          }
+          &.not-this-month {
+            background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(245, 245, 245, 1.00)), color-stop(.25, transparent),color-stop(.5, transparent), color-stop(.5, rgba(245, 245, 245, 1.00)),color-stop(.75, rgba(245, 245, 245, 1.00)), color-stop(.75, transparent),to(transparent));
+            -webkit-background-size: 20px 20px;
+          }
+
+          > span {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            min-height: 20px;
+            line-height: 20px;
+            font-size: 10px;
+            padding: 0;
+            margin-top: -3px;
+            color: rgba(238, 100, 88, 1.00);
+            + div {
+              margin-top: 0;
+            }
+          }
+          > div {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            height: 20px;
+            font-size: 12px;
+            padding: 0;
+            margin-top: 4px;
+            @include overflow-docx3();
+            @include clearfix();
+
+
+            &.finish {
+              @include opacity(.5);
+              > span {
+                // background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(245, 245, 245, 1.00)), color-stop(.25, transparent),color-stop(.5, transparent), color-stop(.5, rgba(245, 245, 245, 1.00)),color-stop(.75, rgba(245, 245, 245, 1.00)), color-stop(.75, transparent),to(transparent));
+                // -webkit-background-size: 20px 20px;
+                text-decoration: line-through;
+              }
+            }
+            > * {
+              float: left;
+              display: inline-block;
+              height: 20px;
+              line-height: 20px;
+            }
+            > img, > i {
+              position: absolute;
+              left: -1px;
+              top: -1px;
+
+              width: 22px;
+              height: 22px;
+              lin-height: 22px;
+              border: 1px solid rgba(255, 255, 255, 1);
+              @include border-radius(50%);
+              z-index: 3;
+              background-color: white;
+
+              + span {
+                width: calc(100% - 10px);
+                margin-left: 10px;
+                padding-left: 10px + 4px;
+                @include border-right-radius(10px);
+              }
+            }
+            > i {
+              background-color: rgba(236, 83, 70, 1.00);
+              color: rgba(253, 209, 85, 1.00);
+              font-size: 15px;
+              padding-top: 1px;
+              text-align: center;
+            }
+            > span {
+              position: relative;
+              z-index: 2;
+              width: 100%;
+              padding: 0 4px;
+
+              background-color: rgba(179, 224, 220, 1.00);
+              @include border-radius(3px);
+              @include overflow-docx3();
+            }
+
+            &.type1 {
+              cursor: grab;
+              cursor: -moz-grab;
+              cursor: -webkit-grab;
+              
+              &:active {
+                cursor: grabbing;
+                cursor: -moz-grabbing;
+                cursor: -webkit-grabbing;
+              }
+            }
+            &.type2 {
+              > span {
+                line-height: 20px - 2px * 2;
+                border: 2px solid rgba(253, 209, 85, 1.00);
+                font-weight: bold;
+                background-color: rgba(254, 231, 165, 1.00) !important;
+
+                background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(251, 188, 5, .500)), color-stop(.25, transparent),color-stop(.5, transparent), color-stop(.5, rgba(251, 188, 5, .500)),color-stop(.75, rgba(251, 188, 5, .500)), color-stop(.75, transparent),to(transparent));
+                -webkit-background-size: 10px 10px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @include range-width(0, 650px) {
+    @include mini-calendar;
+  };
+}
+#menu_ckb:not(:checked) {
+  @include range-width(750px, 950px) {
+    ~ * .calendar {
+      @include mini-calendar;
+    }
+  }
+}

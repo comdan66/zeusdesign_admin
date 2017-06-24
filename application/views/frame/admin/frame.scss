@@ -1709,35 +1709,15 @@ table.table-list {
     @include mini-table-list;
   };
 
-  + span {
-    display: inline-block;
-    width: 100%;
-    font-size: 13px;
-    margin-top: 4px;
-    padding-top: 12px;
-    color: rgba(135, 135, 135, 1.00);
-    border-top: 1px dashed rgba(0, 0, 0, .2);
-  }
-  ~ span.right {
-    display: inline-block;
-    width: 100%;
-    font-size: 13px;
-    margin-top: 4px;
-    padding-top: 8px;
-    color: rgba(135, 135, 135, 1.00);
-    border-top: 1px dashed rgba(0, 0, 0, .2);
-    
-    text-align: right;
-    height: 25px;
-    line-height: 25px - 12px;
-    b {
-      font-size: 15px;
-      line-height: 23px - 12px;
-      &:not(.n) {
-        color: rgba(195, 58, 47, 1.00);
-      }
-    }
-  }
+  // + span {
+  //   display: inline-block;
+  //   width: 100%;
+  //   font-size: 13px;
+  //   margin-top: 4px;
+  //   padding-top: 12px;
+  //   color: rgba(135, 135, 135, 1.00);
+  //   border-top: 1px dashed rgba(0, 0, 0, .2);
+  // }
 
   &.m2d {
     > tbody {
@@ -2989,6 +2969,30 @@ form.form-type2 {
           margin-top: 10px;
         } 
       }
+    }
+  }
+}
+span.unit {
+  display: inline-block;
+  width: 100%;
+  font-size: 13px;
+  margin-top: 4px;
+  padding-top: 8px;
+  color: rgba(135, 135, 135, 1.00);
+  border-top: 1px dashed rgba(0, 0, 0, .2);
+  
+  text-align: right;
+  height: 28px;
+  line-height: 28px - 8px;
+  
+  &:first-child {
+    border-top: 0;
+  }
+  b {
+    font-size: 15px;
+    line-height: 26px - 8px;
+    &:not(.n) {
+      color: rgba(195, 58, 47, 1.00);
     }
   }
 }

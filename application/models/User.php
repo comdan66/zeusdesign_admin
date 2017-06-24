@@ -21,9 +21,16 @@ class User extends OaModel {
   );
 
   private static $current = '';
+  private static $alls = null;
   
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
+  }
+  public static function idAll () {
+    if (self::$alls !== null) return self::$alls;
+
+    self::$alls = User::all ();
+    return self::$alls = array_combine (column_array (self::$alls, 'id'), self::$alls);
   }
   public static function current () {
     if (self::$current !== '') return self::$current;

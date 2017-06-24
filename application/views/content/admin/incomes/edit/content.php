@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-<?php foreach ($obj->items as $item) {
+<?php foreach (IncomeItem::find ('all', array ('include' => array ('user', 'pm', 'details'), 'conditions' => array ('income_id = ?', $obj->id))) as $item) {
         $money += $item->money ();?>
         <tr>
           <td><?php echo $item->id;?></td>
@@ -32,7 +32,7 @@
 <?php } ?>
     </tbody>
   </table>
-  <span class='right'>合計總共 <b><?php echo number_format ($money);?></b> 元</span>
+  <span class='unit'>合計總共 <b><?php echo number_format ($money);?></b> 元</span>
 
 </div>
 
@@ -40,6 +40,11 @@
   <form class='form-type1 loading' action='<?php echo base_url ($uri_1, $obj->id);?>' method='post'>
     <input type='hidden' name='_method' value='put' />
 
+    <div class='row'>
+      <b class='need'>標題</b>
+      <input type='text' name='title' value='<?php echo isset ($posts['title']) ? $posts['title'] : $obj->title;?>' placeholder='請輸入<?php echo $title;?>標題..' maxlength='200' pattern='.{1,200}' required title='輸入標題!' autofocus />
+    </div>
+    
     <div class='row'>
       <b class='need'>總金額</b>
       <input type='number' name='money' value='<?php echo isset ($posts['money']) ? $posts['money'] : $obj->money;?>' placeholder='請輸入總金額..' maxlength='200' pattern='.{1,200}' required title='輸入總金額標題!' <?php echo $obj->items ? 'readonly' : 'autofocus';?> />
