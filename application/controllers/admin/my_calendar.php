@@ -29,6 +29,17 @@ class My_calendar extends Admin_controller {
     return $this->output_json (array (
             array (
                 'y' => '2017',
+                'm' => '4',
+                'd' => '30',
+                'c' => array (
+                    array ('img' => 'https://graph.facebook.com/1222557214424285/picture?width=100&height=100',
+                           'text' => '上學1',
+                           'color' => 'ff0080',
+                           'type' => '1'),
+                  )
+              ),
+            array (
+                'y' => '2017',
                 'm' => '5',
                 'd' => '30',
                 'c' => array (
