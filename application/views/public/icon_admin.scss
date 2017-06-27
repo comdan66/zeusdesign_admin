@@ -6,6 +6,9 @@
   @include font-smoothing(antialiased);
 }
 
+.icon-checkmark:before {
+  content: "\e916";
+}
 .icon-r:before {
   content: "\e114";
 }
@@ -125,6 +128,9 @@
 }
 .icon-check_box:before {
   content: "\e912";
+}
+.icon-check-square:before {
+  content: "\e918";
 }
 .icon-triangle-up:before {
   content: "\e90d";

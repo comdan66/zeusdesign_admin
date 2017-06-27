@@ -17,6 +17,11 @@ if ( !function_exists ('is_date')) {
     return (DateTime::createFromFormat('Y-m-d', $date) !== false);
   }
 }
+if ( !function_exists ('is_month')) {
+  function is_month ($date) {
+    return (DateTime::createFromFormat('Y-m', $date) !== false);
+  }
+}
 if (!function_exists ('utf8_strrev')) {
   function utf8_strrev ($str){
     preg_match_all ('/./us', $str, $ar);
