@@ -95,6 +95,7 @@ $(function () {
               return $('<input />').attr ('type', $row.data ('attrs')[j].type ? $row.data ('attrs')[j].type : null)
                                    .attr ('name', $row.data ('attrs')[j].name + '[' + i + ']' + ($row.data ('attrs')[j].key ? '[' + $row.data ('attrs')[j].key + ']' : ''))
                                    .attr ('placeholder', $row.data ('attrs')[j].placeholder ? $row.data ('attrs')[j].placeholder : null)
+                                   .attr ('accept', $row.data ('attrs')[j].accept ? $row.data ('attrs')[j].accept : null)
                                    .attr ('class', $row.data ('attrs')[j].class ? $row.data ('attrs')[j].class : null)
                                    .val (t ? $row.data ('attrs')[j].key && typeof t[$row.data ('attrs')[j].key] !== 'undefined' ? t[$row.data ('attrs')[j].key] : (typeof t === 'object' ? '' : t) : '');
             })).append (

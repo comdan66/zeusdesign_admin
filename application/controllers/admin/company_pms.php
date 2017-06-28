@@ -28,13 +28,13 @@ class Company_pms extends Admin_controller {
     $this->icon = 'profile2';
 
     if (!(($id = $this->uri->rsegments (3, 0)) && ($this->parent = Company::find_by_id ($id))))
-      return redirect_message (array ('admin', 'work-tags'), array ('_flash_danger' => '找不到該筆資料。'));
+      return redirect_message (array ('admin', 'work-tags'), array ('_fd' => '找不到該筆資料。'));
 
     $this->title = '「' . $this->parent->name . '」的聯絡人';
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy', 'show')))
       if (!(($id = $this->uri->rsegments (4, 0)) && ($this->obj = CompanyPm::find_by_id ($id))))
-        return redirect_message (array ($this->uri_1, $this->parent_tag->id, $this->uri_2), array ('_flash_danger' => '找不到該筆資料。'));
+        return redirect_message (array ($this->uri_1, $this->parent_tag->id, $this->uri_2), array ('_fd' => '找不到該筆資料。'));
 
     $this->add_param ('uri_1', $this->uri_1)
          ->add_param ('uri_2', $this->uri_2)
