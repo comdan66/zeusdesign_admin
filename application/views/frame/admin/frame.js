@@ -11,6 +11,7 @@ $(function () {
 
   var $tipTexts = $('#tip_texts');
   var $loading = $('#loading');
+  var $menuCkb = $('#menu_ckb');
   $('._ic').imgLiquid ({verticalAlign: 'center'});
   $('time[datetime]').timeago ();
 
@@ -20,11 +21,16 @@ $(function () {
   $group.span.click (function () { $(this).toggleClass ('show'); });
   setTimeout (function () { $group.span.addClass ('t'); }, 500);
 
-
-
   $('.drop_img').OAdropUploadImg ();
   window.fns.IsJsonString = function (str) { try { return JSON.parse (str); } catch (e) { return null; } };
 
+  window.fns._fsg = function (key) { return ((typeof (Storage) !== 'undefined') && (value = localStorage.getItem (key)) && (value = JSON.parse (value))) ? value : undefined; };
+  window.fns._fss = function (key, data) { try { if (typeof (Storage) !== 'undefined') { localStorage.setItem (key, JSON.stringify (data)); return true; } return false; } catch (err) { console.error ('Set storage failure.', error); return false; } };
+  
+  if ($(window).width () > 750) $menuCkb.prop ('checked', window.fns._fsg ('zeus.menu') ? true : false);
+  $menuCkb.click (function () { if ($(window).width () > 750) window.fns._fss ('zeus.menu', $(this).prop ('checked')); });
+  setTimeout (function () { $('body').addClass ('ani'); }, 300);
+  
   window.fns.mutiImg = function ($obj) {
     if ($obj.length <= 0) return;
     $obj.on ('click', '.drop_img > a', function () {
@@ -130,10 +136,17 @@ $(function () {
     $('*[data-cntrole*="' + key + '"]').each (function () { $(this).attr ('data-cnt', (result ? -1 : 1) + parseInt ($(this).attr ('data-cnt'), 10)); });
   };
 
+  window.fns.ajaxFail = function (r) {
+    if ((t = window.fns.IsJsonString (r.responseText)) !== null) window.fns.tipText ({title: '設定錯誤！', message: t.message});
+    else window.fns.tipText ({title: '設定錯誤！', message: '※ 不明原因錯誤，請重新整理網頁確認。', error: r.responseText});
+  };
+
   $('.table-list .switch.ajax[data-column][data-url]').each (function () {
     var $that = $(this), column = $that.data ('column'), url = $that.data ('url'), $inp = $that.find ('input[type="checkbox"]');
 
     $inp.click (function () {
+      if ($that.hasClass ('loading')) return;
+
       var data = {};
       data[column] = $(this).prop ('checked') ? 1 : 0;
 
@@ -145,16 +158,17 @@ $(function () {
         async: true, cache: false, dataType: 'json', type: 'POST'
       })
       .done (function (result) {
-        $that.removeClass ('loading');
         $(this).prop ('checked', result);
+        
+        $that.removeClass ('loading');
         window.fns.updateCounter ($that.data ('forcntrole'), result);
 
       }.bind ($(this)))
       .fail (function (result) {
         $that.removeClass ('loading');
         $(this).prop ('checked', !data[column]);
-        if ((t = window.fns.IsJsonString (result.responseText)) !== null) window.fns.tipText ({title: '設定錯誤！', message: t.message});
-        else window.fns.tipText ({title: '設定錯誤！', message: '※ 不明原因錯誤，請重新整理網頁確認。', error: result.responseText});
+
+        window.fns.ajaxFail (result);
       }.bind ($(this)));
     });
   });

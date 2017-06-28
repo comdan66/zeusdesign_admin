@@ -35,7 +35,24 @@ html {
 
     @include font-smoothing(antialiased);
 
-
+    &.ani {
+      #header {
+        .logo {
+          @include transition(width .3s);
+        }
+        .midle {
+          @include transition(width .3s);
+        }
+      }
+      #main {
+        @include transition(padding-left .3s);
+      }
+      #menu {
+        @include range-width(750px) {
+          @include transition(width .3s);
+        }
+      }
+    }
   }
 }
 .hckb {
@@ -151,7 +168,6 @@ html {
     justify-content: center;
     align-items: center;
 
-    @include transition(width .3s);
     @include range-width(0, 750px) {
       display: none;
     }
@@ -218,7 +234,6 @@ html {
   }
   .midle {
     width: calc(100% - #{$menuWidth} - 55px);
-    @include transition(width .3s);
     @include clearfix();
     @include range-width(0, 750px) {
       width: calc(100% - 55px);
@@ -249,7 +264,6 @@ html {
   z-index: 10;
   padding-top: $headerHeight;
   padding-left: $menuWidth;
-  @include transition(padding-left .3s);
   
   > div {
     padding: 16px;
@@ -309,7 +323,6 @@ html {
   }
   @include range-width(750px) {
     top: $headerHeight;
-    @include transition(width .3s);
     +label {
       display: none;
     }
@@ -1013,22 +1026,6 @@ label.checkbox {
   line-height: 20px;
   padding-left: 24px;
 
-  &.loading {
-    span {
-      &:before {
-        @include border-radius(50%);
-        @include background-image(linear-gradient(rgba(184, 241, 148, 1.00) 0%, rgba(89, 178, 169, 1.00) 100%));
-        @include animation(rotate 1s linear infinite);
-      }
-      &:after {
-        left: $w;
-        top: $w;
-        width: calc(100% - #{$w} * 2);
-        height: calc(100% - #{$w} * 2);
-        @include border-radius(50%);
-      }
-    }
-  }
   > * {
     position: absolute;
     left: 0;
@@ -1099,21 +1096,26 @@ label.checkbox {
       @include transition(background-color .3s, color .3s);
     }
   }
-  &.blue {
-    input {
-      &:not([disabled]) {
-        &:checked {
-          ~ span {
-            &:after {
-              background-color: rgba(104, 157, 246, 1.00);
-            }
-          }
-        }
-      }
-    }
+  
+  &.loading {
     span {
       &:before {
-        background-color: rgba(104, 157, 246, 1.00);
+        @include border-radius(50%);
+        @include background-image(linear-gradient(rgba(184, 241, 148, 1.00) 0%, rgba(89, 178, 169, 1.00) 100%));
+        @include animation(rotate 1s linear infinite);
+      }
+      &:after {
+        content: '' !important;
+        left: $w;
+        top: $w;
+        width: calc(100% - #{$w} * 2);
+        height: calc(100% - #{$w} * 2);
+
+        color: rgba(255, 255, 255, 1.00);
+        background-color: rgba(255, 255, 255, 1.00) !important;
+        @include text-shadow(none);
+        
+        @include border-radius(50%);
       }
     }
   }

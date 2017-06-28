@@ -499,7 +499,7 @@ if ( ! function_exists('oa_hidden'))
 {
 	function oa_hidden($attributes = array ())
 	{
-		return $attributes ? '<input type="hidden" ' . implode (' ', array_map (function ($attribute, $value) { return $attribute . '="' . $value . '"'; }, array_keys ($attributes), $attributes)) . ' />' : '';
+		return $attributes ? '<input type="hidden" ' . implode (' ', array_map (function ($attribute, $value) { return $attribute . "='" . $value . "'"; }, array_keys ($attributes), $attributes)) . ' />' : '';
 	}
 }
 

@@ -29,8 +29,8 @@ $(function () {
       .fail (function (result) {
         $that.removeClass ('loading');
         $(this).prop ('checked', !data[column]);
-        if ((t = window.fns.IsJsonString (result.responseText)) !== null) window.fns.tipText ({title: '設定錯誤！', message: t.message});
-        else window.fns.tipText ({title: '設定錯誤！', message: '※ 不明原因錯誤，請重新整理網頁確認。', error: result.responseText});
+        
+        window.fns.ajaxFail (result);
       }.bind ($(this)));
     });
   });

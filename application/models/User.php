@@ -15,6 +15,7 @@ class User extends OaModel {
 
   static $has_many = array (
     array ('roles', 'class_name' => 'UserRole'),
+    array ('schedule_share', 'class_name' => 'ScheduleShare'),
   );
 
   static $belongs_to = array (

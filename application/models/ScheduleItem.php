@@ -17,6 +17,7 @@ class ScheduleItem extends OaModel {
   );
 
   static $belongs_to = array (
+    array ('schedule', 'class_name' => 'Schedule'),
   );
 
   const STATUS_1 = 1;

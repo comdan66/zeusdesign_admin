@@ -1,5 +1,9 @@
 <h1<?php echo isset ($icon) && $icon ? ' class="' . $icon . '"' : '';?>><?php echo $title;?>列表</h1>
 
+<div class='panel back'>
+  <a class='icon-keyboard_arrow_left' href='<?php echo base_url ('admin', 'my-calendar');?>'>回行事曆</a>
+</div>
+
 <div class='search'>
   <input type='checkbox' id='search_conditions' class='hckb'<?php echo $isSearch = array_filter (column_array ($searches, 'value'), function ($t) { return $t !== null; }) ? ' checked' : '';?> />
   

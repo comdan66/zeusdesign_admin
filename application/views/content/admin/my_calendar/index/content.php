@@ -1,6 +1,15 @@
-<input type='hidden' id='datas' data-api_month='<?php echo base_url ('admin', 'my_calendar', 'month');?>' data-api_daysort='<?php echo base_url ('admin', 'my_calendar', 'daysort');?>' data-api_day='<?php echo base_url ('admin', 'my_calendar', 'day');?>' data-api_create='<?php echo base_url ('admin', 'my-calendar');?>' data-tags='<?php echo json_encode (array_map (function ($user) { return array ('id' => $user->id, 'name' => $user->name, 'color' => $user->color); }, ScheduleTag::all (array ('select' => 'id, name, color'))));?>' data-users='<?php echo json_encode (array_map (function ($user) { return array ('id' => $user->id, 'name' => $user->name); }, User::all (array ('select' => 'id, name', 'conditions' => array ('id != ?', User::current ()->id)))));?>' />
 
-<input type='checkbox' class='hckb' id='fix_pnl_ckb' />
+<div class='search'>
+
+  <div class='left'>
+    <h2 class='icon-calendar2'> 我的行事曆</h2>
+  </div>
+  <div class='right'>
+    <a class='icon-price-tags' href='<?php echo base_url ('admin', 'my-schedule-tags');?>'> 分類管理</a>
+  </div>
+</div>
+
+<input type='checkbox' class='hckb' id='fix_pnl_ckb'  />
 
 <div class='panel'>
   
@@ -18,7 +27,104 @@
   <header><a class='icon-keyboard_arrow_left'></a><span>本日活動</span><a class='icon-r'></a></header>
   
   
-  <div class='add s'>
+  <div class='content'></div>
+  <div class='content'>
+      
+      <span>標題</span>
+      <div class='row'>
+        asd
+      </div>
+
+      <span>待辦事項</span>
+      <div class='row mtckbs'>
+          
+        <div>
+          <label class='checkbox'>
+            <input type='checkbox'>
+            <span></span>
+          </label>
+          <span>asddassd</span>
+        </div>
+
+        <div>
+          <label class='checkbox'>
+            <input type='checkbox'>
+            <span></span>
+          </label>
+          <span>asddassd</span>
+        </div>
+        <div>
+          <label class='checkbox'>
+            <input type='checkbox'>
+            <span></span>
+          </label>
+          <span>asddassd</span>
+        </div>
+        <div>
+          <label class='checkbox'>
+            <input type='checkbox'>
+            <span></span>
+          </label>
+          <span>asddassd</span>
+        </div>
+        <div>
+          <label class='checkbox'>
+            <input type='checkbox'>
+            <span></span>
+          </label>
+          <span>asddassd</span>
+        </div>
+        <div>
+          <label class='checkbox'>
+            <input type='checkbox'>
+            <span></span>
+          </label>
+          <span>asddassd</span>
+        </div>
+        <div>
+          <label class='checkbox'>
+            <input type='checkbox'>
+            <span></span>
+          </label>
+          <span>asddassd</span>
+        </div>
+        <div>
+          <label class='checkbox'>
+            <input type='checkbox'>
+            <span></span>
+          </label>
+          <span>asddassd</span>
+        </div>
+        <div>
+          <label class='checkbox'>
+            <input type='checkbox'>
+            <span></span>
+          </label>
+          <span>asddassd</span>
+        </div>
+
+      </div>
+
+      <span>行程分類</span>
+      <div class='row tag'>
+        asad
+      </div>
+
+      <span>分享對象</span>
+      <div class='row users'>
+        <div><img src='https://graph.facebook.com/1222557214424285/picture?width=100&height=100'><span>OAOAOAOAOAOAOAOAOAOAOA</span></div>
+        <div><img src='https://graph.facebook.com/1222557214424285/picture?width=100&height=100'><span>OA</span></div>
+        <div><img src='https://graph.facebook.com/1222557214424285/picture?width=100&height=100'><span>OA</span></div>
+        <div><img src='https://graph.facebook.com/1222557214424285/picture?width=100&height=100'><span>OA</span></div>
+      </div>
+
+      <span>備註</span>
+      <div class='row'>
+        asad
+      </div>
+  </div>
+  
+  <div class='add'>
     <form>
       <div class='note'></div>
       <div class='row'>

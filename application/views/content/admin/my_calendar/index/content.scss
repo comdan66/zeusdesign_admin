@@ -472,6 +472,9 @@ $menuWidth: 230px;
       &.icon-keyboard_arrow_left {
         font-size: 36px;
       }
+      &.icon-pencil2 {
+        font-size: 20px;
+      }
       &:active {
         background-color: rgba(235, 235, 235, 1);
       }
@@ -481,7 +484,7 @@ $menuWidth: 230px;
       font-size: 16px;
       text-align: center;
 
-      &[data-sub] {
+      &[data-sub]:not([data-sub='']) {
         &:after {
           content: '(' attr(data-sub) ')';
           font-size: 13px;
@@ -519,17 +522,253 @@ $menuWidth: 230px;
     @include opacity(0);
     @include transition(left .3s, opacity .3s);
 
+    &:empty {
+      &:after {
+        display: inline-block;
+        width: 100%;
+        height: 55px;
+        line-height: 55px;
+
+        color: rgba(180, 180, 180, 1.00);
+        text-align: center;
+        font-weight: bold;
+        letter-spacing: 1px;
+        @include text-shadow(1px 1px 0 rgba(255, 255, 255, .75));
+      }
+      &.loading {
+        &:after {
+          content: '讀取中，請稍候..' !important;
+        }
+      }
+    }
     &.s {
       left: 0;
       @include opacity(1);
     }
-    &.edit {
-      z-index: 4;
-    }
     &.content {
       z-index: 3;
+      padding: 0;
+
+      &:before {
+        content: '已完成';
+        position: absolute;
+        top: 50px;
+        right: 75px;
+        display: inline-block;
+        padding: 0 10px;
+        font-size: 17px;
+
+        height: 30px;
+        line-height: 30px - 3px * 2;
+        border: 3px solid rgba(255, 210, 210, 1.00);
+        color: rgba(240, 200, 200, 1.00);
+        font-weight: bold;
+        @include border-radius(3px);
+        @include transform(rotate(20deg) scale(0));
+        @include transition(transform .3s);
+        
+      }
+      &.finish {
+        &:before {
+          @include transform(rotate(23deg) scale(2));
+        }
+      }
+
+      &:empty {
+        &:after {
+          content: '讀取不到資料。';
+        }
+      }
+
+      > span {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+
+        height: 33px + 8px;
+        line-height: 33px;
+
+        color: rgba(175, 175, 175, 1.00);
+        font-weight: bold;
+        padding: 0 16px;
+        font-style: italic;
+        letter-spacing: 1px;
+        font-size: 14px;
+        padding-top: 8px;
+        @include text-shadow(1px 1px 1px rgba(255, 255, 255, .75));
+      } 
+      .row {
+        display: block;
+        width: 100%;
+        margin: 0 auto;
+        text-align: left;
+        padding: 16px;
+        background-color: white;
+        border: 1px solid rgba(222, 222, 222, 1.00);
+        border-left: 0;
+        border-radius: 0;
+        
+        &.tag {
+          @include clearfix();
+          height: 60px;
+          word-break: break-all;
+          @include overflow-docx3();
+
+          > * {
+            display: inline-block;
+          }
+          i {
+            width: 15px;
+            height: 15px;
+            margin-top: 4px;
+            margin-right: 8px;
+
+            @include border-radius(50%);
+          }
+          span {
+          }
+        }
+        &.users {
+          padding-top: 8px;
+          @include clearfix();
+          
+          > div {
+            float: left;
+            position: relative;
+            display: inline-block;
+            max-width: 200px;
+            height: 23px;
+            line-height: 23px;
+            margin-right: 8px;
+            margin-top: 8px;
+
+            img {
+              position: absolute;
+              left: 0;
+              top: -1px;
+              display: inline-block;
+              width: 23px + 1px * 2;
+              height: 23px + 1px * 2;
+              border: 1px solid white;
+              @include border-radius(50%);
+            }
+            span {
+              display: inline-block;
+              height: 23px;
+              line-height: 23px;
+
+              margin-left: 0+23px / 2;
+              padding-left: 0+23px / 2 + 8px;
+              padding-right: 12px;
+              max-width: calc(100% - 23px / 2);
+
+              font-size: 13px;
+              @include overflow-docx3();
+              background-color: rgba(218, 232, 252, 1.00);
+              border: 1px solid rgba(161, 196, 247, 1.00);
+              border-left: 0;
+              // color: rgba(50, 120, 222, 1.00);
+              @include border-right-radius(23px / 2);
+            }
+          }
+        }
+        &.mtckbs {
+          padding: 0;
+
+          > div {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            height: 45px;
+
+            @include clearfix();
+            > * {
+              float: left;
+              display: inline-block;
+            }
+            > span {
+              width: 100%;
+              height: 45px;
+              line-height: 45px;
+              padding-left: 16px;
+            }
+            > label {
+              width: 20px;
+              padding: 0;
+              margin-top: (45px - 20px) / 2;
+              margin-left: 16px;
+              + span {
+                width: calc(100% - 20px - 16px);
+              }
+            }
+            > i {
+              display: inline-block;
+              width: 20px;
+              height: 20px;
+              margin-top: (45px - 24px) / 2;
+              margin-left: 16px;
+              + span {
+                width: calc(100% - 20px - 16px);
+              }
+              &:before {
+                font-weight: bold;
+                font-size: 20px;
+                color: rgba(190, 190, 190, 1.00);
+              }
+              &.icon-check_box_outline_blank {
+                &:before {
+                  font-size: 22px;
+                }
+              }
+            }
+            + div {
+              &:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                display: inline-block;
+                
+                // left: 16px;
+                // width: calc(100% - 16px);
+                left: 45px;
+                width: calc(100% - 45px);
+
+                height: 1px;
+                background-color: rgba(222, 222, 222, 1);
+              }
+            }
+          }
+
+          // &.my {
+          //   div {
+          //     + div {
+          //       &:before {
+          //         left: 45px;
+          //         width: calc(100% - 45px);
+          //       }
+          //     }
+          //   }
+          // }
+          
+        }
+      }
+      > a {
+        @include button(rgba(195, 55, 42, 1.00));
+        display: inline-block;
+        width: calc(100% - 16px * 2);
+        margin-left: 16px;
+        padding: 0;
+        font-size: 16px;
+        height: 50px;
+        line-height: 50px;
+        margin-top: 32px;
+        margin-bottom: 32px;
+        text-align: center;
+        cursor: pointer;
+        @include border-radius(2px);
+      }
     }
-    &.add {
+    &.edit, &.add {
       z-index: 2;
       padding: 0;
       .note {
@@ -812,6 +1051,10 @@ $menuWidth: 230px;
         }
       }
     }
+    
+    &.edit {
+      z-index: 4;
+    }
     &.list {
       z-index: 1;
       padding-bottom: 16px;
@@ -819,22 +1062,6 @@ $menuWidth: 230px;
       &:empty {
         &:after {
           content: '目前沒有任何行程。';
-          display: inline-block;
-          width: 100%;
-          height: 55px;
-          line-height: 55px;
-
-          color: rgba(180, 180, 180, 1.00);
-          text-align: center;
-          font-weight: bold;
-          letter-spacing: 1px;
-          @include text-shadow(1px 1px 0 rgba(255, 255, 255, .75));
-        }
-        &.loading {
-          
-          &:after {
-            content: '行程讀取中，請稍候..';
-          }
         }
       }
 
@@ -851,9 +1078,6 @@ $menuWidth: 230px;
         font-size: 14px;
         padding-top: 8px;
         @include text-shadow(1px 1px 1px rgba(255, 255, 255, .75));
-        // &:last-child {
-        //   border-bottom: 0;
-        // }
       }
 
       > div {
@@ -906,7 +1130,7 @@ $menuWidth: 230px;
                 height: 25px;
                 line-height: 25px - 3px * 2;
                 border: 3px solid rgba(255, 210, 210, 1.00);
-                color: rgba(228, 173, 173, 1.00);
+                color: rgba(240, 200, 200, 1.00);
                 font-weight: bold;
                 @include border-radius(3px);
                 @include rotate(-10deg);

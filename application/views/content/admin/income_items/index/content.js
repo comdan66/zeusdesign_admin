@@ -67,10 +67,7 @@ $(function () {
             }) : null));
       }) : $('<tr />').append ($('<td />').attr ('colspan', 10).text ('沒有任何資料。')));
     })
-    .fail (function (r) {
-      if ((t = window.fns.IsJsonString (r.responseText)) !== null) window.fns.tipText ({title: '設定錯誤！', message: t.message});
-      else window.fns.tipText ({title: '設定錯誤！', message: '※ 不明原因錯誤，請重新整理網頁確認。', error: r.responseText});
-    })
+    .fail (window.fns.ajaxFail)
     .complete (function () {
     });
   }

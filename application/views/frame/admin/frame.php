@@ -33,8 +33,8 @@
 
     <div id='main'>
       <div>
-        <label class='alert type1'><?php echo Session::getData ('_fi', true);?></label>
-        <label class='alert type3'><?php echo Session::getData ('_fd', true);?></label>
+        <?php if ($t = Session::getData ('_fi', true)) { ?><label class='alert type1'><?php echo $t;?></label><?php } ?>
+        <?php if ($t = Session::getData ('_fd', true)) { ?><label class='alert type3'><?php echo $t;?></label><?php } ?>
 
         <?php echo isset ($content) ? $content : ''; ?>
       </div>
@@ -50,9 +50,9 @@
         <span class='icon-u'>個人管理</span>
         <div>
           <a class='icon-home' href=''>個人頁面</a>
-          <a class='icon-calendar2 <?php echo ($url = base_url ('admin', 'my-calendar')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的行事曆</a>
+          <a class='icon-calendar2<?php echo ($url = base_url ('admin', 'my-calendar')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的行事曆</a>
           <a class='icon-shield'>我的任務</a>
-          <a class='icon-calendar2 <?php echo ($url = base_url ('admin', 'my-zbs')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的宙思幣</a>
+          <a class='icon-calendar2<?php echo ($url = base_url ('admin', 'my-zbs')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的宙思幣</a>
         </div>
       </div>
 

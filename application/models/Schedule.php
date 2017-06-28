@@ -16,6 +16,7 @@ class Schedule extends OaModel {
   static $has_many = array (
     array ('items', 'class_name' => 'ScheduleItem'),
     array ('shares', 'class_name' => 'ScheduleShare'),
+    array ('users', 'class_name' => 'User', 'through' => 'schedule_share'),
   );
 
   static $belongs_to = array (
@@ -35,7 +36,7 @@ class Schedule extends OaModel {
           return false;
     
     if ($this->shares)
-      foreach ($this->mshares as $share)
+      foreach ($this->shares as $share)
         if (!$share->destroy ())
           return false;
 

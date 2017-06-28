@@ -25,6 +25,81 @@ class My_calendar extends Admin_controller {
          ->add_param ('_url', base_url ($this->uri_1));
   }
 
+  public function status ($id = 0) {
+    if (!($id && ($this->obj = ScheduleItem::find ('one', array ('conditions' => array ('id = ?', $id))))))
+      return $this->output_error_json ('找不到該筆資料。');
+
+    if ($this->obj->schedule->user_id != User::current ()->id)
+      return $this->output_error_json ('您的權限不足。');
+
+    $obj = $this->obj;
+
+    if (!$this->has_post ())
+      return $this->output_error_json ('非 POST 方法，錯誤的頁面請求。');
+
+    $posts = OAInput::post ();
+    $backup = $obj->backup (true);
+
+    $validation = function (&$posts) {
+      return !(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? ScheduleItem::STATUS_2 : ScheduleItem::STATUS_1) && in_array ($posts['status'], array_keys (ScheduleItem::$statusNames))) ? '「設定完成」發生錯誤！' : '';
+    };
+
+    if ($msg = $validation ($posts))
+      return $this->output_error_json ($msg);
+
+    if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
+      foreach ($columns as $column => $value)
+        $obj->$column = $value;
+
+    if (!ScheduleItem::transaction (function () use ($obj, $posts) {
+      return $obj->save ();
+    })) return $this->output_error_json ('更新失敗！');
+
+    UserLog::logWrite (
+      'icon-calendar2',
+      ScheduleItem::$statusNames[$obj->status] . '一項' . $this->title,
+      '將一筆' . $this->title . '調整為「' . ScheduleItem::$statusNames[$obj->status] . '」',
+      array ($backup, $obj->backup (true)));
+
+    return $this->output_json (array (
+        'status' => $obj->status == ScheduleItem::STATUS_2,
+        'finish' => count (array_filter ($obj->schedule->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; })) == count ($obj->schedule->items),
+      ));
+  }
+  public function show ($id = 0) {
+    if (!($id && ($obj = Schedule::find ('one', array ('conditions' => array ('id = ?', $id))))))
+      return $this->output_error_json ('找不到該筆資料。');
+
+    if (!(($obj->user_id == User::current ()->id || (($t = column_array ($obj->shares, 'user_id')) && in_array (User::current ()->id, $t)))))
+      return $this->output_error_json ('您的權限不足，或者頁面不存在。');
+    
+    return $this->output_json (array (
+        'type' => $obj->user_id == User::current ()->id ? 1 : 3,
+        'id' => $obj->id,
+        'title' => $obj->title,
+        'memo' => $obj->memo,
+        'tag' => $obj->schedule_tag_id && $obj->tag ? array (
+            'id' => $obj->tag->id,
+            'name' => $obj->tag->name,
+            'color' => $obj->tag->color,
+          ) : null,
+        'items' => array_map (function ($item) {
+          return array (
+              'id' => $item->id,
+              'content' => $item->content,
+              'status' => $item->status == ScheduleItem::STATUS_2,
+            );
+        }, $obj->items),
+        'users' => array_map (function ($user) {
+          return array (
+              'id' => $user->id,
+              'name' => $user->name,
+              'avatar' => $user->avatar (),
+            );
+        }, $obj->users),
+        'finish' => count (array_filter ($obj->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; })) == count ($obj->items),
+      ));
+  }
   public function month () {
     $gets = OAInput::get ();
     
@@ -83,7 +158,19 @@ class My_calendar extends Admin_controller {
     return $this->output_json (array_values ($days));
   }
   public function index () {
-    $this->load_view ();
+    $this->add_hidden (array (
+      'id' => 'datas',
+      'data-api_status' => base_url ('admin', 'my_calendar', 'status', '%d'),
+      'data-api_content' => base_url ('admin', 'my-calendar', '%d', 'show'),
+      'data-api_month' => base_url ('admin', 'my_calendar', 'month'),
+      'data-api_daysort' => base_url ('admin', 'my_calendar', 'daysort'),
+      'data-api_day' => base_url ('admin', 'my_calendar', 'day'),
+      'data-api_delete' => base_url ('admin', 'my-calendar', '%d'),
+      'data-api_update' => base_url ('admin', 'my-calendar', '%d'),
+      'data-api_create' => base_url ('admin', 'my-calendar'),
+      'data-tags' => json_encode (array_map (function ($user) { return array ('id' => $user->id, 'name' => $user->name, 'color' => $user->color); }, ScheduleTag::all (array ('select' => 'id, name, color')))),
+      'data-users' => json_encode (array_map (function ($user) { return array ('id' => $user->id, 'name' => $user->name); }, User::all (array ('select' => 'id, name', 'conditions' => array ('id != ?', User::current ()->id))))),
+      ))->load_view ();
   }
   public function daysort () {
     $posts = OAInput::post ();
@@ -171,6 +258,67 @@ class My_calendar extends Admin_controller {
       '新增一項' . $this->title . '',
       '名稱為：「' . $obj->title . '」',
       $obj->backup ());
+
+    return $this->output_json (true);
+  }
+  public function update ($id) {
+    if (!($id && ($obj = Schedule::find ('one', array ('conditions' => array ('id = ? AND user_id = ?', $id, User::current ()->id))))))
+      return $this->output_error_json ('找不到該筆資料，或您的權限不足，或者頁面不存在。。');
+
+    if (!$this->has_post ())
+      return $this->output_error_json ('非 POST 方法，錯誤的頁面請求。');
+
+    $posts = OAInput::post ();
+    $backup = $obj->backup (true);
+
+    if ($msg = $this->_validation_update ($posts))
+      return $this->output_error_json ($msg);
+
+    if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
+      foreach ($columns as $column => $value)
+        $obj->$column = $value;
+
+    if (!Schedule::transaction (function () use ($obj) { return $obj->save (); }))
+      return $this->output_error_json ('更新失敗！');
+
+    if ($obj->items)
+      foreach ($obj->items as $item)
+        ScheduleItem::transaction (function () use ($item) { return $item->destroy (); });
+
+    if ($posts['items'])
+      foreach ($posts['items'] as $i => $item)
+        ScheduleItem::transaction (function () use ($i, $item, $obj) { return verifyCreateOrm (ScheduleItem::create (array_intersect_key (array_merge ($item, array ('schedule_id' => $obj->id)), ScheduleItem::table ()->columns))); });
+    
+    if ($obj->shares)
+      foreach ($obj->shares as $share)
+        ScheduleShare::transaction (function () use ($share) { return $share->destroy (); });
+
+    if ($posts['user_ids'])
+      foreach ($posts['user_ids'] as $i => $user_id)
+        ScheduleShare::transaction (function () use ($i, $user_id, $obj) { return verifyCreateOrm (ScheduleShare::create (array_intersect_key (array ('schedule_id' => $obj->id, 'user_id' => $user_id), ScheduleShare::table ()->columns))); });
+    
+    UserLog::logWrite (
+      $this->icon,
+      '修改一項' . $this->title,
+      '名稱為：「' . $obj->title . '」',
+      array ($backup, $obj->backup (true)));
+
+    return $this->output_json (true);
+  }
+  public function destroy ($id) {
+    if (!($id && ($obj = Schedule::find ('one', array ('conditions' => array ('id = ? AND user_id = ?', $id, User::current ()->id))))))
+      return $this->output_error_json ('找不到該筆資料，或您的權限不足，或者頁面不存在。。');
+
+    $backup = $obj->backup (true);
+
+    if (!Schedule::transaction (function () use ($obj) { return $obj->destroy (); }))
+      return redirect_message (array ($this->uri_1), array ('_fd' => '刪除失敗！'));
+
+    UserLog::logWrite (
+      $this->icon,
+      '刪除一項' . $this->title,
+      '已經備份了刪除紀錄，細節可詢問工程師',
+      $backup);
 
     return $this->output_json (true);
   }
