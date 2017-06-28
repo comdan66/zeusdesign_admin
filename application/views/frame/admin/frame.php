@@ -91,6 +91,14 @@
         </div>
       </div>
 
+      <div class='group'>
+        <span class='icon-fs'>專案管理</span>
+        <div>
+          <a class='icon-sev<?php echo ($url = base_url ('admin', 'ftps')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>FTP 資料</a>
+          <a class='icon-shield<?php echo ($url = base_url ('admin', 'income-items')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>任務列表</a>
+        </div>
+      </div>
+
       <footer>© <?php echo date ('Y');?> zeusdesign.com.tw</footer>
     </div><label class='icon-cross' for='menu_ckb'></label>
 

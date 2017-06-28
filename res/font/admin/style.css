@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?ynj3il');
-  src:  url('fonts/icomoon.eot?ynj3il#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?ynj3il') format('truetype'),
-    url('fonts/icomoon.woff?ynj3il') format('woff'),
-    url('fonts/icomoon.svg?ynj3il#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?wma');
+  src:  url('fonts/icomoon.eot?wma#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?wma') format('truetype'),
+    url('fonts/icomoon.woff?wma') format('woff'),
+    url('fonts/icomoon.svg?wma#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -50,6 +50,12 @@
 }
 .icon-bil:before {
   content: "\e915";
+}
+.icon-sev:before {
+  content: "\e91a";
+}
+.icon-fs:before {
+  content: "\e91c";
 }
 .icon-moneybag:before {
   content: "\e917";
