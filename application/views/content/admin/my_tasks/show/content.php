@@ -91,7 +91,7 @@
 
 <div class='panel commits'>
   <?php
-  foreach ($obj->commits as $commit) { ?>
+  foreach (TaskCommit::find ('all', array ('include' => array ('user'), 'order' => 'id DESC', 'conditions' => array ('task_id = ?', $obj->id))) as $commit) { ?>
     <div class='commit'>
       <div>
         <div class='user'>

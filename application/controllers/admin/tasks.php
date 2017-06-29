@@ -203,8 +203,8 @@ class Tasks extends Admin_controller {
     if ($del_users || $new_users) array_push ($changes, '指派人員異動');
     if ($del_users) array_push ($changes, '移除 ' . implode (', ', column_array ($del_users, 'name')));
     if ($new_users) array_push ($changes, '加入 ' . implode (', ', column_array ($new_users, 'name')));
-    if ($del_attachments) array_push ($changes, count ($del_attachments) == 1 ? '刪除附件檔案 ' . $del_attachments[0]->title : ('刪除了 ' . count ($del_attachments) . ' 個附件，分別是 ' . implode ('、', column_array ($del_attachments, 'title'))));
-    if ($add_attachments) array_push ($changes, count ($add_attachments) == 1 ? '新增附件檔案 ' . $add_attachments[0]->title : ('新增了 ' . count ($add_attachments) . ' 個附件，分別是 ' . implode ('、', column_array ($add_attachments, 'title'))));
+    if ($del_attachments) array_push ($changes, count ($del_attachments) == 1 ? '刪除附件檔案 ' . $del_attachments[0]->title : ('刪除了 ' . count ($del_attachments) . ' 個附件，分別是 ' . implode ('、', column_array ($del_attachments, 'title', function ($v) { return '「' . $v . '」'; }))));
+    if ($add_attachments) array_push ($changes, count ($add_attachments) == 1 ? '新增附件檔案 ' . $add_attachments[0]->title : ('新增了 ' . count ($add_attachments) . ' 個附件，分別是 ' . implode ('、', column_array ($add_attachments, 'title', function ($v) { return '「' . $v . '」'; }))));
 
     if ($changes) {
       $posts = array (

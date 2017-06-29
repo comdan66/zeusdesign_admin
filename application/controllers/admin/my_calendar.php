@@ -66,6 +66,42 @@ class My_calendar extends Admin_controller {
         'finish' => count (array_filter ($obj->schedule->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; })) == count ($obj->schedule->items),
       ));
   }
+  public function task ($id = 0) {
+    if (!($id && ($obj = Task::find ('one', array ('conditions' => array ('id = ?', $id))))))
+      return $this->output_error_json ('找不到該筆資料。');
+
+    if (!(($obj->user_id == User::current ()->id || (($t = column_array ($obj->user_mappings, 'user_id')) && in_array (User::current ()->id, $t)))))
+      return $this->output_error_json ('您的權限不足，或者頁面不存在。');
+    
+    return $this->output_json (array (
+        'edit' => $obj->user_id == User::current ()->id ? base_url ('admin', 'tasks', $obj->id, 'edit') : false,
+
+        'id' => $obj->id,
+        'title' => $obj->title,
+        'content' => $obj->content,
+        'href' => base_url ('admin', 'my-tasks', $obj->id, 'show'),
+        'level' => Task::$levelNames[$obj->level],
+        'levelc' => array_values (Task::$levelColors),
+        'levelu' => $t = 100 / count (Task::$levelColors),
+        'levelv' => $t * ($obj->level - 1),
+        'users' => array_map (function ($user) {
+          return array (
+              'id' => $user->id,
+              'name' => $user->name,
+              'avatar' => $user->avatar (),
+            );
+        }, $obj->users),
+        'commits' => array_map (function ($commit) {
+          return array (
+              'id' => $commit->id,
+              'action' => $commit->action,
+              'content' => !$commit->content && (string)$commit->file ? '上傳了一個檔案，名稱為「' . (string)$commit->file . '」。' : $commit->mini_content (),
+              'avatar' => $commit->user->avatar (),
+            );
+        }, TaskCommit::find ('all', array ('include' => array ('user'), 'order' => 'id DESC', 'conditions' => array ('task_id = ?', $obj->id)))),
+        'finish' => $obj->status == Task::STATUS_2 ? true : false,
+      ));
+  }
   public function show ($id = 0) {
     if (!($id && ($obj = Schedule::find ('one', array ('conditions' => array ('id = ?', $id))))))
       return $this->output_error_json ('找不到該筆資料。');
@@ -124,6 +160,18 @@ class My_calendar extends Admin_controller {
 
     for ($i = 0; $i < $count; $i++)
       $days[date ('Y-m-d', $key = strtotime ($start . ' +' . $i . ' day'))] = array ('y' => (int)date ('Y', $key), 'm' => (int)date ('m', $key), 'd' => (int)date ('d', $key), 'c' => array ());
+    
+    $objs = Task::find ('all', array ('order' => 'id DESC', 'joins' => 'LEFT JOIN (select user_id,task_id from task_user_mappings) as a ON(tasks.id = a.task_id)', 'conditions' => array ('date BETWEEN ? AND ? AND a.user_id = ?', $start, $end, User::current ()->id)));
+    foreach ($objs as $obj)
+      if (isset ($days[$obj->date->format ('Y-m-d')]['c']))
+        array_push ($days[$obj->date->format ('Y-m-d')]['c'], array (
+            'id' => $obj->id,
+            'type' => 2,
+            'color' => '',
+            'text' => $obj->title,
+            'img' => '',
+            'finish' => $obj->status == Task::STATUS_2 ? true : false,
+          ));
 
     $objs = Schedule::find ('all', array ('include' => array ('tag', 'user', 'items'), 'order' => 'sort ASC', 'joins' => 'LEFT JOIN (select user_id,schedule_id from schedule_shares) as a ON(schedules.id = a.schedule_id)', 'conditions' => array ('date BETWEEN ? AND ? AND schedules.user_id != ? AND a.user_id = ?', $start, $end, User::current ()->id, User::current ()->id)));
     foreach ($objs as $obj)
@@ -168,6 +216,7 @@ class My_calendar extends Admin_controller {
       'data-api_delete' => base_url ('admin', 'my-calendar', '%d'),
       'data-api_update' => base_url ('admin', 'my-calendar', '%d'),
       'data-api_create' => base_url ('admin', 'my-calendar'),
+      'data-api_task' => base_url ('admin', 'my_calendar', 'task', '%d'),
       'data-tags' => json_encode (array_map (function ($user) { return array ('id' => $user->id, 'name' => $user->name, 'color' => $user->color); }, ScheduleTag::all (array ('select' => 'id, name, color')))),
       'data-users' => json_encode (array_map (function ($user) { return array ('id' => $user->id, 'name' => $user->name); }, User::all (array ('select' => 'id, name', 'conditions' => array ('id != ?', User::current ()->id))))),
       ))->load_view ();
@@ -211,12 +260,26 @@ class My_calendar extends Admin_controller {
         'sub' => $obj->schedule_tag_id && $obj->tag ? $obj->tag->name : '',
         'note' => ($a = count (array_filter ($obj->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; }))) . ' / ' . ($b = count ($obj->items)),
         'finish' => $a == $b,
+        'type' => 1,
         );
     }, $objs1);
 
-    $objs2 = Schedule::find ('all', array ('include' => array ('tag', 'user', 'items'), 'order' => 'sort ASC', 'joins' => 'LEFT JOIN (select user_id,schedule_id from schedule_shares) as a ON(schedules.id = a.schedule_id)', 'conditions' => array ('a.user_id = ? AND schedules.user_id != ? AND date = ?', User::current ()->id, User::current ()->id, $gets['date'])));
-
+    $objs2 = Task::find ('all', array ('order' => 'id DESC', 'joins' => 'LEFT JOIN (select user_id,task_id from task_user_mappings) as a ON(tasks.id = a.task_id)', 'conditions' => array ('date = ? AND a.user_id = ?', $gets['date'], User::current ()->id)));
     $objs2 = array_map (function ($obj) {
+      return array (
+        'icon' => 'icon-shield',
+        'id' => $obj->id,
+        'title' => $obj->title,
+        'sub' => $obj->mini_content (50),
+        'note' => ($obj->status == Task::STATUS_2 ? '1' : '0') . ' / 1',
+        'finish' => $obj->status == Task::STATUS_2 ? true : false,
+        // 'href' => base_url ('admin', 'my-tasks', $obj->id)
+        'type' => 2,
+        );
+    }, $objs2);
+
+    $objs3 = Schedule::find ('all', array ('include' => array ('tag', 'user', 'items'), 'order' => 'sort ASC', 'joins' => 'LEFT JOIN (select user_id,schedule_id from schedule_shares) as a ON(schedules.id = a.schedule_id)', 'conditions' => array ('a.user_id = ? AND schedules.user_id != ? AND date = ?', User::current ()->id, User::current ()->id, $gets['date'])));
+    $objs3 = array_map (function ($obj) {
       return array (
         'img' => $obj->user->avatar (),
         'id' => $obj->id,
@@ -224,12 +287,14 @@ class My_calendar extends Admin_controller {
         'sub' => $obj->schedule_tag_id && $obj->tag ? $obj->tag->name : '',
         'note' => ($a = count (array_filter ($obj->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; }))) . ' / ' . ($b = count ($obj->items)),
         'finish' => $a == $b,
+        'type' => 3,
         );
-    }, $objs2);
+    }, $objs3);
     
     $return = array ();
+    if ($objs2) array_push ($return, array ('text' => '今日任務', 'objs' => $objs2, 'sort' => false));
     if ($objs1) array_push ($return, array ('text' => '個人事項', 'objs' => $objs1, 'sort' => true));
-    if ($objs2) array_push ($return, array ('text' => '朋友事項', 'objs' => $objs2, 'sort' => false));
+    if ($objs3) array_push ($return, array ('text' => '朋友事項', 'objs' => $objs3, 'sort' => false));
 
     return $this->output_json ($return);
   }

@@ -34,6 +34,7 @@ $(function () {
     $add: $('<div />').addClass ('add'),
     $content: $('<div />').addClass ('content'),
     $edit: $('<div />').addClass ('edit'),
+    $task: $('<div />').addClass ('task'),
     $datas: $('#datas'),
     $body: $('body'),
     $calendar: $('.calendar'),
@@ -53,6 +54,7 @@ $(function () {
       this.api.content = this.$datas.data ('api_content');
       this.api.status = this.$datas.data ('api_status');
       this.api.delete = this.$datas.data ('api_delete');
+      this.api.task = this.$datas.data ('api_task');
 
       return this;
     },
@@ -61,7 +63,7 @@ $(function () {
       return this;
     },
     close: function () {
-      this.closeEdit ().closeContent ().closeAdd ().clean ();
+      this.closeTask ().closeEdit ().closeContent ().closeAdd ().clean ();
       this.$ckb.prop ('checked', false);
       this.$body.css('overflow', 'visible');
       return this;
@@ -77,6 +79,7 @@ $(function () {
       this.$panel.append (this.$add);
       this.$panel.append (this.$content);
       this.$panel.append (this.$edit);
+      this.$panel.append (this.$task);
 
       this.showList ();
       this.$ckb.prop ('checked', true);
@@ -109,6 +112,12 @@ $(function () {
       })
       .fail (window.fns.ajaxFail)
       .complete (function () {});
+    },
+    closeTask: function () {
+      this.$task.attr ('class', 'task');
+      this.$right.show ();
+      this.showList (true);
+      return this;
     },
     closeContent: function () {
       this.$content.attr ('class', 'content');
@@ -208,6 +217,71 @@ $(function () {
           if (!confirm ('確定刪除？')) return false;
           this.showDelete (r.id);
         }.bind (this)) : null);
+    },
+    renderTask: function (r) {
+        this.$right.attr ('class', r.edit === false ? 'icon-eye' : 'icon-pencil2').unbind ('click').click (function () {
+          window.open (r.edit === false ? r.href : r.edit, '_blank');
+        }.bind (this)).show ();
+
+      if (r.finish) this.$task.addClass ('finish');
+
+      this.$task.append (
+        $('<span />').text ('任務標題')).append (
+        $('<div />').addClass ('row').text (r.title));
+      
+      $cursor = $('<span />').data ('val', r.levelv).css ({'width': r.levelu + '%'});
+
+      this.$task.append (
+        $('<span />').text ('優先權')).append (
+        $('<div />').addClass ('row').append (
+          $('<div />').addClass ('colors').append (r.levelc.map (function (t) {
+            return $('<span />').css ({'background-color': t, 'width': r.levelu + '%'});
+          })).append ($cursor)).append ($('<span />').text (r.level)));
+
+      this.$task.append (
+        $('<span />').text ('任務內容')).append (
+        $('<div />').addClass ('row').append ($('<article />').html (r.content.trim ())));
+
+      if (r.users.length)
+        this.$task.append (
+          $('<span />').text ('參與人員')).append (
+          $('<div />').addClass ('row').addClass ('users').append (r.users.map (function (t) {
+            return $('<div />').append (
+              $('<img />').attr ('src', t.avatar)).append (
+              $('<span />').text (t.name));
+          })));
+
+      if (r.commits.length)
+        this.$task.append (
+          $('<span />').text ('留言、紀錄')).append (
+          $('<div />').addClass ('row').addClass ('commits').append (r.commits.map (function (t) {
+            return $('<div />').append (
+              $('<img />').attr ('src', t.avatar)).append (
+              $('<span />').text (t.action).attr ('data-content', t.content));
+          })));
+
+      this.$task.append ( $('<a />').text ('檢視細節').click (function () { window.open (r.href); }.bind (this)));
+
+      setTimeout (function () { $cursor.css ({left: $cursor.data ('val')}); }, 500);
+      
+    },
+    showTask: function (id) {
+      this.$task.empty ().attr ('class', 'task').addClass ('loading');
+      this.$task.addClass ('s');
+      this.$left.attr ('class', 'icon-keyboard_arrow_left').unbind ('click').click (function () { this.closeTask (); }.bind (this));
+      this.$right.hide ();
+      this.$title.text ('任務內容').attr ('data-sub', '');
+
+      $.ajax ({
+        url: sprintf (this.api.task, id),
+        data: { },
+        async: true, cache: false, dataType: 'json', type: 'get'
+      })
+      .done (this.renderTask.bind (this))
+      .fail (window.fns.ajaxFail)
+      .complete (function () {
+        this.$content.removeClass ('loading')
+      }.bind (this));
     },
     showContent: function (id) {
       this.$content.empty ().attr ('class', 'content').addClass ('loading');
@@ -400,11 +474,12 @@ $(function () {
       this.$title.text ('新增行程');
     },
     renderList: function (obj) {
-      return $('<a />').data ('id', obj.id).addClass (obj.finish ? 'finish' : null).addClass (obj.img.length ? 'img' : null).append (
-               obj.img.length ? $('<img />').attr ('src', obj.img) : null).append (
+      return $('<a />').data ('id', obj.id).addClass (obj.finish ? 'finish' : null).addClass (typeof obj.img !== 'undefined' && obj.img.length ? 'img' : null).append (
+               typeof obj.img !== 'undefined' && obj.img.length ? $('<img />').attr ('src', obj.img) : (typeof obj.icon !== 'undefined' ? $('<i />').addClass (obj.icon) : null)).append (
                $('<span />').text (obj.note)).append (
                $('<div />').text (obj.title).attr ('data-sub', obj.sub)).click (function (event) {
-                 this.showContent (obj.id);
+                 if (obj.type == 2) this.showTask (obj.id);
+                 else this.showContent (obj.id);
                }.bind (this));
     },
     updateDaySort: function (s, notReload) {

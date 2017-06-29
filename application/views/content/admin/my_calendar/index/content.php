@@ -9,7 +9,7 @@
   </div>
 </div>
 
-<input type='checkbox' class='hckb' id='fix_pnl_ckb'  />
+<input type='checkbox' class='hckb' id='fix_pnl_ckb' />
 
 <div class='panel'>
   
@@ -27,7 +27,22 @@
   <header><a class='icon-keyboard_arrow_left'></a><span>本日活動</span><a class='icon-r'></a></header>
   
   
-  <div class='content'></div>
+  <!-- <div class='task s'></div> -->
+  <div class='task'>
+
+
+
+
+    <span>留言、紀錄</span>
+    <div class='row mtckbs'>
+      <div><img src='https://graph.facebook.com/1222557214424285/picture?width=100&height=100' /><span>asd</span></div>
+      <div><img src='https://graph.facebook.com/1222557214424285/picture?width=100&height=100' /><span>asd</span></div>
+      <div><img src='https://graph.facebook.com/1222557214424285/picture?width=100&height=100' /><span>asd</span></div>
+    </div>
+
+    <a>檢視細節</a>
+
+  </div>
   <div class='content'>
       
       <span>標題</span>
