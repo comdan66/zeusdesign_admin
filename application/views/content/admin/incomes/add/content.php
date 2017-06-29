@@ -86,7 +86,7 @@
     <div class='row'>
       <button type='submit'>確定送出</button>
       <button type='reset'>重新填寫</button>
-      <a href='<?php echo base_url ($uri_1);?>'>回列表頁</a>
+      <a href='<?php echo base_url ('admin', 'income-items');?>'>回列表頁</a>
     </div>
   </form>
 </div>

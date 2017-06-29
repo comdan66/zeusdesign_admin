@@ -36,6 +36,7 @@ class Tasks extends Admin_controller {
 
   public function index ($offset = 0) {
     $searches = array (
+        'user_id[]' => array ('el' => 'checkbox', 'text' => '擁有者', 'sql' => 'user_id IN (?)', 'items' => array_map (function ($u) { return array ('text' => $u->name, 'value' => $u->id); }, User::all ())),
         'title'     => array ('el' => 'input', 'text' => '標題', 'sql' => 'title LIKE ?'),
         'content'     => array ('el' => 'input', 'text' => '內容', 'sql' => 'content LIKE ?'),
         'status'    => array ('el' => 'select', 'text' => '是否完成', 'sql' => 'status = ?', 'items' => array_map (function ($t) { return array ('text' => Task::$statusNames[$t], 'value' => $t,);}, array_keys (Task::$statusNames))),
@@ -90,6 +91,7 @@ class Tasks extends Admin_controller {
         return verifyCreateOrm ($obj = Task::create (array_intersect_key ($posts, Task::table ()->columns)));
     }) && $msg = '新增失敗！')) return redirect_message (array ($this->uri_1, 'add'), array ('_fd' => $msg, 'posts' => $posts));
 
+    $posts['user_ids'] = array_unique (array_merge ($posts['user_ids'], array ($obj->user_id)));
     foreach ($posts['user_ids'] as $user_id)
       TaskUserMapping::transaction (function () use ($user_id, $obj) {
         return verifyCreateOrm (TaskUserMapping::create (array_intersect_key (array ('user_id' => $user_id, 'task_id' => $obj->id), TaskUserMapping::table ()->columns)));
@@ -172,6 +174,8 @@ class Tasks extends Admin_controller {
 
     $ori_ids = column_array ($obj->user_mappings, 'user_id');
 
+    $posts['user_ids'] = array_unique (array_merge ($posts['user_ids'], array ($obj->user_id)));
+
     $new_users = $del_users = array ();
     if (($del_ids = array_diff ($ori_ids, $posts['user_ids'])) && ($mappings = TaskUserMapping::find ('all', array ('select' => 'id, user_id, task_id', 'include' => array ('user'), 'conditions' => array ('task_id = ? AND user_id IN (?)', $obj->id, $del_ids)))))
       foreach ($mappings as $mapping)
@@ -179,6 +183,15 @@ class Tasks extends Admin_controller {
           array_push ($del_users, $mapping->user);
           return $mapping->destroy ();
         });
+
+    $users = array_filter (($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array (), function ($user) { return $user->id != User::current ()->id; });
+    if (($add_ids = array_diff ($posts['user_ids'], $ori_ids)) && ($users = User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $add_ids)))))
+      foreach ($users as $user)
+        TaskUserMapping::transaction (function () use ($user, $obj, &$new_users) {
+          array_push ($new_users, $user);
+          return verifyCreateOrm (TaskUserMapping::create (array_intersect_key (array ('user_id' => $user->id, 'task_id' => $obj->id), TaskUserMapping::table ()->columns)));
+        });
+      
 
     $changes = array ();
     if ($obj->title !== $_title) array_push ($changes, '調整任務標題，由「' . $_title . '」修改成「' . $obj->title . '」');
@@ -281,8 +294,8 @@ class Tasks extends Admin_controller {
   private function _validation_create (&$posts) {
     if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && in_array ($posts['status'], array_keys (Task::$statusNames)))) $posts['status'] = Task::STATUS_1;
     if (!(isset ($posts['user_id']) && is_string ($posts['user_id']) && is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find_by_id ($posts['user_id']))) return '「' . $this->title . '擁有者」格式錯誤！';
-    $posts['user_ids'] = isset ($posts['user_ids']) && is_array ($posts['user_ids']) && $posts['user_ids'] ? column_array (User::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?) AND id != ?', $posts['user_ids'], User::current ()->id))), 'id') : array ();
-    if (!$posts['user_ids']) return '「' . $this->title . '參與者」格式錯誤！';
+    $posts['user_ids'] = isset ($posts['user_ids']) && is_array ($posts['user_ids']) && $posts['user_ids'] ? column_array (User::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['user_ids']))), 'id') : array ();
+    // if (!$posts['user_ids']) return '「' . $this->title . '參與者」格式錯誤！';
     if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「' . $this->title . '標題」格式錯誤！';
     if (!(isset ($posts['level']) && is_string ($posts['level']) && is_numeric ($posts['level'] = trim ($posts['level'])) && in_array ($posts['level'], array_keys (Task::$levelNames)))) $posts['level'] = Task::LEVEL_4;
     if (!(isset ($posts['date']) && is_string ($posts['date']) && is_date ($posts['date'] = trim ($posts['date'])))) return '「' . $this->title . '日期」格式錯誤！';

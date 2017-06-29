@@ -21,11 +21,14 @@ Route::group ('admin', function () {
   
   Route::resourcePagination (array ('income_items'), 'income_items');
   Route::resourcePagination (array ('incomes'), 'incomes');
+
+  Route::resourcePagination (array ('ftps'), 'ftps');
+  Route::resourcePagination (array ('tasks'), 'tasks');
+
   Route::resourcePagination (array ('my_zbs'), 'my_zbs');
   Route::resourcePagination (array ('my_calendar'), 'my_calendar');
   Route::resourcePagination (array ('my_schedule_tags'), 'my_schedule_tags');
-  Route::resourcePagination (array ('ftps'), 'ftps');
-  Route::resourcePagination (array ('tasks'), 'tasks');
+  Route::resourcePagination (array ('my_tasks'), 'my_tasks');
   
   // Route::post ('/income_items/ajax/', 'income_items@ajax(0)');
   // Route::post ('/income_items/ajax/(:id)', 'income_items@ajax($1)');

@@ -18,7 +18,7 @@ class Task extends OaModel {
 
     array ('attachments', 'class_name' => 'TaskAttachment'),
     array ('user_mappings', 'class_name' => 'TaskUserMapping'),
-    array ('commits', 'class_name' => 'TaskCommit'),
+    array ('commits', 'class_name' => 'TaskCommit', 'order' => 'id DESC'),
   );
 
   static $belongs_to = array (

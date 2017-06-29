@@ -25,7 +25,7 @@ class Company_pms extends Admin_controller {
     $this->uri_1 = 'admin/company';
     $this->uri_2 = 'pms';
     $this->uri_b = 'admin/companies';
-    $this->icon = 'profile2';
+    $this->icon = 'icon-profile2';
 
     if (!(($id = $this->uri->rsegments (3, 0)) && ($this->parent = Company::find_by_id ($id))))
       return redirect_message (array ('admin', 'work-tags'), array ('_fd' => '找不到該筆資料。'));

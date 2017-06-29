@@ -25,6 +25,30 @@ class TaskCommit extends OaModel {
 
     OrmFileUploader::bind ('file', 'TaskCommitFileFileUploader');
   }
+  public function file_icon () {
+    $name = 'd4.png';
+    switch (pathinfo ((string)$this->file, PATHINFO_EXTENSION)) {
+      case 'jpg': case 'jpeg': $name = 'jpg.png'; break;
+      
+      case 'ppt': case 'pptx': $name = 'ppt.png'; break;
+      
+      // case 'doc': case 'docx':
+      //   $name = 'doc.png';
+      //   break;
+      
+      case 'xls': case 'xlsx': $name = 'xls.png'; break;
+      case 'gif': $name = 'gif.png'; break;
+      case 'png': $name = 'png.png'; break;
+      case 'pdf': $name = 'pdf.png'; break;
+      case 'zip': $name = 'zip.png'; break;
+      default: $name = 'd4.png'; break;
+    }
+    return base_url ('res', 'image', 'extension', $name);
+  }
+  public function mini_content ($length = 100) {
+    if (!isset ($this->content)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->content), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
+  }
   public function destroy () {
     if (!isset ($this->id)) return false;
 

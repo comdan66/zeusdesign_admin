@@ -19,7 +19,7 @@ class Companies extends Admin_controller {
       return redirect_message (array ('admin'), array ('_fd' => '您的權限不足，或者頁面不存在。'));
     
     $this->uri_1 = 'admin/companies';
-    $this->icon = 'icon-images';
+    $this->icon = 'icon-b';
     $this->title = '配合廠商';
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy', 'show')))

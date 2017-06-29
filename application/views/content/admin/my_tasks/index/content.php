@@ -9,7 +9,6 @@
   </div>
 
   <div class='right'>
-    <a class='icon-r' href='<?php echo base_url ($uri_1, 'add');?>'>新增</a>
   </div>
 
   <form class='conditions'>
@@ -51,28 +50,37 @@
   <table class='table-list w1200'>
     <thead>
       <tr>
-        <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
-        <th width='120'>專案名稱<?php echo listSort ($uri_1, 'name');?></th>
-        <th width='260'>網站網址<?php echo listSort ($uri_1, 'link');?></th>
+        <th width='70'>完成</th>
+        <th width='100'>擁有者</th>
+        <th width='150'>標題<?php echo listSort ($uri_1, 'title');?></th>
+        <th width='110'>優先權<?php echo listSort ($uri_1, 'level');?></th>
         <th >內容</th>
-        <th width='120'>備註<?php echo listSort ($uri_1, 'memo');?></th>
-        <th width='120'>編輯</th>
+
+        <th width='80'>留言數</th>
+        <th width='50'>檢視</th>
       </tr>
     </thead>
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
-          <td><?php echo $obj->id;?></td>
-          <td><?php echo $obj->name;?></td>
-          <td><?php echo mini_link ($obj->link);?></td>
+          <td>
+      <?php if ($obj->user_id == User::current ()->id && User::current ()->in_roles (array ('task'))) {?>
+              <label class='switch ajax' data-column='status' data-url='<?php echo base_url ('admin', 'tasks', 'status', $obj->id);?>'>
+                <input type='checkbox'<?php echo $obj->status == Task::STATUS_2 ? ' checked' : '';?> />
+                <span></span>
+              </label>
+      <?php } else {
+              echo Task::$statusNames[$obj->status];
+            }?>
+          </td>
+          <td><?php echo $obj->user->name;?></td>
+          <td><?php echo $obj->title;?></td>
+          <td><div class='color' style='background-color: <?php echo isset (Task::$levelColors[$obj->level]) ? Task::$levelColors[$obj->level] : '#ffffff';?>;'></div><?php echo Task::$levelNames[$obj->level];?></td>
           <td><?php echo $obj->mini_content (50);?></td>
-          <td><?php echo $obj->memo;?></td>
+          <td><?php echo number_format (count ($obj->commits));?> 則</td>
+
           <td>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
-            /
-            <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
-            /
-            <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
           </td>
         </tr>
 <?php } ?>

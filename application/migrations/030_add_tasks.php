@@ -11,7 +11,7 @@ class Migration_Add_tasks extends CI_Migration {
     $this->db->query (
       "CREATE TABLE `tasks` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-        `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'User ID(產生者)',
+        `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'User ID(擁有者)',
 
         `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
         `content` text NOT NULL COMMENT '內容',

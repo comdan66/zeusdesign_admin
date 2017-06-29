@@ -54,8 +54,8 @@
     </div>
 
     <div class='row'>
-      <b class='need'><?php echo $title;?>日期</b>
-      <input type='date' name='date' value='<?php echo isset ($posts['date']) ? $posts['date'] : $obj->date->format ('Y-m-d');?>' placeholder='請輸入<?php echo $title;?>日期..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>日期!' />
+      <b class='need'><?php echo $title;?>預估完成日期</b>
+      <input type='date' name='date' value='<?php echo isset ($posts['date']) ? $posts['date'] : $obj->date->format ('Y-m-d');?>' placeholder='請輸入<?php echo $title;?>預估完成日期..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>預估完成日期!' />
     </div>
     
     <div class='row'>
