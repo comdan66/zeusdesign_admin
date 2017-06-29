@@ -8,7 +8,7 @@
 
 if ( !function_exists ('size_unit')) {
   function size_unit ($size, $unit = null, $default = null) {
-    $sizes = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB');
+    $sizes = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
     $mod = 1024;
     $ii = count ($sizes) - 1;
 
