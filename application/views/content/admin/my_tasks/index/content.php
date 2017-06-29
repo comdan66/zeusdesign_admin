@@ -65,7 +65,7 @@
         <tr>
           <td>
       <?php if ($obj->user_id == User::current ()->id && User::current ()->in_roles (array ('task'))) {?>
-              <label class='switch ajax' data-column='status' data-url='<?php echo base_url ('admin', 'tasks', 'status', $obj->id);?>'>
+              <label class='switch ajax' data-forcntrole='task' data-column='status' data-url='<?php echo base_url ('admin', 'tasks', 'status', $obj->id);?>'>
                 <input type='checkbox'<?php echo $obj->status == Task::STATUS_2 ? ' checked' : '';?> />
                 <span></span>
               </label>

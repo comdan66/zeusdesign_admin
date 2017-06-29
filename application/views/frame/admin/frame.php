@@ -47,11 +47,11 @@
       </header>
 
       <div class='group'>
-        <span class='icon-u'>個人管理</span>
+        <span class='icon-u' data-cntrole='task' data-cnt='<?php echo ($task_cnt = Task::count (array ('joins' => 'LEFT JOIN (select user_id,task_id from task_user_mappings) as a ON(tasks.id = a.task_id)', 'conditions' => array ('status = ? AND a.user_id = ?', Task::STATUS_1, User::current ()->id))));?>'>個人管理</span>
         <div>
           <a class='icon-home' href=''>個人頁面</a>
           <a class='icon-calendar2<?php echo ($url = base_url ('admin', 'my-calendar')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的行事曆</a>
-          <a class='icon-shield<?php echo ($url = base_url ('admin', 'my-tasks')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的任務</a>
+          <a data-cntrole='task' data-cnt='<?php echo $task_cnt;?>' class='icon-shield<?php echo ($url = base_url ('admin', 'my-tasks')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的任務</a>
           <a class='icon-moneybag<?php echo ($url = base_url ('admin', 'my-zbs')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的宙思幣</a>
         </div>
       </div>
@@ -107,7 +107,7 @@
         <span>Hi, <b><?php echo User::current ()->name;?></b> 您好。</span>
         <span>目前登入次數：<b><?php echo number_format (User::current ()->login_count);?></b>次</span>
         <span>上次登入：<time datetime='<?php echo User::current ()->logined_at->format ('Y-m-d H:i:s');?>'><?php echo User::current ()->logined_at->format ('Y-m-d H:i:s');?></time></span>
-        <a href='' class='icon-notifications_active' data-count='10,000'>您有未讀訊息</a>
+        <a href='' class='icon-notifications_active' data-cnt='<?php echo number_format (1234);?>'>您有未讀訊息</a>
         <a href='<?php echo base_url ('logout');?>' class='icon-power'>登出</a>
       </div>
     </div><label for='user_ckb'></label>

@@ -657,9 +657,9 @@ html {
         text-align: center;
         font-size: 18px;
       }
-      &[data-count] {
+      &[data-cnt]:not([data-cnt='0']) {
         &:after {
-          content: attr(data-count);
+          content: attr(data-cnt);
           position: absolute;
           left: 30px;
           top: 7px;

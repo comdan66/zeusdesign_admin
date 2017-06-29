@@ -54,10 +54,8 @@ class My_tasks extends Admin_controller {
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
-    $objs = conditions ($searches, $configs, $offset, 'Task', array ('order' => 'id DESC', 'include' => array ('user', 'commits')), function ($conditions) {
-
-      $task_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'task_id', 'conditions' => array ('user_id = ?', User::current ()->id))), 'task_id');
-      OaModel::addConditions ($conditions, 'user_id = ? || (id IN (?))', User::current ()->id, $task_ids ? $task_ids : array (0));
+    $objs = conditions ($searches, $configs, $offset, 'Task', array ('order' => 'id DESC', 'include' => array ('user', 'commits'), 'joins' => 'LEFT JOIN (select user_id,task_id from task_user_mappings) as a ON(tasks.id = a.task_id)'), function ($conditions) {
+      OaModel::addConditions ($conditions, 'a.user_id = ?', User::current ()->id);
       return $conditions;
     });
 

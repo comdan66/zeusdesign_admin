@@ -156,8 +156,10 @@ if (!function_exists ('conditions')) {
     if ($cndFunc && ($c = $cndFunc ($conditions)))
       $conditions = $c;
 
-
-    $total = $modelName::count (array ('conditions' => $conditions));
+    if (isset ($options['joins']))
+      $total = $modelName::count (array ('conditions' => $conditions, 'joins' => $options['joins']));
+    else
+      $total = $modelName::count (array ('conditions' => $conditions));
 
     $qs = array ();
     if (OAInput::get () !== null)
