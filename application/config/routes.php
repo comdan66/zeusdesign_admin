@@ -29,6 +29,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('my_calendar'), 'my_calendar');
   Route::resourcePagination (array ('my_schedule_tags'), 'my_schedule_tags');
   Route::resourcePagination (array ('my_tasks'), 'my_tasks');
+  Route::resourcePagination (array ('my_notices'), 'my_notices');
   
   // Route::post ('/income_items/ajax/', 'income_items@ajax(0)');
   // Route::post ('/income_items/ajax/(:id)', 'income_items@ajax($1)');

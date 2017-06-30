@@ -24,7 +24,7 @@
       <div class='midle'>
         <label class='icon-menu' for='menu_ckb'></label>
       </div>
-      <div class='avatar' news>
+      <div class='avatar' data-cntrole='notice' data-cnt='<?php echo $notice_cnt = Notice::count (array ('conditions' => array ('user_id = ? AND status = ?', User::current ()->id, Notice::STATUS_1)));?>'>
         <label for='user_ckb' class='_ic'>
           <img src='<?php echo User::current ()->avatar ();?>' />
         </label>
@@ -107,7 +107,7 @@
         <span>Hi, <b><?php echo User::current ()->name;?></b> 您好。</span>
         <span>目前登入次數：<b><?php echo number_format (User::current ()->login_count);?></b>次</span>
         <span>上次登入：<time datetime='<?php echo User::current ()->logined_at->format ('Y-m-d H:i:s');?>'><?php echo User::current ()->logined_at->format ('Y-m-d H:i:s');?></time></span>
-        <a href='' class='icon-notifications_active' data-cnt='<?php echo number_format (1234);?>'>您有未讀訊息</a>
+        <a href='<?php echo base_url ('admin', 'my-notices');?>' class='icon-notifications_active' data-cntrole='notice' data-cnt='<?php echo $notice_cnt;?>'>檢視通知</a>
         <a href='<?php echo base_url ('logout');?>' class='icon-power'>登出</a>
       </div>
     </div><label for='user_ckb'></label>

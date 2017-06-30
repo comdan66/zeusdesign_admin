@@ -31,8 +31,6 @@ class Incomes extends Admin_controller {
          ->add_param ('title', $this->title)
          ->add_param ('_url', base_url ($this->uri_1));
   }
-  // public function create_choice () {
-  // }
 
   public function index ($offset = 0) {
     $searches = array (
@@ -60,6 +58,7 @@ class Incomes extends Admin_controller {
         'pagination' => $this->_get_pagination ($configs),
       ));
   }
+
   public function add () {
     $posts = Session::getData ('posts', true);
 
@@ -104,15 +103,10 @@ class Incomes extends Admin_controller {
         }
 
       if (!$users) return false;
-
       foreach ($users as $user_id => $user)
-        if (!(verifyCreateOrm ($z = Zb::create (array (
-                            'user_id' => $user_id,
-                            'income_id' => $obj->id,
-                            'money' => $user['money'],
-                            'percentage' => $user['money'] / $posts['money']
-                          ))) && IncomeItemDetail::update_all (array ('set' => 'zb_id = ' . $z->id, 'conditions' => array ('id IN (?)', $user['detail_ids'])))))
+        if (!(verifyCreateOrm ($z = Zb::create (array ('user_id' => $user_id, 'income_id' => $obj->id, 'money' => $user['money'], 'percentage' => $user['money'] / $posts['money']))) && IncomeItemDetail::update_all (array ('set' => 'zb_id = ' . $z->id, 'conditions' => array ('id IN (?)', $user['detail_ids']))) && Notice::send ($z->user_id, '新增了一筆宙思幣給您囉，詳細內容請到「我的宙思幣」檢視。', 'admin/my-zbs/' . $z->id . '/show')))
           return false;
+
       return true;
     }) && $msg = '新增失敗！')) return redirect_message (array ('admin', 'income_items', 'check'), array ('_fd' => $msg, 'posts' => $posts));
 
@@ -166,9 +160,14 @@ class Incomes extends Admin_controller {
   public function destroy () {
     $obj = $this->obj;
     $backup = $obj->backup (true);
+    
+    $zbs = $obj->zbs;
+    $title = $obj->title;
 
     if (!Income::transaction (function () use ($obj) { return $obj->destroy (); }))
       return redirect_message (array ($this->uri_1), array ('_fd' => '刪除失敗！'));
+
+    Notice::send (column_array ($zbs, 'user_id'), '您有一筆入帳「' . $title . '」的宙思幣已刪除囉，詳細內容請詢問管理員。');
 
     UserLog::logWrite (
       $this->icon,
@@ -187,6 +186,7 @@ class Incomes extends Admin_controller {
         'users' => User::idAll (),
       ));
   }
+
   public function status () {
     if (!User::current ()->in_roles (array ('income_admin')))
       return $this->output_error_json ('您的權限不足。');
@@ -222,6 +222,7 @@ class Incomes extends Admin_controller {
 
     return $this->output_json ($obj->status == Income::STATUS_2);
   }
+
   public function zb_status ($id) {
     if (!User::current ()->in_roles (array ('income_admin')))
       return $this->output_error_json ('您的權限不足。');
@@ -248,17 +249,19 @@ class Incomes extends Admin_controller {
       foreach ($columns as $column => $value)
         $obj->$column = $value;
 
-    if (!Income::transaction (function () use ($obj, $posts) {
+    if (!Zb::transaction (function () use ($obj, $posts) {
       return $obj->save ();
     })) return $this->output_error_json ('更新失敗！');
 
     UserLog::logWrite (
       'icon-moneybag',
       Zb::$statusNames[$obj->status] . '一項薪資',
-      '將一筆請款單新增調整為「' . Zb::$statusNames[$obj->status] . '」',
+      '將一筆請款單薪資調整為「' . Zb::$statusNames[$obj->status] . '」',
       array ($backup, $obj->backup (true)));
 
-    return $this->output_json ($obj->status == Income::STATUS_2);
+    Notice::send ($obj->user_id, '您有一筆宙思幣狀態調整已經調整成「' . Zb::$statusNames[$obj->status] . '」，詳細內容請到「我的宙思幣」檢視。', 'admin/my-zbs/' . $obj->id . '/show');
+
+    return $this->output_json ($obj->status == Zb::STATUS_2);
   }
 
   private function _validation_create (&$posts, &$objs) {

@@ -8,7 +8,8 @@
     <span><b>搜尋條件：</b><?php echo $isSearch ? implode (',', array_filter (array_map (function ($search) { return $search['value'] !== null ? $search['text'] : null; }, $searches), function ($t) { return $t !== null; })) : '無';?>，共 <b><?php echo number_format ($total);?></b> 筆。</span>
   </div>
 
-  <div class='right'></div>
+  <div class='right'>
+  </div>
 
   <form class='conditions'>
 <?php
@@ -46,38 +47,25 @@
 </div>
 
 <div class='panel'>
-  <span class='unit'>未領總金額：<b class='n'>NT$</b> <b><?php echo number_format ($status1->a);?></b> <b class='n'>元</b> / 已領總金額：<b class='n'>NT$</b> <b><?php echo number_format ($status2->a);?></b> <b class='n'>元</b>。</span>
-</div>
-
-<div class='panel'>
   <table class='table-list w1200'>
     <thead>
       <tr>
-        <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
-        <th width='150'>入帳標題</th>
-        <th >細項</th>
-        <th width='110'>未稅金額<?php echo listSort ($uri_1, 'money');?></th>
-        <th width='100'>實領金額</th>
-        <th width='80'>有無發票</th>
-        <th width='60'>狀態</th>
+        <th width='70'>已讀</th>
+        <th class='left'>內容</th>
         <th width='50'>檢視</th>
       </tr>
     </thead>
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
-          <td><?php echo $obj->id;?></td>
-          <td><?php echo $obj->income ? $obj->income->title : '';?></td>
-          <td><?php echo $obj->details ? implode ('', array_map (function ($detail) {
-            return '<div class="row">' . $detail->item->title . ' / ' . ($detail->title ? $detail->title . ' / ' : '') . number_format ($detail->all_money) . '元</div>';
-          }, IncomeItemDetail::find ('all', array ('include' => array ('item'), 'conditions' => array ('zb_id = ?', $obj->id))))) : '';?></td>
-          <td><?php echo number_format ($obj->money);?>元</td>
-          <td><?php echo number_format ($obj->pay ());?>元</td>
-          <td><?php echo $obj->income->has_tax () ? '有開' : '沒開';?>發票</td>
-          <td style='color: <?php echo $obj->status == Zb::STATUS_1 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>;'><?php echo Zb::$statusNames[$obj->status];?></td>
           <td>
-            <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
+            <label class='switch ajax' data-forcntrole='notice' data-column='status' data-url='<?php echo base_url ('admin', 'my_notices', 'status', $obj->id);?>'>
+              <input type='checkbox'<?php echo $obj->status == Notice::STATUS_2 ? ' checked' : '';?> />
+              <span></span>
+            </label>
           </td>
+          <td class='left'><?php echo $obj->content;?></td>
+          <td><?php if ($obj->uri) {?><a class='icon-eye' href="<?php echo base_url ($obj->uri);?>"></a><?php }?></td>
         </tr>
 <?php } ?>
     </tbody>
