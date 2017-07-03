@@ -34,7 +34,7 @@
           <td><?php echo $item->title;?></td>
           <td><?php echo isset ($users[$item->user_id]) ? $users[$item->user_id]->name : '';?></td>
           <td><div class='row'><?php echo $item->pm->name;?></div><div class='row sub'><?php echo $item->pm->company->name;?></div></td>
-          <td><?php echo implode ('', array_map (function ($detail) { return '<div class="row">' . (isset ($users[$detail->user_id]) ? $users[$detail->user_id]->name . ' / ' : ' / ') . number_format ($detail->all_money) . '元</div>'; }, $item->details));?></td>
+          <td><?php echo implode ('', array_map (function ($detail) use ($users) { return '<div class="row">' . (isset ($users[$detail->user_id]) ? $users[$detail->user_id]->name . ' / ' : ' / ') . number_format ($detail->all_money) . '元</div>'; }, $item->details));?></td>
           <td><?php echo number_format ($item->money ());?>元</td>
           <td><a class='icon-eye' href="<?php echo base_url ('admin', 'income-items', $item->id, 'show');?>" target='_blank'></a></td>
         </tr>
@@ -107,8 +107,7 @@
     <table class='table-list'>
       <thead>
         <tr>
-          <th width='60'>#</th>
-          <th >專案名稱</th>
+          <th class='left'>專案名稱</th>
           <th width='100'>數量</th>
           <th width='110'>單價</th>
           <th width='120'>金額</th>
@@ -117,8 +116,7 @@
       <tbody>
 <?php foreach (IncomeItemDetail::find ('all', array ('include' => array ('item'), 'conditions' => array ('zb_id = ?', $zb->id))) as $detail) { ?>
           <tr>
-            <td></td>
-            <td><?php echo $detail->item->title . ($detail->title ? ' - ' . $detail->title : '');?></td>
+            <td class='left'><?php echo $detail->item->title . ($detail->title ? ' - ' . $detail->title : '');?></td>
             <td><?php echo number_format ($detail->quantity);?>筆</td>
             <td><?php echo number_format ($detail->sgl_money);?>元</td>
             <td><?php echo number_format ($detail->all_money);?>元</td>

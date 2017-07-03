@@ -11,6 +11,7 @@ class User extends OaModel {
   static $table_name = 'users';
 
   static $has_one = array (
+    array ('set', 'class_name' => 'UserSet'),
   );
 
   static $has_many = array (
@@ -68,5 +69,8 @@ class User extends OaModel {
     }
 
     return res_url ('res', 'image', 'avatar.png');
+  }
+  public function banner ($key = '') {
+    return $this->set ? $this->set->banner->url ($key) : res_url ('res', 'image', 'banner.jpg');
   }
 }

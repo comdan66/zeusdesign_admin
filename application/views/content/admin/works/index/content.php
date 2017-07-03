@@ -48,12 +48,13 @@
 </div>
 
 <div class='panel'>
-  <table class='table-list m2d'>
+  <table class='table-list w1000'>
     <thead>
       <tr>
         <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
         <th width='60' class='center'>上架</th>
         <th width='60' class='center'>封面</th>
+        <th width='100' class='center'>其他照片</th>
         <th width='160'>標題<?php echo listSort ($uri_1, 'title');?></th>
         <th >內容</th>
         <th width='80' class='center'>PV<?php echo listSort ($uri_1, 'pv');?></th>
@@ -71,7 +72,16 @@
             </label>
           </td>
           <td class='center'>
-            <div class='img _ic'><img src='<?php echo $obj->cover->url ('300w');?>' /></div>
+            <div class='oaips'>
+              <div class='oaip _ic' data-src='<?php echo $obj->cover->url ();?>'><img src='<?php echo $obj->cover->url ('300w');?>' /></div>
+            </div>
+          </td>
+          <td class='center'>
+            <div class='oaips'>
+        <?php foreach ($obj->images as $image) { ?>
+                <div class='oaip _ic' data-src='<?php echo $image->name->url ();?>'><img src='<?php echo $image->name->url ('800w');?>' /></div>
+        <?php }?>
+            </div>
           </td>
           <td><?php echo $obj->mini_title (20);?></td>
           <td><?php echo $obj->mini_content (50);?></td>
@@ -82,18 +92,6 @@
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
             /
             <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan='2'>
-            其他圖片
-          </td>
-          <td colspan='5'>
-            <div class='imgs<?php echo $obj->images ? '' : ' e';?>'>
-        <?php foreach ($obj->images as $image) { ?>
-                <div class='img _ic'><img src='<?php echo $image->name->url ('800w');?>' /></div>
-        <?php }?>
-            </div>
           </td>
         </tr>
 <?php } ?>

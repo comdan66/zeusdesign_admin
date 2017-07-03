@@ -1,0 +1,932 @@
+/**
+ * @author      OA Wu <comdan66@gmail.com>
+ * @copyright   Copyright (c) 2017 OA Wu Design
+ * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
+ */
+
+@import "_oa";
+
+#main > div {
+  padding: 0;
+  padding-bottom: 32px;
+
+  > header {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    min-height: 280px;
+    background-attachment: fixed;
+    background-position: center 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    .avatar {
+      position: absolute;
+      left: 20px;
+      top: calc(50% - 100px / 2 - 40px / 2);
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      @include border-radius(50%);
+      @include box-shadow(1px 2px 3px rgba(39, 40, 34, .3));
+
+      img {
+        display: inline-block;
+        width: 100%;
+      }
+    }
+    .info {
+      position: absolute;
+      left: 100px + 20px;
+      top: calc(50% - 90px / 2 + 10px - 40px / 2);
+      display: inline-block;
+      width: calc(100% - (100px + 20px));
+      height: 90px;
+      padding-left: 20px;
+
+      h1 {
+        display: inline-block;
+        width: 100%;
+        height: 45px;
+        line-height: 45px;
+        margin: 0;
+        color: rgba(240, 240, 240, 1.00);
+        @include text-shadow(0 0 3px rgba(0, 0, 0, 0.3));
+      }
+      div {
+        display: inline-block;
+        width: 100%;
+        margin-top: 4px;
+        @include clearfix();
+        
+        > * {
+          display: inline-block;
+          float: left;
+          width: 30px;
+          height: 30px;
+          line-height: 30px;
+          text-align: center;
+          font-size: 14px;
+          @include border-radius(30px / 2);
+          @include box-shadow(0 0 3px rgba(39, 40, 34, .2));
+          @include opacity(.85);
+          @include transition(opacity .3s);
+          
+          &:hover {
+            @include opacity(1);
+          }
+          + * {
+            margin-left: 8px;
+          }
+
+          &.icon-em {
+            font-size: 15px;
+            color: rgba(209, 73, 60, 1.00);
+            background-color: white;
+          }
+          &.icon-facebook {
+            color: white;
+            background-color: rgba(51, 83, 151, 1.00);
+          }
+          &.icon-brand {
+            background-color: rgba(0, 183, 0, 1.00);
+            &:before {
+              color: white;
+              font-size: 17px;
+            }
+          }
+          &.icon-google-plus {
+              font-size: 17px;
+            color: rgba(234, 67, 53, 1.00);
+            background-color: rgba(255, 255, 255, 1.00);
+          }
+        }
+      }
+    }
+    .bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      display: inline-block;
+      width: 100%;
+      padding: 8px 16px;
+
+      background-color: rgba(0, 0, 0, 0.3);
+      @include clearfix();
+
+      padding-left: 85px + 8px;
+      
+      &:before {
+        content: attr(data-title);
+        position: absolute;
+        left: 0;
+        top: 9px;
+        display: inline-block;
+        width: 85px;
+        text-align: right;
+        color: rgba(222, 222, 222, 1.00);
+        font-size: 13px;
+      }
+      > * {
+        position: relative;
+        display: inline-block;
+        float: left;
+        color: rgba(255, 255, 255, 1.00);
+        font-size: 14px;
+        margin-right: 16px;
+        font-weight: bold;
+      }
+    }
+    .setting {
+      position: absolute;
+      top: 8px;
+      right: 16px;
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      color: rgba(230, 230, 230, 1);
+      font-size: 20px;
+      cursor: pointer;
+      @include transition(color .3s);
+      @include text-shadow(0 0 3px rgba(0, 0, 0, .5));
+
+      &:hover {
+        color: rgba(255, 255, 255, 1);
+      }
+    }
+  }
+}
+.e {
+  &:before {
+    display: inline-block;
+    width: 100%;
+    height: 55px;
+    line-height: 55px;
+
+    color: rgba(180, 180, 180, 1.00);
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+    @include text-shadow(1px 1px 0 rgba(255, 255, 255, .75));
+  }
+  a {
+    &:before {
+      margin-right: 4px;
+      font-size: 14px;
+      display: inline-block;
+      margin-top: 2px;
+    }
+  }
+}
+span.title {
+  display: inline-block;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding: 0 24px;
+
+  @include clearfix();
+  @include range-width(0, 550px) {
+    padding: 0 16px;
+  };
+  > * {
+    display: inline-block;
+    float: left;
+    @include overflow-docx3();
+  }
+  span:first-child {
+    width: calc(100% - 100px);
+    text-align: left;
+    font-weight: bold;
+    color: rgba(145, 145, 145, 1.00);
+    letter-spacing: 1px;
+    @include text-shadow(1px 1px 1px rgba(255, 255, 255, .65));
+  }
+  span + span, a {
+    width: 100px;
+    text-align: right;
+    font-size: 13px;
+    color: rgba(74, 138, 244, 1.00);
+  }
+  span + span {
+    color: red;
+  }
+  @include range-width(0, 450px) {
+    padding: 0 8px;
+  }
+}
+.block2 {
+  display: inline-block;
+  width: 100%;
+  @include clearfix();
+  padding: 0 24px;
+  @include range-width(0, 350px) {
+    padding: 0;
+  }
+  @include range-width(350px, 450px) {
+    padding: 0 8px;
+  }
+  @include range-width(450px, 550px) {
+    padding: 0 16px;
+  }
+  
+  > * {
+    float: left;
+    display: inline-block;
+    width: 50%;
+    // border: 1px solid rgba(255, 0, 0, .3);
+
+    > span.title {
+      padding: 0 !important;
+    }
+    &:nth-child(1) {
+      padding-right: 12px;
+    }
+    &:nth-child(2) {
+      padding-left: 12px;
+    }
+    @include range-width(0, 1200px) {
+      width: 100%;
+
+      &:nth-child(1) {
+        padding-right: 0;
+      }
+      &:nth-child(2) {
+        padding-left: 0;
+      }
+    }
+    @include range-width(1200px) {
+      width: 50%;
+    };
+  }
+}
+.logs {
+  display: inline-block;
+  width: 100%;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 1.00);
+  padding: 8px 0;
+  padding-bottom: 16px;
+  @include border-radius(2px);
+  @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+  @include range-width(0, 350px) {
+    @include border-radius(0);
+  }
+  &.e {
+    &:before {
+      content: '沒有任何記錄。';
+    }
+  }  
+  h3 {
+    display: inline-block;
+    width: 100%;
+    padding: 0 16px;
+    font-size: 15px;
+    margin: 0;
+    height: 30px;
+    line-height: 30px;
+  }
+  div {
+    display: inline-block;
+    width: 100%;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 16px;
+    padding-left: 32px;
+    font-size: 16px;
+    color: rgba(100, 100, 100, 1);
+    
+    + h3 {
+      margin-top: 24px;
+    }
+    + span {
+      margin-top: 4px;
+    }
+    &:before {
+      margin-right: 8px;
+      font-size: 20px;
+      color: rgba(180, 180, 180, 1);
+    }
+  }
+  span {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    line-height: 20px;
+    padding: 4px 16px;
+    padding-left: 70px;
+
+    color: rgba(150, 150, 150, 1);
+    font-style: italic;
+    font-size: 13px;
+    word-break: break-all;
+
+
+    + h3 {
+      margin-top: 24px;
+    }
+    + div {
+      margin-top: 16px;
+    }
+    &:before {
+      content: '';
+      position: absolute;
+      left: 52px;
+      top: 0;
+      display: inline-block;
+      width: 4px;
+      height: 100%;
+      background-color: rgba(230, 230, 230, 1);
+    }
+  }
+  @include range-width(0, 450px) {
+    div {
+      padding-left: 16px;
+    }
+    span {
+      padding-left: 42px;
+      
+      &:before {
+        left: 24px;
+      }
+    }
+  };
+}
+.list {
+  display: inline-block;
+  width: 100%;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 1.00);
+  padding: 8px 0;
+  @include border-radius(2px);
+  @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+  @include range-width(0, 350px) {
+    @include border-radius(0);
+  }
+  &.e {
+    &:before {
+      content: '沒有任何行程。';
+    }
+  }
+  > a {
+    position: relative;
+    float: left;
+    display: inline-block;
+    width: 100%;
+    height: 55px;
+    line-height: 55px;
+    padding-left: 4px;
+    @include clearfix();
+
+    + a {
+      &:before {
+        content: '';
+        position: absolute;
+        left: 55px + 4px + 4px;
+        top: 0;
+        display: inline-block;
+        width: calc(100% - (55px + 4px + 4px));
+        height: 1px;
+        background-color: rgba(222, 222, 222, 1);
+      }
+    }
+    > img {
+      @include border-radius(3px);
+    }
+    > * {
+      float: left;
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      margin-top: (55px - 40px) / 2;
+      margin-left: (55px - 40px) / 2;
+
+      + * {
+        float: right;
+        position: relative;
+        width: calc(100% - 55px);
+        height: 55px;
+        line-height: 55px;
+        margin-top: 0;
+        font-size: 18px;
+        padding-left: 12px;
+        padding-right: 40px;
+        color: rgba(105, 105, 105, 1);
+        @include transition(color .3s);
+        @include overflow-docx3();
+
+
+        &:before {
+          content: '\e315';
+          font-family: "admin"; speak: none; font-style: normal; font-weight: normal; font-variant: normal;
+          position: absolute;
+          right: 0;
+          top: 0;
+          display: inline-block;
+          width: 45px;
+          height: 55px;
+          line-height: 55px;
+          font-size: 35px;
+          color: rgba(220, 220, 220, 1);
+          text-align: center;
+          @include transition(color .3s);
+        }
+        &:after {
+          position: absolute;
+          left: 0;
+          bottom: 4px;
+
+          display: inline-block;
+          width: calc(100% - 40px);
+          font-size: 13px;
+          padding-left: 12px;
+          color: rgba(135, 135, 135, 1);
+          @include transition(color .3s);
+          @include overflow-docx3();
+        }
+        &[data-sub]:not([data-sub='']) {
+          line-height: 37px;
+          
+          &:after {
+            content: attr(data-sub);
+            height: 20px;
+            line-height: 20px;
+          }
+        }
+
+        &:hover {
+          color: rgba(85, 85, 85, 1);
+          &:before {
+            color: rgba(180, 180, 180, 1);
+          }
+          &:after {
+            color: rgba(105, 105, 105, 1);
+          }
+        }
+      }
+    }
+  }
+}
+.block1 {
+  display: inline-block;
+  width: 100%;
+  @include clearfix();
+  padding: 0 8px;
+  + * {
+    margin-top: 20px !important;
+  }
+  @include range-width(0, 550px) {
+    padding: 0;
+  }
+  > * {
+    float: left;
+    display: inline-block;
+    width: 50%;
+
+    &:nth-child(1) {
+      > span.title {
+        padding-left: 16px;
+      }
+    }
+    &:nth-child(2) {
+      text-align: left;
+      padding-left: 8px;
+      > span.title {
+        padding-left: 0 !important;
+      }
+    }
+    @include range-width(0, 350px) {
+      > span.title {
+        padding: 0 8px !important;
+      }
+      &:nth-child(2) {
+        padding-left: 0 !important;
+        > span.title {
+          padding: 0 8px !important;
+        }
+      }
+    }
+    @include range-width(350px, 450px) {
+      > span.title {
+        padding: 0 8px !important;
+      }
+      &:nth-child(2) {
+        padding-left: 8px !important;
+      }
+    }
+    @include range-width(0, 1450px) {
+      &:nth-child(1) {
+        width: 100%;
+      }
+      &:nth-child(2) {
+        width: 100%;
+        padding-left: 16px;
+      }
+    };
+    @include range-width(1450px) {
+      &:nth-child(1) {
+        width: 65%;
+      }
+      &:nth-child(2) {
+        width: 35%;
+        > span.title {
+          padding-right: 16px
+        }
+      }
+    };
+  }
+}
+
+.units {
+  display: inline-block;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 8px;
+  @include clearfix();
+  @include range-width(0, 450px) {
+    padding: 0;
+  }
+  > a {
+    float: left;
+    display: inline-block;
+    height: 150px;
+    padding: 16px;
+    background-color: rgba(255, 255, 255, 1.00);
+    margin: 8px;
+    margin-top: 0;
+    @include border-radius(2px);
+
+    background-color: rgba(255, 255, 255, 1.00);
+    @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+    
+    @include range-width(0, 350px) {
+      width: calc(100% / 2);
+      margin: 0;
+      @include border-radius(0);
+      @include box-shadow(0 0 2px rgba(0,0,0,0.4));
+    }
+    @include range-width(350px, 420px) {
+      width: calc(100% / 2 - 8px * 2 + 8px / 2);
+      &:nth-child(2n + 2) {
+        margin-left: 0;
+      }
+      &:nth-child(n + 3) {
+        margin-top: 0;
+      }
+    }
+    @include range-width(420px, 1150px) {
+      width: calc(100% / 3 - 8px * 2);
+      &:nth-child(n + 4) {
+        margin-top: 8px;
+      }
+    }
+    @include range-width(1150px) {
+      width: calc(100% / 6 - 8px * 2);
+    }
+    &:before {
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      margin: 0 auto;
+
+      color: white;
+      @include border-radius(50%);
+      font-size: 32px;
+    }
+    &.icon-shield:before {
+      background-color: rgba(236, 83, 70, 1.00);
+    }
+    &.icon-moneybag:before {
+      font-size: 40px;
+      background-color: rgba(237, 188, 17, 1.00);
+    }
+    &.icon-enter:before {
+      background-color: rgba(102, 102, 102, 1.00);
+    }
+    &.icon-calendar2:before {
+      background-color: rgba(52, 168, 83, 1.00);
+    }
+    &.icon-line-chart:before {
+      background-color: rgba(66, 133, 244, 1.00);
+    }
+    &.icon-file-text2:before {
+      background-color: rgba(66, 133, 244, 1.00);
+    }
+    &.icon-g:before {
+      background-color: rgba(232, 114, 11, 1.00);
+    }
+    span {
+      margin-top: 12px;
+      display: block;
+      height: 22px;
+      font-size: 20px;
+      font-weight: bold;
+      color: rgba(91, 91, 91, 1.00);
+      @include overflow-docx3();
+      &[data-unit] {
+        &:after {
+          content: attr(data-unit);
+          font-weight: normal;
+          font-size: 10px;
+          margin-top: 6px;
+          margin-left: 3px;
+          display: inline-block;
+          color: rgba(125, 125, 125, 1.00);
+        }
+      }
+      
+      + span {
+        margin-top: 4px;
+        font-size: 13px;
+        font-weight: normal;
+      }
+    }
+  }
+}
+@mixin mini-calendar3 {
+  height: auto;
+  margin: 0;
+  width: 100%;
+  @include border-radius(0);
+
+  > div {
+    width: calc(100% / 4);
+    height: 40px * 7;
+
+    &:nth-last-child(n + 5) {
+      display: none;
+    }
+  }
+};
+@mixin mini-calendar2 {
+  height: auto;
+  > div {
+    width: calc(100% / 7);
+    height: 40px * 7;
+
+    &:nth-last-child(n + 8) {
+      display: none;
+    }
+  }
+};
+@mixin mini-calendar1 {
+  height: auto;
+  > div {
+    width: calc(100% / 11);
+    height: 40px * 7;
+
+    &:nth-last-child(n + 12) {
+      display: none;
+    }
+    > div {
+      height: 40px;
+      line-height: 40px;
+      border-width: 2px;
+
+      &[data-month][data-day] {
+        &:before {
+          content: attr(data-month) '/' attr(data-day);
+          display: inline-block;
+          @include overflow-docx3();
+          font-size: 13px;
+          @include opacity(.35);
+        }
+        &.s3, &.s4 {
+          color: white;
+        }
+      }
+    }
+  }
+};
+.calendar {
+  position: relative;
+  display: inline-block;
+  margin: 0 16px;
+  width: calc(100% - 16px * 2);
+  height: 151px;
+  padding: 16px;
+
+  background-color: rgba(255, 255, 255, 1.00);
+  @include border-radius(2px);
+  @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+  @include clearfix();
+
+  > div {
+    float: left;
+    display: inline-block;
+    width: calc(100% / 52);
+    height: 17px * 7;
+
+    > div {
+      display: block;
+      width: 100%;
+      height: 17px;
+      border: 1px solid rgba(255, 255, 255, 1);
+      background-color: rgba(240, 240, 240, 1.00);
+      cursor: pointer;
+
+      @include border-radius(2px);
+      @include opacity(.85);
+      @include transition(opacity .3s);
+      @include box-shadow(inset 0 0 1px rgba(0, 0, 0, .1));
+      
+      &:hover {
+        @include opacity(1);
+      }
+    }
+  }
+
+
+  .s4 { background-color: rgba(22, 67, 31, 1.00) !important; }
+  .s3 { background-color: rgba(25, 97, 39, 1.00) !important; }
+  .s2 { background-color: rgba(35, 154, 59, 1.00) !important; }
+  .s1 { background-color: rgba(123, 201, 111, 1.00) !important; }
+  .s0 { background-color: rgba(198, 228, 139, 1.00) !important; }
+  @include range-width(0, 450px) {
+    margin: 0 8px;
+    width: calc(100% - 8px * 2);
+  }
+  @include range-width(0, 1150px) {
+    @include mini-calendar1;
+  }
+  @include range-width(0, 500px) {
+    @include mini-calendar2;
+  }
+  @include range-width(0, 350px) {
+    @include mini-calendar3;
+  }
+}
+
+.ptt {
+  display: inline-block;
+  margin: 0;
+  padding: 8px 0;
+  width: calc(100% - 16px);
+  height: 363px;
+  overflow: hidden;
+  background-color: rgba(0, 0, 255, 0.2);
+  background-color: rgba(255, 255, 255, 1.00);
+  @include border-radius(2px);
+  @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+  &.e {
+    &:before {
+      content: '目前沒有任何文章喔。';
+    }
+    > a {
+      text-align: center;
+      font-size: 16px;
+    }
+  }
+  @include range-width(0, 350px) {
+    width: 100%;
+    @include border-radius(0);
+  }
+  @include range-width(350px, 450px) {
+    width: calc(100% - 8px);
+  }
+  > a {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: (363px - 8px * 2) / 8;
+    line-height: (363px - 8px * 2) / 8;
+    @include clearfix();
+    &:hover {
+      > * {
+        color: rgba(115, 115, 115, 1);
+        + * {
+          color: rgba(45, 45, 45, 1);
+          + * {
+            color: rgba(135, 135, 135, 1);
+          }
+        }
+      } 
+    }
+
+    + a {
+      &:before {
+        content: '';
+        position: absolute;
+        left: 50px - 6px;
+        top: 0;
+        display: inline-block;
+        width: calc(100% - 50px + 6px);
+        height: 1px;
+        background-color: rgba(222, 222, 222, 1);
+      }
+    }
+    > * {
+      float: left;
+      display: inline-block;
+      width: 50px;
+      height: 100%;
+      font-size: 15px;
+      text-align: center;
+      color: rgba(135, 135, 135, 1);
+      @include transition(color .3s);
+      
+      &.s, &.b {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      &.b {
+        color: rgba(236, 83, 70, 1.00);
+      }
+      &.s {
+        color: rgba(52, 168, 83, 1.00);
+      }
+      + * {
+        width: calc(100% - 50px - 100px);
+        text-align: left;
+        padding-right: 24px;
+        font-size: 16px;
+        color: rgba(75, 75, 75, 1);
+        @include overflow-docx3();
+        
+        + * {
+          font-size: 12px;
+          width: 100px;
+          text-align: right;
+          color: rgba(155, 155, 155, 1);
+        }
+      }
+    }
+  }
+}
+.constellation {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 24px;
+  overflow: hidden;
+
+  background-color: rgba(255, 255, 255, 1.00);
+  @include border-radius(2px);
+  @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+  &.e {
+    text-align: left;
+    &:before {
+      content: '今日沒有星座運勢。';
+      text-align: left;
+    }
+    a {
+      text-align: center;
+      margin-bottom: 16px;
+      display: inline-block;
+      width: 100%;
+      height: 25px;
+      line-height: 25px;
+      text-align: left;
+    }
+  }
+  @include range-width(0, 350px) {
+    width: 100%;
+    @include border-radius(0);
+  }
+  @include range-width(350px, 450px) {
+    width: calc(100% - 8px * 2);
+  }
+  @include range-width(450px, 550px) {
+    width: calc(100% - 16px * 2);
+  }
+  @include range-width(550px) {
+    width: calc(100% - 24px * 2);
+  }
+  article {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    text-align: left;
+    line-height: 23px;
+
+    p {
+      display: inline-block;
+      margin: 0;
+
+      span {
+        float: left;
+        display: inline-block;
+        font-size: 35px;
+        height: 50px;
+        line-height: 50px;
+        margin: 8px 20px;
+        margin-left: 0;
+        font-weight: bold;
+        color: rgba(155, 155, 155, 1);
+      }
+    }
+  }
+  time {
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+    
+    font-size: 13px;
+    color: rgba(155, 155, 155, 1);
+  }
+}

@@ -52,8 +52,7 @@
   <table class='table-list'>
     <thead>
       <tr>
-        <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
-        <th >名稱<?php echo listSort ($uri_1, 'name');?></th>
+        <th class='left'>名稱<?php echo listSort ($uri_1, 'name');?></th>
         <th width='100'>子分類數量</th>
         <th width='100'>編輯</th>
       </tr>
@@ -61,8 +60,7 @@
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
-          <td><?php echo $obj->id;?></td>
-          <td><?php echo $obj->name;?></td>
+          <td class='left'><?php echo $obj->name;?></td>
           <td><?php echo count ($obj->tags);?></td>
           <td>
             <a class='icon-list' href="<?php echo base_url ('admin', 'tag', $obj->id, 'work-tags');?>"></a>

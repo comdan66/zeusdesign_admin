@@ -63,7 +63,12 @@ class Income_items extends Admin_controller {
       return array (
           'id' => $obj->id,
           'income_id' => $obj->income_id,
-          'src' => $obj->images ? $obj->images[0]->name->url ('800w') : '',
+          'srcs' => array_map (function ($image) {
+            return array (
+                'ori' => $image->name->url (),
+                'w800' => $image->name->url ('800w'),
+              );
+          }, $obj->images),
           'close_date' => $obj->close_date ? $obj->close_date->format ('Y-m-d') : '',
           'title' => $obj->title,
           'user' => isset ($users[$obj->user_id]) ? $users[$obj->user_id]->name : '',

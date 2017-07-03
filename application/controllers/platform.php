@@ -28,18 +28,26 @@ class Platform extends Site_controller {
       return redirect_message (array (), array ('_fd' => 'Facebook 登入錯誤，請通知程式設計人員!(1)'));
 
     if (!($user = User::find ('one', array ('conditions' => array ('fid = ?', $fid)))))
-      if (!User::transaction (function () use (&$user, $fid, $name, $email) { return verifyCreateOrm ($user = User::create (array_intersect_key (array (
-        'fid' => $fid,
-        'account' => '',
-        'password' => '',
-        'token' => token ($fid),
-        'name' => $name,
-        'email' => $email,
-        ), User::table ()->columns))); }))
+      if (!User::transaction (function () use (&$user, $fid, $name, $email) {
+        return verifyCreateOrm ($user = User::create (array_intersect_key (array (
+          'fid' => $fid,
+          'account' => '',
+          'password' => '',
+          'token' => token ($fid),
+          'name' => $name,
+          'email' => $email,
+        ), User::table ()->columns))) && verifyCreateOrm (UserSet::create (array (
+          'user_id' => $user->id,
+          'banner' => '',
+          'link_facebook' => $user->facebook_link (),
+          'link_line' => '',
+          'link_google' => '',
+        )));
+      }))
         return redirect_message (array (), array ('_fd' => 'Facebook 登入錯誤，請通知程式設計人員!(2)'));
 
     $user->name = $name;
-    $user->email = $email;
+    // $user->email = $email;
     $user->login_count += 1;
     $user->logined_at = date ('Y-m-d H:i:s');
 

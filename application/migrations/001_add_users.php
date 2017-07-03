@@ -21,7 +21,7 @@ class Migration_Add_users extends CI_Migration {
 
         `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '名稱',
         `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '電子郵件',
-
+        
         `login_count` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '登入次數',
         `logined_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '上次登入時間',
         
