@@ -49,9 +49,15 @@ class My extends Admin_controller {
     $s = array (0, $tls[$u * 4], $tls[$u * 3], $tls[$u * 2], $tls[$u * 1]);
     $logs = array_map (function ($t) use ($s) { return array ('cnt' => $t, 's' => $t <= $s[4] ? $t <= $s[3] ? $t <= $s[2] ? $t <= $s[1] ? 's0' : 's1' : 's2' : 's3' : 's4');}, $logs);
 
+    $today = date ('Y-m-d');
+    $tasks = Task::find ('all', array ('order' => 'id DESC', 'joins' => 'LEFT JOIN (select user_id,task_id from task_user_mappings) as a ON(tasks.id = a.task_id)', 'conditions' => array ('date = ? AND a.user_id = ?', $today, $obj->id)));
+
     $this->load_view (array (
         'obj' => $obj,
         'logs' => $logs,
+        'tasks' => $tasks,
+        'schedules1' => Schedule::find ('all', array ('include' => array ('tag', 'user'), 'order' => 'sort ASC', 'conditions' => array ('date = ? AND user_id = ?', $today, $obj->id))),
+        'schedules3' => Schedule::find ('all', array ('include' => array ('tag', 'user'), 'order' => 'sort ASC', 'joins' => 'LEFT JOIN (select user_id,schedule_id from schedule_shares) as a ON(schedules.id = a.schedule_id)', 'conditions' => array ('a.user_id = ? AND schedules.user_id != ? AND date = ?', $obj->id, $obj->id, $today))),
       ));
   }
 }

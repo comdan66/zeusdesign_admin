@@ -6,22 +6,18 @@
  * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
-class Schedule extends OaModel {
+class PttTag extends OaModel {
 
-  static $table_name = 'schedules';
+  static $table_name = 'ptt_tags';
 
   static $has_one = array (
   );
 
   static $has_many = array (
-    array ('items', 'class_name' => 'ScheduleItem'),
-    array ('shares', 'class_name' => 'ScheduleShare'),
-    array ('users', 'class_name' => 'User', 'through' => 'schedule_share'),
+    array ('user_mappings', 'class_name' => 'PttTagUserMapping'),
   );
 
   static $belongs_to = array (
-    array ('tag', 'class_name' => 'ScheduleTag'),
-    array ('user', 'class_name' => 'User'),
   );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
@@ -30,14 +26,9 @@ class Schedule extends OaModel {
   public function destroy () {
     if (!isset ($this->id)) return false;
     
-    if ($this->items)
-      foreach ($this->items as $item)
-        if (!$item->destroy ())
-          return false;
-    
-    if ($this->shares)
-      foreach ($this->shares as $share)
-        if (!$share->destroy ())
+    if ($this->user_mappings)
+      foreach ($this->user_mappings as $user_mapping)
+        if (!$user_mapping->destroy ())
           return false;
 
     return $this->delete ();
@@ -46,20 +37,15 @@ class Schedule extends OaModel {
   public function backup ($has = false) {
     $var = array (
       'id'         => $this->id,
-      'user_id'    => $this->user_id,
-      'schedule_tag_id'    => $this->schedule_tag_id,
-      'title'      => $this->title,
-      'date'       => $this->date,
-      'memo'       => $this->memo,
-      'sort'       => $this->sort,
+      'name'       => $this->name,
+      'uri'        => $this->uri,
       'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );
 
     return $has ? array (
         '_' => $var,
-        'items' => $this->subBackup ('ScheduleItem', $has),
-        'shares' => $this->subBackup ('ScheduleShare', $has),
+        'user_mappings' => $this->subBackup ('PttTagUserMapping', $has),
       ) : $var;
   }
 }
