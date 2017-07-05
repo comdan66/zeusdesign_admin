@@ -55,25 +55,25 @@
   <h2><?php echo $obj->title;?> 的內容</h2>
   <span class='info'>以下是任務「<b><?php echo $obj->title;?></b>」的工作內容，若有疑問請善用下方 <a class='to_commit'>留言系統</a>。</span>
   <article><?php echo $obj->content;?></article>
-
-
 </div>
 
-<div class='panel'>
-  <h2>相關附件</h2>
-  <span class='info'>以下是任務「<b><?php echo $obj->title;?></b>」的附件檔案，可以點擊檔案下載。</span>
-  <div class='attachments'>
-<?php 
-    foreach ($obj->attachments as $attachment) { ?>
-      <a href='<?php echo $attachment->file->url ();?>' target='_blank'>
-        <img src='<?php echo $attachment->file_icon ();?>' />
-        <figcaption data-description='<?php echo $attachment->title;?>'><?php echo $attachment->title;?></figcaption>
-        <div><?php echo size_unit ($attachment->size);?></div>
-      </a>
-<?php
-    }?>
+<?php if ($obj->attachments) { ?>
+  <div class='panel'>
+    <h2>相關附件</h2>
+    <span class='info'>以下是任務「<b><?php echo $obj->title;?></b>」的附件檔案，可以點擊檔案下載。</span>
+    <div class='attachments'>
+  <?php 
+      foreach ($obj->attachments as $attachment) { ?>
+        <a href='<?php echo $attachment->file->url ();?>' target='_blank'>
+          <img src='<?php echo $attachment->file_icon ();?>' />
+          <figcaption data-description='<?php echo $attachment->title;?>'><?php echo $attachment->title;?></figcaption>
+          <div><?php echo size_unit ($attachment->size);?></div>
+        </a>
+  <?php
+      }?>
+    </div>
   </div>
-</div>
+<?php } ?>
 
 <h3 class='h'>針對任務「<?php echo $obj->title;?>」留言</h3>
 <div class='panel commit-form'>
@@ -89,31 +89,34 @@
   </form>
 </div>
 
-<div class='panel commits'>
-  <?php
-  foreach (TaskCommit::find ('all', array ('include' => array ('user'), 'order' => 'id DESC', 'conditions' => array ('task_id = ?', $obj->id))) as $commit) { ?>
-    <div class='commit'>
-      <div>
-        <div class='user'>
-          <img src='<?php echo $commit->user->avatar ();?>' />
-          <span><?php echo $commit->user->name;?></span>
-        </div>
-        <span>於</span>
-        <time datetime='<?php echo $commit->created_at->format ('Y-m-d H:i:s');?>'><?php echo $commit->created_at->format ('Y-m-d H:i:s');?></time>
-        <span><?php echo $commit->action;?>。</span>
-      </div>
-      <div><?php echo $commit->content;?></div>
-
-<?php if ((string)$commit->file) {?>
+<?php if ($commits = TaskCommit::find ('all', array ('include' => array ('user'), 'order' => 'id DESC', 'conditions' => array ('task_id = ?', $obj->id)))) { ?>
+  <div class='panel commits'>
+    <?php
+    foreach ($commits as $commit) { ?>
+      <div class='commit'>
         <div>
-          <a href='<?php echo $commit->file->url ();?>' target='_blank'>
-            <img src='<?php echo $commit->file_icon ();?>' />
-            <span><?php echo (string)$commit->file;?></span>
-            <span><?php echo size_unit ($commit->size);?></span>
-          </a>
+          <div class='user'>
+            <img src='<?php echo $commit->user->avatar ();?>' />
+            <span><?php echo $commit->user->name;?></span>
+          </div>
+          <span>於</span>
+          <time datetime='<?php echo $commit->created_at->format ('Y-m-d H:i:s');?>'><?php echo $commit->created_at->format ('Y-m-d H:i:s');?></time>
+          <span><?php echo $commit->action;?>。</span>
         </div>
-<?php } ?>
-    </div>
-  <?php
-  } ?>
-</div>
+        <div><?php echo $commit->content;?></div>
+
+  <?php if ((string)$commit->file) {?>
+          <div>
+            <a href='<?php echo $commit->file->url ();?>' target='_blank'>
+              <img src='<?php echo $commit->file_icon ();?>' />
+              <span><?php echo (string)$commit->file;?></span>
+              <span><?php echo size_unit ($commit->size);?></span>
+            </a>
+          </div>
+  <?php } ?>
+      </div>
+    <?php
+    } ?>
+  </div>
+<?php
+} ?>

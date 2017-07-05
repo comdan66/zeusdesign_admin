@@ -83,6 +83,7 @@ class Tasks extends Admin_controller {
 
     $posts = OAInput::post ();
     $posts['content'] = OAInput::post ('content', false);
+    $posts['user_id'] = User::current ()->id;
     
     $files = OAInput::file ();
     $files = $this->_validation_file ('attachments', $posts, $files, 'file');
@@ -101,6 +102,29 @@ class Tasks extends Admin_controller {
       TaskAttachment::transaction (function () use ($file, $obj) {
         return verifyCreateOrm ($attachment = TaskAttachment::create (array_intersect_key (array ('task_id' => $obj->id, 'title' => $file['title'], 'file' => '', 'size' => $file['file']['size']), TaskAttachment::table ()->columns))) && $attachment->file->put ($file['file']);
       });
+
+    $users = array_filter (
+      ($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? 
+      User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : 
+      array (), function ($user) use ($obj) { return $user->id != $obj->user_id; });
+
+    Notice::send (
+      $users,
+      $obj->user->name . '指派給您一項新的任務了！',
+      'admin/my-tasks/' . $obj->id . '/show');
+
+    Mail::send (
+      $users,
+      '[宙思任務] ' . $obj->title . '',
+      'admin/my-tasks/' . $obj->id . '/show',
+      function ($o) use ($obj, $users) {
+        return array_merge (array (
+            array ('type' => 'section', 'title' => '', 'content' => Mail::renderP ('您有一項標題為「' . Mail::renderB ($obj->title) . '」的新任務，此任務是由 ' . Mail::renderB ($obj->user->name) . ' 新增的，參與者目前有 ' . implode (', ', column_array ($users, 'name', function ($t) { return Mail::renderB ($t); })) . '，目前緊急程度為 ' . Mail::renderB2 (Task::$levelNames[$obj->level]) . ' 的等級，請各位務必在 ' . Mail::renderB2 ($obj->date->format ('Y年 n月 j日')) . ' 前完成，如有問題請與 ' . Mail::renderB ($obj->user->name) . ' 討論，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看。')),
+            array ('type' => 'section', 'title' => '內容說明', 'content' => Mail::renderContent ($obj->content)),
+          ), $obj->attachments ? array (array ('type' => 'ul', 'title' => '任務附件', 'li' => array_map (function ($attachment) {
+            return Mail::renderLi ($attachment->title, Mail::renderLink ('下載', $attachment->file->url ()));
+          }, $obj->attachments))) : array ());
+    });
 
     UserLog::logWrite (
       $this->icon,
@@ -184,7 +208,20 @@ class Tasks extends Admin_controller {
           return $mapping->destroy ();
         });
 
-    $users = array_filter (($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array (), function ($user) { return $user->id != User::current ()->id; });
+    Notice::send (
+      $del_users,
+      $obj->user->name . '已經將任務「' . $obj->title . '」刪除囉。');
+
+    Mail::send (
+      $del_users,
+      '[宙思任務] ' . $obj->title . '',
+      function ($o) use ($obj) {
+        return array_merge (array (
+            array ('type' => 'section', 'title' => '', 'content' => Mail::renderP ('您有一項標題為「' . Mail::renderB ($obj->title) . '」的任務，已經由 ' . Mail::renderB ($obj->user->name) . ' 刪除囉，如有疑問或相關問題，請與 ' . $obj->user->name . '(' . $obj->user->email . ') 聯絡。')),
+          ));
+    });
+
+    $us = array_filter (($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array (), function ($user) use ($obj) { return $user->id != $obj->user_id; });
     if (($add_ids = array_diff ($posts['user_ids'], $ori_ids)) && ($users = User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $add_ids)))))
       foreach ($users as $user)
         TaskUserMapping::transaction (function () use ($user, $obj, &$new_users) {
@@ -192,6 +229,23 @@ class Tasks extends Admin_controller {
           return verifyCreateOrm (TaskUserMapping::create (array_intersect_key (array ('user_id' => $user->id, 'task_id' => $obj->id), TaskUserMapping::table ()->columns)));
         });
       
+    Notice::send (
+      $new_users,
+      $obj->user->name . '指派給您一項新的任務了！',
+      'admin/my-tasks/' . $obj->id . '/show');
+
+    Mail::send (
+      $new_users,
+      '[宙思任務] ' . $obj->title . '',
+      'admin/my-tasks/' . $obj->id . '/show',
+      function ($o) use ($obj, $new_users, $us) {
+        return array_merge (array (
+            array ('type' => 'section', 'title' => '', 'content' => Mail::renderP ('您有一項標題為「' . Mail::renderB ($obj->title) . '」的新任務，此任務是由 ' . Mail::renderB ($obj->user->name) . ' 新增的，參與者目前有 ' . implode (', ', column_array ($new_users, 'name', function ($t) { return Mail::renderB ($t); })) . ($us ? ', ' . implode (', ', column_array ($us, 'name', function ($t) { return Mail::renderB ($t); })) : '') . '，目前緊急程度為 ' . Mail::renderB2 (Task::$levelNames[$obj->level]) . ' 的等級，請各位務必在 ' . Mail::renderB2 ($obj->date->format ('Y年 n月 j日')) . ' 前完成，如有問題請與 ' . Mail::renderB ($obj->user->name) . ' 討論，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看。')),
+            array ('type' => 'section', 'title' => '內容說明', 'content' => Mail::renderContent ($obj->content)),
+          ), $obj->attachments ? array (array ('type' => 'ul', 'title' => '任務附件', 'li' => array_map (function ($attachment) {
+            return Mail::renderLi ($attachment->title, Mail::renderLink ('下載', $attachment->file->url ()));
+          }, $obj->attachments))) : array ());
+    });
 
     $changes = array ();
     if ($obj->title !== $_title) array_push ($changes, '調整任務標題，由「' . $_title . '」修改成「' . $obj->title . '」');
@@ -212,7 +266,21 @@ class Tasks extends Admin_controller {
         'content' => implode ('，', $changes) . '。');
 
       if (TaskCommit::transaction (function () use (&$commit, $obj, $posts) { return verifyCreateOrm ($commit = TaskCommit::create (array_intersect_key (array_merge ($posts, array ('task_id' => $obj->id, 'user_id' => User::current ()->id, 'file' => '', 'size' => 0)), TaskCommit::table ()->columns))); })) {
-        
+        Notice::send (
+          $us,
+          '任務「' . $obj->title . '」內容有更新囉。',
+          'admin/my-tasks/' . $obj->id . '/show');
+
+        Mail::send (
+          $us,
+          '[宙思任務] ' . $obj->title . '',
+          'admin/my-tasks/' . $obj->id . '/show',
+          function ($o) use ($obj, $changes) {
+            return array_merge (array (
+                array ('type' => 'section', 'title' => '', 'content' => Mail::renderP ('您有一項任務由 ' . Mail::renderB ($obj->user->name) . ' 調整了任務內容，其更新的細節大致如下，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看。')),
+                array ('type' => 'ol', 'title' => '更新項目', 'li' => array_map (function ($change) { return Mail::renderLi ($change . '。'); }, $changes)),
+              ));
+        });
       }
     }
 
@@ -228,9 +296,23 @@ class Tasks extends Admin_controller {
   public function destroy () {
     $obj = $this->obj;
     $backup = $obj->backup (true);
+    $users = array_filter (($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array (), function ($user) use ($obj) { return $user->id != $obj->user_id; });
 
     if (!Task::transaction (function () use ($obj) { return $obj->destroy (); }))
       return redirect_message (array ($this->uri_1), array ('_fd' => '刪除失敗！'));
+
+    Notice::send (
+      $users,
+      $obj->user->name . '已經將任務「' . $obj->title . '」刪除囉。');
+
+    Mail::send (
+      $users,
+      '[宙思任務] ' . $obj->title . '',
+      function ($o) use ($obj) {
+        return array_merge (array (
+            array ('type' => 'section', 'title' => '', 'content' => Mail::renderP ('您有一項標題為「' . Mail::renderB ($obj->title) . '」的任務，已經由 ' . Mail::renderB ($obj->user->name) . ' 刪除囉，如有疑問或相關問題，請與 ' . $obj->user->name . '(' . $obj->user->email . ') 聯絡。')),
+          ));
+    });
 
     UserLog::logWrite (
       $this->icon,
@@ -251,6 +333,7 @@ class Tasks extends Admin_controller {
   public function status () {
     $obj = $this->obj;
     $_status = $obj->status;
+    $users = array_filter (($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array (), function ($user) use ($obj) { return $user->id != $obj->user_id; });
 
     if (!$this->has_post ())
       return $this->output_error_json ('非 POST 方法，錯誤的頁面請求。');
@@ -279,8 +362,23 @@ class Tasks extends Admin_controller {
     $posts = array (
       'action' => '更新了任務細項',
       'content' => implode ('，', $changes) . '。');
+    
     if (TaskCommit::transaction (function () use (&$commit, $obj, $posts) { return verifyCreateOrm ($commit = TaskCommit::create (array_intersect_key (array_merge ($posts, array ('task_id' => $obj->id, 'user_id' => User::current ()->id, 'file' => '', 'size' => 0)), TaskCommit::table ()->columns))); })) {
+      Notice::send (
+          $users,
+          '任務「' . $obj->title . '」內容有更新囉。',
+          'admin/my-tasks/' . $obj->id . '/show');
 
+      Mail::send (
+        $users,
+        '[宙思任務] ' . $obj->title . '',
+        'admin/my-tasks/' . $obj->id . '/show',
+        function ($o) use ($obj, $changes) {
+          return array_merge (array (
+              array ('type' => 'section', 'title' => '', 'content' => Mail::renderP ('您有一項任務由 ' . Mail::renderB ($obj->user->name) . ' 調整了任務內容，其更新的細節大致如下，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看。')),
+              array ('type' => 'ol', 'title' => '更新項目', 'li' => array_map (function ($change) { return Mail::renderLi ($change . '。'); }, $changes)),
+            ));
+      });
     }
 
     UserLog::logWrite (
@@ -293,9 +391,7 @@ class Tasks extends Admin_controller {
   }
   private function _validation_create (&$posts) {
     if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && in_array ($posts['status'], array_keys (Task::$statusNames)))) $posts['status'] = Task::STATUS_1;
-    if (!(isset ($posts['user_id']) && is_string ($posts['user_id']) && is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find_by_id ($posts['user_id']))) return '「' . $this->title . '擁有者」格式錯誤！';
     $posts['user_ids'] = isset ($posts['user_ids']) && is_array ($posts['user_ids']) && $posts['user_ids'] ? column_array (User::find ('all', array ('select' => 'id', 'conditions' => array ('id IN (?)', $posts['user_ids']))), 'id') : array ();
-    // if (!$posts['user_ids']) return '「' . $this->title . '參與者」格式錯誤！';
     if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「' . $this->title . '標題」格式錯誤！';
     if (!(isset ($posts['level']) && is_string ($posts['level']) && is_numeric ($posts['level'] = trim ($posts['level'])) && in_array ($posts['level'], array_keys (Task::$levelNames)))) $posts['level'] = Task::LEVEL_4;
     if (!(isset ($posts['date']) && is_string ($posts['date']) && is_date ($posts['date'] = trim ($posts['date'])))) return '「' . $this->title . '日期」格式錯誤！';

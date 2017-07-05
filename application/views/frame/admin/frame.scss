@@ -486,7 +486,9 @@ html {
           right: 10px;
           top: 12.5px;
           font-family: "admin";
-          width: 20px;
+          min-width: 20px;
+          width: auto;
+          padding: 0 6px;
           height: 20px;
           line-height: 18px;
           font-size: 13px;
@@ -496,7 +498,7 @@ html {
           background-color: rgba(236, 83, 70, 1.00);
           @include rotate(0);
           @include opacity(1);
-          @include border-radius(50%);
+          @include border-radius(20px / 2);
         }
         &.show {
           &:after {
@@ -561,7 +563,9 @@ html {
             right: (35px - 20px) / 2;
             top: (35px - 20px) / 2;
             display: inline-block;
-            width: 20px;
+            min-width: 20px;
+            width: auto;
+            padding: 0 6px;
             height: 20px;
             line-height: 18px;
             font-size: 13px;
@@ -569,6 +573,7 @@ html {
             text-align: center;
             color: rgba(255, 255, 255, 1.00);
             background-color: rgba(236, 83, 70, 1.00);
+            @include border-radius(20px / 2);
           }
         }
       }

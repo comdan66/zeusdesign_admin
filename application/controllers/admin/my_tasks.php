@@ -96,6 +96,23 @@ class My_tasks extends Admin_controller {
     if (!TaskCommit::transaction (function () use (&$commit, $obj, $posts, $file) { return verifyCreateOrm ($commit = TaskCommit::create (array_intersect_key (array_merge ($posts, array ('task_id' => $obj->id, 'user_id' => User::current ()->id)), TaskCommit::table ()->columns))) && (!$file || ($commit->file->put ($file))); }))
       return redirect_message (array ($this->uri_1, $obj->id, 'show'), array ('_fd' => '留言失敗！', 'posts' => $posts));
 
+    $users = array_filter (($user_ids = column_array (TaskUserMapping::find ('all', array ('select' => 'user_id', 'conditions' => array ('task_id = ?', $obj->id))), 'user_id')) ? User::find ('all', array ('select' => 'id, name, email', 'conditions' => array ('id IN (?)', $user_ids))) : array (), function ($user) use ($commit) { return $user->id != $commit->user_id; });
+
+    Notice::send (
+      $users,
+      $commit->user->name . ' 針對任務「' . $obj->title . '」' . $commit->action . '。',
+      base_url ('admin', 'my-tasks', $obj->id, 'show'));
+
+    Mail::send (
+      $users,
+      '宙斯任務「' . $obj->title . '」',
+      base_url ('admin', 'my-tasks', $obj->id, 'show'),
+      function ($o) use ($obj, $commit) {
+        return array_merge (array (
+            array ('type' => 'section', 'title' => '', 'content' => Mail::renderP (Mail::renderB ($commit->user->name) . ' 在您的任務「' . $obj->title . '」' . $commit->action . '' . ($commit->content ? '，留言內容是：「' . $commit->content . '」' : '') . '' . ((string)$commit->file ? '，上傳的檔案名稱為：「' . Mail::renderLink ((string)$commit->file, $commit->file->url ()) . '」' : '') . '，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看。')),
+          ));
+    });
+
     UserLog::logWrite (
       $this->icon,
       '針對一項任務做了留言',

@@ -33,7 +33,8 @@ class Notice extends OaModel {
   }
   public static function send ($user_ids, $content, $uri = '') {
     if (!is_array ($user_ids)) $user_ids = array ($user_ids);
-    
+    if (!$user_ids = array_map (function ($u) { return $u && is_object ($u) && ($u instanceof User) && isset ($u->id) ? $u->id : is_numeric ($u); }, $user_ids)) return false;
+
     foreach (array_unique ($user_ids) as $user_id)
       if (!verifyCreateOrm (Notice::create (array ('user_id' => $user_id, 'content' => $content, 'uri' => $uri, 'status' => Notice::STATUS_1))))
         return false;

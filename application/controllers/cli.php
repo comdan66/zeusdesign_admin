@@ -16,9 +16,12 @@ class Cli extends Oa_controller {
     //   exit ();
     // }
   }
+  public function o ($id = 0) {
+    echo $id ? Mail::find_by_id ($id)->content : Mail::last ()->content;
+  }
   public function x () {
     
-    Mail::send ('test3', array (array ('oa', 'comdan66@gmail.com')), function ($obj) {
+    Mail::send ('test3', array (array ('oa', 'comdan66@gmail.com')), 'asd', function ($obj) {
       return array (
             array ('type' => 'section', 'title' => '', 'content' => Mail::renderUser ('吳政賢') . ' 已經將任務刪除囉，相關細節請至' . Mail::renderLink ('後台', base_url ('platform', 'mail', $obj->token)) . '看吧！'),
             array ('type' => 'ul', 'title' => '', 'li' => array (Mail::renderLi ('asdasdasd'), Mail::renderLi ('asdasdasdasdd'), Mail::renderLi ('asdasdasdas', Mail::renderLink ('asdasdasd', 'dasdasdasdasd')))),

@@ -11,17 +11,6 @@
       </label>
     </div>
 
-    <div class='row'>
-      <b class='need'><?php echo $title;?>擁有者</b>
-      <select name='user_id'>
-  <?php if ($users = User::all (array ('select' => 'id, name'))) {
-          foreach ($users as $user) { ?>
-            <option value='<?php echo $user->id;?>'<?php echo (isset ($posts['user_id']) ? $posts['user_id'] : User::current ()->id) == $user->id ? ' selected': '';?>><?php echo $user->name;?></option>
-    <?php }
-        }?>
-      </select>
-    </div>
-
 <?php if ($users = User::all ()) { ?>
         <div class='row'>
           <b class='need'><?php echo $title;?>參與者</b>

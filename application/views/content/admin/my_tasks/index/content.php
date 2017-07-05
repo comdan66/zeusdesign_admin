@@ -51,10 +51,10 @@
     <thead>
       <tr>
         <th width='70'>完成</th>
-        <th width='100'>擁有者</th>
-        <th width='150'>標題<?php echo listSort ($uri_1, 'title');?></th>
         <th width='110'>優先權<?php echo listSort ($uri_1, 'level');?></th>
-        <th >內容</th>
+        <th width='110'>擁有者</th>
+        <th width='150'>標題<?php echo listSort ($uri_1, 'title');?></th>
+        <th>內容</th>
 
         <th width='80'>留言數</th>
         <th width='50'>檢視</th>
@@ -73,12 +73,11 @@
               echo Task::$statusNames[$obj->status];
             }?>
           </td>
+          <td><div class='color' style='background-color: <?php echo isset (Task::$levelColors[$obj->level]) ? Task::$levelColors[$obj->level] : '#ffffff';?>;'></div><?php echo Task::$levelNames[$obj->level];?></td>
           <td><?php echo $obj->user->name;?></td>
           <td><?php echo $obj->title;?></td>
-          <td><div class='color' style='background-color: <?php echo isset (Task::$levelColors[$obj->level]) ? Task::$levelColors[$obj->level] : '#ffffff';?>;'></div><?php echo Task::$levelNames[$obj->level];?></td>
           <td><?php echo $obj->mini_content (50);?></td>
           <td><?php echo number_format (count ($obj->commits));?> 則</td>
-
           <td>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
           </td>

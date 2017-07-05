@@ -33,6 +33,7 @@ class UserLog extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
   public static function logRead ($icon, $title, $content = '', $backup = array ()) {
+    return true;
     return UserLog::create (array (
       'user_id' => User::current ()->id,
       'icon' => $icon,
