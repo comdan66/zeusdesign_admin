@@ -185,8 +185,8 @@ if (!function_exists ('conditions')) {
   }
 }
 if (!function_exists ('token')) {
-  function token ($id) {
-    return md5 ($id . '_' . uniqid (rand () . '_'));
+  function token ($id = '') {
+    return md5 (($id ? $id . '_' : '') . uniqid (rand () . '_'));
   }
 }
 if (!function_exists ('redirect_message')) {

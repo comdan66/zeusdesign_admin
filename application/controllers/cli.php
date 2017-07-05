@@ -11,22 +11,28 @@ class Cli extends Oa_controller {
   public function __construct () {
     parent::__construct ();
     
-    if (!$this->input->is_cli_request ()) {
-      echo 'Request 錯誤！';
-      exit ();
-    }
+    // if (!$this->input->is_cli_request ()) {
+    //   echo 'Request 錯誤！';
+    //   exit ();
+    // }
   }
   public function x () {
-    // $data = '7/02';
-    // $d = DateTime::createFromFormat ('m/d', $data);
-    // var_dump ($d->format ('Y-m-d'));
-    // exit ();
-    $a = date ('Y-m-d', strtotime (date ('Y-m-d') . ' -' . 3 . ' day'));
-    $b = date ('Y-m-d', strtotime (date ('Y-m-d') . ' -' . 2 . ' day'));
+    
+    Mail::send ('test3', array (array ('oa', 'comdan66@gmail.com')), function ($obj) {
+      return array (
+            array ('type' => 'section', 'title' => '', 'content' => Mail::renderUser ('吳政賢') . ' 已經將任務刪除囉，相關細節請至' . Mail::renderLink ('後台', base_url ('platform', 'mail', $obj->token)) . '看吧！'),
+            array ('type' => 'ul', 'title' => '', 'li' => array (Mail::renderLi ('asdasdasd'), Mail::renderLi ('asdasdasdasdd'), Mail::renderLi ('asdasdasdas', Mail::renderLink ('asdasdasd', 'dasdasdasdasd')))),
+            array ('type' => 'ol', 'title' => 'asd', 'li' => array (Mail::renderLi ('asdasdasd'), Mail::renderLi ('asdasdasdasdd'), Mail::renderLi ('asdasdasdas', Mail::renderLink ('asdasdasd', 'dasdasdasdasd')))),
+        );
+    }, '');
 
-    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump ($a, $b, $a > $b);
-    exit ();
+
+    // $this->load->view ('mail/test.php', array (
+    //     'datas' =>  array (
+    //       array ('type' => 'section', 'title' => '', 'content' => Mail::renderUser ('吳政賢') . ' 已經將任務刪除囉！'),
+    //       array ('type' => 'ul', 'title' => '', 'li' => array (Mail::renderLi ('asdasdasd'), Mail::renderLi ('asdasdasdasdd'), Mail::renderLi ('asdasdasdas', Mail::renderLink ('asdasdasd', 'dasdasdasdasd')))),
+    //       array ('type' => 'ol', 'title' => 'asd', 'li' => array (Mail::renderLi ('asdasdasd'), Mail::renderLi ('asdasdasdasdd'), Mail::renderLi ('asdasdasdas', Mail::renderLink ('asdasdasd', 'dasdasdasdasd')))),
+    //   )));
   }
 
   public function ptt () {
