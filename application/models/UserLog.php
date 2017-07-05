@@ -25,28 +25,28 @@ class UserLog extends OaModel {
 
   static $statusNames = array (
     self::STATUS_0 => '未知',
-    self::STATUS_1 => '讀',
-    self::STATUS_2 => '寫',
+    self::STATUS_1 => '讀取資料',
+    self::STATUS_2 => '寫入資料',
   );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
-  public static function logRead ($icon, $title, $desc = '', $backup = array ()) {
+  public static function logRead ($icon, $title, $content = '', $backup = array ()) {
     return UserLog::create (array (
       'user_id' => User::current ()->id,
       'icon' => $icon,
       'title' => $title,
-      'desc' => $desc,
+      'content' => $content,
       'status' => UserLog::STATUS_1,
       'backup'  => json_encode ($backup)));
   }
-  public static function logWrite ($icon, $title, $desc = '', $backup = array ()) {
+  public static function logWrite ($icon, $title, $content = '', $backup = array ()) {
     return UserLog::create (array (
       'user_id' => User::current ()->id,
       'icon' => $icon,
       'title' => $title,
-      'desc' => $desc,
+      'content' => $content,
       'status' => UserLog::STATUS_2,
       'backup'  => json_encode ($backup)));
   }
@@ -55,7 +55,7 @@ class UserLog extends OaModel {
       'id'         => $this->id,
       'user_id'    => $this->user_id,
       'title'      => $this->title,
-      'desc'       => $this->desc,
+      'content'    => $this->content,
       'backup'     => $this->backup,
       'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',

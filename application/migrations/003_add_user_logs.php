@@ -15,7 +15,7 @@ class Migration_Add_user_logs extends CI_Migration {
 
         `icon` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '圖示',
         `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
-        `desc` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '內容',
+        `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '內容',
         
         `backup` text NOT NULL COMMENT '備份 json',
         `status` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '記錄動作，0 未知，1 讀，2 寫',

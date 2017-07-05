@@ -24,7 +24,9 @@ Route::group ('admin', function () {
 
   Route::resourcePagination (array ('ftps'), 'ftps');
   Route::resourcePagination (array ('tasks'), 'tasks');
+  Route::resourcePagination (array ('users'), 'users');
 
+  Route::resourcePagination (array ('my'), 'my');
   Route::resourcePagination (array ('my_zbs'), 'my_zbs');
   Route::resourcePagination (array ('my_calendar'), 'my_calendar');
   Route::resourcePagination (array ('my_schedule_tags'), 'my_schedule_tags');

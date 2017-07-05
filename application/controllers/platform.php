@@ -36,22 +36,19 @@ class Platform extends Site_controller {
           'token' => token ($fid),
           'name' => $name,
           'email' => $email,
-        ), User::table ()->columns))) && verifyCreateOrm (UserSet::create (array (
-          'user_id' => $user->id,
-          'banner' => '',
-          'link_facebook' => $user->facebook_link (),
-          'link_line' => '',
-          'link_google' => '',
-        )));
+        ), User::table ()->columns))) && $user->create_set ();
       }))
         return redirect_message (array (), array ('_fd' => 'Facebook 登入錯誤，請通知程式設計人員!(2)'));
 
-    $user->name = $name;
+    // $user->name = $name;
     // $user->email = $email;
-    $user->login_count += 1;
-    $user->logined_at = date ('Y-m-d H:i:s');
+    
+    if (!$user->set) $user->create_set ();
 
-    if (!User::transaction (function () use ($user) { return $user->save (); }))
+    $user->set->login_count += 1;
+    $user->set->logined_at = date ('Y-m-d H:i:s');
+
+    if (!User::transaction (function () use ($user) { return $user->save () && $user->set->save (); }))
       return redirect_message (array (), array ('_fd' => 'Facebook 登入錯誤，請通知程式設計人員!(3)'));
 
     Session::setData ('user_token', $user->token);

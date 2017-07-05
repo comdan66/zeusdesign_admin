@@ -32,7 +32,7 @@
     </header>
 
     <div id='main'>
-      <div>
+      <div class='ani<?php echo User::current ()->set->ani;?>'>
         <?php if ($t = Session::getData ('_fi', true)) { ?><label class='alert type1'><?php echo $t;?></label><?php } ?>
         <?php if ($t = Session::getData ('_fd', true)) { ?><label class='alert type3'><?php echo $t;?></label><?php } ?>
 
@@ -49,10 +49,17 @@
       <div class='group'>
         <span class='icon-u' data-cntrole='task' data-cnt='<?php echo ($task_cnt = Task::count (array ('joins' => 'LEFT JOIN (select user_id,task_id from task_user_mappings) as a ON(tasks.id = a.task_id)', 'conditions' => array ('status = ? AND a.user_id = ?', Task::STATUS_1, User::current ()->id))));?>'>個人管理</span>
         <div>
-          <a class='icon-home<?php echo ($url = base_url ('admin', 'my')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>個人頁面</a>
+          <a class='icon-home<?php echo ($url = base_url ('admin', 'my', User::current ()->id)) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>個人頁面</a>
           <a class='icon-calendar2<?php echo ($url = base_url ('admin', 'my-calendar')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的行事曆</a>
           <a data-cntrole='task' data-cnt='<?php echo $task_cnt;?>' class='icon-shield<?php echo ($url = base_url ('admin', 'my-tasks')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的任務</a>
           <a class='icon-moneybag<?php echo ($url = base_url ('admin', 'my-zbs')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的宙思幣</a>
+        </div>
+      </div>
+
+      <div class='group'>
+        <span class='icon-user-secret'>後台管理</span>
+        <div>
+          <a class='icon-ua<?php echo ($url = base_url ('admin', 'users')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>人員管理</a>
         </div>
       </div>
 
@@ -105,8 +112,10 @@
     <div id='user'>
       <div>
         <span>Hi, <b><?php echo User::current ()->name;?></b> 您好。</span>
-        <span>目前登入次數：<b><?php echo number_format (User::current ()->login_count);?></b>次</span>
-        <span>上次登入：<time datetime='<?php echo User::current ()->logined_at->format ('Y-m-d H:i:s');?>'><?php echo User::current ()->logined_at->format ('Y-m-d H:i:s');?></time></span>
+        <?php if (User::current ()->set) {?>
+          <span>目前登入次數：<b><?php echo number_format (User::current ()->set->login_count);?></b>次</span>
+          <span>上次登入：<time datetime='<?php echo User::current ()->set->logined_at->format ('Y-m-d H:i:s');?>'><?php echo User::current ()->set->logined_at->format ('Y-m-d H:i:s');?></time></span>
+        <?php }?>
         <a href='<?php echo base_url ('admin', 'my-notices');?>' class='icon-notifications_active' data-cntrole='notice' data-cnt='<?php echo $notice_cnt;?>'>檢視通知</a>
         <a href='<?php echo base_url ('logout');?>' class='icon-power'>登出</a>
       </div>

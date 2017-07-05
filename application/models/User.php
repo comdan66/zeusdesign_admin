@@ -39,6 +39,18 @@ class User extends OaModel {
     if (self::$current !== '') return self::$current;
     return self::$current = ($token = Session::getData ('user_token')) ? User::find_by_token ($token) : null;
   }
+  public function create_set () {
+    return verifyCreateOrm (UserSet::create (array (
+          'user_id' => $this->id,
+          'banner' => '',
+          'link_facebook' => $this->facebook_link (),
+          'link_line' => '',
+          'link_google' => '',
+          'ani' => UserSet::ANI_2,
+          'login_count' => 1,
+          'logined_at' => date ('Y-m-d H:i:s'),
+        )));
+  }
   public function is_root () {
     return $this->roles && in_array ('root', column_array ($this->roles, 'name'));
   }
@@ -70,7 +82,23 @@ class User extends OaModel {
 
     return res_url ('res', 'image', 'avatar.png');
   }
-  public function banner ($key = '') {
-    return $this->set ? $this->set->banner->url ($key) : res_url ('res', 'image', 'banner.jpg');
+  public function backup ($has = false) {
+    $var = array (
+      'id'         => $this->id,
+      'fid'    => $this->fid,
+      'account'      => $this->account,
+      'password'    => $this->password,
+      'token'     => $this->token,
+      'name'      => $this->name,
+      'email'       => $this->email,
+      'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
+      'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
+    );
+
+    return $has ? array (
+        '_' => $var,
+        'set' => $this->subBackup ('UserSet', $has),
+        'roles' => $this->subBackup ('UserRole', $has),
+      ) : $var;
   }
 }

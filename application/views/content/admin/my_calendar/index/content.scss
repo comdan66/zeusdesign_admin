@@ -1573,16 +1573,12 @@ $menuWidth: 230px;
               text-align: center;
               background-color: rgba(236, 83, 70, 1.00);
               color: rgba(253, 209, 85, 1.00);
-              @include border-radius(50%);
               font-size: 22px;
-
-              border: 1px solid rgba(255, 0, 0, .3);
+              @include border-radius(50%);
+              @include box-shadow(1px 1px 5px rgba(0, 0, 0, .2));
+              @include text-shadow(0 1px 3px rgba(0, 0, 0, .1));
             }
           }
-          //   height: 55px - 34px;
-          //   line-height: 55px - 34px;
-          //   margin-top: -5px;
-          // }
           &.img {
             + a {
               &:before {

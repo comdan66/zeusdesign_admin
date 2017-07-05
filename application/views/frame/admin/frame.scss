@@ -273,9 +273,24 @@ html {
     @include range-width(0, 450px) {
       padding: 8px;
     };
-    margin-top: 0;
+    margin: 0;
     @include opacity(1);
-    @include animation(main-show .75s);
+    
+    &.ani2 {
+      @include animation(main-show2 .75s);
+    }
+    &.ani3 {
+      @include animation(main-show3 .75s);
+    }
+    &.ani4 {
+      @include animation(main-show4 .75s);
+    }
+    &.ani5 {
+      @include animation(main-show5 .75s);
+    }
+    &.ani6 {
+      @include animation(main-show6 1s);
+    }
 
     > *:first-child {
       margin-top: 0;
@@ -892,13 +907,51 @@ html {
   }
 }
 
-@include keyframes(main-show){
+@include keyframes(main-show2){
   0% {
     margin-top: 20px;
     @include opacity(0);
   }
   100% {
     margin-top: 0;
+    @include opacity(1);
+  }
+}
+@include keyframes(main-show3){
+  0% {
+    margin-top: -20px;
+    @include opacity(0);
+  }
+  100% {
+    margin-top: 0;
+    @include opacity(1);
+  }
+}
+@include keyframes(main-show4){
+  0% {
+    margin-left: -20px;
+    @include opacity(0);
+  }
+  100% {
+    margin-left: 0;
+    @include opacity(1);
+  }
+}
+@include keyframes(main-show5){
+  0% {
+    margin-left: 20px;
+    @include opacity(0);
+  }
+  100% {
+    margin-left: 0;
+    @include opacity(1);
+  }
+}
+@include keyframes(main-show6){
+  0% {
+    @include opacity(0);
+  }
+  100% {
     @include opacity(1);
   }
 }

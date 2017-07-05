@@ -11,7 +11,7 @@
   
   <span><?php echo Session::getData ('_fd', true);?></span>
 
-  <a href='<?php echo Fb::loginUrl ('platform', 'fb_sign_in', 'admin');?>' class='facebook-login'>使用 Facebook 登入</a>
+  <a href='<?php echo Fb::loginUrl ('platform', 'fb_sign_in', 'admin', 'my');?>' class='facebook-login'>使用 Facebook 登入</a>
 
   <div class='or'>or</div>
 

@@ -474,7 +474,7 @@ $(function () {
       this.$title.text ('新增行程');
     },
     renderList: function (obj) {
-      return $('<a />').data ('id', obj.id).addClass (obj.finish ? 'finish' : null).addClass (typeof obj.img !== 'undefined' && obj.img.length ? 'img' : null).append (
+      return $('<a />').attr ('data-id', obj.id).addClass (obj.finish ? 'finish' : null).addClass (typeof obj.img !== 'undefined' && obj.img.length ? 'img' : null).append (
                typeof obj.img !== 'undefined' && obj.img.length ? $('<img />').attr ('src', obj.img) : (typeof obj.icon !== 'undefined' ? $('<i />').addClass (obj.icon) : null)).append (
                $('<span />').text (obj.note)).append (
                $('<div />').text (obj.title).attr ('data-sub', obj.sub)).click (function (event) {
@@ -727,6 +727,18 @@ $(function () {
                 .attr ('data-gz', ganZhi (o.y))
                 .attr ('data-a', animals (o.y));
          });
+
+    if (_panel.$datas.data ('date').length) {
+      var u = _panel.$datas.data ('date').split ('-');
+      if (u.length == 3)
+        setTimeout (function () {
+          $that.find ('.days > div[data-y="' + parseInt (u[0], 10) + '"][data-m="' + parseInt (u[1], 10) + '"][data-d="' + parseInt (u[2], 10) + '"]').click ();
+            if (_panel.$datas.data ('id'))
+              setTimeout (function () {
+                _panel.$list.find ('>div a[data-id="' + _panel.$datas.data ('id') + '"]').click ();
+              }, 300);
+        }, 500);
+    }
   });
 
   $('.calendar .days > div').sortable ({

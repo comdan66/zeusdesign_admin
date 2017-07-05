@@ -206,8 +206,12 @@ class My_calendar extends Admin_controller {
     return $this->output_json (array_values ($days));
   }
   public function index () {
+    $date = OAInput::get ('date');
+    $id = OAInput::get ('id');
     $this->add_hidden (array (
       'id' => 'datas',
+      'data-id' => $id ? $id : '',
+      'data-date' => $date ? $date : '',
       'data-api_status' => base_url ('admin', 'my_calendar', 'status', '%d'),
       'data-api_content' => base_url ('admin', 'my-calendar', '%d', 'show'),
       'data-api_month' => base_url ('admin', 'my_calendar', 'month'),
