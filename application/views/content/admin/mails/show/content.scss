@@ -1,0 +1,28 @@
+/**
+ * @author      OA Wu <comdan66@gmail.com>
+ * @copyright   Copyright (c) 2016 OA Wu Design
+ */
+
+@import "_oa";
+
+._mail {
+  display: block;
+  margin-bottom: 4px;
+  * {
+    @include box-sizing(content-box);
+  }
+  > div {
+    padding: 0 !important;
+    padding-top: 8px !important;
+  }
+  > div > div {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+.panel._c {
+  display: block;
+  // max-width: 600px;
+  // margin: 0 auto;
+  // width: calc(100% - 16px )
+}

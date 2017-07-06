@@ -268,7 +268,7 @@ class Incomes extends Admin_controller {
     if (!(isset ($posts['ids']) && $posts['ids'] && is_array ($posts['ids']) && ($posts['ids'] = column_array ($objs = IncomeItem::find ('all', array ('select' => 'id, income_id, updated_at', 'include' => array ('details'), 'conditions' => array ('id IN (?) AND income_id = 0', $posts['ids']))), 'id')))) return '「請款」資料有誤！';
 
     if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「標題」格式錯誤！';
-    if (!(isset ($posts['money']) && is_string ($posts['money']) && is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] > 0))) return '「總金額」資料有誤！';
+    if (!(isset ($posts['money']) && is_string ($posts['money']) && is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] > 0))) return '「總金額」格式錯誤！';
     if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Income::STATUS_2 : Income::STATUS_1) && in_array ($posts['status'], array_keys (Income::$statusNames)))) $posts['status'] = Income::STATUS_1;
     
     if (isset ($posts['invoice_date']) && !(is_string ($posts['invoice_date']) && is_date ($posts['invoice_date'] = trim ($posts['invoice_date'])))) $posts['invoice_date'] = NULL;
@@ -278,7 +278,7 @@ class Incomes extends Admin_controller {
   }
   private function _validation_update (&$posts) {
     if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「標題」格式錯誤！';
-    if (!(isset ($posts['money']) && is_string ($posts['money']) && is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] > 0))) return '「總金額」資料有誤！';
+    if (!(isset ($posts['money']) && is_string ($posts['money']) && is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] > 0))) return '「總金額」格式錯誤！';
     if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Income::STATUS_2 : Income::STATUS_1) && in_array ($posts['status'], array_keys (Income::$statusNames)))) $posts['status'] = Income::STATUS_1;
     
     if (isset ($posts['invoice_date']) && !(is_string ($posts['invoice_date']) && is_date ($posts['invoice_date'] = trim ($posts['invoice_date'])))) $posts['invoice_date'] = NULL;

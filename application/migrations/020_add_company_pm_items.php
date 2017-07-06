@@ -13,7 +13,7 @@ class Migration_Add_company_pm_items extends CI_Migration {
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
         `company_pm_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'PM ID',
         
-        `type` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '類型，1 E-Mail，2 Phone',
+        `type` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '類型，1 E-Mail，2 Phone',
         `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '內容',
 
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',

@@ -21,10 +21,12 @@ Route::group ('admin', function () {
   
   Route::resourcePagination (array ('income_items'), 'income_items');
   Route::resourcePagination (array ('incomes'), 'incomes');
+  Route::resourcePagination (array ('outcomes'), 'outcomes');
 
   Route::resourcePagination (array ('ftps'), 'ftps');
   Route::resourcePagination (array ('tasks'), 'tasks');
   Route::resourcePagination (array ('users'), 'users');
+  Route::resourcePagination (array ('mails'), 'mails');
 
   Route::resourcePagination (array ('my'), 'my');
   Route::resourcePagination (array ('my_zbs'), 'my_zbs');

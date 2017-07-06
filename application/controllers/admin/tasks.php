@@ -120,8 +120,7 @@ class Tasks extends Admin_controller {
       function ($o) use ($obj, $users) {
         return array_merge (array (
             array ('type' => 'section', 'title' => '', 'content' => Mail::renderP ('您有一項標題為「' . Mail::renderB ($obj->title) . '」的新任務，此任務是由 ' . Mail::renderB ($obj->user->name) . ' 新增的，參與者目前有 ' . implode (', ', column_array ($users, 'name', function ($t) { return Mail::renderB ($t); })) . '，目前緊急程度為 ' . Mail::renderB2 (Task::$levelNames[$obj->level]) . ' 的等級，請各位務必在 ' . Mail::renderB2 ($obj->date->format ('Y年 n月 j日')) . ' 前完成，如有問題請與 ' . Mail::renderB ($obj->user->name) . ' 討論，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看。')),
-            array ('type' => 'section', 'title' => '內容說明', 'content' => Mail::renderContent ($obj->content)),
-          ), $obj->attachments ? array (array ('type' => 'ul', 'title' => '任務附件', 'li' => array_map (function ($attachment) {
+          ), $obj->content ? array (array ('type' => 'section', 'title' => '內容說明', 'content' => Mail::renderContent ($obj->content))) : array (), $obj->attachments ? array (array ('type' => 'ul', 'title' => '任務附件', 'li' => array_map (function ($attachment) {
             return Mail::renderLi ($attachment->title, Mail::renderLink ('下載', $attachment->file->url ()));
           }, $obj->attachments))) : array ());
     });
@@ -241,8 +240,7 @@ class Tasks extends Admin_controller {
       function ($o) use ($obj, $new_users, $us) {
         return array_merge (array (
             array ('type' => 'section', 'title' => '', 'content' => Mail::renderP ('您有一項標題為「' . Mail::renderB ($obj->title) . '」的新任務，此任務是由 ' . Mail::renderB ($obj->user->name) . ' 新增的，參與者目前有 ' . implode (', ', column_array ($new_users, 'name', function ($t) { return Mail::renderB ($t); })) . ($us ? ', ' . implode (', ', column_array ($us, 'name', function ($t) { return Mail::renderB ($t); })) : '') . '，目前緊急程度為 ' . Mail::renderB2 (Task::$levelNames[$obj->level]) . ' 的等級，請各位務必在 ' . Mail::renderB2 ($obj->date->format ('Y年 n月 j日')) . ' 前完成，如有問題請與 ' . Mail::renderB ($obj->user->name) . ' 討論，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看。')),
-            array ('type' => 'section', 'title' => '內容說明', 'content' => Mail::renderContent ($obj->content)),
-          ), $obj->attachments ? array (array ('type' => 'ul', 'title' => '任務附件', 'li' => array_map (function ($attachment) {
+          ), $obj->content ? array (array ('type' => 'section', 'title' => '內容說明', 'content' => Mail::renderContent ($obj->content))) : array (), $obj->attachments ? array (array ('type' => 'ul', 'title' => '任務附件', 'li' => array_map (function ($attachment) {
             return Mail::renderLi ($attachment->title, Mail::renderLink ('下載', $attachment->file->url ()));
           }, $obj->attachments))) : array ());
     });

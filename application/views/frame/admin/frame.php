@@ -60,6 +60,7 @@
         <span class='icon-user-secret'>後台管理</span>
         <div>
           <a class='icon-ua<?php echo ($url = base_url ('admin', 'users')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>人員管理</a>
+          <a class='icon-em<?php echo ($url = base_url ('admin', 'mails')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>E-Mail 管理</a>
         </div>
       </div>
 
@@ -94,7 +95,8 @@
         <div>
           <a class='icon-b<?php echo ($url = base_url ('admin', 'companies')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>配合廠商</a>
           <a class='icon-ti<?php echo ($url = base_url ('admin', 'income-items')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>請款列表</a>
-          <a class='icon-bil<?php echo ($url = base_url ('admin', 'incomes')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>入帳列表</a>
+          <a class='icon-ib<?php echo ($url = base_url ('admin', 'incomes')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>入帳列表</a>
+          <a class='icon-ob<?php echo ($url = base_url ('admin', 'outcomes')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>出帳列表</a>
         </div>
       </div>
 
