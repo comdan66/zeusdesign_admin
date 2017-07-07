@@ -182,7 +182,7 @@ class Outcomes extends Admin_controller {
     if (!(isset ($posts['user_id']) && is_string ($posts['user_id']) && is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find_by_id ($posts['user_id']))) return '「' . $this->title . '新增者」格式錯誤！';
     if (!(isset ($posts['money']) && is_string ($posts['money']) && is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] > 0))) return '「金額」格式錯誤！';
     if (!(isset ($posts['type']) && is_string ($posts['type']) && is_numeric ($posts['type'] = trim ($posts['type'])) && in_array ($posts['type'], array_keys (Outcome::$typeNames)))) $posts['type'] = Outcome::TYPE_1;
-    if (isset ($posts['memo']) && !(is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])))) $$posts['memo'] = '';
+    if (isset ($posts['memo']) && !(is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])))) $posts['memo'] = '';
     $posts['date'] = $posts['status'] == Outcome::STATUS_2 ? date ('Y-m-d') : null;
 
     return '';
