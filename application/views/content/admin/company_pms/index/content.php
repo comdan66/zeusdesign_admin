@@ -9,7 +9,7 @@
   <div class='show-type1 left' style='border-top: 1px solid rgba(220, 220, 220, 1);padding-top: 20px;'>
     <div class='row min'>
       <b>名稱</b>
-      <span><?php echo $parent->name;?><?php echo $parent->name;?><?php echo $parent->name;?></span>
+      <span><?php echo $parent->name;?></span>
     </div>
     <div class='row min'>
       <b>統編</b>

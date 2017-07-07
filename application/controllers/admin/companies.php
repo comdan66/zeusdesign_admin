@@ -144,10 +144,10 @@ class Companies extends Admin_controller {
   }
   private function _validation_create (&$posts) {
     if (!(isset ($posts['name']) && is_string ($posts['name']) && ($posts['name'] = trim ($posts['name'])))) return '「' . $this->title . '名稱」格式錯誤！';
-    if (isset ($posts['phone']) && !(is_string ($posts['phone']) && ($posts['phone'] = trim ($posts['phone'])))) $$posts['phone'] = '';
-    if (isset ($posts['tax_no']) && !(is_string ($posts['tax_no']) && ($posts['tax_no'] = trim ($posts['tax_no'])))) $$posts['tax_no'] = '';
-    if (isset ($posts['address']) && !(is_string ($posts['address']) && ($posts['address'] = trim ($posts['address'])))) $$posts['address'] = '';
-    if (isset ($posts['memo']) && !(is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])))) $$posts['memo'] = '';
+    if (isset ($posts['phone']) && !(is_string ($posts['phone']) && ($posts['phone'] = trim ($posts['phone'])))) $posts['phone'] = '';
+    if (isset ($posts['tax_no']) && !(is_string ($posts['tax_no']) && ($posts['tax_no'] = trim ($posts['tax_no'])))) $posts['tax_no'] = '';
+    if (isset ($posts['address']) && !(is_string ($posts['address']) && ($posts['address'] = trim ($posts['address'])))) $posts['address'] = '';
+    if (isset ($posts['memo']) && !(is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])))) $posts['memo'] = '';
 
     return '';
   }
