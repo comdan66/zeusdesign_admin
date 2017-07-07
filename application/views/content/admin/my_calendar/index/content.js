@@ -369,8 +369,8 @@ $(function () {
       return $('<form />').append ($r0)
                           .append ($r1)
                           .append ($r2)
-                          .append ($r3)
-                          .append ($r4)
+                          .append (this.$datas.data ('tags').length ? $r3 : null)
+                          .append (this.$datas.data ('users').length ? $r4 : null)
                           .append ($r5);
     },
     formDate: function ($obj) {
