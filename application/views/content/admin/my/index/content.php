@@ -7,7 +7,7 @@
     <h1><?php echo $obj->name;?></h1>
     <div>
       <?php if ($obj->set && $obj->set->link_facebook) { ?><a href="<?php echo $obj->set->link_facebook;?>" class='icon-facebook' target='_blank'></a><?php }?>
-      <a href="mailto:<?php echo $obj->email;?>" class='icon-em' target='_blank'></a>
+      <?php if ($obj->email) { ?><a href="mailto:<?php echo $obj->email;?>" class='icon-em' target='_blank'></a><?php }?>
       <?php if ($obj->set && $obj->set->phone) { ?><a href="tel:<?php echo $obj->set->phone;?>" class='icon-phone' target='_blank'></a><?php }?>
     </div>
   </div>

@@ -71,7 +71,7 @@ class User extends OaModel {
     return array_filter (array_map (function ($role) { if (!$t = Cfg::setting ('role', 'role_names', $role)) return false; return $t['name']; }, column_array ($this->roles, 'name')));
   }
   public function facebook_link () {
-    if (!isset ($this->fid)) return '';
+    if (!(isset ($this->fid) && $this->fid)) return '';
     return 'https://www.facebook.com/' . $this->fid;
   }
   public function avatar ($w = 100, $h = 100) {
