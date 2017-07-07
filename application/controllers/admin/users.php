@@ -39,7 +39,7 @@ class Users extends Admin_controller {
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
-    $objs = conditions ($searches, $configs, $offset, 'User', array ('order' => 'id DESC'));
+    $objs = conditions ($searches, $configs, $offset, 'User', array ('order' => 'id DESC', 'include' => array ('set')));
 
     UserLog::logRead (
       $this->icon,

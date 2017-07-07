@@ -53,6 +53,7 @@
         <th width='130'>名稱<?php echo listSort ($uri_1, 'name');?></th>
         <th >E-Mail<?php echo listSort ($uri_1, 'email');?></th>
         <th width='150'>權限</th>
+        <th width='100'>上次登入</th>
         <th width='70'>編輯</th>
       </tr>
     </thead>
@@ -65,6 +66,7 @@
           <td><?php echo implode ('', array_map (function ($t) {
             return '<div class="row">' . $t . '</div>';
           }, $obj->role_names ()));?></td>
+          <td><time datetime='<?php echo $obj->set->logined_at->format ('Y-m-d H:i:s');?>'><?php echo $obj->set->logined_at->format ('Y-m-d H:i:s');?></time></td>
           <td class='edit'>
             <a class='icon-eye' target='_blank' href="<?php echo base_url ('admin', 'my', $obj->id);?>"></a>
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
