@@ -66,7 +66,7 @@
           <td style='color: <?php echo $obj->status == Mail::STATUS_1 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>;'><?php echo Mail::$statusNames[$obj->status];?></td>
           <td><?php echo $obj->title;?></td>
           <td><?php echo $obj->uri;?></td>
-          <td<?php echo ($t = round (100 * ($obj->cnt_send ? $obj->cnt_open / $obj->cnt_send : 0))) == 100 ? ' style="color: rgba(52, 168, 83, 1.00);"': ($t ? '' : ' style="color: rgba(234, 67, 53, 1.00);font-weight: bold;"');?>><?php echo $t;?>%</td>
+          <td<?php echo ($t = round (100 * ($obj->cnt_send ? $obj->cnt_open / $obj->cnt_send : 0))) >= 100 ? ' style="color: rgba(52, 168, 83, 1.00);"': ($t ? '' : ' style="color: rgba(234, 67, 53, 1.00);font-weight: bold;"');?>><?php echo $t;?>%</td>
           <td><?php echo $obj->cnt_open;?></td>
           <td><?php echo $obj->cnt_send;?></td>
           <td>
