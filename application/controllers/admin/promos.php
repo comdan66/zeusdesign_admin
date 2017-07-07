@@ -15,7 +15,7 @@ class Promos extends Admin_controller {
   public function __construct () {
     parent::__construct ();
     
-    if (!User::current ()->in_roles (array ('website')))
+    if (!User::current ()->in_roles (array ('promo')))
       return redirect_message (array ('admin'), array ('_fd' => '您的權限不足，或者頁面不存在。'));
     
     $this->uri_1 = 'admin/promos';

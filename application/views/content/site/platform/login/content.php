@@ -1,7 +1,7 @@
 <div id='box'>
   <header>
-    <div class='avatar'>
-      <img src='<?php echo res_url('res', 'image', 'login_logo.png');?>' />
+    <div class='logo'>
+      z
     </div>
     <div class='title'>
       <h1>宙思管理系統</h1>
@@ -15,9 +15,9 @@
 
   <div class='or'>or</div>
 
-  <form action='<?php echo base_url ('platform', 'ap_sign_in');?>' method='post'>
-    <input type='text' name='account' placeholder='請輸入帳號' />
-    <input type='text' name='password' placeholder='請輸入密碼' />
+  <form action='<?php echo base_url ('platform', 'ap_sign_in', 'admin', 'my');?>' method='post'>
+    <input type='text' name='account' placeholder='請輸入帳號' value='<?php echo isset ($posts['account']) && $posts['account'] ? $posts['account'] : '';?>' />
+    <input type='password' name='password' placeholder='請輸入密碼' value='<?php echo isset ($posts['password']) && $posts['password'] ? $posts['password'] : '';?>' />
     <button type='submit'>使用帳密登入</button>
   </form>
 

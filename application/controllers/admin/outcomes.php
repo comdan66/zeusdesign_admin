@@ -15,7 +15,7 @@ class Outcomes extends Admin_controller {
   public function __construct () {
     parent::__construct ();
     
-    if (!User::current ()->in_roles (array ('income')))
+    if (!User::current ()->in_roles (array ('outcome')))
       return redirect_message (array ('admin'), array ('_fd' => '您的權限不足，或者頁面不存在。'));
     
     $this->uri_1 = 'admin/outcomes';
@@ -35,10 +35,12 @@ class Outcomes extends Admin_controller {
   public function index ($offset = 0) {
     $searches = array (
         'title' => array ('el' => 'input', 'text' => '標題', 'sql' => 'title LIKE ?'),
-        'status' => array ('el' => 'select', 'text' => '是否入帳', 'sql' => 'status = ?', 'items' => array_map (function ($t) { return array ('text' => Outcome::$statusNames[$t], 'value' => $t,);}, array_keys (Outcome::$statusNames))),
+        'status' => array ('el' => 'select', 'text' => '是否出帳', 'sql' => 'status = ?', 'items' => array_map (function ($t) { return array ('text' => Outcome::$statusNames[$t], 'value' => $t,);}, array_keys (Outcome::$statusNames))),
         'type' => array ('el' => 'select', 'text' => '是否有開發票', 'sql' => 'status = ?', 'items' => array_map (function ($t) { return array ('text' => Outcome::$typeNames[$t], 'value' => $t,);}, array_keys (Outcome::$typeNames))),
         'money1' => array ('el' => 'input', 'type' => 'number', 'text' => '金額大於等於', 'sql' => 'money >= ?'),
         'money2' => array ('el' => 'input', 'type' => 'number', 'text' => '金額小於等於', 'sql' => 'money <= ?'),
+        'year[]' => array ('el' => 'checkbox', 'text' => '出帳年份', 'sql' => 'date IS NOT NULL AND YEAR(date) IN (?)', 'items' => array_map (function ($u) { return array ('text' => $u . '年', 'value' => $u); }, array ('2014', '2015', '2016', '2017'))),
+        'date[]' => array ('el' => 'checkbox', 'text' => '出帳月份', 'sql' => 'date IS NOT NULL AND MONTH(date) IN (?)', 'items' => array_map (function ($u) { return array ('text' => $u . '月', 'value' => $u); }, array ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'))),
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
@@ -151,7 +153,8 @@ class Outcomes extends Admin_controller {
     $backup = $obj->backup (true);
 
     $validation = function (&$posts) {
-      return !(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Outcome::STATUS_2 : Outcome::STATUS_1) && in_array ($posts['status'], array_keys (Outcome::$statusNames))) ? '「設定上下架」發生錯誤！' : '';
+      if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Outcome::STATUS_2 : Outcome::STATUS_1) && in_array ($posts['status'], array_keys (Outcome::$statusNames)))) return '「設定上下架」發生錯誤！';
+      $posts['date'] = $posts['status'] == Outcome::STATUS_2 ? date ('Y-m-d') : null;
     };
 
     if ($msg = $validation ($posts))
@@ -177,10 +180,10 @@ class Outcomes extends Admin_controller {
     if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && in_array ($posts['status'], array_keys (Outcome::$statusNames)))) $posts['status'] = Outcome::STATUS_1;
     if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「' . $this->title . '標題」格式錯誤！';
     if (!(isset ($posts['user_id']) && is_string ($posts['user_id']) && is_numeric ($posts['user_id'] = trim ($posts['user_id'])) && User::find_by_id ($posts['user_id']))) return '「' . $this->title . '新增者」格式錯誤！';
-    if (!(isset ($posts['date']) && is_string ($posts['date']) && is_date ($posts['date'] = trim ($posts['date'])))) return '「日期」格式錯誤！';
     if (!(isset ($posts['money']) && is_string ($posts['money']) && is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] > 0))) return '「金額」格式錯誤！';
     if (!(isset ($posts['type']) && is_string ($posts['type']) && is_numeric ($posts['type'] = trim ($posts['type'])) && in_array ($posts['type'], array_keys (Outcome::$typeNames)))) $posts['type'] = Outcome::TYPE_1;
     if (isset ($posts['memo']) && !(is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])))) $$posts['memo'] = '';
+    $posts['date'] = $posts['status'] == Outcome::STATUS_2 ? date ('Y-m-d') : null;
 
     return '';
   }

@@ -16,10 +16,10 @@ class My extends Admin_controller {
   public function __construct () {
     parent::__construct ();
 
-    $this->uri_1 = 'admin/my/' . User::current ()->id;
-    
     if (!User::current ()->in_roles (array ('member')))
       return redirect_message (array ('admin'), array ('_fd' => '您的權限不足，或者頁面不存在。'));
+
+    $this->uri_1 = 'admin/my/' . User::current ()->id;
 
     if (!((($id = $this->uri->rsegments (3, 0)) || ($id = User::current ()->id)) && ($this->obj = User::find ('one', array ('conditions' => array ('id = ?', $id))))))
       return redirect_message (array ($this->uri_1), array ('_fd' => '找不到該筆資料。'));
@@ -27,7 +27,7 @@ class My extends Admin_controller {
     $this->self = $this->obj->id == User::current ()->id;
     if (!$this->obj->set) $this->obj->create_set ();
 
-    if (!$this->self && !User::current ()->in_roles (array ('admin')))
+    if (!$this->self && !User::current ()->in_roles (array ('user')))
       return redirect_message (array ('admin'), array ('_fd' => '您的權限不足，或者頁面不存在。'));
 
     $this->icon = 'icon-home';

@@ -12,7 +12,7 @@ class Admin_controller extends Oa_controller {
     parent::__construct ();
 
     if (!(User::current () && User::current ()->is_login ()))
-      return redirect_message (array ('login'), array ());
+      return redirect_message (array ('login'), array ('_fd' => '請管理員幫您開啟權限！'));
 
     $this
          ->set_componemt_path ('component', 'admin')

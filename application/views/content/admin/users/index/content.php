@@ -65,9 +65,8 @@
           <td><?php echo implode ('', array_map (function ($t) {
             return '<div class="row">' . $t . '</div>';
           }, $obj->role_names ()));?></td>
-          <td>
-            <a class='icon-eye' href="<?php echo base_url ('admin', 'my', $obj->id);?>"></a>
-            /
+          <td class='edit'>
+            <a class='icon-eye' target='_blank' href="<?php echo base_url ('admin', 'my', $obj->id);?>"></a>
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
           </td>
         </tr>

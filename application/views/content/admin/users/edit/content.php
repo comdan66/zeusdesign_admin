@@ -14,19 +14,22 @@
       <input type='text' name='email' value='<?php echo isset ($posts['email']) ? $posts['email'] : $obj->email;?>' placeholder='請輸入<?php echo $title;?> E-Mail..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?> E-Mail!' />
     </div>
     
-
-    <div class='row'>
-      <b>權限</b>
-<?php foreach (Cfg::setting ('role', 'roles') as $key) { ?>
-        <label class='checkbox'>
-          <input type='checkbox' name='keys[]' value='<?php echo $key;?>'<?php echo ($t = column_array ($obj->roles, 'name')) && in_array ($key, $t) ? ' checked' : '';?>>
-          <span></span>
-          <?php echo Cfg::setting ('role', 'role_names', $key);?>
-        </label>
+<?php 
+    foreach (Cfg::setting ('role', 'group') as $group => $keys) { ?>
+      <div class='row'>
+          <b style='border-bottom: 1px solid rgba(220, 220, 220, 1);padding-bottom: 8px;margin-bottom: 8px;'><?php echo $group;?></b>
+    <?php foreach ($keys as $key) {
+            if (Cfg::setting ('role', 'role_names', $key)) { ?>
+              <label class='checkbox'>
+                <input type='checkbox' name='keys[]' value='<?php echo $key;?>'<?php echo $obj->in_roles (array ($key), true) ? ' checked' : '';?>>
+                <span></span>
+                <b><?php echo Cfg::setting ('role', 'role_names', $key, 'name');?></b><i><?php echo Cfg::setting ('role', 'role_names', $key, 'desc');?>。</i>
+              </label>
+      <?php } ?>
+    <?php } ?>
+        </div>
 <?php } ?>
-    </div>
-
-
+  
     <div class='row'>
       <b><?php echo $title;?> Facebook 鏈結</b>
       <input type='text' name='link_facebook' value='<?php echo isset ($posts['link_facebook']) ? $posts['link_facebook'] : $obj->set->link_facebook;?>' placeholder='請輸入<?php echo $title;?> Facebook 鏈結..' maxlength='200' title='輸入<?php echo $title;?> Facebook 鏈結!' />

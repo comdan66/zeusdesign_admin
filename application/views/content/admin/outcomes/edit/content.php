@@ -29,11 +29,6 @@
     </div>
 
     <div class='row'>
-      <b class='need'><?php echo $title;?>日期</b>
-      <input type='date' name='date' value='<?php echo isset ($posts['date']) ? $posts['date'] : $obj->date->format ('Y-m-d');?>' placeholder='請輸入<?php echo $title;?>日期..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>日期!' />
-    </div>
-
-    <div class='row'>
       <b class='need'><?php echo $title;?>金額</b>
       <input type='number' name='money' value='<?php echo isset ($posts['money']) ? $posts['money'] : $obj->money;?>' placeholder='請輸入<?php echo $title;?>金額..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?>金額!' />
     </div>

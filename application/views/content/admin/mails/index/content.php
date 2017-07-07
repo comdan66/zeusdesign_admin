@@ -53,9 +53,9 @@
         <th width='70'>狀態</th>
         <th >標題<?php echo listSort ($uri_1, 'title');?></th>
         <th width='180'>跳址</th>
-        <th width='60'>開啟率</th>
-        <th width='60'>點擊數<?php echo listSort ($uri_1, 'cnt_open');?></th>
-        <th width='60'>發送數<?php echo listSort ($uri_1, 'cnt_send');?></th>
+        <th width='80'>開啟率</th>
+        <th width='80'>點擊數<?php echo listSort ($uri_1, 'cnt_open');?></th>
+        <th width='80'>發送數<?php echo listSort ($uri_1, 'cnt_send');?></th>
         <th width='50'>檢視</th>
       </tr>
     </thead>

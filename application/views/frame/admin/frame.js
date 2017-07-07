@@ -142,6 +142,11 @@ $(function () {
     $('*[data-cntrole*="' + key + '"]').each (function () { $(this).attr ('data-cnt', (result ? -1 : 1) + parseInt ($(this).attr ('data-cnt'), 10)); });
   };
 
+  window.fns.updateHide = function (key, result) {
+    if (typeof key === 'undefined') return;
+    $('*[data-hide*="' + key + '"]').each (function () { $(this).addClass (result ? 'hide' : null).removeClass (result ? null : 'hide'); });
+  };
+
   window.fns.ajaxFail = function (r) {
     if ((t = window.fns.IsJsonString (r.responseText)) !== null) window.fns.tipText ({title: '設定錯誤！', message: t.message});
     else window.fns.tipText ({title: '設定錯誤！', message: '※ 不明原因錯誤，請重新整理網頁確認。', error: r.responseText});
@@ -168,6 +173,7 @@ $(function () {
         
         $that.removeClass ('loading');
         window.fns.updateCounter ($that.data ('forcntrole'), result);
+        window.fns.updateHide ($that.data ('forhide'), result);
 
       }.bind ($(this)))
       .fail (function (result) {

@@ -15,7 +15,7 @@ class Income_items extends Admin_controller {
   public function __construct () {
     parent::__construct ();
     
-    if (!User::current ()->in_roles (array ('income')))
+    if (!User::current ()->in_roles (array ('income_item')))
       return redirect_message (array ('admin'), array ('_fd' => '您的權限不足，或者頁面不存在。'));
     
     $this->uri_1 = 'admin/income-items';
@@ -147,6 +147,8 @@ class Income_items extends Admin_controller {
     return redirect_message (array ($this->uri_1), array ('_fi' => '新增成功！'));
   }
   public function edit () {
+    if ($this->obj->hasIncome ()) return redirect_message (array ($this->uri_1), array ('_fd' => '此' . $this->title . '已經入帳，所以不能修改！'));
+
     $posts = Session::getData ('posts', true);
     $details = isset ($posts['details']) ? $posts['details'] : array_map (function ($detail) { return array (
         'user_id' => $detail->user_id,
@@ -172,6 +174,8 @@ class Income_items extends Admin_controller {
       ));
   }
   public function update () {
+    if ($this->obj->hasIncome ()) return redirect_message (array ($this->uri_1), array ('_fd' => '此' . $this->title . '已經入帳，所以不能修改！'));
+
     $obj = $this->obj;
 
     if (!$this->has_post ())
@@ -218,6 +222,8 @@ class Income_items extends Admin_controller {
   }
 
   public function destroy () {
+    if ($this->obj->hasIncome ()) return redirect_message (array ($this->uri_1), array ('_fd' => '此' . $this->title . '已經入帳，所以不能刪除！'));
+
     $obj = $this->obj;
     $backup = $obj->backup (true);
 

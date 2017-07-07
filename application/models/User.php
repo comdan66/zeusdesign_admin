@@ -59,15 +59,16 @@ class User extends OaModel {
     if ($this->is_root ()) return true;
     return in_array ('member', column_array ($this->roles, 'name'));
   }
-  public function in_roles ($roles = array ()) {
+  public function in_roles ($roles = array (), $ignoreRoot = false) {
     if (!$this->roles) return false;
-    if ($this->is_root ()) return true;
+    if (!$ignoreRoot && $this->is_root ()) return true;
     if (!($roles = array_filter ($roles, function ($role) { return in_array ($role, Cfg::setting ('role', 'roles')); }))) return false;
     foreach ($this->roles as $role) if (in_array ($role->name, $roles)) return true;
+    
     return false;
   }
   public function role_names () {
-    return array_filter (array_map (function ($role) { return Cfg::setting ('role', 'role_names', $role); }, column_array ($this->roles, 'name')));
+    return array_filter (array_map (function ($role) { if (!$t = Cfg::setting ('role', 'role_names', $role)) return false; return $t['name']; }, column_array ($this->roles, 'name')));
   }
   public function facebook_link () {
     if (!isset ($this->fid)) return '';

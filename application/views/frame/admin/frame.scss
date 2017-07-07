@@ -1544,6 +1544,11 @@ label.radio {
           border-bottom: 1px solid rgba(221, 221, 221, 1.00);
           @include overflow-docx3();
           
+          &.edit {
+            a {
+              margin-top: 20px;
+            }
+          }
           &:last-child {
             border-bottom: 0;
           }
@@ -1577,6 +1582,7 @@ label.radio {
             }
           }
         }
+
         &:last-child {
           > td {
             border-right: 0;
@@ -3087,6 +3093,29 @@ span.unit {
     line-height: 26px - 8px;
     &:not(.n) {
       color: rgba(195, 58, 47, 1.00);
+    }
+  }
+}
+.edit {
+  a {
+    position: relative;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+    &.hide {
+      display: none;
+    }
+    &:not(.hide) + a {
+      margin-left: 9px;
+      &:after {
+        content: '/';
+        position: absolute;
+        left: -8px;
+        bottom: 0;
+        display: inline-block;
+        color: rgba(150, 150, 150, 1.00);
+      }
     }
   }
 }

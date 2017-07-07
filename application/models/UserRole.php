@@ -23,7 +23,10 @@ class UserRole extends OaModel {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
   public function name () {
-    return Cfg::setting ('role', 'role_names', $this->name);
+    return Cfg::setting ('role', 'role_names', $this->name, 'name');
+  }
+  public function desc () {
+    return Cfg::setting ('role', 'role_names', $this->name, 'desc');
   }
   public function destroy () {
     if (!isset ($this->id)) return false;

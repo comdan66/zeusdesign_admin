@@ -40,6 +40,8 @@ class Incomes extends Admin_controller {
         'invoice_date' => array ('el' => 'input', 'type' => 'date', 'text' => '發票日期', 'sql' => 'date LIKE ?'),
         'money1' => array ('el' => 'input', 'type' => 'number', 'text' => '金額大於等於', 'sql' => 'money >= ?'),
         'money2' => array ('el' => 'input', 'type' => 'number', 'text' => '金額小於等於', 'sql' => 'money <= ?'),
+        'year[]' => array ('el' => 'checkbox', 'text' => '入帳年份', 'sql' => 'date IS NOT NULL AND YEAR(date) IN (?)', 'items' => array_map (function ($u) { return array ('text' => $u . '年', 'value' => $u); }, array ('2014', '2015', '2016', '2017'))),
+        'date[]' => array ('el' => 'checkbox', 'text' => '入帳月份', 'sql' => 'date IS NOT NULL AND MONTH(date) IN (?)', 'items' => array_map (function ($u) { return array ('text' => $u . '月', 'value' => $u); }, array ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'))),
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
@@ -120,6 +122,8 @@ class Incomes extends Admin_controller {
   }
 
   public function edit () {
+    if ($this->obj->status == Income::STATUS_2) return redirect_message (array ($this->uri_1), array ('_fd' => '此' . $this->title . '已經入帳，所以不能修改！'));
+
     $posts = Session::getData ('posts', true);
 
     return $this->load_view (array (
@@ -129,6 +133,8 @@ class Incomes extends Admin_controller {
   }
 
   public function update () {
+    if ($this->obj->status == Income::STATUS_2) return redirect_message (array ($this->uri_1), array ('_fd' => '此' . $this->title . '已經入帳，所以不能修改！'));
+    
     $obj = $this->obj;
 
     if (!$this->has_post ())
@@ -137,7 +143,7 @@ class Incomes extends Admin_controller {
     $posts = OAInput::post ();
     $backup = $obj->backup (true);
 
-    if ($msg = $this->_validation_update ($posts))
+    if ($msg = $this->_validation_update ($posts, $obj))
       return redirect_message (array ($this->uri_1, $obj->id, 'edit'), array ('_fd' => $msg, 'posts' => $posts));
 
     if ($columns = array_intersect_key ($posts, $obj->table ()->columns))
@@ -158,6 +164,7 @@ class Incomes extends Admin_controller {
   }
 
   public function destroy () {
+    if ($this->obj->status == Income::STATUS_2) return redirect_message (array ($this->uri_1), array ('_fd' => '此' . $this->title . '已經入帳，所以不能刪除！'));
     $obj = $this->obj;
     $backup = $obj->backup (true);
     
@@ -188,7 +195,7 @@ class Incomes extends Admin_controller {
   }
 
   public function status () {
-    if (!User::current ()->in_roles (array ('income_admin')))
+    if (!User::current ()->in_roles (array ('income_status')))
       return $this->output_error_json ('您的權限不足。');
 
     $obj = $this->obj;
@@ -199,8 +206,11 @@ class Incomes extends Admin_controller {
     $posts = OAInput::post ();
     $backup = $obj->backup (true);
 
-    $validation = function (&$posts) {
-      return !(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Income::STATUS_2 : Income::STATUS_1) && in_array ($posts['status'], array_keys (Income::$statusNames))) ? '「設定入帳」發生錯誤！' : '';
+    $validation = function (&$posts) use ($obj) {
+      if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Income::STATUS_2 : Income::STATUS_1) && in_array ($posts['status'], array_keys (Income::$statusNames)))) return '「設定入帳」發生錯誤！';
+      $posts['date'] = $posts['status'] == Income::STATUS_2 && $obj->status != $posts['status'] ? date ('Y-m-d') : null;
+
+      return '';
     };
 
     if ($msg = $validation ($posts))
@@ -224,7 +234,7 @@ class Incomes extends Admin_controller {
   }
 
   public function zb_status ($id) {
-    if (!User::current ()->in_roles (array ('income_admin')))
+    if (!User::current ()->in_roles (array ('to_zb')))
       return $this->output_error_json ('您的權限不足。');
     
     if (!($id && ($this->obj = Zb::find ('one', array ('conditions' => array ('id = ?', $id))))))
@@ -269,18 +279,29 @@ class Incomes extends Admin_controller {
 
     if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「標題」格式錯誤！';
     if (!(isset ($posts['money']) && is_string ($posts['money']) && is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] > 0))) return '「總金額」格式錯誤！';
-    if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Income::STATUS_2 : Income::STATUS_1) && in_array ($posts['status'], array_keys (Income::$statusNames)))) $posts['status'] = Income::STATUS_1;
     
+    if (User::current ()->in_roles (array ('income_status'))) {
+      if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Income::STATUS_2 : Income::STATUS_1) && in_array ($posts['status'], array_keys (Income::$statusNames)))) $posts['status'] = Income::STATUS_1;
+      $posts['date'] = $posts['status'] == Income::STATUS_2 ? date ('Y-m-d') : null;
+    } else {
+      $posts['status'] = Income::STATUS_1;      
+      $posts['date'] = null;
+    }
+
     if (isset ($posts['invoice_date']) && !(is_string ($posts['invoice_date']) && is_date ($posts['invoice_date'] = trim ($posts['invoice_date'])))) $posts['invoice_date'] = NULL;
     if (isset ($posts['memo']) && !(is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])))) $posts['memo'] = '';
 
     return '';
   }
-  private function _validation_update (&$posts) {
+  private function _validation_update (&$posts, $obj) {
     if (!(isset ($posts['title']) && is_string ($posts['title']) && ($posts['title'] = trim ($posts['title'])))) return '「標題」格式錯誤！';
     if (!(isset ($posts['money']) && is_string ($posts['money']) && is_numeric ($posts['money'] = trim ($posts['money'])) && ($posts['money'] > 0))) return '「總金額」格式錯誤！';
-    if (!(isset ($posts['status']) && is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Income::STATUS_2 : Income::STATUS_1) && in_array ($posts['status'], array_keys (Income::$statusNames)))) $posts['status'] = Income::STATUS_1;
     
+    if (User::current ()->in_roles (array ('income_status')) && isset ($posts['status'])) {
+      if (!(is_string ($posts['status']) && is_numeric ($posts['status'] = trim ($posts['status'])) && ($posts['status'] = $posts['status'] ? Income::STATUS_2 : Income::STATUS_1) && in_array ($posts['status'], array_keys (Income::$statusNames)))) $posts['status'] = Income::STATUS_1;
+      $posts['date'] = $posts['status'] == Income::STATUS_2 ? date ('Y-m-d') : null;
+    }
+
     if (isset ($posts['invoice_date']) && !(is_string ($posts['invoice_date']) && is_date ($posts['invoice_date'] = trim ($posts['invoice_date'])))) $posts['invoice_date'] = NULL;
     if (isset ($posts['memo']) && !(is_string ($posts['memo']) && ($posts['memo'] = trim ($posts['memo'])))) $posts['memo'] = '';
 

@@ -62,11 +62,9 @@
         <tr>
           <td class='left'><?php echo $obj->name;?></td>
           <td><?php echo count ($obj->tags);?></td>
-          <td>
+          <td class='edit'>
             <a class='icon-list' href="<?php echo base_url ('admin', 'tag', $obj->id, 'work-tags');?>"></a>
-            /
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
-            /
             <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
           </td>
         </tr>

@@ -22,6 +22,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('income_items'), 'income_items');
   Route::resourcePagination (array ('incomes'), 'incomes');
   Route::resourcePagination (array ('outcomes'), 'outcomes');
+  Route::resourcePagination (array ('surplus'), 'surplus');
 
   Route::resourcePagination (array ('ftps'), 'ftps');
   Route::resourcePagination (array ('tasks'), 'tasks');

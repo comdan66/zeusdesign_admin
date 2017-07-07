@@ -59,12 +59,10 @@ $(function () {
           }))).append (
           $('<td />').text (t.money + '元')).append (
           $('<td />').text (t.close_date)).append (
-          $('<td />')
+          $('<td />').addClass ('edit')
             .append ($('<a />').addClass ('icon-eye').attr ('href', t.links.show))
-            .append (' / ')
-            .append (t.status ? $('<a />').addClass ('icon-bil').attr ('href', t.links.income) : null)
+            .append (t.status ? $('<a />').addClass ('icon-bil').attr ('href', t.links.income).attr ('target', '_blank') : null)
             .append (!t.status ? $('<a />').addClass ('icon-pencil2').attr ('href', t.links.edit) : null)
-            .append (!t.status ? ' / ' : null)
             .append (!t.status ? $('<a />').addClass ('icon-bin').attr ('href', t.links.delete).attr ('data-method', 'delete').click (function () {
               if (!confirm ('確定要刪除？')) return false;
             }) : null));

@@ -37,8 +37,12 @@ class Zb extends OaModel {
   public function percentage ($c = 4) {
     return floor ($this->percentage * ($t = pow (10, $c))) / $t;
   }
-  public function pay () {
-    $money = $this->income->tax_money () - round ($this->income->tax_money () * $this->income->zeus_rate ());
+  public function pay ($income = null) {
+    if ($income)
+      $money = $income->tax_money () - round ($income->tax_money () * $income->zeus_rate ());
+    else
+      $money = $this->income->tax_money () - round ($this->income->tax_money () * $this->income->zeus_rate ());
+
     return floor ($this->percentage () * $money);
   }
   public function destroy () {

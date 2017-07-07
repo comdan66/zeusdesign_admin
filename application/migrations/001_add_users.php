@@ -14,10 +14,10 @@ class Migration_Add_users extends CI_Migration {
 
         `fid` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Facebook UID',
         `account` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '帳號',
-        `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '密碼 md5(psd + acc)',
+        `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '密碼 password * len md5',
         `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '名稱',
         `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '電子郵件',
-        `token` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Access Token md5(fid+time())',
+        `token` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Access Token md5(fid\acc+time())',
         
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',

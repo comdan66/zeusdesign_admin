@@ -62,13 +62,10 @@ foreach ($objs as $obj) { ?>
                 <td width='140' data-before='統編：'><?php echo $obj->tax_no;?></td>
         <?php } ?>
 
-              <td class='mobile' width='120'>
+              <td class='mobile edit' width='120'>
                 <a class='icon-r' href="<?php echo base_url ('admin/company', $obj->id, 'pms', 'add');?>"></a>
-                /
                 <a class='icon-eye' href="<?php echo base_url ('admin/company', $obj->id, 'pms');?>"></a>
-                /
                 <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
-                /
                 <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
               </td>
             </tr>

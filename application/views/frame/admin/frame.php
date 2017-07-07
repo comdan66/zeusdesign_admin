@@ -46,67 +46,116 @@
         <span>管理系統</span>
       </header>
 
-      <div class='group'>
-        <span class='icon-u' data-cntrole='task' data-cnt='<?php echo ($task_cnt = Task::count (array ('joins' => 'LEFT JOIN (select user_id,task_id from task_user_mappings) as a ON(tasks.id = a.task_id)', 'conditions' => array ('status = ? AND a.user_id = ?', Task::STATUS_1, User::current ()->id))));?>'>個人管理</span>
-        <div>
-          <a class='icon-home<?php echo ($url = base_url ('admin', 'my', User::current ()->id)) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>個人頁面</a>
-          <a class='icon-calendar2<?php echo ($url = base_url ('admin', 'my-calendar')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的行事曆</a>
-          <a data-cntrole='task' data-cnt='<?php echo $task_cnt;?>' class='icon-shield<?php echo ($url = base_url ('admin', 'my-tasks')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的任務</a>
-          <a class='icon-moneybag<?php echo ($url = base_url ('admin', 'my-zbs')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的宙思幣</a>
+<?php if (User::current ()->in_roles (array ('member'))) { ?>
+        <div class='group'>
+          <span class='icon-u' data-cntrole='task' data-cnt='<?php echo ($task_cnt = Task::count (array ('joins' => 'LEFT JOIN (select user_id,task_id from task_user_mappings) as a ON(tasks.id = a.task_id)', 'conditions' => array ('status = ? AND a.user_id = ?', Task::STATUS_1, User::current ()->id))));?>'>個人管理</span>
+          <div>
+            <a class='icon-home<?php echo ($url = base_url ('admin', 'my', User::current ()->id)) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>個人頁面</a>
+            <a class='icon-calendar2<?php echo ($url = base_url ('admin', 'my-calendar')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的行事曆</a>
+            <a data-cntrole='task' data-cnt='<?php echo $task_cnt;?>' class='icon-shield<?php echo ($url = base_url ('admin', 'my-tasks')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的任務</a>
+            <a class='icon-moneybag<?php echo ($url = base_url ('admin', 'my-zbs')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>我的宙思幣</a>
+          </div>
         </div>
-      </div>
+<?php } ?>
 
-      <div class='group'>
-        <span class='icon-user-secret'>後台管理</span>
-        <div>
-          <a class='icon-ua<?php echo ($url = base_url ('admin', 'users')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>人員管理</a>
-          <a class='icon-em<?php echo ($url = base_url ('admin', 'mails')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>E-Mail 管理</a>
+<?php if (User::current ()->in_roles (array ('user', 'email'))) { ?>
+        <div class='group'>
+          <span class='icon-user-secret'>後台管理</span>
+          <div>
+      <?php if (User::current ()->in_roles (array ('user'))) { ?>
+              <a class='icon-ua<?php echo ($url = base_url ('admin', 'users')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>人員管理</a>
+      <?php }
+            if (User::current ()->in_roles (array ('email'))) { ?>
+              <a class='icon-em<?php echo ($url = base_url ('admin', 'mails')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>E-Mail 管理</a>
+      <?php } ?>
+          </div>
         </div>
-      </div>
+<?php } ?>
 
-      <div class='group'>
-        <span class='icon-ea' data-cntrole='contact' data-cnt='<?php echo ($contact_cnt = Contact::count (array ('conditions' => array ('status = ?', Contact::STATUS_1))));?>'>官網管理</span>
-        <div>
-          <a class='icon-im<?php echo ($url = base_url ('admin', 'banners')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>旗幟管理</a>
-          <a class='icon-im<?php echo ($url = base_url ('admin', 'promos')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>促銷管理</a>
-          <a data-cntrole='contact' data-cnt='<?php echo $contact_cnt;?>' class='icon-em<?php echo ($url = base_url ('admin', 'contacts')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>聯絡宙思</a>
-          <a class='icon-loop2<?php echo ($url = base_url ('admin', 'deploys')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>部署紀錄</a>
+<?php if (User::current ()->in_roles (array ('banner', 'promo', 'contact', 'deploy'))) { ?>
+        <div class='group'>
+          <span class='icon-ea' data-cntrole='contact' data-cnt='<?php echo ($contact_cnt = Contact::count (array ('conditions' => array ('status = ?', Contact::STATUS_1))));?>'>官網管理</span>
+          <div>
+      <?php if (User::current ()->in_roles (array ('banner'))) { ?>
+              <a class='icon-im<?php echo ($url = base_url ('admin', 'banners')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>旗幟管理</a>
+      <?php }
+            if (User::current ()->in_roles (array ('promo'))) { ?>
+              <a class='icon-im<?php echo ($url = base_url ('admin', 'promos')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>促銷管理</a>
+      <?php }
+            if (User::current ()->in_roles (array ('contact'))) { ?>
+              <a data-cntrole='contact' data-cnt='<?php echo $contact_cnt;?>' class='icon-em<?php echo ($url = base_url ('admin', 'contacts')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>聯絡宙思</a>
+      <?php }
+            if (User::current ()->in_roles (array ('deploy'))) { ?>
+              <a class='icon-loop2<?php echo ($url = base_url ('admin', 'deploys')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>部署紀錄</a>
+      <?php } ?>
+          </div>
         </div>
-      </div>
+<?php } ?>
 
-      <div class='group'>
-        <span class='icon-file-text2'>文章管理</span>
-        <div>
-          <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'article-tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>文章分類</a>
-          <a class='icon-list<?php echo ($url = base_url ('admin', 'articles')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>文章列表</a>
+<?php if (User::current ()->in_roles (array ('article_tag', 'article'))) { ?>
+        <div class='group'>
+          <span class='icon-file-text2'>文章管理</span>
+          <div>
+      <?php if (User::current ()->in_roles (array ('article_tag'))) { ?>
+              <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'article-tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>文章分類</a>
+      <?php }
+            if (User::current ()->in_roles (array ('article'))) { ?>
+              <a class='icon-list<?php echo ($url = base_url ('admin', 'articles')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>文章列表</a>
+      <?php } ?>
+          </div>
         </div>
-      </div>
+<?php } ?>
 
-      <div class='group'>
-        <span class='icon-g'>作品管理</span>
-        <div>
-          <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'work-tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>作品分類</a>
-          <a class='icon-list<?php echo ($url = base_url ('admin', 'works')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>作品列表</a>
+<?php if (User::current ()->in_roles (array ('work_tag', 'work'))) { ?>
+        <div class='group'>
+          <span class='icon-g'>作品管理</span>
+          <div>
+      <?php if (User::current ()->in_roles (array ('work_tag'))) { ?>
+              <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'work-tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>作品分類</a>
+      <?php }
+            if (User::current ()->in_roles (array ('work'))) { ?>
+              <a class='icon-list<?php echo ($url = base_url ('admin', 'works')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>作品列表</a>
+      <?php } ?>
+          </div>
         </div>
-      </div>
+<?php } ?>
 
-      <div class='group'>
-        <span class='icon-bil'>帳務管理</span>
-        <div>
-          <a class='icon-b<?php echo ($url = base_url ('admin', 'companies')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>配合廠商</a>
-          <a class='icon-ti<?php echo ($url = base_url ('admin', 'income-items')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>請款列表</a>
-          <a class='icon-ib<?php echo ($url = base_url ('admin', 'incomes')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>入帳列表</a>
-          <a class='icon-ob<?php echo ($url = base_url ('admin', 'outcomes')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>出帳列表</a>
+<?php if (User::current ()->in_roles (array ('company', 'income_item', 'income', 'outcome', 'surplus'))) { ?>
+        <div class='group'>
+          <span class='icon-bil'>帳務管理</span>
+          <div>
+      <?php if (User::current ()->in_roles (array ('company'))) { ?>
+              <a class='icon-b<?php echo ($url = base_url ('admin', 'companies')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>配合廠商</a>
+      <?php }
+            if (User::current ()->in_roles (array ('income_item'))) { ?>
+              <a class='icon-ti<?php echo ($url = base_url ('admin', 'income-items')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>請款列表</a>
+      <?php }
+            if (User::current ()->in_roles (array ('income'))) { ?>
+              <a class='icon-ib<?php echo ($url = base_url ('admin', 'incomes')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>入帳列表</a>
+      <?php }
+            if (User::current ()->in_roles (array ('outcome'))) { ?>
+              <a class='icon-ob<?php echo ($url = base_url ('admin', 'outcomes')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>出帳列表</a>
+      <?php }
+            if (User::current ()->in_roles (array ('surplus'))) { ?>
+              <a class='icon-moneybag<?php echo ($url = base_url ('admin', 'surplus')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>宙思盈餘</a>
+      <?php } ?>
+          </div>
         </div>
-      </div>
+<?php } ?>
 
-      <div class='group'>
-        <span class='icon-fs'>專案管理</span>
-        <div>
-          <a class='icon-sev<?php echo ($url = base_url ('admin', 'ftps')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>FTP 資料</a>
-          <a class='icon-shield<?php echo ($url = base_url ('admin', 'tasks')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>任務列表</a>
+<?php if (User::current ()->in_roles (array ('ftp', 'task'))) { ?>
+        <div class='group'>
+          <span class='icon-fs'>專案管理</span>
+          <div>
+      <?php if (User::current ()->in_roles (array ('ftp'))) { ?>
+              <a class='icon-sev<?php echo ($url = base_url ('admin', 'ftps')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>FTP 資料</a>
+      <?php }
+            if (User::current ()->in_roles (array ('task'))) { ?>
+              <a class='icon-shield<?php echo ($url = base_url ('admin', 'tasks')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>任務列表</a>
+      <?php } ?>
+          </div>
         </div>
-      </div>
+<?php } ?>
 
       <footer>© <?php echo date ('Y');?> zeusdesign.com.tw</footer>
     </div><label class='icon-cross' for='menu_ckb'></label>

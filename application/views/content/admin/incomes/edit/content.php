@@ -50,13 +50,15 @@
       <input type='number' name='money' value='<?php echo isset ($posts['money']) ? $posts['money'] : $obj->money;?>' placeholder='請輸入總金額..' maxlength='200' pattern='.{1,200}' required title='輸入總金額標題!' <?php echo $obj->items ? 'readonly' : 'autofocus';?> />
     </div>
 
-    <div class='row min'>
-      <b class='need'>是否入帳</b>
-      <label class='switch'>
-        <input type='checkbox' name='status'<?php echo (isset ($posts['status']) ? $posts['status'] : $obj->status) == Income::STATUS_2 ? ' checked' : '';?> value='<?php echo Income::STATUS_2;?>' />
-        <span></span>
-      </label>
-    </div>
+<?php if (User::current ()->in_roles (array ('income_status'))) { ?>
+        <div class='row min'>
+          <b class='need'>是否入帳</b>
+          <label class='switch'>
+            <input type='checkbox' name='status'<?php echo (isset ($posts['status']) ? $posts['status'] : $obj->status) == Income::STATUS_2 ? ' checked' : '';?> value='<?php echo Income::STATUS_2;?>' />
+            <span></span>
+          </label>
+        </div>
+<?php } ?>
 
     <div class='row'>
       <b data-title='若有勾選開發票，請填寫發票日期。'>發票日期</b>

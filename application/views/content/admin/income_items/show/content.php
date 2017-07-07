@@ -5,7 +5,6 @@
 
   <?php
   if (!$obj->hasIncome ()) { ?>
-
     <a class='icon-bin' href='<?php echo base_url ($uri_1, $obj->id);?>' data-method='delete'>刪除</a>
     <a class='icon-pencil2' href='<?php echo base_url ($uri_1, $obj->id, 'edit');?>'>編輯</a>
   <?php

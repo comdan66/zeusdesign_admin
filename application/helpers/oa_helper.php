@@ -184,6 +184,14 @@ if (!function_exists ('conditions')) {
     return $modelName::find ('all', $options);
   }
 }
+if (!function_exists ('password')) {
+  function password ($pwd = '') {
+    for ($i = 0; $i < strlen ($pwd); $i ++)
+      $pwd = md5 ($pwd);
+
+    return md5 ($pwd);
+  }
+}
 if (!function_exists ('token')) {
   function token ($id = '') {
     return md5 (($id ? $id . '_' : '') . uniqid (rand () . '_'));

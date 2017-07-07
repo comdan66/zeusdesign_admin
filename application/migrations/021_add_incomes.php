@@ -17,6 +17,7 @@ class Migration_Add_incomes extends CI_Migration {
         `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
         `memo` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '備註',
         `money` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '總金額',
+        `date` date DEFAULT NULL COMMENT '入帳時間',
         
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',

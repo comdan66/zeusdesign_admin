@@ -78,9 +78,8 @@
           <td><?php echo $obj->user_mappings ? implode ('', array_map (function ($mapping) {
             return '<div class="row">' . User::idAll ()[$mapping->user_id]->name . '</div>';
           }, $obj->user_mappings)) : '';?></td>
-          <td>
+          <td class='edit'>
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
-            /
             <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
           </td>
         </tr>

@@ -104,11 +104,9 @@
             return '<div class="row">' . $t . '</div>';
           }));?></td>
           <td><?php echo $obj->memo;?></td>
-          <td>
+          <td class='edit'>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $parent->id,  $uri_2, $obj->id, 'show');?>"></a>
-            /
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $parent->id,  $uri_2, $obj->id, 'edit');?>"></a>
-            /
             <a class='icon-bin' href="<?php echo base_url ($uri_1, $parent->id,  $uri_2, $obj->id);?>" data-method='delete'></a>
           </td>
         </tr>

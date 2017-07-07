@@ -32,7 +32,7 @@
 
     <div class='row'>
       <b><?php echo $title;?>日期</b>
-      <span><?php echo $obj->date->format ('Y-m-d');?></span>
+      <span><?php echo $obj->date ? $obj->date->format ('Y-m-d') : '';?></span>
     </div>
 
     <div class='row'>

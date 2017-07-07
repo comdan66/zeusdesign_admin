@@ -1,7 +1,7 @@
 <h1<?php echo isset ($icon) && $icon ? ' class="' . $icon . '"' : '';?>><?php echo $title;?>列表</h1>
 
 <div class='search'>
-  <input type='checkbox' id='search_conditions' class='hckb' />
+  <input type='checkbox' id='search_conditions' class='hckb' checked />
   
   <div class='left'>
     <label class='icon-search' for='search_conditions'></label>
@@ -24,7 +24,7 @@
     <div class='checkboxs' title='依照負責人搜尋'>
 <?php foreach (User::all () as $user) { ?>
         <label class='checkbox'>
-          <input type='checkbox' name='user_ids' value='<?php echo $user->id;?>'>
+          <input type='checkbox' name='user_ids' value='<?php echo $user->id;?>'<?php echo User::current ()->id == $user->id ? ' checked' : '';?>>
           <span></span>
           <?php echo $user->name;?>
         </label>
@@ -43,7 +43,6 @@
 
     <div class='btns'>
       <button type='submit' data-url='<?php echo base_url ('admin', 'income_items', 'ajax');?>'>搜尋</button>
-      <a href='<?php echo base_url ($uri_1);?>'>取消</a>
     </div>
   </div>
 </div>

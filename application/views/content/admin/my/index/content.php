@@ -79,7 +79,7 @@
     
     <div class='list<?php echo !$tasks ? ' e' : '';?>' data-e='今日沒有任何任務。'>
 <?php foreach ($tasks as $task) { ?>
-        <a href='<?php echo base_url ('admin', 'my-tasks');?>'>
+        <a<?php echo $self ? " href='" . base_url ('admin', 'my-tasks') . "'" : '' ?>>
           <i class='icon-shield'></i>
           <span data-sub='<?php echo $task->mini_content (50);?>'><?php echo $task->title;?></span>
         </a>

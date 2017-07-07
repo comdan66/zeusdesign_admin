@@ -56,8 +56,8 @@
         <th width='90'>有無發票</th>
         <th >標題<?php echo listSort ($uri_1, 'title');?></th>
         <th width='100'>金額<?php echo listSort ($uri_1, 'money');?></th>
-        <th width='70'>備註</th>
-        <th width='90'>日期</th>
+        <th width='100'>備註</th>
+        <th width='90'>新增日期</th>
         <th width='90'>編輯</th>
       </tr>
     </thead>
@@ -72,12 +72,10 @@
           <td><?php echo $obj->title;?></td>
           <td><?php echo number_format ($obj->money);?>元</td>
           <td><?php echo $obj->memo;?></td>
-          <td><?php echo $obj->date->format ('Y-m-d');?></td>
-          <td>
+          <td><?php echo $obj->created_at->format ('Y-m-d');?></td>
+          <td class='edit'>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
-            /
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
-            /
             <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
           </td>
         </tr>

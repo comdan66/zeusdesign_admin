@@ -15,7 +15,7 @@ class Users extends Admin_controller {
   public function __construct () {
     parent::__construct ();
     
-    if (!User::current ()->in_roles (array ('admin')))
+    if (!User::current ()->in_roles (array ('user')))
       return redirect_message (array ('admin'), array ('_fd' => '您的權限不足，或者頁面不存在。'));
     
     $this->uri_1 = 'admin/users';
@@ -114,7 +114,7 @@ class Users extends Admin_controller {
     if (isset ($posts['phone']) && !(is_string ($posts['phone']) && ($posts['phone'] = trim ($posts['phone'])))) $posts['phone'] = '';
     
     $posts['keys'] = isset ($posts['keys']) && is_array ($posts['keys']) && ($posts['keys'] = array_filter ($posts['keys'], function ($k) {
-            return Cfg::setting ('role', 'role_names', $k);
+            return Cfg::setting ('role', 'role_names', $k, 'name');
         })) ? $posts['keys'] : array ();
     return '';
   }
