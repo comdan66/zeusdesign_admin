@@ -221,7 +221,7 @@ class My_calendar extends Admin_controller {
       'data-api_update' => base_url ('admin', 'my-calendar', '%d'),
       'data-api_create' => base_url ('admin', 'my-calendar'),
       'data-api_task' => base_url ('admin', 'my_calendar', 'task', '%d'),
-      'data-tags' => json_encode (array_map (function ($user) { return array ('id' => $user->id, 'name' => $user->name, 'color' => $user->color); }, ScheduleTag::all (array ('select' => 'id, name, color')))),
+      'data-tags' => json_encode (array_map (function ($user) { return array ('id' => $user->id, 'name' => $user->name, 'color' => $user->color); }, ScheduleTag::all (array ('select' => 'id, name, color', 'conditions' => array ('user_id = ?', User::current ()->id))))),
       'data-users' => json_encode (array_map (function ($user) { return array ('id' => $user->id, 'name' => $user->name); }, User::all (array ('select' => 'id, name', 'conditions' => array ('id != ?', User::current ()->id))))),
       ))->load_view ();
   }
