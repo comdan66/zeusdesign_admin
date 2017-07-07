@@ -13,6 +13,18 @@ class Platform extends Site_controller {
     $this->load->library ('fb');
   }
 
+  public function mail ($token = '') {
+    if (!$mail = Mail::find ('one', array ('select' => 'id, uri, cnt_open, updated_at', 'conditions' => array ('token = ?', $token))))
+      return redirect_message (array ('login'), array ('_fd' => ''));
+
+    $mail->cnt_open = $mail->cnt_open + 1;
+    $mail->save ();
+
+    if (User::current () && User::current ()->is_login ()) 
+      return redirect_message (explode ('/', $mail->uri), array ('_fd' => ''));
+
+    return redirect (forward_static_call_array (array ('Fb', 'loginUrl'), array_merge (array ('platform', 'fb_sign_in'), explode ('/', $mail->uri))));
+  }
   public function login () {
     if (User::current () && User::current ()->is_login ()) return redirect_message (array ('admin'), array ());
     else $this->set_frame_path ('frame', 'pure')
@@ -54,6 +66,7 @@ class Platform extends Site_controller {
     Session::setData ('user_token', $user->token);
     return redirect_message (func_get_args (), array ('_fi' => '使用 Facebook 登入成功!'));
   }
+  
   public function fb_sign_in () {
     if (!(Fb::login () && ($me = Fb::me ()) && ((isset ($me['name']) && ($name = $me['name'])) && (isset ($me['email']) && ($email = $me['email'])) && (isset ($me['id']) && ($fid = $me['id'])))))
       return redirect_message (array ('login'), array ('_fd' => 'Facebook 登入錯誤，請通知程式設計人員!(1)'));
