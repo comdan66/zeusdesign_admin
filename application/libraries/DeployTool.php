@@ -236,16 +236,7 @@ exit ();
     };
   }
   public static function callBuild ($obj) {
-    $url = Cfg::setting ('deploy', 'build', ENVIRONMENT) . '?' . http_build_query (array (
-          'env' => ENVIRONMENT,
-          'psw' => Cfg::setting ('deploy', 'psw', ENVIRONMENT)
-        ));
-
-    return self::crud (array (
-        'url' => 'http://dev.www.zeusdesign.com.tw/cmd/build.php',
-        'data' => array (
-          )
-      ), $obj);
+    return self::crud (Cfg::setting ('deploy', ENVIRONMENT), $obj);
   }
   public static function callUpload ($obj) {
     $url = Cfg::setting ('deploy', 'upload', ENVIRONMENT) . '?' . http_build_query (array (
