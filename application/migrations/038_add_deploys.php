@@ -6,14 +6,17 @@
  * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
-class Migration_Add_ckeditor_images extends CI_Migration {
+class Migration_Add_deploys extends CI_Migration {
   public function up () {
     $this->db->query (
-      "CREATE TABLE `ckeditor_images` (
+      "CREATE TABLE `deploys` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-        `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'User ID(作者)',
-        `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT '名稱',
-        `pv` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'Page View',
+        `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'User ID(操作者)',
+        
+        `type` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '類型，1 build，2 upload(rebuild and upload to s3)',
+        `status` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '是否成功，1 失敗，2 成功',
+        `error` text COMMENT '錯誤訊息',
+
         `updated_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '更新時間',
         `created_at` datetime NOT NULL DEFAULT '" . date ('Y-m-d H:i:s') . "' COMMENT '新增時間',
         PRIMARY KEY (`id`)
@@ -22,7 +25,7 @@ class Migration_Add_ckeditor_images extends CI_Migration {
   }
   public function down () {
     $this->db->query (
-      "DROP TABLE `ckeditor_images`;"
+      "DROP TABLE `deploys`;"
     );
   }
 }

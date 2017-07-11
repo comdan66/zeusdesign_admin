@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined ('BASEPATH')) exit ('No direct script access allowed');
 
 /**
  * @author      OA Wu <comdan66@gmail.com>
@@ -8,6 +8,11 @@
 
 class Main extends Site_controller {
 
+  public function x () {
+    $this->load->library ('DeployTool');
+    $obj = null;
+    DeployTool::callBuild ($obj);
+  }
   public function index () {
     $this->load_view ();
   }

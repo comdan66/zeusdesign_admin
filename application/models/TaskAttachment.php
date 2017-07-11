@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined ('BASEPATH')) exit ('No direct script access allowed');
 
 /**
  * @author      OA Wu <comdan66@gmail.com>
@@ -54,7 +54,7 @@ class TaskAttachment extends OaModel {
       'id'         => $this->id,
       'task_id'    => $this->task_id,
       'title'      => $this->title,
-      'file'       => $this->file,
+      'file'       => (string)$this->file ? (string)$this->file : '',
       'size'       => $this->size,
       'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',

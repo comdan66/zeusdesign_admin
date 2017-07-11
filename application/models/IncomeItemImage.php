@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined ('BASEPATH')) exit ('No direct script access allowed');
 
 /**
  * @author      OA Wu <comdan66@gmail.com>
@@ -33,7 +33,7 @@ class IncomeItemImage extends OaModel {
     $var = array (
       'id'             => $this->id,
       'income_item_id' => $this->income_item_id,
-      'name'           => $this->name,
+      'name'           => (string)$this->name ? (string)$this->name : '',
       'updated_at'     => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at'     => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
     );

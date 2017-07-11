@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined ('BASEPATH')) exit ('No direct script access allowed');
 
 /**
  * @author      OA Wu <comdan66@gmail.com>
@@ -61,7 +61,7 @@ class TaskCommit extends OaModel {
       'user_id'    => $this->user_id,
       'action'     => $this->action,
       'content'    => $this->content,
-      'file'       => $this->file,
+      'file'       => (string)$this->file ? (string)$this->file : '',
       'size'       => $this->size,
       'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
       'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
