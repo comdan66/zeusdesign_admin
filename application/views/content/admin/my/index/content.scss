@@ -443,14 +443,14 @@ span.title {
         }
       }
     }
-    &:nth-last-child(-n+3) { > div span { left: auto; &:before { left: auto; } } }
-    &:nth-last-child(3) { > div span { right: -40px; &:before { right: 50px; } } }
-    &:nth-last-child(2) { > div span { right: -20px; &:before { right: 30px; } } }
-    &:nth-last-child(1) { > div span { right: 0; &:before { right: 10px; } } }
+    &:nth-last-child(-n+3) { > a span { left: auto; &:before { left: auto; } } }
+    &:nth-last-child(3) { > a span { right: -40px; &:before { right: 50px; } } }
+    &:nth-last-child(2) { > a span { right: -20px; &:before { right: 30px; } } }
+    &:nth-last-child(1) { > a span { right: 0; &:before { right: 10px; } } }
 
-    &:nth-child(3) { > div span { left: -40px; &:before { left: 50px; } } }
-    &:nth-child(2) { > div span { left: -20px; &:before { left: 30px; } } }
-    &:nth-child(1) { > div span { left: 0; &:before { left: 10px; } } }
+    &:nth-child(3) { > a span { left: -40px; &:before { left: 50px; } } }
+    &:nth-child(2) { > a span { left: -20px; &:before { left: 30px; } } }
+    &:nth-child(1) { > a span { left: 0; &:before { left: 10px; } } }
   }
 
   .s4:before { color: rgba(255, 255, 255, .5) !important; background-color: rgba(22, 67, 31, 1.00) !important; }
@@ -495,9 +495,9 @@ span.title {
       &:nth-last-child(n + 12) {
         display: none;
       }
-      &:nth-last-child(9) { > div span { left: -40px; &:before { left: 50px; } } }
-      &:nth-last-child(10) { > div span { left: -20px; &:before { left: 30px; } } }
-      &:nth-last-child(11) { > div span { left: 0; &:before { left: 10px; } } }
+      &:nth-last-child(9) { > a span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(10) { > a span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(11) { > a span { left: 0; &:before { left: 10px; } } }
     }
   }
   @include range-width(550px, 1000px) {
@@ -506,9 +506,9 @@ span.title {
       &:nth-last-child(n + 16) {
         display: none;
       }
-      &:nth-last-child(13) { > div span { left: -40px; &:before { left: 50px; } } }
-      &:nth-last-child(14) { > div span { left: -20px; &:before { left: 30px; } } }
-      &:nth-last-child(15) { > div span { left: 0; &:before { left: 10px; } } }
+      &:nth-last-child(13) { > a span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(14) { > a span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(15) { > a span { left: 0; &:before { left: 10px; } } }
     }
   }
   @include range-width(1000px, 1300px) {
@@ -517,9 +517,9 @@ span.title {
       &:nth-last-child(n + 22) {
         display: none;
       }
-      &:nth-last-child(19) { > div span { left: -40px; &:before { left: 50px; } } }
-      &:nth-last-child(20) { > div span { left: -20px; &:before { left: 30px; } } }
-      &:nth-last-child(21) { > div span { left: 0; &:before { left: 10px; } } }
+      &:nth-last-child(19) { > a span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(20) { > a span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(21) { > a span { left: 0; &:before { left: 10px; } } }
     }
   }
   @include range-width(1300px, 1500px) {
@@ -529,9 +529,9 @@ span.title {
         display: none;
       }
 
-      &:nth-last-child(26) { > div span { left: -40px; &:before { left: 50px; } } }
-      &:nth-last-child(27) { > div span { left: -20px; &:before { left: 30px; } } }
-      &:nth-last-child(28) { > div span { left: 0; &:before { left: 10px; } } }
+      &:nth-last-child(26) { > a span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(27) { > a span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(28) { > a span { left: 0; &:before { left: 10px; } } }
     }
   }
   @include range-width(1500px, 1750px) {
@@ -541,9 +541,9 @@ span.title {
         display: none;
       }
 
-      &:nth-last-child(40) { > div span { left: -40px; &:before { left: 50px; } } }
-      &:nth-last-child(41) { > div span { left: -20px; &:before { left: 30px; } } }
-      &:nth-last-child(42) { > div span { left: 0; &:before { left: 10px; } } }
+      &:nth-last-child(40) { > a span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(41) { > a span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(42) { > a span { left: 0; &:before { left: 10px; } } }
     }
   }
 }
