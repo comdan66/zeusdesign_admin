@@ -79,8 +79,10 @@ class User extends OaModel {
       array_push ($size, isset ($w) && $w ? 'width=' . $w : ''); array_push ($size, isset ($h) && $h ? 'height=' . $h : '');
       return 'https://graph.facebook.com/' . $this->fid . '/picture' . (($size = implode ('&', array_filter ($size))) ? '?' . $size : '');
     }
-
     return res_url ('res', 'image', 'avatar.png');
+  }
+  public function url () {
+    return ($url = $this->facebook_link ()) ? $url : 'https://www.zeusdesign.com.tw/';
   }
   public function backup ($has = false) {
     $var = array (

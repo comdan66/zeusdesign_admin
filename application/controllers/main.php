@@ -8,11 +8,6 @@
 
 class Main extends Site_controller {
 
-  public function x () {
-    $this->load->library ('DeployTool');
-    $obj = null;
-    DeployTool::callBuild ($obj);
-  }
   public function index () {
     $this->load_view ();
   }

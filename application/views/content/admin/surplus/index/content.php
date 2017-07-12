@@ -35,10 +35,10 @@
           <tr style='font-weight: bold;'>
             <td>總和</td>
             <td> </td>
-            <td style='color: <?php echo $all < 0 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>'><?php echo number_format ($all);?>元</td>
-            <td style='color: <?php echo $zeus < 0 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>'><?php echo number_format ($zeus);?>元</td>
-            <td style='color: <?php echo $out < 0 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>'><?php echo number_format ($out);?>元</td>
-            <td style='color: <?php echo $sur < 0 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>'><?php echo number_format ($sur);?>元</td>
+            <td style='color: <?php echo $all < 0 ? 'rgba(234, 67, 53, 1.00)' : 'rgba(52, 168, 83, 1.00)';?>'><?php echo number_format ($all);?>元</td>
+            <td style='color: <?php echo $zeus < 0 ? 'rgba(234, 67, 53, 1.00)' : 'rgba(52, 168, 83, 1.00)';?>'><?php echo number_format ($zeus);?>元</td>
+            <td style='color: <?php echo $out < 0 ? 'rgba(234, 67, 53, 1.00)' : 'rgba(52, 168, 83, 1.00)';?>'><?php echo number_format ($out);?>元</td>
+            <td style='color: <?php echo $sur < 0 ? 'rgba(234, 67, 53, 1.00)' : 'rgba(52, 168, 83, 1.00)';?>'><?php echo number_format ($sur);?>元</td>
           </tr>
         </tbody>
       </table>

@@ -16,7 +16,7 @@ class WorkTag extends OaModel {
   static $has_many = array (
     array ('mappings', 'class_name' => 'WorkTagMapping'),
     array ('works', 'class_name' => 'Work', 'through' => 'mappings'),
-    array ('tags', 'class_name' => 'WorkTag', 'order' => 'sort ASC')
+    array ('tags', 'class_name' => 'WorkTag', 'order' => 'sort DESC')
   );
 
   static $belongs_to = array (

@@ -9,7 +9,7 @@
 
     <div class='row'>
       <b>狀態</b>
-      <span style='color: <?php echo $obj->status == Mail::STATUS_1 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>;'><?php echo Mail::$statusNames[$obj->status];?></span>
+      <span style='color: <?php echo $obj->status == Mail::STATUS_1 ? 'rgba(234, 67, 53, 1.00)' : 'rgba(52, 168, 83, 1.00)';?>;'><?php echo Mail::$statusNames[$obj->status];?></span>
     </div>
 
     <div class='row'>
@@ -52,7 +52,7 @@
 
     <div class='row'>
       <b>點閱率</b>
-      <span<?php echo ($t = round (100 * ($obj->cnt_send ? $obj->cnt_open / $obj->cnt_send : 0))) == 100 ? ' style="color: rgba(52, 168, 83, 1.00);"': ($t ? '' : ' style="color: rgba(234, 67, 53, 1.00);font-weight: bold;"');?>><?php echo round (100 * ($obj->cnt_send ? $obj->cnt_open / $obj->cnt_send : 0));?>%</span>
+      <span<?php echo ($t = round (100 * ($obj->cnt_send ? $obj->cnt_open / $obj->cnt_send : 0))) == 100 ? ' style="color: rgba(52, 168, 83, 1.00);"' : ($t ? '' : ' style="color: rgba(234, 67, 53, 1.00);font-weight: bold;"');?>><?php echo round (100 * ($obj->cnt_send ? $obj->cnt_open / $obj->cnt_send : 0));?>%</span>
     </div>
 
   </div>

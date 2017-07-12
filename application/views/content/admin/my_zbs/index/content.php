@@ -74,7 +74,7 @@
           <td><?php echo number_format ($obj->money);?>元</td>
           <td><?php echo number_format ($obj->pay ());?>元</td>
           <td><?php echo $obj->income->has_tax () ? '有開' : '沒開';?>發票</td>
-          <td style='color: <?php echo $obj->status == Zb::STATUS_1 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>;'><?php echo Zb::$statusNames[$obj->status];?></td>
+          <td style='color: <?php echo $obj->status == Zb::STATUS_1 ? 'rgba(234, 67, 53, 1.00)' : 'rgba(52, 168, 83, 1.00)';?>;'><?php echo Zb::$statusNames[$obj->status];?></td>
           <td>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
           </td>

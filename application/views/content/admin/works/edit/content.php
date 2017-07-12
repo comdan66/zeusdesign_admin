@@ -17,14 +17,14 @@
       <select name='user_id' autofocus >
   <?php if ($users = User::all (array ('select' => 'id, name'))) {
           foreach ($users as $user) { ?>
-            <option value='<?php echo $user->id;?>'<?php echo (isset ($posts['user_id']) ? $posts['user_id'] : $obj->user_id) == $user->id ? ' selected': '';?>><?php echo $user->name;?></option>
+            <option value='<?php echo $user->id;?>'<?php echo (isset ($posts['user_id']) ? $posts['user_id'] : $obj->user_id) == $user->id ? ' selected' : '';?>><?php echo $user->name;?></option>
     <?php }
         }?>
       </select>
     </div>
 
 <?php
-    if ($tags = WorkTag::find ('all', array ('include' => array ('tags'), 'conditions' => array ('work_tag_id = ?', 0)))) { ?>
+    if ($tags = WorkTag::find ('all', array ('include' => array ('tags'), 'order' => 'sort DESC', 'conditions' => array ('work_tag_id = ?', 0)))) { ?>
       <div class='row'>
         <b><?php echo $title;?>分類</b>
         <div class='tags2d'>

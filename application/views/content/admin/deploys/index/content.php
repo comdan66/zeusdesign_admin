@@ -9,6 +9,7 @@
   </div>
 
   <div class='right'>
+    <a class='icon-r' href='<?php echo base_url ($uri_1, 'add');?>'>新增</a>
   </div>
 
   <form class='conditions'>
@@ -47,28 +48,23 @@
 </div>
 
 <div class='panel'>
-  <table class='table-list'>
+  <table class='table-list w1200'>
     <thead>
       <tr>
-        <th width='70'>狀態</th>
-        <th >標題<?php echo listSort ($uri_1, 'title');?></th>
-        <th width='180'>跳址</th>
-        <th width='80'>開啟率</th>
-        <th width='80'>點擊數<?php echo listSort ($uri_1, 'cnt_open');?></th>
-        <th width='80'>發送數<?php echo listSort ($uri_1, 'cnt_send');?></th>
+        <th width='100'>類型</th>
+        <th class='center' width='100'>是否完成</th>
+        <th class='center' width='150'>操作者</th>
+        <th class='left'>概略內容</th>
         <th width='50'>檢視</th>
       </tr>
     </thead>
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
-          
-          <td style='color: <?php echo $obj->status == Mail::STATUS_1 ? 'rgba(234, 67, 53, 1.00)' : 'rgba(52, 168, 83, 1.00)';?>;'><?php echo Mail::$statusNames[$obj->status];?></td>
-          <td><?php echo $obj->title;?></td>
-          <td><?php echo $obj->uri;?></td>
-          <td<?php echo ($t = round (100 * ($obj->cnt_send ? $obj->cnt_open / $obj->cnt_send : 0))) >= 100 ? ' style="color: rgba(52, 168, 83, 1.00);"' : ($t ? '' : ' style="color: rgba(234, 67, 53, 1.00);font-weight: bold;"');?>><?php echo $t;?>%</td>
-          <td><?php echo $obj->cnt_open;?></td>
-          <td><?php echo $obj->cnt_send;?></td>
+          <td><?php echo Deploy::$typeNames[$obj->type];?></td>
+          <td class='center' style='color: <?php echo $obj->status == Deploy::STATUS_2 ? 'rgba(34, 164, 136, 1.00)' : 'rgba(195, 55, 42, 1.00)';?>;'><?php echo Deploy::$statusNames[$obj->status];?></td>
+          <td class='center'><?php echo $obj->user->name;?></td>
+          <td class='left'><?php echo $obj->res ('message');?></td>
           <td>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
           </td>

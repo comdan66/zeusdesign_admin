@@ -1,0 +1,547 @@
+/**
+ * @author      OA Wu <comdan66@gmail.com>
+ * @copyright   Copyright (c) 2017 OA Wu Design
+ * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
+ */
+
+@import "_oa";
+
+h2, .info {
+  padding: 0 8px;
+  @include range-width(0, 450px) {
+    padding: 0 16px;
+    width: calc(100% + 8px * 2) !important;
+    margin-left: -8px !important;
+  }
+}
+.info {
+  display: inline-block;
+  width: 100%;
+  // height: 25px;
+  line-height: 25px;
+  font-size: 14px;
+  margin-top: 8px;
+
+  time {
+    font-weight: bold;
+  }
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(222, 222, 222, 1);
+}
+.box {
+  display: inline-block;
+  width: 100%;
+  padding: 32px 8px;
+  @include clearfix();
+  
+  > div {
+    display: inline-block;
+    float: left;
+    @include range-width(0, 900px) {
+      width: 100%;
+      + div {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px dashed rgba(220, 220, 220, 1);
+      }
+    }
+    @include range-width(900px, 1200px) {
+      width: calc(100% / 2);
+      &:nth-child(1), &:nth-child(2) {
+        height: 75px;
+      }
+      &:nth-child(3) {
+        margin-top: 20px;
+      }
+    };
+    @include range-width(1200px) {
+      width: calc(100% / 3);
+    };
+    h3 {
+      display: inline-block;
+      width: 100%;
+      font-size: 16px;
+      margin-top: 0;
+    }
+  }
+
+  .colors {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    padding-top: 5px;
+    overflow: hidden;
+    @include clearfix();
+    + span {
+      margin-top: 5px;
+      display: inline-block;
+      margin-left: 5px;
+    }
+    span {
+      float: left;
+      display: inline-block;
+      // width: calc(100% / 5);
+      height: 20px;
+      border-top: 1px solid rgba(0, 0, 0, .3);
+      border-bottom: 1px solid rgba(0, 0, 0, .3);
+      border-left: 1px solid rgba(0, 0, 0, .3);
+      
+
+      &:nth-child(1) {
+        @include border-left-radius(3px);
+      }
+      &:nth-last-child(2) {
+        border-right: 1px solid rgba(0, 0, 0, .3);
+        @include border-right-radius(3px);
+      }
+
+
+      &:last-child {
+        border: 0;
+        position: absolute;
+        left: 0;
+        top: 5px;
+        float: none;
+        @include opacity(1);
+        @include transition(left .5s);
+        
+        &:after {
+          position: absolute;
+          bottom: -3px;
+          left: calc(50% - 15px / 2);
+          display: inline-block;
+          width: 15px;
+          height: 15px;
+          font-size: 17px;
+          content: '▲';
+        }
+        &:before {
+          position: absolute;
+          top: -10px;
+          left: calc(50% - 15px / 2);
+          display: inline-block;
+          width: 15px;
+          height: 15px;
+          font-size: 17px;
+          content: '▼';
+        }
+      }
+    }
+  }
+
+  .date {
+    display: inline-block;
+    width: 100%;
+    height: 23px;
+    line-height: 23px;
+    font-size: 16px;
+
+    .yesterday, .today, .tomorrow {
+      display: inline-block;
+      font-size: 13px;
+    }
+
+    .yesterday {
+      color: rgba(234, 67, 53, 1.00);
+    }
+    .today {
+      color: rgba(66, 133, 244, 1.00);
+    }
+    .tomorrow {
+      color: rgba(52, 168, 83, 1.00);
+    }
+  }
+  .users {
+    display: inline-block;
+    width: 100%;
+    margin-top: -8px;
+
+    @include clearfix();
+    > .user {
+      float: left;
+      margin-top: 8px;
+      margin-right: 8px;
+    }
+  }
+}
+
+.user {
+  display: inline-block;
+  position: relative;
+  height: 22px;
+  line-height: 22px;
+  
+  img {
+    position: absolute;
+    left: 0;
+    top: -1px;
+    width: 22px + 2px;
+    height: 22px + 2px;
+    margin-left: -1px;
+    border: 1px solid rgba(255, 255, 255, 1.00);
+    @include border-radius(50%);
+  }
+  span {
+    display: inline-block;
+    margin-left: (22px + 2px) / 2;
+    padding-left: (22px + 2px) / 2 + 4px;
+    padding-right: 10px;
+    height: 22px;
+    line-height: 22px - 2px;
+    border: 1px solid rgba(0, 0, 0, .10);
+    border-left: 0;
+    font-size: 14px;
+    background-color: rgba(195, 230, 230, 1.00);
+    @include border-right-radius(22px / 2)
+  }
+}
+article {
+  padding: 0 32px;  
+  @include range-width(0, 450px) {
+    padding: 0 8px;
+  }
+  &:empty {
+    padding-left: 8px;
+    &:before {
+      content: '目前無內容。';
+      color: rgba(180, 180, 180, 1);
+      display: inline-block;
+      width: 100%;
+      margin-top: 32px;
+      margin-bottom: 32px;
+      font-size: 20px;
+    }
+  }
+}
+.attachments {
+  margin-top: 16px;
+  padding-bottom: 8px;
+  display: inline-block;
+  @include clearfix();
+
+  a {
+    float: left;
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    margin: 5px 10px;
+    overflow: visible;
+    cursor: pointer;
+    width: 75px + 2px + 10px * 2;
+    height: 120px + 2px + 10px;
+    padding: 0 10px;
+    padding-top: 10px;
+    border: 1px dashed rgba(39, 40, 34, .3);
+    background-color: rgba(247, 247, 247, 1.00);
+    @include border-radius(3px);
+    @include transition(background-color .3s);
+    
+    &:hover {
+      background-color: rgba(247 * 0.95, 247 * 0.95, 247 * 0.95, 1.00);
+    }
+    img {
+      height: calc(100% - 20px - 1px);
+    }
+
+    figcaption {
+      position: absolute;
+      left: 10px;
+      bottom: 20px;
+      display: inline-block;
+      width: calc(100% - 10px * 2);
+      padding: 5px;
+      @include opacity(.5);
+      background-color: rgba(39, 40, 34, 1.00);
+      font-size: 10px;
+      color: rgba(255, 255, 255, 1.00);
+      @include border-bottom-radius(6px);
+      @include overflow-docx3();
+    }
+    div {
+      margin-top: 4px;
+      display: inline-block;
+      text-align: center;
+      font-size: 10px;
+      width: 100%;
+      color: rgba(39, 40, 34, 1.00);
+      @include overflow-docx3();
+    }
+  }
+}
+
+.commit-form {
+  .commit {
+    @include clearfix();
+    
+    img {
+      float: left;
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      margin-right: 8px;
+      @include border-radius(50%);
+    }
+    button {
+      @include button(rgba(76, 139, 243, 1.00));
+      float: right;
+      width: 60px;
+      height: 30px;
+      margin-top: (40px - 30px) / 2;
+    }
+
+    input {
+      @include input;
+      float: left;
+      display: inline-block;
+      height: 35px;
+      width: calc(100% - 40px - 60px - 200px - 8px - 8px - 8px - 8px);
+      margin-top: (40px - 35px) / 2;
+      margin-left: 8px;
+
+      + input[type='file'] {
+        width: 200px;
+        padding-top: 8px;
+      }
+    }
+    @include range-width(0, 450px) {
+      padding-top: 8px;
+      padding-bottom: 8px;
+      img {
+        display: none;
+      }
+      input {
+        width: calc(100% - 8px - 8px);
+        + input[type='file'] {
+          width: calc(100% - 8px - 8px);
+        }
+      }
+      button {
+        float: left;
+        width: calc(100% - 8px - 8px);
+        margin-left: 8px;
+      }
+    }
+    @include range-width(450px, 650px) {
+      input {
+        width: calc(100% - 40px - 8px - 8px - 8px);
+        + input[type='file'] {
+          width: calc(100% - 40px - 8px - 8px - 8px);
+        }
+      }
+      button {
+        float: left;
+        width: calc(100% - 40px - 8px - 8px - 8px);
+        margin-left: 50px + 6px;
+      }
+    };
+  }
+}
+
+#menu_ckb:not(:checked) {
+  @include range-width(750px, 950px) {
+    ~ #main {
+      .commit-form {
+        .commit {
+          input {
+            width: calc(100% - 40px - 8px - 8px - 8px);
+            + input[type='file'] {
+              width: calc(100% - 40px - 8px - 8px - 8px);
+            }
+          }
+          button {
+            float: left;
+            width: calc(100% - 40px - 8px - 8px - 8px);
+            margin-left: 50px + 6px;
+          }
+        }
+      }
+    }
+  }
+}
+
+h3.h {
+  display: inline-block;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  text-align: left;
+  margin-bottom: 4px;
+  margin-top: 24px;
+  color: rgba(150, 150, 150, 1.00);
+  font-weight: bold;
+  letter-spacing: 1px;
+  @include overflow-docx3();
+  @include text-shadow(1px 1px 0 rgba(255, 255, 255, .75));
+
+  + .panel {
+    margin-top: 4px;
+    article {
+      padding: 0 32px;  
+    }
+  }
+}
+.to_commit {
+  cursor: pointer;
+}
+
+.commits {
+  padding-left: 0;
+  padding-right: 0;
+
+  .commit {
+    display: inline-block;
+    width: 100%;
+    padding: 0 16px;
+
+    @include range-width(0, 450px) {
+      margin-top: 8px;
+      padding: 0 8px;
+    };
+    + div {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px dashed rgba(200, 200, 200, 1);
+    }
+
+    > div {
+      display: inline-block;
+      width: 100%;
+
+      &:nth-child(1) {
+
+        font-size: 14px;
+        line-height: 30px;
+        @include clearfix();
+        
+        > * {
+          float: left;
+          display: inline-block;
+        }
+        .user {
+          margin-top: 4px;
+        }
+        > time {
+          color: rgba(100, 100, 100, 1); 
+        }
+        > span {
+          margin: 0 4px;
+          color: rgba(140, 140, 140, 1); 
+        }
+      }
+      &:nth-child(2) {
+        margin-top: 8px;
+        padding-top: 4px;
+        font-size: 15px;
+        &:empty {
+          display: none;
+        }
+        + div {
+          margin-top: 16px;
+        }
+      }
+
+      &:nth-child(3) {
+        margin-top: 10px;
+
+        a {
+          display: inline-block;
+          padding: 5px;
+          width: 200px;
+          cursor: pointer;
+
+          border: 1px dashed rgba(39, 40, 34, .3);
+          background-color: rgba(247, 247, 247, 1.00);
+          @include transition(background-color .3s);
+          @include border-radius(3px);
+          @include clearfix();
+
+          &:hover {
+            background-color: rgba(247 * 0.95, 247 * 0.95, 247 * 0.95, 1.00);
+          }
+          > * {
+            float: left;
+            display: inline-block;
+          }
+          img {
+            width: 0 + 75px / 2;
+            height: 0 + 99px / 2;
+          }
+          span {
+            display: inline-block;
+            width: calc(100% - #{0 + 75px / 2} - 6px);
+            height: (0 + 99px / 2) - 20px - 5px;
+            line-height: (0 + 99px / 2) - 20px - 5px;
+            margin-left: 6px;
+
+            padding: 0 3px;
+            color: rgba(39, 40, 34, .7500);
+            @include overflow-docx3();
+
+            &:last-child {
+              height: 20px;
+              line-height: 20px;
+              margin-top: 5px;
+
+              text-align: right;
+              color: rgba(39, 40, 34, .50);
+              font-size: 10px;
+              font-style: italic;
+              border-top: 1px dashed rgba(190, 191, 189, .25);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.finish {
+  position: relative;
+
+  &:after{
+
+    content: '未完成';
+    position: absolute;
+    right: 45px;
+    top: 55px;
+    display: inline-block;
+    border: 5px solid rgba(230, 233, 237, .50);
+    z-index: 0;
+    color: rgba(230, 233, 237, .80);
+    font-size: 30px;
+    letter-spacing: 5px;
+    padding: 2px 15px;
+    font-weight: bolder;
+    @include border-radius(3px);
+    @include rotate(30deg);
+    @include opacity(.5);
+
+    content: '已完成';
+    border: 5px solid rgba(255, 0, 0, .3);
+    color: rgba(245, 166, 159, 1.00);
+    @include animation(marionette_shadow 1.0s ease-in);
+
+    @include range-width(0, 450px) {
+      top: 0;
+      right: 0;
+    }
+  }
+}
+@include keyframes(marionette_shadow){
+  0%{
+    @include transform(rotate(40deg) scale(5.0));
+    @include opacity(.0);
+  }
+  60%{
+    @include transform(rotate(30deg) scale(.9));
+    @include opacity(.5);
+  }
+  85%{
+    @include transform(rotate(30deg) scale(1.05));
+    @include opacity(.5);
+  }
+  100%{
+    @include transform(rotate(30deg) scale(1.0));
+    @include opacity(.5);
+  }
+}
