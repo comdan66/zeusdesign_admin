@@ -11,6 +11,7 @@ class Migration_Add_incomes extends CI_Migration {
     $this->db->query (
       "CREATE TABLE `incomes` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+        `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'User ID(合帳者)',
 
         `invoice_date` date DEFAULT NULL COMMENT '發票日期',
         `status` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '是否入帳，1 未入帳，2 已入帳',

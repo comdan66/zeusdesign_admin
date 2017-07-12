@@ -52,6 +52,7 @@
         <th width='70'>是否入帳</th>
         <th width='75'>發票</th>
         <th width='150'>標題</th>
+        <th width='150'>合帳者</th>
         <th >人員薪資</th>
         <th width='80'>放款進度</th>
         <th width='90'>金額<?php echo listSort ($uri_1, 'money');?></th>
@@ -62,19 +63,20 @@
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
-          <td class='center'<?php echo !User::current ()->in_roles (array ('income_status')) ? ' style="color: ' . ($obj->status == Income::STATUS_2 ? 'rgba(34, 164, 136, 1.00)': 'rgba(234, 67, 53, 1.00)') . ';"' : '';?>>
+          <td class='center'<?php echo !User::current ()->in_roles (array ('income_status')) ? ' style="color: ' . ($obj->status == Income::STATUS_2 ? 'rgba(34, 164, 136, 1.00)' : 'rgba(234, 67, 53, 1.00)') . ';"' : '';?>>
       <?php if (User::current ()->in_roles (array ('income_status'))) {?>
               <label class='switch ajax' data-forhide='income-edit' data-column='status' data-url='<?php echo base_url ($uri_1, 'status', $obj->id);?>'><input type='checkbox'<?php echo $obj->status == Income::STATUS_2 ? ' checked' : '';?> /><span></span></label>
       <?php } else {
               echo Income::$statusNames[$obj->status];
             }?>
           </td>
-          <td style='color: <?php echo $obj->has_tax () ? 'rgba(34, 164, 136, 1.00)': 'rgba(72, 137, 244, 1.00)';?>;'><?php echo $obj->has_tax () ? '有' : '沒';?>開發票</td>
+          <td style='color: <?php echo $obj->has_tax () ? 'rgba(34, 164, 136, 1.00)' : 'rgba(72, 137, 244, 1.00)';?>;'><?php echo $obj->has_tax () ? '有' : '沒';?>開發票</td>
           <td><?php echo $obj->title;?></td>
+          <td><?php echo $obj->user->name;?></td>
           <td><?php echo $obj->zbs ? implode ('', array_map (function ($zb) {
             return '<div class="row' . ($zb->status == Zb::STATUS_2 ? ' finish' : '') . '">' . $zb->user->name . ' / ' . number_format ($zb->money) . '元</div>';
           }, $obj->zbs)) : '';?></td>
-          <td style='color: <?php echo $obj->progress () < 100 ? 'rgba(234, 67, 53, 1.00)': 'rgba(52, 168, 83, 1.00)';?>;'><?php echo $obj->progress ()?>%</td>
+          <td style='color: <?php echo $obj->progress () < 100 ? 'rgba(234, 67, 53, 1.00)' : 'rgba(52, 168, 83, 1.00)';?>;'><?php echo $obj->progress ()?>%</td>
           <td><?php echo number_format ($obj->money);?>元</td>
           <td><?php echo $obj->memo;?></td>
           <td class='edit'>

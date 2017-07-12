@@ -19,6 +19,7 @@ class Income extends OaModel {
   );
 
   static $belongs_to = array (
+    array ('user', 'class_name' => 'User'),
   );
   
   const STATUS_1 = 1;
@@ -82,6 +83,7 @@ class Income extends OaModel {
   public function backup ($has = false) {
     $var = array (
       'id'           => $this->id,
+      'user_id'      => $this->user_id,
       'invoice_date' => $this->invoice_date ? $this->invoice_date->format ('Y-m-d') : '',
       'status'       => $this->status,
       'title'        => $this->title,

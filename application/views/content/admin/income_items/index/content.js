@@ -48,9 +48,9 @@ $(function () {
             $('<span />'))
             : null)).append (
           $('<td />').addClass ('center').text (t.status ? '已請款' : '未請款').css ({'color': t.status ? 'rgba(52, 168, 83, 1.00)' : 'rgba(234, 67, 53, 1.00)'})).append (
-          $('<td />').addClass ('center').append ($('<div />').addClass ('oaips').append (t.srcs.map (function (s) {
+          $('<td />').addClass ('center').append (t.srcs.length ? $('<div />').addClass ('oaips').append (t.srcs.map (function (s) {
             return $('<div />').addClass ('oaip').data ('data-src', s.ori).append ($('<img />').attr ('src', s.w800)).imgLiquid ({verticalAlign: 'center'});
-          })))).append (
+          })) : null)).append (
           $('<td />').text (t.title)).append (
           $('<td />').text (t.user)).append (
           $('<td />').append ($('<div />').addClass ('row').text (t.pm)).append ($('<div />').addClass ('row').addClass ('sub').text (t.company))).append (

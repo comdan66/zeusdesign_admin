@@ -45,7 +45,7 @@ class Incomes extends Admin_controller {
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
-    $objs = conditions ($searches, $configs, $offset, 'Income', array ('order' => 'id DESC', 'include' => array ('zbs')));
+    $objs = conditions ($searches, $configs, $offset, 'Income', array ('order' => 'id DESC', 'include' => array ('zbs', 'user')));
 
     UserLog::logRead (
       $this->icon,
@@ -87,6 +87,7 @@ class Incomes extends Admin_controller {
       return redirect_message (array ('admin', 'income-items'), array ('_fd' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
+    $posts['user_id'] = User::current ()->id;
 
     if (($msg = $this->_validation_create ($posts, $objs)) || (!Income::transaction (function () use (&$obj, $posts, $objs) {
       if (!verifyCreateOrm ($obj = Income::create (array_intersect_key ($posts, Income::table ()->columns)))) return false;

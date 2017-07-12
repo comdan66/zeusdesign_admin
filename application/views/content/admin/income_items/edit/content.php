@@ -14,7 +14,7 @@
       <select name='user_id'>
   <?php if ($users = User::all (array ('select' => 'id, name'))) {
           foreach ($users as $user) { ?>
-            <option value='<?php echo $user->id;?>'<?php echo (isset ($posts['user_id']) ? $posts['user_id'] : $obj->user_id) == $user->id ? ' selected': '';?>><?php echo $user->name;?></option>
+            <option value='<?php echo $user->id;?>'<?php echo (isset ($posts['user_id']) ? $posts['user_id'] : $obj->user_id) == $user->id ? ' selected' : '';?>><?php echo $user->name;?></option>
     <?php }
         }?>
       </select>
@@ -29,7 +29,7 @@
               <optgroup label='<?php echo $company->name;?>'>
           <?php if ($company->pms) {
                   foreach ($company->pms as $pm) { ?>
-                    <option value='<?php echo $pm->id;?>'<?php echo (isset ($posts['company_pm_id']) ? $posts['company_pm_id'] : $obj->company_pm_id) == $pm->id ? ' selected': '';?>><?php echo $pm->name;?></option>
+                    <option value='<?php echo $pm->id;?>'<?php echo (isset ($posts['company_pm_id']) ? $posts['company_pm_id'] : $obj->company_pm_id) == $pm->id ? ' selected' : '';?>><?php echo $pm->name;?></option>
             <?php }
                 } ?>
               </optgroup>
