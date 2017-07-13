@@ -8,6 +8,9 @@
 
 class WorkImageNameImageUploader extends OrmImageUploader {
 
+  public function d4Url () {
+    return res_url ('res', 'image', 'image.jpg');
+  }
   public function getVersions () {
     return array (
         '' => array (),
