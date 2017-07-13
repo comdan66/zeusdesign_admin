@@ -9,10 +9,10 @@
         <thead>
           <tr>
             <th width='100'>月份</th>
-            <th width='100'>檢視細項</th>
-            <th width='120'>含稅入帳</th>
-            <th width='120'>宙思收入</th>
-            <th width='120'>宙思支出</th>
+            <th width='90'>檢視細項</th>
+            <th width='115'>含稅入帳</th>
+            <th width='115'>宙思收入</th>
+            <th width='115'>宙思支出</th>
             <th >宙思盈餘</th>
           </tr>
         </thead>

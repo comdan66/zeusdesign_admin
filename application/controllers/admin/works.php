@@ -41,7 +41,7 @@ class Works extends Admin_controller {
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
-    $objs = conditions ($searches, $configs, $offset, 'Work', array ('order' => 'id DESC', 'include' => array ('images')));
+    $objs = conditions ($searches, $configs, $offset, 'Work', array ('order' => 'id DESC', 'include' => array ('images', 'user')));
 
     UserLog::logRead (
       $this->icon,

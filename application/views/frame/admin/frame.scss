@@ -341,6 +341,7 @@ html {
   }
   @include range-width(750px) {
     top: $headerHeight;
+    height: calc(100% - #{$headerHeight});
     +label {
       display: none;
     }

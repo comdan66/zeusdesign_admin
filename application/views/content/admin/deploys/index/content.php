@@ -48,12 +48,12 @@
 </div>
 
 <div class='panel'>
-  <table class='table-list w1200'>
+  <table class='table-list'>
     <thead>
       <tr>
-        <th width='100'>類型</th>
+        <th width='100'>執行類型</th>
         <th class='center' width='100'>是否完成</th>
-        <th class='center' width='150'>操作者</th>
+        <th class='left' width='150'>操作者</th>
         <th class='left'>概略內容</th>
         <th width='50'>檢視</th>
       </tr>
@@ -63,7 +63,7 @@
         <tr>
           <td><?php echo Deploy::$typeNames[$obj->type];?></td>
           <td class='center' style='color: <?php echo $obj->status == Deploy::STATUS_2 ? 'rgba(34, 164, 136, 1.00)' : 'rgba(195, 55, 42, 1.00)';?>;'><?php echo Deploy::$statusNames[$obj->status];?></td>
-          <td class='center'><?php echo $obj->user->name;?></td>
+          <td class='left'><?php echo $obj->user->name;?></td>
           <td class='left'><?php echo $obj->res ('message');?></td>
           <td>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>

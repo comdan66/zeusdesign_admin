@@ -51,16 +51,14 @@
   <table class='table-list'>
     <thead>
       <tr>
-        <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
-        <th >名稱<?php echo listSort ($uri_1, 'name');?></th>
+        <th class='left'>名稱<?php echo listSort ($uri_1, 'name');?></th>
         <th width='70'>編輯</th>
       </tr>
     </thead>
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
-          <td><?php echo $obj->id;?></td>
-          <td><?php echo $obj->name;?></td>
+          <td class='left'><?php echo $obj->name;?></td>
           <td class='edit'>
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
             <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>

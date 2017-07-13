@@ -51,9 +51,9 @@ $(function () {
           $('<td />').addClass ('center').append (t.srcs.length ? $('<div />').addClass ('oaips').append (t.srcs.map (function (s) {
             return $('<div />').addClass ('oaip').data ('data-src', s.ori).append ($('<img />').attr ('src', s.w800)).imgLiquid ({verticalAlign: 'center'});
           })) : null)).append (
-          $('<td />').text (t.title)).append (
-          $('<td />').text (t.user)).append (
-          $('<td />').append ($('<div />').addClass ('row').text (t.pm)).append ($('<div />').addClass ('row').addClass ('sub').text (t.company))).append (
+          $('<td />').addClass ('left').text (t.title)).append (
+          $('<td />').addClass ('left').text (t.user)).append (
+          $('<td />').addClass ('left').append ($('<div />').addClass ('row').text (t.pm)).append ($('<div />').addClass ('row').addClass ('sub').text (t.company))).append (
           $('<td />').append (t.detail.map (function (u) {
             return $('<div />').addClass ('row').addClass (u.status ? 'finish' : '').text (u.user + ' / ' + u.money + '元');
           }))).append (

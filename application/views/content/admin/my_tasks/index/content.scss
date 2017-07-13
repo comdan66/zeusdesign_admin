@@ -15,8 +15,3 @@
   @include box-shadow(0 0 1px rgba(0, 0, 0, .200));
   border: 1px solid rgba(0, 0, 0, .3);
 }
-.row {
-  + .row {
-    border-top: 1px solid rgba(222, 222, 222, 1);
-  }
-}

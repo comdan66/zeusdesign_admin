@@ -24,13 +24,15 @@ class WorkItem extends OaModel {
   const TYPE_3 = 3;
   const TYPE_4 = 4;
   const TYPE_5 = 5;
+  const TYPE_6 = 6;
 
   static $typeNames = array (
-    self::TYPE_1 => 'Client',
+    self::TYPE_1 => 'Clients',
     self::TYPE_2 => 'Details',
     self::TYPE_3 => 'Technologies',
     self::TYPE_4 => 'Lives',
     self::TYPE_5 => 'Demos',
+    self::TYPE_6 => 'Others',
   );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {

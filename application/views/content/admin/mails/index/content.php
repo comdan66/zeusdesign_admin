@@ -47,11 +47,11 @@
 </div>
 
 <div class='panel'>
-  <table class='table-list'>
+  <table class='table-list w1100'>
     <thead>
       <tr>
-        <th width='70'>狀態</th>
-        <th >標題<?php echo listSort ($uri_1, 'title');?></th>
+        <th width='80'>狀態</th>
+        <th class='left'>標題<?php echo listSort ($uri_1, 'title');?></th>
         <th width='180'>跳址</th>
         <th width='80'>開啟率</th>
         <th width='80'>點擊數<?php echo listSort ($uri_1, 'cnt_open');?></th>
@@ -64,7 +64,7 @@
         <tr>
           
           <td style='color: <?php echo $obj->status == Mail::STATUS_1 ? 'rgba(234, 67, 53, 1.00)' : 'rgba(52, 168, 83, 1.00)';?>;'><?php echo Mail::$statusNames[$obj->status];?></td>
-          <td><?php echo $obj->title;?></td>
+          <td class='left'><?php echo $obj->title;?></td>
           <td><?php echo $obj->uri;?></td>
           <td<?php echo ($t = round (100 * ($obj->cnt_send ? $obj->cnt_open / $obj->cnt_send : 0))) >= 100 ? ' style="color: rgba(52, 168, 83, 1.00);"' : ($t ? '' : ' style="color: rgba(234, 67, 53, 1.00);font-weight: bold;"');?>><?php echo $t;?>%</td>
           <td><?php echo $obj->cnt_open;?></td>

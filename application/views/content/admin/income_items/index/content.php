@@ -56,16 +56,16 @@
   <table class='table-list w1200 dy'>
     <thead>
       <tr>
-        <th width='50' class='center'>勾選</th>
-        <th width='60' class='center'>狀態</th>
-        <th width='60' class='center'>圖片</th>
-        <th width='130'>標題</th>
-        <th width='80'>負責人</th>
-        <th width='140'>窗口 PM / 公司</th>
+        <th width='45' class='center'>勾選</th>
+        <th width='55' class='center'>狀態</th>
+        <th width='70' class='center'>圖片</th>
+        <th width='160' class='left'>標題</th>
+        <th width='110' class='left'>負責人</th>
+        <th width='140' class='left'>窗口 PM / 公司</th>
         <th >細項</th>
-        <th width='80'>總金額</th>
-        <th width='90'>結束日期</th>
-        <th width='100'>編輯</th>
+        <th width='70'>總金額</th>
+        <th width='85'>結束日期</th>
+        <th width='90'>編輯</th>
       </tr>
     </thead>
     <tbody id='_tb'></tbody>

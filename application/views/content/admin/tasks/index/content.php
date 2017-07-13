@@ -48,15 +48,15 @@
 </div>
 
 <div class='panel'>
-  <table class='table-list'>
+  <table class='table-list w1100'>
     <thead>
       <tr>
         <th width='60'>完成</th>
-        <th width='100'>擁有者</th>
-        <th width='150'>標題</th>
-        <th width='110'>優先權</th>
+        <th width='110' class='center'>優先權</th>
+        <th width='100' class='left'>擁有者</th>
+        <th width='150' class='left'>標題</th>
 
-        <th >內容</th>
+        <th class='left'>內容</th>
         <th width='120'>參與者</th>
         <th width='70'>編輯</th>
       </tr>
@@ -70,11 +70,11 @@
               <span></span>
             </label>
           </td>
-          <td><?php echo $obj->user->name;?></td>
-          <td><?php echo $obj->title;?></td>
-          <td><div class='color' style='background-color: <?php echo isset (Task::$levelColors[$obj->level]) ? Task::$levelColors[$obj->level] : '#ffffff';?>;'></div><?php echo Task::$levelNames[$obj->level];?></td>
+          <td class='center'><div class='color' style='background-color: <?php echo isset (Task::$levelColors[$obj->level]) ? Task::$levelColors[$obj->level] : '#ffffff';?>;'></div><?php echo Task::$levelNames[$obj->level];?></td>
+          <td class='left'><?php echo $obj->user->name;?></td>
+          <td class='left'><?php echo $obj->title;?></td>
 
-          <td><?php echo $obj->mini_content (50);?></td>
+          <td class='left'><?php echo $obj->mini_content (50);?></td>
           <td><?php echo $obj->user_mappings ? implode ('', array_map (function ($mapping) {
             return '<div class="row">' . User::idAll ()[$mapping->user_id]->name . '</div>';
           }, $obj->user_mappings)) : '';?></td>

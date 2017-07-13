@@ -54,9 +54,9 @@
       <tr>
         <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
         <th width='60' class='center'>上架</th>
-        <th width='60' class='center'>封面</th>
-        <th width='180'>標題<?php echo listSort ($uri_1, 'title');?></th>
-        <th >內容</th>
+        <th width='70' class='center'>封面</th>
+        <th width='150' class='left'>標題<?php echo listSort ($uri_1, 'title');?></th>
+        <th class='left'>內容</th>
         <th width='60'>開啟</th>
         <th width='100'>編輯</th>
       </tr>
@@ -76,8 +76,8 @@
               <div class='oaip _ic' data-src='<?php echo $obj->cover->url ();?>'><img src='<?php echo $obj->cover->url ('500w');?>' /></div>
             </div>
           </td>
-          <td><?php echo $obj->mini_title (20);?></td>
-          <td><?php echo $obj->mini_content (50);?></td>
+          <td class='left'><?php echo $obj->mini_title (20);?></td>
+          <td class='left'><?php echo $obj->mini_content (50);?></td>
           <td><?php echo Banner::$targetNames[$obj->target];?></td>
           <td class='edit'>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>

@@ -50,9 +50,20 @@
 <div class='panel'>
   <div class='show-type1'>
 
+
     <div class='row min'>
       <b>是否入帳</b>
       <span><?php echo Income::$statusNames[$obj->status];?></span>
+    </div>
+
+    <div class='row'>
+      <b>標題</b>
+      <span><?php echo $obj->title;?></span>
+    </div>
+    
+    <div class='row'>
+      <b>合帳人員</b>
+      <span><?php echo $obj->user->name;?></span>
     </div>
     
     <div class='row'>

@@ -29,7 +29,7 @@ class My_notices extends Admin_controller {
     $this->add_param ('uri_1', $this->uri_1)
          ->add_param ('icon', $this->icon)
          ->add_param ('title', $this->title)
-         ->add_param ('_url', base_url ($this->uri_1));
+         ->add_param ('_url',  base_url ('admin', 'my', User::current ()->id));
   }
 
   public function index ($offset = 0) {

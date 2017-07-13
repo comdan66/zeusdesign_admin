@@ -41,7 +41,7 @@ class Articles extends Admin_controller {
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
-    $objs = conditions ($searches, $configs, $offset, 'Article', array ('order' => 'id DESC'));
+    $objs = conditions ($searches, $configs, $offset, 'Article', array ('order' => 'id DESC', 'include' => array ('user')));
 
     UserLog::logRead (
       $this->icon,

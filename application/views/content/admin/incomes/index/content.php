@@ -50,13 +50,13 @@
     <thead>
       <tr>
         <th width='70'>是否入帳</th>
-        <th width='75'>發票</th>
-        <th width='150'>標題</th>
-        <th width='150'>合帳者</th>
-        <th >人員薪資</th>
-        <th width='80'>放款進度</th>
-        <th width='90'>金額<?php echo listSort ($uri_1, 'money');?></th>
-        <th width='120'>備註</th>
+        <th width='70' class='center'>發票</th>
+        <th width='170' class='left'>標題</th>
+        <th width='140' class='left'>合帳人員</th>
+        <th >放款進度</th>
+        <th width='85'>金額<?php echo listSort ($uri_1, 'money');?></th>
+        <th width='85'>含稅金額</th>
+        <th width='110'>備註</th>
         <th width='90'>編輯</th>
       </tr>
     </thead>
@@ -70,14 +70,12 @@
               echo Income::$statusNames[$obj->status];
             }?>
           </td>
-          <td style='color: <?php echo $obj->has_tax () ? 'rgba(34, 164, 136, 1.00)' : 'rgba(72, 137, 244, 1.00)';?>;'><?php echo $obj->has_tax () ? '有' : '沒';?>開發票</td>
-          <td><?php echo $obj->title;?></td>
-          <td><?php echo $obj->user->name;?></td>
-          <td><?php echo $obj->zbs ? implode ('', array_map (function ($zb) {
-            return '<div class="row' . ($zb->status == Zb::STATUS_2 ? ' finish' : '') . '">' . $zb->user->name . ' / ' . number_format ($zb->money) . '元</div>';
-          }, $obj->zbs)) : '';?></td>
+          <td class='center' style='color: <?php echo $obj->has_tax () ? 'rgba(34, 164, 136, 1.00)' : 'rgba(72, 137, 244, 1.00)';?>;'><?php echo $obj->has_tax () ? '有' : '沒';?>開發票</td>
+          <td class='left'><?php echo $obj->title;?></td>
+          <td class='left'><?php echo $obj->user->name;?></td>
           <td style='color: <?php echo $obj->progress () < 100 ? 'rgba(234, 67, 53, 1.00)' : 'rgba(52, 168, 83, 1.00)';?>;'><?php echo $obj->progress ()?>%</td>
           <td><?php echo number_format ($obj->money);?>元</td>
+          <td><?php echo number_format ($obj->tax_money ());?>元</td>
           <td><?php echo $obj->memo;?></td>
           <td class='edit'>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>

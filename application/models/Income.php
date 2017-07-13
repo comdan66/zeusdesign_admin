@@ -50,9 +50,9 @@ class Income extends OaModel {
 
   public function zeus_money () {
     $that = $this;
-    return $this->tax_money () - array_sum (array_map (function ($zb) use ($that) {
+    return $this->zbs ? $this->tax_money () - array_sum (array_map (function ($zb) use ($that) {
           return $zb->pay ($that);
-        }, $this->zbs));
+        }, $this->zbs)) : $this->zeus_rate () * $this->tax_money ();
   }
   public function use_money () {
     return $this->tax_money () - $this->zeus_money ();

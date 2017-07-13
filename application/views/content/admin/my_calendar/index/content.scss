@@ -619,6 +619,9 @@ $menuWidth: 230px;
             font-size: 14px;
             margin: 8px 0;
           }
+          img {
+            max-width: 100%;
+          }
           &:empty {
             &:before {
               content: '沒有內容。';

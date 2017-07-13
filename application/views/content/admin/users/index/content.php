@@ -46,12 +46,12 @@
 </div>
 
 <div class='panel'>
-  <table class='table-list'>
+  <table class='table-list w1100'>
     <thead>
       <tr>
         <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
-        <th width='150'>名稱<?php echo listSort ($uri_1, 'name');?></th>
-        <th >E-Mail<?php echo listSort ($uri_1, 'email');?></th>
+        <th width='160' class='left'>名稱<?php echo listSort ($uri_1, 'name');?></th>
+        <th class='left'>E-Mail<?php echo listSort ($uri_1, 'email');?></th>
         <th width='150'>權限</th>
         <th width='120'>上次登入</th>
         <th width='70'>編輯</th>
@@ -61,8 +61,8 @@
 <?php foreach ($objs as $obj) { ?>
         <tr>
           <td><?php echo $obj->id;?></td>
-          <td><?php echo $obj->name;?></td>
-          <td><?php echo $obj->email;?></td>
+          <td class='left'><?php echo $obj->name;?></td>
+          <td class='left'><?php echo $obj->email;?></td>
           <td><?php echo implode ('', array_map (function ($t) {
             return '<div class="row">' . $t . '</div>';
           }, $obj->role_names ()));?></td>

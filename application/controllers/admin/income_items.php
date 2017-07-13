@@ -70,7 +70,7 @@ class Income_items extends Admin_controller {
               );
           }, $obj->images),
           'close_date' => $obj->close_date ? $obj->close_date->format ('Y-m-d') : '',
-          'title' => $obj->title,
+          'title' => $obj->mini_title (20),
           'user' => isset ($users[$obj->user_id]) ? $users[$obj->user_id]->name : '',
           'pm' => $obj->company_pm_id && isset ($pms[$obj->company_pm_id]) ? $pms[$obj->company_pm_id]->name : '',
           'company' => $obj->company_pm_id && isset ($pms[$obj->company_pm_id]) && $pms[$obj->company_pm_id]->company ? $pms[$obj->company_pm_id]->company->name : '',

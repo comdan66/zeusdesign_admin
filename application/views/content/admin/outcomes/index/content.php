@@ -48,13 +48,13 @@
 </div>
 
 <div class='panel'>
-  <table class='table-list w1200'>
+  <table class='table-list w1100'>
     <thead>
       <tr>
         <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
-        <th width='70'>是否入帳</th>
-        <th width='90'>有無發票</th>
-        <th >標題<?php echo listSort ($uri_1, 'title');?></th>
+        <th width='80'>是否入帳</th>
+        <th width='90' class='center'>有無發票</th>
+        <th class='left'>標題<?php echo listSort ($uri_1, 'title');?></th>
         <th width='100'>金額<?php echo listSort ($uri_1, 'money');?></th>
         <th width='100'>備註</th>
         <th width='90'>新增日期</th>
@@ -68,8 +68,8 @@
           <td class='center'>
             <label class='switch ajax' data-column='status' data-url='<?php echo base_url ($uri_1, 'status', $obj->id);?>'><input type='checkbox'<?php echo $obj->status == Outcome::STATUS_2 ? ' checked' : '';?> /><span></span></label>
           </td>
-          <td><?php echo Outcome::$typeNames[$obj->type];?></td>
-          <td><?php echo $obj->title;?></td>
+          <td class='center'><?php echo Outcome::$typeNames[$obj->type];?></td>
+          <td class='left'><?php echo $obj->title;?></td>
           <td><?php echo number_format ($obj->money);?>元</td>
           <td><?php echo $obj->memo;?></td>
           <td><?php echo $obj->created_at->format ('Y-m-d');?></td>

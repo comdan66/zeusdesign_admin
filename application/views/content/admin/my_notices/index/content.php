@@ -47,7 +47,7 @@
 </div>
 
 <div class='panel'>
-  <table class='table-list w1200'>
+  <table class='table-list'>
     <thead>
       <tr>
         <th width='70'>已讀</th>

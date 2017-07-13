@@ -52,21 +52,19 @@
     <thead>
       <tr>
         <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
-        <th width='120'>專案名稱<?php echo listSort ($uri_1, 'name');?></th>
-        <th width='260'>網站網址<?php echo listSort ($uri_1, 'link');?></th>
-        <th >內容</th>
-        <th width='120'>備註<?php echo listSort ($uri_1, 'memo');?></th>
-        <th width='120'>編輯</th>
+        <th width='150' class='left'>專案名稱<?php echo listSort ($uri_1, 'name');?></th>
+        <th width='280' class='left'>網站網址<?php echo listSort ($uri_1, 'link');?></th>
+        <th class='left'>內容</th>
+        <th width='90'>編輯</th>
       </tr>
     </thead>
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
           <td><?php echo $obj->id;?></td>
-          <td><?php echo $obj->name;?></td>
-          <td><?php echo mini_link ($obj->link);?></td>
-          <td><?php echo $obj->mini_content (50);?></td>
-          <td><?php echo $obj->memo;?></td>
+          <td class='left'><?php echo $obj->name;?></td>
+          <td class='left'><?php echo mini_link ($obj->link);?></td>
+          <td class='left'><?php echo $obj->mini_content (50);?></td>
           <td class='edit'>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
