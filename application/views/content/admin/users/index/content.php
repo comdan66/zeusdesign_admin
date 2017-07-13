@@ -50,10 +50,10 @@
     <thead>
       <tr>
         <th width='60'>#<?php echo listSort ($uri_1, 'id');?></th>
-        <th width='130'>名稱<?php echo listSort ($uri_1, 'name');?></th>
+        <th width='150'>名稱<?php echo listSort ($uri_1, 'name');?></th>
         <th >E-Mail<?php echo listSort ($uri_1, 'email');?></th>
         <th width='150'>權限</th>
-        <th width='100'>上次登入</th>
+        <th width='120'>上次登入</th>
         <th width='70'>編輯</th>
       </tr>
     </thead>
