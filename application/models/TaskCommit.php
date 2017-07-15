@@ -55,18 +55,7 @@ class TaskCommit extends OaModel {
     return $this->delete ();
   }
   public function backup ($has = false) {
-    $var = array (
-      'id'         => $this->id,
-      'task_id'    => $this->task_id,
-      'user_id'    => $this->user_id,
-      'action'     => $this->action,
-      'content'    => $this->content,
-      'file'       => (string)$this->file ? (string)$this->file : '',
-      'size'       => $this->size,
-      'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
-    );
-
+    $var = $this->getBackup ();
     return $has ? array (
         '_' => $var,
       ) : $var;

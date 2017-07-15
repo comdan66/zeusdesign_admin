@@ -60,10 +60,16 @@
 
 <?php if (User::current ()->in_roles (array ('user', 'email'))) { ?>
         <div class='group'>
-          <span class='icon-user-secret'>後台管理</span>
+          <span class='icon-user-secret' data-cnt='<?php echo ($backup_cnt = User::current ()->in_roles (array ('backup')) ? Backup::count (array ('conditions' => array ('status = ?', Backup::STATUS_1))) : 0) + ($cronjob_cnt = User::current ()->in_roles (array ('cronjob')) ? Cronjob::count (array ('conditions' => array ('status = ?', Cronjob::STATUS_1))) : 0);?>'>後台管理</span>
           <div>
       <?php if (User::current ()->in_roles (array ('user'))) { ?>
               <a class='icon-ua<?php echo ($url = base_url ('admin', 'users')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>人員管理</a>
+      <?php }
+            if (User::current ()->in_roles (array ('backup'))) { ?>
+              <a data-cnt='<?php echo $backup_cnt;?>' class='icon-backup<?php echo ($url = base_url ('admin', 'backups')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>備份紀錄</a>
+      <?php }
+            if (User::current ()->in_roles (array ('cronjob'))) { ?>
+              <a data-cnt='<?php echo $cronjob_cnt;?>' class='icon-clipboard<?php echo ($url = base_url ('admin', 'cronjobs')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>排程紀錄</a>
       <?php }
             if (User::current ()->in_roles (array ('email'))) { ?>
               <a class='icon-em<?php echo ($url = base_url ('admin', 'mails')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>E-Mail 管理</a>
@@ -74,7 +80,7 @@
 
 <?php if (User::current ()->in_roles (array ('banner', 'promo', 'contact', 'deploy'))) { ?>
         <div class='group'>
-          <span class='icon-ea' data-cntrole='contact' data-cnt='<?php echo ($contact_cnt = Contact::count (array ('conditions' => array ('status = ?', Contact::STATUS_1))));?>'>官網管理</span>
+          <span class='icon-ea' data-cntrole='contact' data-cnt='<?php echo ($contact_cnt = User::current ()->in_roles (array ('contact')) ? Contact::count (array ('conditions' => array ('status = ?', Contact::STATUS_1))) : 0);?>'>官網管理</span>
           <div>
       <?php if (User::current ()->in_roles (array ('banner'))) { ?>
               <a class='icon-im<?php echo ($url = base_url ('admin', 'banners')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>旗幟管理</a>

@@ -29,6 +29,8 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('tasks'), 'tasks');
   Route::resourcePagination (array ('users'), 'users');
   Route::resourcePagination (array ('mails'), 'mails');
+  Route::resourcePagination (array ('backups'), 'backups');
+  Route::resourcePagination (array ('cronjobs'), 'cronjobs');
 
   Route::resourcePagination (array ('my'), 'my');
   Route::resourcePagination (array ('my_zbs'), 'my_zbs');

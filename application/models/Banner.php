@@ -59,18 +59,7 @@ class Banner extends OaModel {
   }
 
   public function backup ($has = false) {
-    $var = array (
-      'id'         => $this->id,
-      'title'      => $this->title,
-      'content'    => $this->content,
-      'link'       => $this->link,
-      'sort'       => $this->sort,
-      'target'     => $this->target,
-      'status'     => $this->status,
-      'cover'      => (string)$this->cover ? (string)$this->cover : '',
-      'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
-    );
+    $var = $this->getBackup ();
     return $has ? array (
         '_' => $var
       ) : $var;

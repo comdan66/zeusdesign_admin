@@ -41,18 +41,7 @@ class UserSet extends OaModel {
     OrmImageUploader::bind ('banner', 'UserSetBannerImageUploader');
   }
   public function backup ($has = false) {
-    $var = array (
-      'id'            => $this->id,
-      'user_id'       => $this->user_id,
-      'banner'        => (string)$this->banner ? (string)$this->banner : '',
-      'link_facebook' => $this->link_facebook,
-      'phone'         => $this->phone,
-      'ani'           => $this->ani,
-      'login_count'   => $this->login_count,
-      'logined_at'    => $this->logined_at,
-      'updated_at'    => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at'    => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
-    );
+    $var = $this->getBackup ();
     return $has ? array (
         '_' => $var
       ) : $var;

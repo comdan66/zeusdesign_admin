@@ -38,15 +38,7 @@ class ScheduleItem extends OaModel {
   }
 
   public function backup ($has = false) {
-    $var = array (
-      'id'          => $this->id,
-      'schedule_id' => $this->schedule_id,
-      'content'     => $this->content,
-      'status'      => $this->status,
-      'updated_at'  => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at'  => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
-    );
-
+    $var = $this->getBackup ();
     return $has ? array (
         '_' => $var,
       ) : $var;

@@ -38,16 +38,7 @@ class Company extends OaModel {
     return $this->delete ();
   }
   public function backup ($has = false) {
-    $var = array (
-      'id'          => $this->id,
-      'name'        => $this->name,
-      'tax_no'      => $this->tax_no,
-      'address'     => $this->address,
-      'phone'       => $this->phone,
-      'memo'        => $this->memo,
-      'updated_at'  => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at'  => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
-    );
+    $var = $this->getBackup ();
     return $has ? array (
         '_' => $var,
         'pms' => $this->subBackup ('CompanyPm', $has),

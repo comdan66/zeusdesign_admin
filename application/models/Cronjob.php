@@ -6,9 +6,9 @@
  * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
  */
 
-class Deploy extends OaModel {
+class Cronjob extends OaModel {
 
-  static $table_name = 'deploys';
+  static $table_name = 'cronjobs';
 
   static $has_one = array (
   );
@@ -17,42 +17,33 @@ class Deploy extends OaModel {
   );
 
   static $belongs_to = array (
-    array ('user', 'class_name' => 'User'),
   );
 
-  const TYPE_1 = 1;
-  const TYPE_2 = 2;
-
-  static $typeNames = array (
-    self::TYPE_1 => '編譯',
-    self::TYPE_2 => '編譯 & 上傳',
-  );
   const STATUS_1 = 1;
   const STATUS_2 = 2;
+  const STATUS_3 = 3;
 
   static $statusNames = array (
     self::STATUS_1 => '失敗',
     self::STATUS_2 => '成功',
+    self::STATUS_3 => '已讀',
   );
-
+  
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
   }
-  public function res ($key = '') {
-    if (!(isset ($this->res) && $this->res)) return '';
-    if ($t = json_decode ($this->res, true)) return $key && isset ($t[$key]) ? $t[$key] : '';
-    return '';
+  public function mini_title ($length = 50) {
+    if (!isset ($this->title)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->title), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
-  public function destroy () {
-    if (!isset ($this->id)) return false;
-
-    return $this->delete ();
+  public function mini_content ($length = 100) {
+    if (!isset ($this->content)) return '';
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->content), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
-
   public function backup ($has = false) {
     $var = $this->getBackup ();
     return $has ? array (
-        '_' => $var,
+        '_' => $var
       ) : $var;
   }
 }

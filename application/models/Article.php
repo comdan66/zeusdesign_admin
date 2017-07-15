@@ -62,17 +62,7 @@ class Article extends OaModel {
     return $this->delete ();
   }
   public function backup ($has = false) {
-    $var = array (
-      'id'         => $this->id,
-      'user_id'    => $this->user_id,
-      'title'      => $this->title,
-      'content'    => $this->content,
-      'status'     => $this->status,
-      'pv'         => $this->pv,
-      'cover'      => (string)$this->cover ? (string)$this->cover : '',
-      'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
-    );
+    $var = $this->getBackup ();
     return $has ? array (
         '_' => $var,
         'mappings' => $this->subBackup ('ArticleTagMapping', $has),

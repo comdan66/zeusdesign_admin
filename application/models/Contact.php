@@ -40,16 +40,7 @@ class Contact extends OaModel {
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->message), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->message);
   }
   public function backup ($has = false) {
-    $var = array (
-      'id'         => $this->id,
-      'name'       => $this->name,
-      'email'      => $this->email,
-      'message'    => $this->message,
-      'ip'         => $this->ip,
-      'status'     => $this->status,
-      'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
-    );
+    $var = $this->getBackup ();
     return $has ? array (
         '_' => $var
       ) : $var;

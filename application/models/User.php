@@ -85,18 +85,7 @@ class User extends OaModel {
     return ($url = $this->facebook_link ()) ? $url : 'https://www.zeusdesign.com.tw/';
   }
   public function backup ($has = false) {
-    $var = array (
-      'id'         => $this->id,
-      'fid'    => $this->fid,
-      'account'      => $this->account,
-      'password'    => $this->password,
-      'token'     => $this->token,
-      'name'      => $this->name,
-      'email'       => $this->email,
-      'updated_at' => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at' => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
-    );
-
+    $var = $this->getBackup ();
     return $has ? array (
         '_' => $var,
         'set' => $this->subBackup ('UserSet', $has),

@@ -28,13 +28,7 @@ class WorkTagMapping extends OaModel {
     return $this->delete ();
   }
   public function backup ($has = false) {
-    $var = array (
-      'id'          => $this->id,
-      'work_id'     => $this->work_id,
-      'work_tag_id' => $this->work_tag_id,
-      'updated_at'  => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at'  => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
-    );
+    $var = $this->getBackup ();
     return $has ? array (
         '_' => $var
       ) : $var;

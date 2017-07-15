@@ -112,4 +112,10 @@ class Mail extends OaModel {
     if (!isset ($this->content)) return '';
     return $length ? mb_strimwidth (remove_ckedit_tag ($this->content), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
   }
+  public function backup ($has = false) {
+    $var = $this->getBackup ();
+    return $has ? array (
+        '_' => $var
+      ) : $var;
+  }
 }

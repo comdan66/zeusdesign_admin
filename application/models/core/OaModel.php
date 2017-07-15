@@ -29,6 +29,30 @@ class OaModel extends ActiveRecordModel {
       if ($arg !== null)
         array_push ($conditions, $arg);
   }
+  public function backup ($has = false) {
+    $var = $this->getBackup ();
+    return $has ? array (
+        '_' => $var,
+      ) : $var;
+  }
+  protected function getBackup () {
+    $that = $this;
+    return array_combine ($k = array_keys ($this->table ()->columns), array_map (function ($u) use ($that) {
+      switch (gettype ($that->$u)) {
+        case 'integer': case 'string': case 'double':
+          return $that->$u; break;
+        
+        default:
+          if ($that->$u instanceof OrmUploader) return (string) $that->$u;
+          if ($that->$u instanceof ActiveRecord\DateTime) return (string) $that->$u->format ('Y-m-d H:i:s');
+          if ($that->$u === null) return null;
+          
+          var_dump ($u, get_class ($that->$u));
+          exit ();  
+          break;
+      }
+    }, $k));
+  }
   protected function subBackup ($model, $has = false, $foreignKey = null) {
     if (!$foreignKey) $foreignKey = ActiveRecord\Utils::singularize ($this::$table_name) . ($this->table ()->pk ? '_' . $this->table ()->pk[0] : '');
     if (!isset ($model::table ()->columns[$foreignKey])) return array ();

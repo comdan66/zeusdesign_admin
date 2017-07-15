@@ -58,17 +58,7 @@ class IncomeItem extends OaModel {
     return $this->delete ();
   }
   public function backup ($has = false) {
-    $var = array (
-      'id'            => $this->id,
-      'income_id'     => $this->income_id,
-      'user_id'       => $this->user_id,
-      'company_pm_id' => $this->company_pm_id,
-      'title'         => $this->title,
-      'close_date'    => $this->close_date ? $this->close_date->format ('Y-m-d') : '',
-      'memo'          => $this->memo,
-      'updated_at'    => $this->updated_at ? $this->updated_at->format ('Y-m-d H:i:s') : '',
-      'created_at'    => $this->created_at ? $this->created_at->format ('Y-m-d H:i:s') : '',
-    );
+    $var = $this->getBackup ();
     return $has ? array (
         '_' => $var,
         'images' => $this->subBackup ('IncomeItemImage', $has),
