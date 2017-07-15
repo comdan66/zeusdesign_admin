@@ -91,10 +91,10 @@ class My extends Admin_controller {
         'content'   => array ('el' => 'input', 'text' => '內容', 'sql' => 'content LIKE ?'),
         'date'      => array ('el' => 'input', 'type' => 'date', 'text' => '日期', 'sql' => 'DATE(created_at) = ?'),
       );
-
+    $obj = $$this->obj;
     $configs = array_merge (explode ('/', 'admin/my/logs/' . $this->obj->id), array ('%s'));
-    $objs = conditions ($searches, $configs, $offset, 'UserLog', array ('select' => 'icon,title,content,status,created_at', 'order' => 'id DESC'), function ($conditions) {
-      OaModel::addConditions ($conditions, 'user_id = ?', User::current ()->id);
+    $objs = conditions ($searches, $configs, $offset, 'UserLog', array ('select' => 'icon,title,content,status,created_at', 'order' => 'id DESC'), function ($conditions) use ($obj) {
+      OaModel::addConditions ($conditions, 'user_id = ?', $obj->id);
       return $conditions;
     });
 
