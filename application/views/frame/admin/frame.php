@@ -163,7 +163,7 @@
         </div>
 <?php } ?>
 
-      <footer>© <?php echo date ('Y');?> zeusdesign.com.tw</footer>
+      <footer>© 2013 - <?php echo date ('Y');?> ZEUS Design CO., Ltd.</footer>
     </div><label class='icon-cross' for='menu_ckb'></label>
 
     <div id='user'>
