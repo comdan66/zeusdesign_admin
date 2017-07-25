@@ -14,6 +14,16 @@
       <input type='text' name='email' value='<?php echo isset ($posts['email']) ? $posts['email'] : $obj->email;?>' placeholder='請輸入<?php echo $title;?> E-Mail..' maxlength='200' pattern='.{1,200}' required title='輸入<?php echo $title;?> E-Mail!' />
     </div>
     
+  
+    <div class='row'>
+      <b><?php echo $title;?> Facebook 鏈結</b>
+      <input type='text' name='link_facebook' value='<?php echo isset ($posts['link_facebook']) ? $posts['link_facebook'] : $obj->set->link_facebook;?>' placeholder='請輸入<?php echo $title;?> Facebook 鏈結..' maxlength='200' title='輸入<?php echo $title;?> Facebook 鏈結!' />
+    </div>
+    
+    <div class='row'>
+      <b><?php echo $title;?> 聯絡電話</b>
+      <input type='text' name='phone' value='<?php echo isset ($posts['phone']) ? $posts['phone'] : $obj->set->phone;?>' placeholder='請輸入<?php echo $title;?> 聯絡電話..' maxlength='200' title='輸入<?php echo $title;?> 聯絡電話!' />
+    </div>
 <?php 
     foreach (Cfg::setting ('role', 'group') as $group => $keys) { ?>
       <div class='row'>
@@ -29,16 +39,6 @@
     <?php } ?>
         </div>
 <?php } ?>
-  
-    <div class='row'>
-      <b><?php echo $title;?> Facebook 鏈結</b>
-      <input type='text' name='link_facebook' value='<?php echo isset ($posts['link_facebook']) ? $posts['link_facebook'] : $obj->set->link_facebook;?>' placeholder='請輸入<?php echo $title;?> Facebook 鏈結..' maxlength='200' title='輸入<?php echo $title;?> Facebook 鏈結!' />
-    </div>
-    
-    <div class='row'>
-      <b><?php echo $title;?> 聯絡電話</b>
-      <input type='text' name='phone' value='<?php echo isset ($posts['phone']) ? $posts['phone'] : $obj->set->phone;?>' placeholder='請輸入<?php echo $title;?> 聯絡電話..' maxlength='200' title='輸入<?php echo $title;?> 聯絡電話!' />
-    </div>
     
     <div class='row'>
       <button type='submit'>確定送出</button>

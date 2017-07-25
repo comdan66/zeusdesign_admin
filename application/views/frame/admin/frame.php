@@ -154,7 +154,7 @@
           <span class='icon-fs'>專案管理</span>
           <div>
       <?php if (User::current ()->in_roles (array ('ftp'))) { ?>
-              <a class='icon-sev<?php echo ($url = base_url ('admin', 'ftps')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>FTP 資料</a>
+              <a class='icon-sev<?php echo ($url = base_url ('admin', 'ftps')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>FTP 列表</a>
       <?php }
             if (User::current ()->in_roles (array ('task'))) { ?>
               <a class='icon-shield<?php echo ($url = base_url ('admin', 'tasks')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>任務列表</a>
