@@ -90,7 +90,7 @@ class OAS3Tool {
             case 'js': myWriteFile ($f, preg_replace ("/^$bom/", '', JSMin::minify (myReadFile ($f)))); break;
           }
         }
-        return array ('path' => $f, 'md5' => md5_file ($f), 'uri' => ($usname ? FNAME . DIRECTORY_SEPARATOR : '') . preg_replace ('/^(' . preg_replace ('/\//', '\/', PATH) . ')/', '', $f));
+        return array ('path' => $f, 'md5' => md5_file ($f), 'uri' => ($usname ? FNAME . DIRECTORY_SEPARATOR . (defined('VERSION') ? VERSION . DIRECTORY_SEPARATOR : '') : '') . preg_replace ('/^(' . preg_replace ('/\//', '\/', PATH) . ')/', '', $f));
       }, $fs);
 
       return $fs;
@@ -109,8 +109,8 @@ class OAS3Tool {
   }
   public function listS3Files ($title) {
     $usname = $this->usname;
-    
-    $row = RowLogger::start ($this, $title, $this->s3fs = S3::getBucket ($this->bucket, $usname ? FNAME : null));
+
+    $row = RowLogger::start ($this, $title, $this->s3fs = S3::getBucket ($this->bucket, $usname ? FNAME . (defined('VERSION') ? DIRECTORY_SEPARATOR . VERSION . DIRECTORY_SEPARATOR : '') : null));
     $this->s3fs = $row->run ();
     $row->end ();
     
@@ -178,6 +178,6 @@ class OAS3Tool {
                 ->logAppend (' ' . color ('➜', 'W') . ' ' . color ('目前使用記憶體量', 'R') . '：' . str_repeat (' ', 49) . color ($s1[0], 'W') . ' ' . $s1[1] . "\n");
   }
   public function url () {
-    return $this->logAppend ("\n ", color ('➜', 'R') . " " . color ('您的網址是', 'G') . "：" . color ($this->protocol . '//' . $this->bucket . '/' . ($this->usname ? FNAME . '/' : ''), 'W'), "\n\n");
+    return $this->logAppend ("\n ", color ('➜', 'R') . " " . color ('您的網址是', 'G') . "：" . color ($this->protocol . '//' . $this->bucket . '/' . ($this->usname ? FNAME . '/' . (defined('VERSION') ? VERSION . '/' : '') : ''), 'W'), "\n\n");
   }
 }

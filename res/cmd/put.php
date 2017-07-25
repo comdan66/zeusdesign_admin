@@ -19,6 +19,7 @@ $argv = params ($argv, array (
   array ('-u', '-upload'),
   array ('-m', '-minify'),
   array ('-n', '-usname'),
+  array ('-v', '-version'),
   array ('-p', '-protocol')));
 
 $log = new Logger ();
@@ -29,6 +30,8 @@ if (!(isset ($argv['-b'][0]) && ($bucket = trim ($argv['-b'][0], '/')) && isset 
     );
   exit ();
 }
+
+define ('VERSION', !isset ($argv['-v'][0]) ? '0' : (($argv['-v'][0] = trim ($argv['-v'][0])) ? $argv['-v'][0] : '0'));
 
 $option = array (
     'bucket' => $bucket,
