@@ -30,7 +30,9 @@ class Site_controller extends Oa_controller {
   }
 
   private function _add_meta () {
-    return $this;
+    return $this->add_meta (array ('name' => 'robots', 'content' => 'noindex,nofollow'))
+                ->add_meta (array ('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui'))
+                ;
   }
 
   private function _add_css () {
