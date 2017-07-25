@@ -17,7 +17,8 @@ class Cli extends Oa_controller {
     }
 
     ini_set ('memory_limit', '2048M');
-    ob_start ();
+    ini_set ('set_time_limit', 60 * 60);
+    // ob_start ();
   }
   
   private function _save_cronjob ($cronjob, $title = '') {
@@ -97,13 +98,30 @@ class Cli extends Oa_controller {
     return $this->_save_cronjob ($cronjob);
   }
 
-  public function x ($id = 0) {
-    $is = InvoiceImage::all ();
-    foreach ($is as $i) {
-      $o = IncomeItemImage::find ('one', array ('conditions' => array ('income_item_id = ?', $i->invoice_id)));
-      $o->name->put_url ($i->name->url ());
-    }
-  }
+//   public function x ($id = 0) {
+//     // 35 88 98
+//     $is = InvoiceImage::find ('all', array ('order' => 'id ASC', 'conditions' => array ('id > 0')));
+    
+//     foreach ($is as $i) {
+//       echo $i->id;
+//       $o = IncomeItemImage::find ('one', array ('conditions' => array ('income_item_id = ?', $i->invoice_id)));
+// // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+// $x1 = str_replace ('https://cdn.zeusdesign.com.tw/', '', $i->name->url ());
+// $x2 = str_replace ('https://cdn.zeusdesign.com.tw/', '', $i->name->url ('800w'));
+
+// $x1 = str_replace ('invoice_images', 'income_item_images', $x1);
+// $x2 = str_replace ('invoice_images', 'income_item_images', $x2);
+
+
+//       download_web_file ($i->name->url (), $w1 = FCPATH . 'temp/' . ((string) $i->name));
+//       download_web_file ($i->name->url ('800w'), $w2 = FCPATH . 'temp/800w_' . ((string) $i->name));
+
+//       S3::putFile ($w1, 'cdn.zeusdesign.com.tw', $x1);
+//       S3::putFile ($w2, 'cdn.zeusdesign.com.tw', $x2);
+//       $o->name = (string) $i->name;
+//       echo " - ok\n";
+//     }
+//   }
   // public function o ($id = 0) {
   //   // echo $id ? Mail::find_by_id ($id)->content : Mail::last ()->content;
   // }
