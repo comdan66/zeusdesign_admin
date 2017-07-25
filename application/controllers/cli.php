@@ -97,6 +97,13 @@ class Cli extends Oa_controller {
     return $this->_save_cronjob ($cronjob);
   }
 
+  public function x ($id = 0) {
+    $is = InvoiceImage::all ();
+    foreach ($is as $i) {
+      $o = IncomeItemImage::find ('one', array ('conditions' => array ('income_item_id = ?', $i->invoice_id)));
+      $o->name->put_url ($i->name->url ());
+    }
+  }
   // public function o ($id = 0) {
   //   // echo $id ? Mail::find_by_id ($id)->content : Mail::last ()->content;
   // }
