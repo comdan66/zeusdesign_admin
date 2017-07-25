@@ -12,7 +12,6 @@ class Platform extends Site_controller {
     parent::__construct ();
     $this->load->library ('fb');
   }
-
   public function mail ($token = '') {
     if (!$mail = Mail::find ('one', array ('select' => 'id, uri, cnt_open, updated_at', 'conditions' => array ('token = ?', $token))))
       return redirect_message (array ('login'), array ('_fd' => ''));

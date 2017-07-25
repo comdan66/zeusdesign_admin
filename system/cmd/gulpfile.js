@@ -75,7 +75,7 @@ gulp.task ('update_admin_font_icon', function () {
 gulp.task ('update_site_font_icon', function () {
 
   read ('./root/res/font/site/style.css', 'utf8', function (err, buffer) {
-    var t = buffer.match (/\.icon-[a-zA-Z_\-0-9]*:before\s?\{\s*content:\s*"[\\A-Za-z0-9]*";\s*}/g);
+    var t = buffer.match (/\.icon-[a-zA-Z_\-0-9]*:before\s?\{\s*content:\s*"[\\A-Za-z0-9]*";(\s*color:\s*#[A-Za-z0-9]*;)?\s*}/g);
       if (!(t && t.length)) return;
 
       writeFile ('./root/application/views/public/icon_site.scss', '@import "_oa";\n\n@include font-face("site", font-files("site/fonts/icomoon.eot", "site/fonts/icomoon.woff", "site/fonts/icomoon.ttf", "site/fonts/icomoon.svg"));\n[class^="icon-"], [class*=" icon-"] {\n  font-family: "site"; speak: none; font-style: normal; font-weight: normal; font-variant: normal;\n  @include font-smoothing(antialiased);\n}\n\n' + t.join ('\n'), function(err) {
