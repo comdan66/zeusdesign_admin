@@ -19,8 +19,9 @@ class Oa_controller extends Root_controller {
   private $js_list     = array ();
   private $css_list    = array ();
 
-  private $append_js_list     = array ();
-  private $append_css_list    = array ();
+  private $append_js_list      = array ();
+  private $append_css_list     = array ();
+  private $static_file_version = 2;
 
   public function __construct () {
     parent::__construct ();
@@ -152,12 +153,26 @@ class Oa_controller extends Root_controller {
     $file_name = (Cfg::system ('static', 'is_md5') ? md5 ($file_name) : $file_name) . '.' .  $format;
     $bom = pack ('H*','EFBBBF');
 
+    $return = true;
+    $f = implode ('/', array_merge (Cfg::system ('static', 'assets_folder'), array ($file_name)));
+
     if (!is_readable ($folder_path . $file_name) && !($data = '')) {
       foreach ($temp as $key => $value)
         $data .= (($file = preg_replace("/^$bom/", '', read_file ($path = FCPATH . preg_replace ("|^(" . preg_quote (base_url ('')) . ")|", '', $value)))) ? Cfg::system ('static', 'minify') ? $this->minify->$format->min ($file) : $file : '') . "\n";
-      write_file ($folder_path . $file_name, $data, 'w+');
+      write_file ($t = $folder_path . $file_name, $data, 'w+');
+
+      $bucket = Cfg::system ('orm_uploader', 'uploader', 's3', 'bucket');
+      if (!class_exists ('S3')) {
+        $this->load->library ('S3');
+
+        if (!S3::initialize (Cfg::system ('s3', 'buckets', $bucket)))
+          return $this->error = array ('OrmUploader 錯誤！', '初始化 S3 錯誤！', '請確認一下 Bucket 的 access_key 與 secret_key 是否正確');
+      }
+
+      $return = S3::putFile ($t, $bucket, $f);
     }
-    return base_url (array_merge (Cfg::system ('static', 'assets_folder'), array ($file_name)));
+
+    return ($return ? Cfg::system ('orm_uploader', 'uploader', 's3', 'url') . $f : base_url ($f)) . '?v=' . $this->static_file_version;
   }
   private function _combine_static_files () {
     if ((ENVIRONMENT !== 'production') && Cfg::system ('static', 'enable'))
