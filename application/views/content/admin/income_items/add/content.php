@@ -1,3 +1,4 @@
+<input type='hidden' id='_mid' value='<?php echo User::current ()->id;?>' />
 <h1<?php echo isset ($icon) && $icon ? ' class="' . $icon . '"' : '';?>>新增<?php echo $title;?></h1>
 
 <div class='panel'>

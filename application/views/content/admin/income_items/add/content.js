@@ -20,6 +20,7 @@
 }) (jQuery.fn.clone);
 
 $(function () {
+  var _mid = $('#_mid').val ();
 
   function mutiCol ($obj) {
     $obj.each (function () {
@@ -40,7 +41,7 @@ $(function () {
                                      .attr ('class', $row.data ('attrs')[j].class ? $row.data ('attrs')[j].class : null).append (
                                       $row.data ('attrs')[j].options ? Array.apply (null, Array ($row.data ('attrs')[j].options.length)).map (function (_, k) {
                                         return $('<option />').attr ('value', $row.data ('attrs')[j].options[k].value)
-                                                              .prop ('selected', (t ? $row.data ('attrs')[j].key && typeof t[$row.data ('attrs')[j].key] !== 'undefined' ? t[$row.data ('attrs')[j].key] : (typeof t === 'object' ? '' : t) : '') == $row.data ('attrs')[j].options[k].value)
+                                                              .prop ('selected', (t ? $row.data ('attrs')[j].key && typeof t[$row.data ('attrs')[j].key] !== 'undefined' ? t[$row.data ('attrs')[j].key] : (typeof t === 'object' ? _mid : t) : _mid) == $row.data ('attrs')[j].options[k].value)
                                                               .text ($row.data ('attrs')[j].options[k].text);
 
                                       }) : null);
