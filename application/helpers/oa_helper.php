@@ -209,7 +209,7 @@ if (!function_exists ('redirect_message')) {
 if (!function_exists ('res_url')) {
   function res_url () {
     $args = array_filter (func_get_args ());
-    return base_url ($args);
+    return ENVIRONMENT == 'production' ? Cfg::system ('orm_uploader', 'uploader', 's3', 'url') . implode ('/', $args) : base_url ($args);
   }
 }
 if (!function_exists ('conditions')) {
