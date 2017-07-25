@@ -67,8 +67,8 @@
               <span></span>
             </label>
           </td>
-          <td><?php echo $obj->email;?></td>
           <td><?php echo $obj->name;?></td>
+          <td><?php echo $obj->email;?></td>
           <td><?php echo $obj->mini_message (50);?></td>
           <td class='center'>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
