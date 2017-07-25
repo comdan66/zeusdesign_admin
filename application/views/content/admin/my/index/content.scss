@@ -362,8 +362,9 @@ span.title {
       line-height: 30px;
       border: 1px solid rgba(255, 255, 255, 1);
       cursor: pointer;
+      overflow: hidden;
 
-      @include border-radius(2px);
+      @include border-radius(3px);
 
       &:before {
         content: attr(data-cnt);
