@@ -22,7 +22,7 @@ class Incomes extends Admin_controller {
     $this->icon = 'icon-bil';
     $this->title = '入帳';
 
-    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy', 'status', 'show')))
+    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy', 'status', 'show', 'export')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Income::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array ('_fd' => '找不到該筆資料。'));
 
@@ -186,6 +186,33 @@ class Incomes extends Admin_controller {
     return redirect_message (array ($this->uri_1), array ('_fi' => '刪除成功！'));
   }
 
+  public function export ($id = 0) {
+    $objs = $this->obj->items;
+
+    $this->load->library ('OAExcel');
+    $infos = array (
+        array ('title' => '請款名稱', 'exp' => '$obj->title', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
+        array ('title' => '聯絡人公司', 'exp' => '$obj->pm && $obj->pm->company ? $obj->pm->company->name : ""', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
+        array ('title' => '聯絡人', 'exp' => '$obj->pm && $obj->pm->company ? $obj->pm->name : ""', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
+        array ('title' => '聯絡人電話', 'exp' => '$obj->pm && $obj->pm->company ? $obj->pm->company->phone . (($e = trim ($obj->pm->extension, "#")) ? " #" . $e : "") : ""', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
+        array ('title' => '總金額', 'exp' => '$obj->money ()', 'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,),
+        array ('title' => '結案日期', 'exp' => '$obj->close_date ? $obj->close_date->format ("Y-m-d") : ""', 'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2,),
+        array ('title' => '備註', 'exp' => '$obj->memo ? $obj->memo : "-"', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,)
+      );
+
+    $excel = $this->_build_excel ($objs, $infos);
+    $excel->getActiveSheet ()->setTitle ('入帳請款列表');
+    $excel->setActiveSheetIndex (0);
+
+    $filename = '宙思入帳請款_' . date ('Ymd') . '.xlsx';
+    header ('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf8');
+    header ('Content-Disposition: attachment; filename=' . $filename);
+
+    $objWriter = new PHPExcel_Writer_Excel2007 ($excel);
+    $objWriter->save ("php://output");
+
+    UserLog::logRead ($this->icon, '匯出一項入帳的請款細項', '該筆請款標題為：「' . $this->obj->title . '」，細項共有 ' . count ($objs) . ' 筆');
+  }
   public function show () {
     UserLog::logRead ($this->icon, '檢視了一項' . $this->title);
 

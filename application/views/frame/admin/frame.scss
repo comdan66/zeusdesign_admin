@@ -853,7 +853,7 @@ html {
       &:nth-child(1) {
         max-width: calc(100% - 70px * 2);
       }
-      &:nth-child(2), &:nth-child(3) {
+      &:nth-child(2), &:nth-child(3), &:nth-child(4) {
         float: right;
         width: 70px;
         text-align: center;

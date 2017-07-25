@@ -4,6 +4,7 @@
   <a class='icon-keyboard_arrow_left' href='<?php echo base_url ($uri_1);?>'>回列表頁</a>
 
     
+  <a class='icon-p' href='<?php echo base_url ($uri_1, 'export', $obj->id);?>'>列印</a>
 <?php if ($obj->status != Income::STATUS_2) { ?>
         <a class='icon-bin' href='<?php echo base_url ($uri_1, $obj->id);?>' data-method='delete'>刪除</a>
         <a class='icon-pencil2' href='<?php echo base_url ($uri_1, $obj->id, 'edit');?>'>編輯</a>
