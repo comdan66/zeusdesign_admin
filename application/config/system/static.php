@@ -17,6 +17,6 @@ $static['separate'] = '_|_';
 $static['name'] = 'asset_file';
 
 $static['s3'] = array (
-    'bucket' => 'test.ioa.tw',
-    'url' => 'https://test.ioa.tw/'
+    'bucket' => 'cdn.zeusdesign.com.tw',
+    'url' => 'https://cdn.zeusdesign.com.tw/'
   );
