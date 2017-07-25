@@ -33,7 +33,7 @@ class OrmImageUploader extends OrmUploader {
   }
   // return array
   public function path ($key = '') {
-    if (($versions = ($versions = array_merge ($this->getVersions (), $this->getVirtualVersions ())) ? $versions : $this->configs['default_version']) && isset ($versions[$key]) && ($fileName = $key . $this->configs['separate_symbol'] . $this->getValue ()))
+    if (($versions = ($versions = array_merge ($this->getVersions (), $this->getVirtualVersions ())) ? $versions : $this->configs['default_version']) && isset ($versions[$key]) && $this->getValue () && ($fileName = $key . $this->configs['separate_symbol'] . $this->getValue ()))
       return parent::path ($fileName);
     else
       return array ();
