@@ -25,7 +25,7 @@ class Platform extends Site_controller {
     return redirect (forward_static_call_array (array ('Fb', 'loginUrl'), array_merge (array ('platform', 'fb_sign_in'), explode ('/', $mail->uri))));
   }
   public function login () {
-    if (User::current () && User::current ()->is_login ()) return redirect_message (array ('admin'), array ());
+    if (User::current () && User::current ()->is_login ()) return redirect_message (array ('admin', 'my'), array ());
     else $this->set_frame_path ('frame', 'pure')
               ->set_title ('登入')
               ->load_view (array (
