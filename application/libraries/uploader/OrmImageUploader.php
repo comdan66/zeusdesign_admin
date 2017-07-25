@@ -122,7 +122,7 @@ class OrmImageUploader extends OrmUploader {
       case 's3':
         @self::uploadColumnAndUpload ('');
         foreach ($news as $new)
-          if (!(S3::putObjectFile ($new['path'], $this->getS3Bucket (), implode (DIRECTORY_SEPARATOR, $save_path) . DIRECTORY_SEPARATOR . $new['name'], S3::ACL_PUBLIC_READ, array (), array ('Cache-Control' => 'max-age=315360000', 'Expires' => gmdate ('D, d M Y H:i:s T', strtotime ('+5 years')))) && @unlink ($new['path'])))
+          if (!(S3::putFile ($new['path'], $this->getS3Bucket (), implode (DIRECTORY_SEPARATOR, $save_path) . DIRECTORY_SEPARATOR . $new['name']) && @unlink ($new['path'])))
             return $this->getDebug () ? error ('OrmImageUploader 錯誤！', '不明原因錯誤！', '請程式設計者確認狀況！') : false;
         return self::uploadColumnAndUpload ($name) && @unlink ($temp);
         break;
@@ -165,7 +165,7 @@ class OrmImageUploader extends OrmUploader {
 
         foreach ($files as $file)
           if (file_exists ($file) && is_writable ($file))
-            if (!(S3::putObjectFile ($file, $this->getS3Bucket (), $path . pathinfo ($file, PATHINFO_BASENAME), S3::ACL_PUBLIC_READ, array (), array ('Cache-Control' => 'max-age=315360000', 'Expires' => gmdate ('D, d M Y H:i:s T', strtotime ('+5 years')))) && @unlink ($file)))
+            if (!(S3::putFile ($file, $this->getS3Bucket (), $path . pathinfo ($file, PATHINFO_BASENAME)) && @unlink ($file)))
               return $this->getDebug () ? error ('OrmImageUploader 錯誤！', '不明原因錯誤！', '請程式設計者確認狀況！') : false;
         return true;
         break;
@@ -225,7 +225,7 @@ class OrmImageUploader extends OrmUploader {
           $image = ImageUtility::create ($fileName = FCPATH . implode (DIRECTORY_SEPARATOR, $fileName), null);
           $newPath = array_merge ($path, array ($newName = $key . $this->configs['separate_symbol'] . $name));
 
-          if ($this->_utility ($image, FCPATH . implode (DIRECTORY_SEPARATOR, $newFileName = array_merge ($this->getTempDirectory (), array ($newName))), $key, $version) && S3::putObjectFile ($newFileName = FCPATH . implode (DIRECTORY_SEPARATOR, $newFileName), $this->getS3Bucket (), implode (DIRECTORY_SEPARATOR, $newPath), S3::ACL_PUBLIC_READ, array (), array ('Cache-Control' => 'max-age=315360000', 'Expires' => gmdate ('D, d M Y H:i:s T', strtotime ('+5 years')))) && @unlink ($newFileName) && @unlink ($fileName))
+          if ($this->_utility ($image, FCPATH . implode (DIRECTORY_SEPARATOR, $newFileName = array_merge ($this->getTempDirectory (), array ($newName))), $key, $version) && S3::putFile ($newFileName = FCPATH . implode (DIRECTORY_SEPARATOR, $newFileName), $this->getS3Bucket (), implode (DIRECTORY_SEPARATOR, $newPath)) && @unlink ($newFileName) && @unlink ($fileName))
             return $newPath;  
           else
             return array ();
