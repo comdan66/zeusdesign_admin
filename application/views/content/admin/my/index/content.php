@@ -30,7 +30,7 @@
 
 <div class='units'>
   <a<?php echo $self ? " href='" . base_url ('admin', 'my-tasks') . "'" : '' ?> class='icon-shield'>
-    <span class='count-up' data-unit='個'><?php echo Task::count (array ('conditions' => array ('user_id = ? AND status = ?', $obj->id, Task::STATUS_2)));?></span>
+    <span class='count-up' data-unit='個'><?php echo $task_cnt = Task::count (array ('joins' => 'LEFT JOIN (select user_id,task_id from task_user_mappings) as a ON(tasks.id = a.task_id)', 'conditions' => array ('status = ? AND a.user_id = ?', Task::STATUS_1, $obj->id)));?></span>
     <span>未完成任務</span>
   </a>
   <a<?php echo $self ? " href='" . base_url ('admin', 'my-calendar', '?date=' . $today) . "'" : '' ?> class='icon-calendar2'>
