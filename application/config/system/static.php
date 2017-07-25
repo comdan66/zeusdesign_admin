@@ -15,3 +15,8 @@ $static['assets_folder'] = array ('assets');
 $static['file_prefix'] = 'static';
 $static['separate'] = '_|_';
 $static['name'] = 'asset_file';
+
+$static['s3'] = array (
+    'bucket' => 'test.ioa.tw',
+    'url' => 'https://test.ioa.tw/'
+  );
