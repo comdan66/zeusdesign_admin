@@ -50,7 +50,7 @@
   <table class='table-list w1200'>
     <thead>
       <tr>
-        <th width='70'>完成</th>
+        <th width='70'>狀態</th>
         <th width='110' class='center'>優先權<?php echo listSort ($uri_1, 'level');?></th>
         <th width='110' class='left'>擁有者</th>
         <th width='160' class='left'>標題<?php echo listSort ($uri_1, 'title');?></th>
@@ -63,8 +63,8 @@
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
-          <td>
-      <?php if ($obj->user_id == User::current ()->id && User::current ()->in_roles (array ('task'))) {?>
+          <td<?php echo !($t = $obj->user_id == User::current ()->id && User::current ()->in_roles (array ('task'))) && $obj->status != Task::STATUS_2 ? ' style="color: rgba(206, 26, 31, 1.00);"' : '';?>>
+      <?php if ($t) {?>
               <label class='switch ajax' data-forcntrole='task' data-column='status' data-url='<?php echo base_url ('admin', 'tasks', 'status', $obj->id);?>'>
                 <input type='checkbox'<?php echo $obj->status == Task::STATUS_2 ? ' checked' : '';?> />
                 <span></span>
