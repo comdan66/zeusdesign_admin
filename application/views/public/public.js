@@ -12,18 +12,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga ('create', 'UA-46121102-27', 'auto');
 ga ('send', 'pageview');
 
-Array.prototype.column = function (k) {
-  return this.map (function (t) { return k ? eval ("t." + k) : t; });
-};
-Array.prototype.diff = function (a, k) {
-  return this.filter (function (i) { return a.column (k).indexOf (eval ("i." + k)) < 0; });
-};
-Array.prototype.max = function (k) {
-  return Math.max.apply (null, this.column (k));
-};
-Array.prototype.min = function (k) {
-  return Math.min.apply (null, this.column (k));
-};
 
 window.ajaxError = function (result) {
   console.error (result.responseText);
