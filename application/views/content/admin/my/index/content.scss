@@ -1,0 +1,859 @@
+/**
+ * @author      OA Wu <comdan66@gmail.com>
+ * @copyright   Copyright (c) 2017 OA Wu Design
+ * @license     http://creativecommons.org/licenses/by-nc/2.0/tw/
+ */
+
+@import "_oa";
+
+#main > div {
+  padding: 0;
+  padding-bottom: 32px;
+  overflow: hidden;
+
+  > header {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    min-height: 280px;
+    background-attachment: fixed;
+    background-position: center 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    .avatar {
+      position: absolute;
+      left: 20px;
+      top: calc(50% - 100px / 2 - 40px / 2);
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      @include border-radius(50%);
+      @include box-shadow(1px 2px 3px rgba(39, 40, 34, .3));
+
+      img {
+        display: inline-block;
+        width: 100%;
+      }
+    }
+    .info {
+      position: absolute;
+      left: 100px + 20px;
+      top: calc(50% - 90px / 2 + 10px - 40px / 2);
+      display: inline-block;
+      width: calc(100% - (100px + 20px));
+      height: 90px;
+      padding-left: 20px;
+
+      h1 {
+        display: inline-block;
+        width: 100%;
+        height: 45px;
+        line-height: 45px;
+        margin: 0;
+        color: rgba(240, 240, 240, 1.00);
+        @include text-shadow(0 0 3px rgba(0, 0, 0, 0.3));
+      }
+      div {
+        display: inline-block;
+        width: 100%;
+        margin-top: 4px;
+        @include clearfix();
+        
+        > * {
+          display: inline-block;
+          float: left;
+          width: 30px;
+          height: 30px;
+          line-height: 30px;
+          text-align: center;
+          font-size: 14px;
+          @include border-radius(30px / 2);
+          @include box-shadow(0 0 3px rgba(39, 40, 34, .2));
+          @include opacity(.85);
+          @include transition(opacity .3s);
+          
+          &:hover {
+            @include opacity(1);
+          }
+          + * {
+            margin-left: 8px;
+          }
+
+          &.icon-em {
+            font-size: 15px;
+            color: white;
+            background-color: rgba(52, 168, 83, 1.00);
+          }
+          &.icon-facebook {
+            color: white;
+            background-color: rgba(51, 83, 151, 1.00);
+          }
+          &.icon-phone {
+            font-size: 17px;
+            color: white;
+            background-color: rgba(236, 83, 70, 1.00);
+          }
+        }
+      }
+    }
+    .bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      display: inline-block;
+      width: 100%;
+      padding: 8px 16px;
+
+      background-color: rgba(0, 0, 0, 0.3);
+      @include clearfix();
+
+      padding-left: 85px + 8px;
+      
+      &:before {
+        content: attr(data-title);
+        position: absolute;
+        left: 0;
+        top: 9px;
+        display: inline-block;
+        width: 85px;
+        text-align: right;
+        color: rgba(222, 222, 222, 1.00);
+        font-size: 13px;
+      }
+      > * {
+        position: relative;
+        display: inline-block;
+        float: left;
+        color: rgba(255, 255, 255, 1.00);
+        font-size: 14px;
+        margin-right: 16px;
+        font-weight: bold;
+      }
+    }
+    .setting {
+      position: absolute;
+      top: 8px;
+      right: 16px;
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      color: rgba(230, 230, 230, 1);
+      font-size: 20px;
+      cursor: pointer;
+      @include transition(color .3s);
+      @include text-shadow(0 0 3px rgba(0, 0, 0, .5));
+
+      &:hover {
+        color: rgba(255, 255, 255, 1);
+      }
+      &:not([href]), [href=''] {
+        display: none;
+      }
+    }
+  }
+}
+.e {
+  &:before {
+    display: inline-block;
+    width: 100%;
+    height: 55px;
+    line-height: 55px;
+
+    color: rgba(180, 180, 180, 1.00);
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+    @include text-shadow(1px 1px 0 rgba(255, 255, 255, .75));
+  }
+  a {
+    &:before {
+      margin-right: 4px;
+      font-size: 14px;
+      display: inline-block;
+      margin-top: 2px;
+    }
+  }
+}
+span.title {
+  display: inline-block;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  @include clearfix();
+
+  @include range-width(0, 550px) { padding: 0 8px; }
+  @include range-width(550px, 1000px) { padding: 0 16px; }
+  @include range-width(1000px) { padding: 0 24px; }
+
+  > * {
+    display: inline-block;
+    float: left;
+    @include overflow-docx3();
+  }
+  span:first-child {
+    width: calc(100% - 100px);
+    text-align: left;
+    font-weight: bold;
+    color: rgba(145, 145, 145, 1.00);
+    letter-spacing: 1px;
+    @include text-shadow(1px 1px 1px rgba(255, 255, 255, .65));
+  }
+  span + span, span + a {
+    width: 100px;
+    text-align: right;
+    font-size: 13px;
+    color: rgba(74, 138, 244, 1.00);
+  }
+  span + span {
+    color: red;
+  }
+}
+
+.units {
+  display: inline-block;
+  margin: 0 auto;
+  width: 100%;
+  @include clearfix();
+
+  > a {
+    float: left;
+    display: inline-block;
+    height: 150px;
+    padding: 16px;
+    background-color: rgba(255, 255, 255, 1.00);
+    margin-top: 0;
+    background-color: rgba(255, 255, 255, 1.00);
+    @include border-radius(2px);
+    @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+    
+    &:before {
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      margin: 0 auto;
+
+      color: white;
+      @include border-radius(50%);
+      font-size: 32px;
+    }
+    &.icon-shield:before { background-color: rgba(236, 83, 70, 1.00); }
+    &.icon-moneybag:before { font-size: 40px; background-color: rgba(237, 188, 17, 1.00); }
+    &.icon-enter:before { background-color: rgba(102, 102, 102, 1.00); }
+    &.icon-calendar2:before { background-color: rgba(52, 168, 83, 1.00); }
+    &.icon-line-chart:before { background-color: rgba(66, 133, 244, 1.00); }
+    &.icon-file-text2:before { background-color: rgba(66, 133, 244, 1.00); }
+    &.icon-g:before { background-color: rgba(232, 114, 11, 1.00); }
+    
+    span {
+      margin-top: 12px;
+      display: block;
+      height: 22px;
+      font-size: 20px;
+      font-weight: bold;
+      color: rgba(91, 91, 91, 1.00);
+      @include overflow-docx3();
+      &[data-unit] {
+        &:after {
+          content: attr(data-unit);
+          font-weight: normal;
+          font-size: 10px;
+          margin-top: 6px;
+          margin-left: 3px;
+          display: inline-block;
+          color: rgba(125, 125, 125, 1.00);
+        }
+      }
+      
+      + span {
+        margin-top: 4px;
+        font-size: 13px;
+        font-weight: normal;
+      }
+    }
+  }
+
+  @include range-width(0, 350px) {
+    padding: 0;
+    a {
+      width: calc(100% / 2);
+      margin: 0;
+      @include border-radius(0);
+      @include box-shadow(0 0 2px rgba(0,0,0,0.4));
+    }
+  }
+  @include range-width(350px, 450px) {
+    padding: 0 4px;
+    a {
+      width: calc(100% / 2 - 8px);
+      margin: 4px;
+      &:nth-child(2n + 2) {
+        margin-left: 4px;
+      }
+      &:nth-child(n + 3) {
+        margin-top: 4px;
+      }
+    }
+  }
+  @include range-width(450px, 550px) {
+    padding: 0 4px;
+    a {
+      width: calc(100% / 3 - 4px * 2);
+      margin: 4px;
+      &:nth-child(n + 4) {
+        margin-top: 4px;
+      }
+    }
+  }
+  @include range-width(550px, 1000px) {
+    padding: 0 8px;
+    a {
+      width: calc(100% / 3 - 8px * 2);
+      margin: 8px;
+      &:nth-child(n + 4) {
+        margin-top: 8px;
+      }
+    }
+  }
+  @include range-width(1000px, 1280px) {
+    padding: 0 12px;
+    a {
+      width: calc(100% / 3 - 12px * 2);
+      margin: 12px;
+      &:nth-child(n + 4) {
+        margin-top: 12px;
+      }
+    }
+  }
+  @include range-width(1280px) {
+    padding: 0 12px;
+    a {
+      width: calc(100% / 6 - 12px * 2);
+      margin: 12px;
+    }
+  }
+}
+
+.calendar {
+  position: relative;
+  display: inline-block;
+  padding: 16px;
+
+  background-color: rgba(255, 255, 255, 1.00);
+  @include border-radius(2px);
+  @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+  @include clearfix();
+
+  > div {
+    float: left;
+    display: inline-block;
+    width: calc(100% / 52);
+    height: 30px * 7;
+
+    > a {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 30px;
+      line-height: 30px;
+      border: 1px solid rgba(255, 255, 255, 1);
+      cursor: pointer;
+
+      @include border-radius(2px);
+
+      &:before {
+        content: attr(data-cnt);
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        @include overflow-docx3();
+        font-size: 12px;
+        @include opacity(.75);
+        @include transition(opacity .3s);
+        z-index: 1;
+        background-color: rgba(235, 235, 235, 1.00);
+        color: rgba(0, 0, 0, .3);
+        @include box-shadow(inset 0 0 1px rgba(0, 0, 0, .2));
+      }
+      &[data-cnt='0'] {
+        &:before {
+          content: '';
+        }
+      }
+      span {
+        position: absolute;
+        bottom: -25px;
+        left: (30px-150px) / 2;
+        display: inline-block;
+        height: 25px;
+        line-height: 25px;
+        width: 150px;
+        text-align: center;
+        font-size: 10px;
+        color: white;
+        background-color: rgba(25, 25, 25, 1);
+        z-index: -1;
+        @include border-radius(3px);
+        @include opacity(0);
+        @include transition(opacity .3s);
+
+        &:before {
+          bottom: 100%;
+          left: 50%;
+          border: solid transparent;
+          content: '';
+          height: 0;
+          width: 0;
+          position: absolute;
+          pointer-events: none;
+          border-color: transparent;
+          border-bottom-color: rgba(25, 25, 25, 1);
+          border-width: 5px;
+          margin-left: -5px;
+        }
+      }
+      &:nth-last-child(-n + 2) {
+        span {
+          bottom: auto;
+          top: -25px;
+
+          &:before {
+            bottom: auto;
+            top: 100%;
+            @include rotate(180deg);
+          }
+        }
+      }
+      &:hover {
+        &[data-cnt] {
+          &:before {
+            @include opacity(1);
+          }
+          span {
+            z-index: 2;
+            @include opacity(1);
+          }
+        }
+      }
+    }
+    &:nth-last-child(-n+3) { > a span { left: auto; &:before { left: auto; } } }
+    &:nth-last-child(3) { > a span { right: -40px; &:before { right: 50px; } } }
+    &:nth-last-child(2) { > a span { right: -20px; &:before { right: 30px; } } }
+    &:nth-last-child(1) { > a span { right: 0; &:before { right: 10px; } } }
+
+    &:nth-child(3) { > a span { left: -40px; &:before { left: 50px; } } }
+    &:nth-child(2) { > a span { left: -20px; &:before { left: 30px; } } }
+    &:nth-child(1) { > a span { left: 0; &:before { left: 10px; } } }
+  }
+
+  .s4:before { color: rgba(255, 255, 255, .5) !important; background-color: rgba(22, 67, 31, 1.00) !important; }
+  .s3:before { color: rgba(255, 255, 255, .5) !important; background-color: rgba(25, 97, 39, 1.00) !important; }
+  .s2:before { background-color: rgba(35, 154, 59, 1.00) !important; }
+  .s1:before { background-color: rgba(123, 201, 111, 1.00) !important; }
+  .s0:before { background-color: rgba(198, 228, 139, 1.00) !important; }
+  
+  @include range-width(0, 350px) {
+    margin: 0 ;
+    width: 100%;
+    @include border-radius(0);
+  }
+  @include range-width(350px, 550px) {
+    margin: 0 8px;
+    width: calc(100% - 8px * 2);
+  }
+  @include range-width(550px, 1000px) {
+    margin: 0 16px;
+    width: calc(100% - 16px * 2);
+  }
+  @include range-width(1000px) {
+    margin: 0 24px;
+    width: calc(100% - 24px * 2);
+  }
+
+  @include range-width(0, 420px) {
+    > div {
+      width: calc(100% / 6);
+      &:nth-last-child(n + 7) {
+        display: none;
+      }
+      &:nth-last-child(4) { > div span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(5) { > div span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(6) { > div span { left: 0; &:before { left: 10px; } } }
+    }
+  }
+
+  @include range-width(420px, 550px) {
+    > div {
+      width: calc(100% / 11);
+      &:nth-last-child(n + 12) {
+        display: none;
+      }
+      &:nth-last-child(9) { > a span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(10) { > a span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(11) { > a span { left: 0; &:before { left: 10px; } } }
+    }
+  }
+  @include range-width(550px, 1000px) {
+    > div {
+      width: calc(100% / 15);
+      &:nth-last-child(n + 16) {
+        display: none;
+      }
+      &:nth-last-child(13) { > a span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(14) { > a span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(15) { > a span { left: 0; &:before { left: 10px; } } }
+    }
+  }
+  @include range-width(1000px, 1300px) {
+    > div {
+      width: calc(100% / 21);
+      &:nth-last-child(n + 22) {
+        display: none;
+      }
+      &:nth-last-child(19) { > a span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(20) { > a span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(21) { > a span { left: 0; &:before { left: 10px; } } }
+    }
+  }
+  @include range-width(1300px, 1500px) {
+    > div {
+      width: calc(100% / 28);
+      &:nth-last-child(n + 29) {
+        display: none;
+      }
+
+      &:nth-last-child(26) { > a span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(27) { > a span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(28) { > a span { left: 0; &:before { left: 10px; } } }
+    }
+  }
+  @include range-width(1500px, 1750px) {
+    > div {
+      width: calc(100% / 42);
+      &:nth-last-child(n + 43) {
+        display: none;
+      }
+
+      &:nth-last-child(40) { > a span { left: -40px; &:before { left: 50px; } } }
+      &:nth-last-child(41) { > a span { left: -20px; &:before { left: 30px; } } }
+      &:nth-last-child(42) { > a span { left: 0; &:before { left: 10px; } } }
+    }
+  }
+}
+
+.block2 {
+  display: inline-block;
+  width: 100%;
+  @include clearfix();
+  
+  > * {
+    float: left;
+    display: inline-block;
+    width: 50%;
+
+    > span.title {
+      @include range-width(0, 350px) {
+        padding: 0 8px !important;
+      }
+      @include range-width(350px) {
+        padding: 0 !important;
+      }
+    }
+  }
+
+  @include range-width(0, 350px) {
+    padding: 0;
+  }
+  @include range-width(350px, 550px) {
+    padding: 0 8px;
+  }
+  @include range-width(550px, 1000px) {
+    padding: 0 16px;
+  }
+  @include range-width(1000px) {
+    padding: 0 24px;
+  }
+
+  @include range-width(0, 1200px) {
+    > * {
+      width: 100%;
+
+      &:nth-child(1) {
+        padding-right: 0;
+      }
+      &:nth-child(2) {
+        padding-left: 0;
+      }
+    }
+  }
+  @include range-width(1200px) {
+    > * {
+      width: 50%;
+      &:nth-child(1) {
+        padding-right: 12px;
+      }
+      &:nth-child(2) {
+        padding-left: 12px;
+      }
+    }
+  };
+}
+.logs {
+  display: inline-block;
+  width: 100%;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 1.00);
+  padding: 8px 0;
+  padding-bottom: 16px;
+  @include border-radius(2px);
+  @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+  
+  &.e {
+    &:before {
+      content: '沒有任何記錄。';
+    }
+  }  
+  h3 {
+    display: inline-block;
+    width: 100%;
+    padding: 0 16px;
+    font-size: 15px;
+    margin: 8px 0;
+    height: 30px;
+    line-height: 30px;
+  }
+  div {
+    display: inline-block;
+    width: 100%;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 16px;
+    padding-left: 32px;
+    font-size: 16px;
+    color: rgba(100, 100, 100, 1);
+    > time {
+      color: rgba(130, 130, 130, 1);
+      margin-right: 4px;
+      font-size: 14px;
+    }
+    + h3 {
+      margin-top: 24px;
+    }
+    + span {
+      margin-top: 4px;
+    }
+    &:before {
+      margin-right: 8px;
+      font-size: 20px;
+      color: rgba(180, 180, 180, 1);
+    }
+  }
+  span {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    line-height: 20px;
+    padding: 4px 16px;
+    padding-left: 70px;
+
+    color: rgba(150, 150, 150, 1);
+    font-style: italic;
+    font-size: 13px;
+    word-break: break-all;
+
+
+    + h3 {
+      margin-top: 24px;
+    }
+    + div {
+      margin-top: 16px;
+    }
+    &:before {
+      content: '';
+      position: absolute;
+      left: 52px;
+      top: 0;
+      display: inline-block;
+      width: 4px;
+      height: 100%;
+      background-color: rgba(230, 230, 230, 1);
+    }
+  }
+
+
+  @include range-width(0, 350px) {
+    @include border-radius(0);
+  }
+  @include range-width(0, 550px) {
+    div {
+      padding-left: 16px;
+    }
+    span {
+      padding-left: 42px;
+      
+      &:before {
+        left: 24px;
+      }
+    }
+  };
+}
+.list {
+  display: inline-block;
+  width: 100%;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 1.00);
+  padding: 8px 0;
+  @include border-radius(2px);
+  @include box-shadow(0 1px 2px rgba(0,0,0,0.2), 0 -1px 1px rgba(0,0,0,0.05));
+  
+  &.e {
+    &:before {
+      content: attr(data-e);
+    }
+  }
+  > a {
+    position: relative;
+    float: left;
+    display: inline-block;
+    width: 100%;
+    height: 55px;
+    line-height: 55px;
+    padding-left: 4px;
+    @include clearfix();
+
+    + a {
+      &:before {
+        content: '';
+        position: absolute;
+        left: 55px + 4px + 4px;
+        top: 0;
+        display: inline-block;
+        width: calc(100% - (55px + 4px + 4px));
+        height: 1px;
+        background-color: rgba(222, 222, 222, 1);
+      }
+    }
+    > img {
+      @include border-radius(3px);
+    }
+    > i {
+      line-height: 40px;
+      text-align: center;
+
+      &:before {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        margin: 0 auto;
+        margin-top: (40px - 30px) / 2;
+        color: rgba(253, 209, 85, 1.00);
+        background-color: rgba(236, 83, 70, 1.00);
+        font-size: 20px;
+        @include border-radius(50%);
+        @include box-shadow(1px 1px 5px rgba(0, 0, 0, .2));
+        @include text-shadow(0 1px 3px rgba(0, 0, 0, .1));
+      }
+    }
+    &[href]:not([href='']) {
+      > * {
+        + * {
+          padding-right: 45px;
+          &:before {
+            display: inline-block;
+          }
+          &:after {
+            width: calc(100% - 45px);
+            padding-right: 0;
+          }
+        }
+      }
+    }
+    > * {
+      float: left;
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      margin-top: (55px - 40px) / 2;
+      margin-left: (55px - 40px) / 2;
+
+      + * {
+        float: right;
+        position: relative;
+        width: 100%;
+        height: 55px;
+        width: calc(100% - 55px);
+        line-height: 55px;
+        margin-top: 0;
+        font-size: 18px;
+        padding-left: 12px;
+        padding-right: 12px;
+        color: rgba(105, 105, 105, 1);
+        @include transition(color .3s);
+        @include overflow-docx3();
+
+
+        &:before {
+          content: '\e315';
+          font-family: "admin"; speak: none; font-style: normal; font-weight: normal; font-variant: normal;
+          position: absolute;
+          right: 0;
+          top: 0;
+          display: none;
+          width: 45px;
+          height: 55px;
+          line-height: 55px;
+          font-size: 35px;
+          color: rgba(220, 220, 220, 1);
+          text-align: center;
+          @include transition(color .3s);
+        }
+        &:after {
+          position: absolute;
+          left: 0;
+          bottom: 4px;
+
+          display: inline-block;
+          width: 100%;
+          font-size: 13px;
+          padding-left: 12px;
+          padding-right: 12px;
+          color: rgba(135, 135, 135, 1);
+          @include transition(color .3s);
+          @include overflow-docx3();
+        }
+        &[data-sub]:not([data-sub='']) {
+          line-height: 37px;
+          
+          &:after {
+            content: attr(data-sub);
+            height: 20px;
+            line-height: 20px;
+          }
+        }
+
+        &:hover {
+          color: rgba(85, 85, 85, 1);
+          &:before {
+            color: rgba(180, 180, 180, 1);
+          }
+          &:after {
+            color: rgba(105, 105, 105, 1);
+          }
+        }
+      }
+    }
+  }
+
+  @include range-width(0, 350px) {
+    @include border-radius(0);
+  }
+}
