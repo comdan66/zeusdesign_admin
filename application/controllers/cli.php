@@ -101,232 +101,227 @@ class Cli extends Oa_controller {
     // echo $id ? Mail::find_by_id ($id)->content : Mail::last ()->content;
   }
   public function x () {
-    // array_filter(json_decode (read_file (FCPATH . 'temp/users.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = User::create (array_intersect_key ($t, User::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/user_sets.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = UserSet::create (array_intersect_key ($t, UserSet::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/user_logs.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = UserLog::create (array_intersect_key ($t, UserLog::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/ckeditor_images.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = CkeditorImage::create (array_intersect_key ($t, CkeditorImage::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/article_tags.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = ArticleTag::create (array_intersect_key ($t, ArticleTag::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/articles.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Article::create (array_intersect_key ($t, Article::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/article_sources.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = ArticleSource::create (array_intersect_key ($t, ArticleSource::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/article_tag_mappings.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = ArticleTagMapping::create (array_intersect_key ($t, ArticleTagMapping::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/banners.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Banner::create (array_intersect_key ($t, Banner::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/promos.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Promo::create (array_intersect_key ($t, Promo::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/work_tags.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = WorkTag::create (array_intersect_key ($t, WorkTag::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/works.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Work::create (array_intersect_key ($t, Work::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/work_tag_mappings.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = WorkTagMapping::create (array_intersect_key ($t, WorkTagMapping::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/work_images.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = WorkImage::create (array_intersect_key ($t, WorkImage::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
+    array_filter(json_decode (read_file (FCPATH . 'temp/users.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = User::create (array_intersect_key ($t, User::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/user_sets.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = UserSet::create (array_intersect_key ($t, UserSet::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/user_logs.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = UserLog::create (array_intersect_key ($t, UserLog::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/ckeditor_images.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = CkeditorImage::create (array_intersect_key ($t, CkeditorImage::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/article_tags.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = ArticleTag::create (array_intersect_key ($t, ArticleTag::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/articles.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Article::create (array_intersect_key ($t, Article::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/article_sources.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = ArticleSource::create (array_intersect_key ($t, ArticleSource::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/article_tag_mappings.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = ArticleTagMapping::create (array_intersect_key ($t, ArticleTagMapping::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/banners.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Banner::create (array_intersect_key ($t, Banner::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/promos.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Promo::create (array_intersect_key ($t, Promo::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/work_tags.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = WorkTag::create (array_intersect_key ($t, WorkTag::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/works.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Work::create (array_intersect_key ($t, Work::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/work_tag_mappings.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = WorkTagMapping::create (array_intersect_key ($t, WorkTagMapping::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/work_images.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = WorkImage::create (array_intersect_key ($t, WorkImage::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
     
-
-    // // echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    // // var_dump (array_unique(column_array (json_decode (read_file (FCPATH . 'temp/work_items.json'), true), 'type')));
-    // // exit ();
-
-    // array_filter(json_decode (read_file (FCPATH . 'temp/work_items.json'), true), function ($t) {
+    array_filter(json_decode (read_file (FCPATH . 'temp/work_items.json'), true), function ($t) {
         
-    //     if (in_array ($t['type'], array ('Client'))) $t['type'] = WorkItem::TYPE_1;
-    //     else if (in_array ($t['type'], array ('Details'))) $t['type'] = WorkItem::TYPE_2;
-    //     else if (in_array ($t['type'], array ('Technology'))) $t['type'] = WorkItem::TYPE_3;
-    //     else if (in_array ($t['type'], array ('Links', 'APP Link - android'))) $t['type'] = WorkItem::TYPE_4;
-    //     else if (in_array ($t['type'], array ('Demo Links'))) $t['type'] = WorkItem::TYPE_5;
-    //     else $t['type'] = WorkItem::TYPE_6;
+        if (in_array ($t['type'], array ('Client'))) $t['type'] = WorkItem::TYPE_1;
+        else if (in_array ($t['type'], array ('Details'))) $t['type'] = WorkItem::TYPE_2;
+        else if (in_array ($t['type'], array ('Technology'))) $t['type'] = WorkItem::TYPE_3;
+        else if (in_array ($t['type'], array ('Links', 'APP Link - android'))) $t['type'] = WorkItem::TYPE_4;
+        else if (in_array ($t['type'], array ('Demo Links'))) $t['type'] = WorkItem::TYPE_5;
+        else $t['type'] = WorkItem::TYPE_6;
 
-    //   if (!verifyCreateOrm ($obj = WorkItem::create (array_intersect_key ($t, WorkItem::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-
-
-    // array_filter(json_decode (read_file (FCPATH . 'temp/companies.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Company::create (array_intersect_key ($t, Company::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/company_pms.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = CompanyPm::create (array_intersect_key ($t, CompanyPm::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/company_pm_items.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = CompanyPmItem::create (array_intersect_key ($t, CompanyPmItem::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
+      if (!verifyCreateOrm ($obj = WorkItem::create (array_intersect_key ($t, WorkItem::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
 
 
-    // array_filter(json_decode (read_file (FCPATH . 'temp/income_items.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = IncomeItem::create (array_intersect_key ($t, IncomeItem::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/income_item_images.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = IncomeItemImage::create (array_intersect_key ($t, IncomeItemImage::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/income_item_details.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = IncomeItemDetail::create (array_intersect_key ($t, IncomeItemDetail::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
+    array_filter(json_decode (read_file (FCPATH . 'temp/companies.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Company::create (array_intersect_key ($t, Company::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/company_pms.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = CompanyPm::create (array_intersect_key ($t, CompanyPm::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/company_pm_items.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = CompanyPmItem::create (array_intersect_key ($t, CompanyPmItem::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
 
-    // array_filter(json_decode (read_file (FCPATH . 'temp/schedule_tags.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = ScheduleTag::create (array_intersect_key ($t, ScheduleTag::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/schedules.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Schedule::create (array_intersect_key ($t, Schedule::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/schedule_items.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = ScheduleItem::create (array_intersect_key ($t, ScheduleItem::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/ftps.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Ftp::create (array_intersect_key ($t, Ftp::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
 
-    // array_filter(json_decode (read_file (FCPATH . 'temp/tasks.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Task::create (array_intersect_key ($t, Task::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/task_user_mappings.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = TaskUserMapping::create (array_intersect_key ($t, TaskUserMapping::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/task_attachments.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = TaskAttachment::create (array_intersect_key ($t, TaskAttachment::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/task_commits.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = TaskCommit::create (array_intersect_key ($t, TaskCommit::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
+    array_filter(json_decode (read_file (FCPATH . 'temp/income_items.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = IncomeItem::create (array_intersect_key ($t, IncomeItem::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/income_item_images.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = IncomeItemImage::create (array_intersect_key ($t, IncomeItemImage::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/income_item_details.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = IncomeItemDetail::create (array_intersect_key ($t, IncomeItemDetail::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
 
-    // array_filter(json_decode (read_file (FCPATH . 'temp/notices.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Notice::create (array_intersect_key ($t, Notice::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
+    array_filter(json_decode (read_file (FCPATH . 'temp/schedule_tags.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = ScheduleTag::create (array_intersect_key ($t, ScheduleTag::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/schedules.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Schedule::create (array_intersect_key ($t, Schedule::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/schedule_items.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = ScheduleItem::create (array_intersect_key ($t, ScheduleItem::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/ftps.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Ftp::create (array_intersect_key ($t, Ftp::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
 
-    // array_filter(json_decode (read_file (FCPATH . 'temp/mails.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Mail::create (array_intersect_key ($t, Mail::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/outcomes.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Outcome::create (array_intersect_key ($t, Outcome::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/deploys.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Deploy::create (array_intersect_key ($t, Deploy::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
-    // array_filter(json_decode (read_file (FCPATH . 'temp/incomes.json'), true), function ($t) {
-    //   if (!verifyCreateOrm ($obj = Income::create (array_intersect_key ($t, Income::table ()->columns)))) return false;
-    //   if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
-    //   if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
-    //   return $obj->save ();
-    // });
+    array_filter(json_decode (read_file (FCPATH . 'temp/tasks.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Task::create (array_intersect_key ($t, Task::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/task_user_mappings.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = TaskUserMapping::create (array_intersect_key ($t, TaskUserMapping::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/task_attachments.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = TaskAttachment::create (array_intersect_key ($t, TaskAttachment::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/task_commits.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = TaskCommit::create (array_intersect_key ($t, TaskCommit::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+
+    array_filter(json_decode (read_file (FCPATH . 'temp/notices.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Notice::create (array_intersect_key ($t, Notice::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+
+    array_filter(json_decode (read_file (FCPATH . 'temp/mails.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Mail::create (array_intersect_key ($t, Mail::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/outcomes.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Outcome::create (array_intersect_key ($t, Outcome::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/deploys.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Deploy::create (array_intersect_key ($t, Deploy::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
+    array_filter(json_decode (read_file (FCPATH . 'temp/incomes.json'), true), function ($t) {
+      if (!verifyCreateOrm ($obj = Income::create (array_intersect_key ($t, Income::table ()->columns)))) return false;
+      if (isset ($t['updated_at'])) $obj->updated_at = $t['updated_at'];
+      if (isset ($t['created_at'])) $obj->created_at = $t['created_at'];
+      return $obj->save ();
+    });
   }
 
   // public function ptt () {
