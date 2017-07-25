@@ -31,9 +31,10 @@ class OrmUploader {
     if (!in_array ($this->configs['unique_column'], array_keys ($orm->attributes ())))
       return $this->error = array ('OrmUploader 錯誤！', '無法取得 unique 欄位資訊！', '請 ORM select，或者修改 unique 欄位名稱(' . $this->configs['unique_column'] . ')！', '修改 unique 欄位名稱至 config/system/orm_uploader.php 設定檔修改！');
 
-    if ($this->getDriver () == 's3') {
+    if ($this->getDriver () == 's3' && !class_exists ('S3')) {
       $this->CI->load->library ('S3');
-      if (!(S3::init (Cfg::system ('s3', 'buckets', $this->getS3Bucket (), 'access_key'), Cfg::system ('s3', 'buckets', $this->getS3Bucket (), 'secret_key')) && S3::test ()))
+
+      if (!S3::initialize (Cfg::system ('s3', 'buckets', $this->getS3Bucket ())))
         return $this->error = array ('OrmUploader 錯誤！', '初始化 S3 錯誤！', '請確認一下 Bucket 的 access_key 與 secret_key 是否正確');
     }
   }

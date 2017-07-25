@@ -24,6 +24,14 @@ class S3 {
     self::$__secret_key = $secret_key;
     return true;
   }
+  public static function initialize ($cfg) {
+    self::$__access_key = $cfg['access_key'];
+    self::$__secret_key = $cfg['secret_key'];
+    self::$use_ssl = $cfg['use_ssl'];
+    self::$verify_peer = $cfg['verify_peer'];
+
+    return true;
+  }
   public static function test () {
     $rest = new S3Request ('GET', '', '');
     $rest = $rest->getResponse ();
