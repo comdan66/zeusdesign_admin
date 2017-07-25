@@ -33,6 +33,6 @@ class Ckeditor extends Admin_controller {
     $upload = OAInput::file ('upload');
 
     if (!($upload && verifyCreateOrm ($img = CkeditorImage::create (array ('name' => '', 'user_id' => User::current ()->id))) && $img->name->put ($upload, true))) echo "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction ($funcNum, '', '上傳失敗！');</script>";
-    else echo "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction ($funcNum, '" . $img->name->url ('800h') . "', '上傳成功！');</script>";
+    else echo "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction ($funcNum, '" . $img->name->url ('400h') . "', '上傳成功！');</script>";
   }
 }
