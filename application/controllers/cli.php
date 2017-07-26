@@ -10,11 +10,13 @@ class Cli extends Oa_controller {
 
   public function __construct () {
     parent::__construct ();
-    
+    Cronjob::trace ('=========1');
     if (!$this->input->is_cli_request ()) {
+    Cronjob::trace ('=========2');
       echo 'Request 錯誤！';
       exit ();
     }
+    Cronjob::trace ('=========3');
 
     ini_set ('memory_limit', '2048M');
     ini_set ('set_time_limit', 60 * 60);
