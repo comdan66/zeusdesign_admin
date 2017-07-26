@@ -30,6 +30,9 @@ class Articles extends Admin_controller {
          ->add_param ('icon', $this->icon)
          ->add_param ('title', $this->title)
          ->add_param ('_url', base_url ($this->uri_1));
+
+    if (in_array ($this->uri->rsegments (2, 0), array ('create', 'update')))
+      error_reporting (E_ALL & ~E_NOTICE & ~E_WARNING);
   }
 
   public function index ($offset = 0) {
