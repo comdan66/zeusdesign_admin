@@ -10,30 +10,26 @@ class Cli extends Oa_controller {
 
   public function __construct () {
     parent::__construct ();
-    Cronjob::trace ('=========1');
+    
     if (!$this->input->is_cli_request ()) {
-    Cronjob::trace ('=========2');
       echo 'Request 錯誤！';
       exit ();
     }
-    Cronjob::trace ('=========3');
 
     ini_set ('memory_limit', '2048M');
     ini_set ('set_time_limit', 60 * 60);
-    // ob_start ();
+    ob_start ();
   }
   
   private function _save_cronjob ($cronjob, $title = '') {
-    $cronjob->content = ($title ? $title . ' - ' : '');
-     // . ob_get_contents ();
-    // @ob_end_clean ();
+    $cronjob->content = ($title ? $title . ' - ' : '') . ob_get_contents ();
+    @ob_end_clean ();
 
     $cronjob->end_at = microtime (true);
     $cronjob->save ();
     return true;
   }
   public function backup_2 () {
-    Cronjob::trace ('=========');
     if (!(Cronjob::transaction (function () use (&$cronjob) {
       return verifyCreateOrm ($cronjob = Cronjob::create (array (
           'title' => '備份 ' . Backup::$typeNames[Backup::TYPE_2] . '',
