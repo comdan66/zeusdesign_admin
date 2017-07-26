@@ -31,6 +31,7 @@ class Cli extends Oa_controller {
     return true;
   }
   public function backup_2 () {
+    Cronjob::trace ('=========');
     if (!(Cronjob::transaction (function () use (&$cronjob) {
       return verifyCreateOrm ($cronjob = Cronjob::create (array (
           'title' => '備份 ' . Backup::$typeNames[Backup::TYPE_2] . '',
