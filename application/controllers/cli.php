@@ -22,8 +22,9 @@ class Cli extends Oa_controller {
   }
   
   private function _save_cronjob ($cronjob, $title = '') {
-    $cronjob->content = ($title ? $title . ' - ' : '') . ob_get_contents ();
-    @ob_end_clean ();
+    $cronjob->content = ($title ? $title . ' - ' : '');
+     // . ob_get_contents ();
+    // @ob_end_clean ();
 
     $cronjob->end_at = microtime (true);
     $cronjob->save ();
