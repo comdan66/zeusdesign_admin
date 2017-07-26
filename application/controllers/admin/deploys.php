@@ -89,15 +89,6 @@ class Deploys extends Admin_controller {
     $this->load->library ('DeployTool');
     DeployTool::genApi ();
 
-    // if ($obj->type == Deploy::TYPE_1)
-    //   if (!DeployTool::callBuild ($obj))
-    //     return redirect_message (array ($this->uri_1, ), array ('_flash_danger' => '新增失敗！'));
-
-    // if ($obj->type == Deploy::TYPE_2)
-    //   if (!DeployTool::callUpload ($obj))
-    //     return redirect_message (array ($this->uri_1, ), array ('_flash_danger' => '新增失敗！'));
-    //   else DeployTool::callBuild ();
-    
     $obj->status = ($obj->type == Deploy::TYPE_2 ? DeployTool::callUpload ($obj) : DeployTool::callBuild ($obj)) ? Deploy::STATUS_2 : Deploy::STATUS_1;
     
     if (!Deploy::transaction (function () use ($obj) { return $obj->save (); })) return redirect_message (array ($this->uri_1, 'add'), array ('_flash_danger' => '新增失敗！'));
