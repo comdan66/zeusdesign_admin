@@ -79,7 +79,7 @@ class DeployTool {
           'updated_at' => $article->updated_at->format ('Y-m-d H:i:s'),
           'created_at' => $article->created_at->format ('Y-m-d H:i:s'),
         );
-    }, Article::find ('all', array ('include' => array ('user', 'mappings', 'sources'), 'order' => 'id DESC', 'conditions' => array ('status = ?', Article::STATUS_2))));
+    }, Article::find ('all', array ('include' => array ('user', 'mappings', 'sources'), 'order' => 'id DESC')));
     write_file ($api . 'articles.json', json_encode ($articles));
     @chmod ($api . 'articles.json', 0777);
     
@@ -146,7 +146,7 @@ class DeployTool {
           'updated_at' => $work->updated_at->format ('Y-m-d H:i:s'),
           'created_at' => $work->created_at->format ('Y-m-d H:i:s'),
         );
-    }, Work::find ('all', array ('include' => array ('user', 'images', 'items'), 'order' => 'id DESC', 'conditions' => array ('status = ?', Work::STATUS_2))));
+    }, Work::find ('all', array ('include' => array ('user', 'images', 'items'), 'order' => 'id DESC')));
 
     write_file ($api . 'works.json', json_encode ($works));
     @chmod ($api . 'works.json', 0777);
