@@ -19,6 +19,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('companies'), 'companies');
   Route::resourcePagination (array ('company', 'pms'), 'company_pms');
   
+  Route::resourcePagination (array ('income_tags'), 'income_tags');
   Route::resourcePagination (array ('income_items'), 'income_items');
   Route::resourcePagination (array ('incomes'), 'incomes');
   Route::resourcePagination (array ('outcomes'), 'outcomes');

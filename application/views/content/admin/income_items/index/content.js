@@ -92,4 +92,7 @@ $(function () {
     }));
   });
 
+  $('label.all').click (function () {
+    $_tb.find ('label.checkbox input').prop ('checked', $(this).find ('input').prop ('checked'));
+  });
 });

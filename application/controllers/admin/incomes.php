@@ -187,17 +187,36 @@ class Incomes extends Admin_controller {
   }
 
   public function export ($id = 0) {
-    $objs = $this->obj->items;
+    $items = IncomeItem::find ('all', array ('include' => array ('pm', 'details'), 'conditions' => array ('income_id = ?', $this->obj->id)));
+    
+    $objs = array ();
+    foreach ($items as $item) {
+      foreach ($item->details as $detail) {
+        array_push ($objs, array (
+            $item->title,
+            $item->pm && $item->pm->company ? $item->pm->name : "",
+            $item->pm && $item->pm->company ? $item->pm->company->phone . (($e = trim ($item->pm->extension, "#")) ? " #" . $e : "") : "",
+            $detail->quantity,
+            $detail->sgl_money,
+            $detail->all_money,
+            $detail->income_item_detail_tag_id && $detail->tag ? $detail->tag->name : '',
+            $item->close_date ? $item->close_date->format ("Y-m-d") : "",
+            $item->memo ? $item->memo : "-",
+          ));
+      }
+    }
 
     $this->load->library ('OAExcel');
     $infos = array (
-        array ('title' => '請款名稱', 'exp' => '$obj->title', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
-        array ('title' => '聯絡人公司', 'exp' => '$obj->pm && $obj->pm->company ? $obj->pm->company->name : ""', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
-        array ('title' => '聯絡人', 'exp' => '$obj->pm && $obj->pm->company ? $obj->pm->name : ""', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
-        array ('title' => '聯絡人電話', 'exp' => '$obj->pm && $obj->pm->company ? $obj->pm->company->phone . (($e = trim ($obj->pm->extension, "#")) ? " #" . $e : "") : ""', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
-        array ('title' => '總金額', 'exp' => '$obj->money ()', 'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,),
-        array ('title' => '結案日期', 'exp' => '$obj->close_date ? $obj->close_date->format ("Y-m-d") : ""', 'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2,),
-        array ('title' => '備註', 'exp' => '$obj->memo ? $obj->memo : "-"', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,)
+        array ('title' => '專案名稱', 'exp' => '$obj[0]', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
+        array ('title' => '聯絡人', 'exp' => '$obj[1]', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
+        array ('title' => '聯絡人電話', 'exp' => '$obj[2]', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
+        array ('title' => '數量', 'exp' => '$obj[3]', 'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER,),
+        array ('title' => '單價', 'exp' => '$obj[4]', 'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,),
+        array ('title' => '總金額', 'exp' => '$obj[5]', 'format' => PHPExcel_Style_NumberFormat::FORMAT_MONEY,),
+        array ('title' => '分類', 'exp' => '$obj[6]', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
+        array ('title' => '結案日期', 'exp' => '$obj[7]', 'format' => PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2,),
+        array ('title' => '備註', 'exp' => '$obj[8]', 'format' => PHPExcel_Style_NumberFormat::FORMAT_TEXT,),
       );
 
     $excel = $this->_build_excel ($objs, $infos);

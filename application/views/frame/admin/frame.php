@@ -133,6 +133,9 @@
       <?php if (User::current ()->in_roles (array ('company'))) { ?>
               <a class='icon-b<?php echo ($url = base_url ('admin', 'companies')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>配合廠商</a>
       <?php }
+            if (User::current ()->in_roles (array ('income_tags'))) { ?>
+              <a class='icon-price-tags<?php echo ($url = base_url ('admin', 'income-tags')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>請款分類</a>
+      <?php }
             if (User::current ()->in_roles (array ('income_item'))) { ?>
               <a class='icon-ti<?php echo ($url = base_url ('admin', 'income-items')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>請款列表</a>
       <?php }

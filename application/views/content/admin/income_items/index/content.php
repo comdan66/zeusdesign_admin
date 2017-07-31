@@ -56,7 +56,12 @@
   <table class='table-list w1200 dy'>
     <thead>
       <tr>
-        <th width='45' class='center'>勾選</th>
+        <th width='45' class='center x'>
+          <label class='checkbox all' style='margin-top: 12px;'>
+            <input type='checkbox' />
+            <span></span>
+          </label>
+        </th>
         <th width='55' class='center'>狀態</th>
         <th width='70' class='center'>圖片</th>
         <th width='160' class='left'>標題</th>
@@ -64,7 +69,7 @@
         <th width='140' class='left'>窗口 PM / 公司</th>
         <th >細項</th>
         <th width='70'>總金額</th>
-        <th width='85'>結束日期</th>
+        <th width='90'>結束日期</th>
         <th width='90'>編輯</th>
       </tr>
     </thead>
