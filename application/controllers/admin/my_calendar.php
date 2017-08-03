@@ -106,7 +106,7 @@ class My_calendar extends Admin_controller {
     if (!($id && ($obj = Schedule::find ('one', array ('conditions' => array ('id = ?', $id))))))
       return $this->output_error_json ('找不到該筆資料。');
 
-    if (!(($obj->user_id == User::current ()->id || (($t = column_array ($obj->shares, 'user_id')) && in_array (User::current ()->id, $t)))))
+    if (!(User::current ()->in_roles (array ('schedule')) || ($obj->user_id == User::current ()->id || (($t = column_array ($obj->shares, 'user_id')) && in_array (User::current ()->id, $t)))))
       return $this->output_error_json ('您的權限不足，或者頁面不存在。');
     
     return $this->output_json (array (
@@ -173,17 +173,31 @@ class My_calendar extends Admin_controller {
             'finish' => $obj->status == Task::STATUS_2 ? true : false,
           ));
 
-    $objs = Schedule::find ('all', array ('include' => array ('tag', 'user', 'items'), 'order' => 'sort ASC', 'joins' => 'LEFT JOIN (select user_id,schedule_id from schedule_shares) as a ON(schedules.id = a.schedule_id)', 'conditions' => array ('date BETWEEN ? AND ? AND schedules.user_id != ? AND a.user_id = ?', $start, $end, User::current ()->id, User::current ()->id)));
-    foreach ($objs as $obj)
-      if (isset ($days[$obj->date->format ('Y-m-d')]['c']))
-        array_push ($days[$obj->date->format ('Y-m-d')]['c'], array (
-            'id' => $obj->id,
-            'type' => 3,
-            'color' => $obj->schedule_tag_id && $obj->tag ? $obj->tag->color : '',
-            'text' => $obj->title,
-            'img' => $obj->user->avatar (),
-            'finish' => count (array_filter ($obj->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; })) == count ($obj->items),
-          ));
+    if (User::current ()->in_roles (array ('schedule'))) {
+      $objs = Schedule::find ('all', array ('include' => array ('tag', 'user', 'items'), 'order' => 'sort ASC', 'conditions' => array ('date BETWEEN ? AND ? AND schedules.user_id != ?', $start, $end, User::current ()->id)));
+      foreach ($objs as $obj)
+        if (isset ($days[$obj->date->format ('Y-m-d')]['c']) && $obj->user_id != User::current ()->id)
+          array_push ($days[$obj->date->format ('Y-m-d')]['c'], array (
+              'id' => $obj->id,
+              'type' => 3,
+              'color' => $obj->schedule_tag_id && $obj->tag ? $obj->tag->color : '',
+              'text' => $obj->title,
+              'img' => $obj->user->avatar (),
+              'finish' => count (array_filter ($obj->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; })) == count ($obj->items),
+            ));
+    } else {
+      $objs = Schedule::find ('all', array ('include' => array ('tag', 'user', 'items'), 'order' => 'sort ASC', 'joins' => 'LEFT JOIN (select user_id,schedule_id from schedule_shares) as a ON(schedules.id = a.schedule_id)', 'conditions' => array ('date BETWEEN ? AND ? AND schedules.user_id != ? AND a.user_id = ?', $start, $end, User::current ()->id, User::current ()->id)));
+      foreach ($objs as $obj)
+        if (isset ($days[$obj->date->format ('Y-m-d')]['c']))
+          array_push ($days[$obj->date->format ('Y-m-d')]['c'], array (
+              'id' => $obj->id,
+              'type' => 3,
+              'color' => $obj->schedule_tag_id && $obj->tag ? $obj->tag->color : '',
+              'text' => $obj->title,
+              'img' => $obj->user->avatar (),
+              'finish' => count (array_filter ($obj->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; })) == count ($obj->items),
+            ));
+    }
 
 
     $objs = Schedule::find ('all', array ('include' => array ('tag', 'user', 'items'), 'order' => 'sort ASC', 'conditions' => array ('date BETWEEN ? AND ? AND schedules.user_id = ?', $start, $end, User::current ()->id)));
@@ -282,18 +296,33 @@ class My_calendar extends Admin_controller {
         );
     }, $objs2);
 
-    $objs3 = Schedule::find ('all', array ('include' => array ('tag', 'user', 'items'), 'order' => 'sort ASC', 'joins' => 'LEFT JOIN (select user_id,schedule_id from schedule_shares) as a ON(schedules.id = a.schedule_id)', 'conditions' => array ('a.user_id = ? AND schedules.user_id != ? AND date = ?', User::current ()->id, User::current ()->id, $gets['date'])));
-    $objs3 = array_map (function ($obj) {
-      return array (
-        'img' => $obj->user->avatar (),
-        'id' => $obj->id,
-        'title' => $obj->title,
-        'sub' => $obj->schedule_tag_id && $obj->tag ? $obj->tag->name : '',
-        'note' => ($a = count (array_filter ($obj->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; }))) . ' / ' . ($b = count ($obj->items)),
-        'finish' => $a == $b,
-        'type' => 3,
-        );
-    }, $objs3);
+    if (User::current ()->in_roles (array ('schedule'))) {
+      $objs3 = Schedule::find ('all', array ('include' => array ('tag', 'user', 'items'), 'order' => 'sort ASC', 'conditions' => array ('date = ? AND schedules.user_id != ?', $gets['date'], User::current ()->id)));
+      $objs3 = array_map (function ($obj) {
+        return array (
+          'img' => $obj->user->avatar (),
+          'id' => $obj->id,
+          'title' => $obj->title,
+          'sub' => $obj->schedule_tag_id && $obj->tag ? $obj->tag->name : '',
+          'note' => ($a = count (array_filter ($obj->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; }))) . ' / ' . ($b = count ($obj->items)),
+          'finish' => $a == $b,
+          'type' => 3,
+          );
+      }, $objs3);
+    } else {
+      $objs3 = Schedule::find ('all', array ('include' => array ('tag', 'user', 'items'), 'order' => 'sort ASC', 'joins' => 'LEFT JOIN (select user_id,schedule_id from schedule_shares) as a ON(schedules.id = a.schedule_id)', 'conditions' => array ('a.user_id = ? AND schedules.user_id != ? AND date = ?', User::current ()->id, User::current ()->id, $gets['date'])));
+      $objs3 = array_map (function ($obj) {
+        return array (
+          'img' => $obj->user->avatar (),
+          'id' => $obj->id,
+          'title' => $obj->title,
+          'sub' => $obj->schedule_tag_id && $obj->tag ? $obj->tag->name : '',
+          'note' => ($a = count (array_filter ($obj->items, function ($item) { return $item->status == ScheduleItem::STATUS_2; }))) . ' / ' . ($b = count ($obj->items)),
+          'finish' => $a == $b,
+          'type' => 3,
+          );
+      }, $objs3);
+    }
     
     $return = array ();
     if ($objs2) array_push ($return, array ('text' => '今日任務', 'objs' => $objs2, 'sort' => false));
