@@ -33,7 +33,7 @@ class IncomeItem extends OaModel {
   }
   public function mini_title ($length = 50) {
     if (!isset ($this->title)) return '';
-    return $length ? mb_strimwidth (remove_ckedit_tag ($this->title), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->content);
+    return $length ? mb_strimwidth (remove_ckedit_tag ($this->title), 0, $length, '…','UTF-8') : remove_ckedit_tag ($this->title);
   }
   public function hasIncome () {
     return $this->income_id && $this->income;

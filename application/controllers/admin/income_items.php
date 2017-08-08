@@ -260,7 +260,7 @@ class Income_items extends Admin_controller {
       if (!(isset ($detail['user_id']) && is_string ($detail['user_id']) && is_numeric ($detail['user_id'] = trim ($detail['user_id'])) && User::find_by_id ($detail['user_id']))) unset ($detail['user_id']);
       if (isset ($detail['title']) && !(is_string ($detail['title']) && ($detail['title'] = trim ($detail['title'])))) $detail['title'] = '';
 
-      if (!(isset ($detail['income_item_detail_tag_id']) && is_string ($detail['income_item_detail_tag_id']) && is_numeric ($detail['income_item_detail_tag_id'] = trim ($detail['income_item_detail_tag_id'])) && IncomeItemDetailTag::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $detail['income_item_detail_tag_id']))))) unset ($detail['quantity']);
+      if (!(isset ($detail['income_item_detail_tag_id']) && is_string ($detail['income_item_detail_tag_id']) && is_numeric ($detail['income_item_detail_tag_id'] = trim ($detail['income_item_detail_tag_id'])) && IncomeItemDetailTag::find ('one', array ('select' => 'id', 'conditions' => array ('id = ?', $detail['income_item_detail_tag_id']))))) $detail['income_item_detail_tag_id'] = 0;
       if (!(isset ($detail['quantity']) && is_string ($detail['quantity']) && is_numeric ($detail['quantity'] = trim ($detail['quantity'])) && $detail['quantity'] > 0)) unset ($detail['quantity']);
       if (!(isset ($detail['sgl_money']) && is_string ($detail['sgl_money']) && is_numeric ($detail['sgl_money'] = trim ($detail['sgl_money'])) && $detail['sgl_money'] > 0)) unset ($detail['sgl_money']);
       if (!(isset ($detail['all_money']) && is_string ($detail['all_money']) && is_numeric ($detail['all_money'] = trim ($detail['all_money'])) && $detail['all_money'] > 0)) unset ($detail['all_money']);
