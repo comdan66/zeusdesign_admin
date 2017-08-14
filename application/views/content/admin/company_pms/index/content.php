@@ -6,7 +6,7 @@
   <a class='icon-bin' href='<?php echo base_url ($uri_b, $parent->id);?>' data-method='delete'>刪除</a>
   <a class='icon-pencil2' href='<?php echo base_url ($uri_b, $parent->id, 'edit');?>'>編輯</a>
 
-  <div class='show-type1 left' style='border-top: 1px solid rgba(220, 220, 220, 1);padding-top: 20px;'>
+  <div class='show-type1 left' style='width:100%;border-top: 1px solid rgba(220, 220, 220, 1);padding-top: 20px;'>
     <div class='row min'>
       <b>名稱</b>
       <span><?php echo $parent->name;?></span>
