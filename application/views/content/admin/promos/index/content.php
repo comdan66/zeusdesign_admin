@@ -67,7 +67,7 @@
           <td><?php echo $obj->id;?></td>
           <td class='center'>
             <label class='switch ajax' data-column='status' data-url='<?php echo base_url ($uri_1, 'status', $obj->id);?>'>
-              <input type='checkbox'<?php echo $obj->status == Banner::STATUS_2 ? ' checked' : '';?> />
+              <input type='checkbox'<?php echo $obj->status == Promo::STATUS_2 ? ' checked' : '';?> />
               <span></span>
             </label>
           </td>
@@ -78,7 +78,7 @@
           </td>
           <td class='left'><?php echo $obj->mini_title (20);?></td>
           <td class='left'><?php echo $obj->mini_content (50);?></td>
-          <td><?php echo Banner::$targetNames[$obj->target];?></td>
+          <td><?php echo Promo::$targetNames[$obj->target];?></td>
           <td class='edit'>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>

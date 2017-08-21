@@ -6,7 +6,7 @@
     <div class='row min'>
       <b class='need'>是否上架</b>
       <label class='switch'>
-        <input type='checkbox' name='status'<?php echo (isset ($posts['status']) ? $posts['status'] : Banner::STATUS_1) == Banner::STATUS_2 ? ' checked' : '';?> value='<?php echo Banner::STATUS_2;?>' />
+        <input type='checkbox' name='status'<?php echo (isset ($posts['status']) ? $posts['status'] : Promo::STATUS_1) == Promo::STATUS_2 ? ' checked' : '';?> value='<?php echo Promo::STATUS_2;?>' />
         <span></span>
       </label>
     </div>
@@ -38,9 +38,9 @@
 
     <div class='row'>
       <b class='need'>鏈結開啟方式</b>
-<?php foreach (Banner::$targetNames as $key => $targetName) { ?>
+<?php foreach (Promo::$targetNames as $key => $targetName) { ?>
         <label class='radio'>
-          <input type='radio' name='target' value='<?php echo $key;?>'<?php echo (isset ($posts['target']) ? $posts['target'] : Banner::TARGET_1) == $key ? ' checked' : '';?>>
+          <input type='radio' name='target' value='<?php echo $key;?>'<?php echo (isset ($posts['target']) ? $posts['target'] : Promo::TARGET_1) == $key ? ' checked' : '';?>>
           <span></span><?php echo $targetName;?>
         </label>
 <?php } ?>
