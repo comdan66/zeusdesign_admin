@@ -66,7 +66,7 @@
           <td class='left'><?php echo $obj->user->name;?></td>
           <td class='left'><?php echo $obj->res ('message');?></td>
           <td>
-            <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
+            <a class='icon-eye' href="<?php echo $obj->type == Deploy::TYPE_2 ? 'https://www.zeusdesign.com.tw' : 'http://staging.zeusdesign.com.tw';?>"></a>
           </td>
         </tr>
 <?php } ?>
