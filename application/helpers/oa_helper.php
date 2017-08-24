@@ -213,7 +213,7 @@ if (!function_exists ('res_url')) {
       return base_url ($args);
 
     if ($args && $args[0] == 'res')
-      array_splice ($args, 1, 0, '2');
+      array_splice ($args, 1, 0, '3');
 
     return Cfg::system ('orm_uploader', 'uploader', 's3', 'url') . implode ('/', $args);
   }
