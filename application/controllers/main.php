@@ -9,7 +9,7 @@
 class Main extends Site_controller {
 
   public function maillogo () {
-    if (!User::current () && ($code = OAInput::get ('q')) && ($code = trim ($code)) && ($code = Track::find ('one', array ('select' => 'id, cnt_open', 'conditions' => array ('code = ?', $code))))) {
+    if (($code = OAInput::get ('q')) && ($code = trim ($code)) && ($code = Track::find ('one', array ('select' => 'id, cnt_open', 'conditions' => array ('code = ? AND user_id != ?', $code, User::current () ? User::current ()->id : 0))))) {
       $code->cnt_open = $code->cnt_open + 1;
       $code->save ();
     }
