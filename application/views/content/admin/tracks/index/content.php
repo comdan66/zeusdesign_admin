@@ -52,6 +52,7 @@
     <thead>
       <tr>
         <th width='60' class='center'>ID</th>
+        <th width='100' class='left'>產生者</th>
         <th width='180' class='left'>標題<?php echo listSort ($uri_1, 'title');?></th>
         <th class='left'>網址</th>
         <th width='100' class='center'>開啟次數<?php echo listSort ($uri_1, 'cnt_open');?></th>
@@ -64,6 +65,7 @@
           <td class='center'>
             <?php echo $obj->id;?>
           </td>
+          <td class='left'><?php echo $obj->user->name;?></td>
           <td class='left'><?php echo $obj->title;?></td>
           <td class='left'>
             <input id='url' value='<?php echo base_url ('maillogo') . '?q=' . $obj->code;?>' readonly/>

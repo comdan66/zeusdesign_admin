@@ -17,6 +17,7 @@ class Track extends OaModel {
   );
 
   static $belongs_to = array (
+    array ('user', 'class_name' => 'User'),
   );
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {

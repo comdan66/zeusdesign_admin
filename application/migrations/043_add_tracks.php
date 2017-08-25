@@ -11,6 +11,7 @@ class Migration_Add_tracks extends CI_Migration {
     $this->db->query (
       "CREATE TABLE `tracks` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+        `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'User ID(作者)',
         
         `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '標題',
         `code` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'md5(time ())',

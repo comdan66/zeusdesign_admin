@@ -38,7 +38,7 @@ class Tracks extends Admin_controller {
       );
 
     $configs = array_merge (explode ('/', $this->uri_1), array ('%s'));
-    $objs = conditions ($searches, $configs, $offset, 'Track', array ('order' => 'id DESC'));
+    $objs = conditions ($searches, $configs, $offset, 'Track', array ('order' => 'id DESC', 'include' => array ('user')));
 
     UserLog::logRead (
       $this->icon,
@@ -65,6 +65,7 @@ class Tracks extends Admin_controller {
       return redirect_message (array ($this->uri_1, 'add'), array ('_fd' => '非 POST 方法，錯誤的頁面請求。'));
 
     $posts = OAInput::post ();
+    $posts['user_id'] = User::current ()->id;
     $posts['code'] = md5 (time ());
     $posts['cnt_open'] = 0;
 
@@ -128,7 +129,7 @@ class Tracks extends Admin_controller {
   public function reset ($id) {
     $obj = $this->obj;
     $obj->cnt_open = 0;
-    
+
     if (!Track::transaction (function () use ($obj) { return $obj->save (); }))
       return redirect_message (array ($this->uri_1), array ('_fd' => '更新失敗！', 'posts' => $posts));
 
