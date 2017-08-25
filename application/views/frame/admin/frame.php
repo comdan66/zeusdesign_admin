@@ -89,7 +89,7 @@
             if (User::current ()->in_roles (array ('email'))) { ?>
               <a class='icon-em<?php echo ($url = base_url ('admin', 'mails')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>E-Mail 管理</a>
       <?php }
-            if (User::current ()->in_roles (array ('tracks'))) { ?>
+            if (User::current ()->in_roles (array ('track'))) { ?>
               <a class='icon-signal<?php echo ($url = base_url ('admin', 'tracks')) && isset ($_url) && ($url == $_url) ? ' show' : '';?>' href='<?php echo $url;?>'>追蹤碼</a>
       <?php } ?>
           </div>
