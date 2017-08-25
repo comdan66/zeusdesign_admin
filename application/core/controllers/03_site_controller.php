@@ -28,7 +28,6 @@ class Site_controller extends Oa_controller {
       $this->add_css (base_url (implode ('/', array_merge ($this->get_views_path (), $this->get_public_path (), array ('icon_site.css')))));
 
   }
-
   private function _add_meta () {
     return $this->add_meta (array ('name' => 'robots', 'content' => 'noindex,nofollow'))
                 ->add_meta (array ('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui'))

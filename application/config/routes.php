@@ -4,6 +4,7 @@ Route::root ('main');
 
 Route::get ('/login', 'platform@login');
 Route::get ('/logout', 'platform@logout');
+Route::get ('/maillogo', 'main@maillogo');
 
 Route::get ('admin', 'admin/main@index');
 
@@ -25,6 +26,7 @@ Route::group ('admin', function () {
   Route::resourcePagination (array ('outcomes'), 'outcomes');
   Route::resourcePagination (array ('surplus'), 'surplus');
   Route::resourcePagination (array ('deploys'), 'deploys');
+  Route::resourcePagination (array ('tracks'), 'tracks');
 
   Route::resourcePagination (array ('ftps'), 'ftps');
   Route::resourcePagination (array ('tasks'), 'tasks');

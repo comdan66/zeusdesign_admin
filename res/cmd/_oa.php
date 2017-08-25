@@ -15,7 +15,7 @@ $_dirs = array (
   'js'   => [['js', 'css', 'png', 'jpg', 'jpeg', 'gif', 'eot', 'svg', 'ttf', 'woff'], true, false],
   'css'  => [['css'], true, false],
   'font' => [['eot', 'svg', 'ttf', 'woff'], true, false],
-  'image'  => [['png', 'jpg', 'jpeg', 'gif', 'svg'], true, false],
+  'image'  => [['png', 'jpg', 'jpeg', 'gif', 'svg', 'json'], true, false],
 );
 
 include_once 'libs' . DIRECTORY_SEPARATOR . 'OAS3Tool' . PHP;

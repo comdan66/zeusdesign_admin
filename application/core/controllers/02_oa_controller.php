@@ -25,7 +25,10 @@ class Oa_controller extends Root_controller {
 
   public function __construct () {
     parent::__construct ();
-    $this->add_meta (array ('http-equiv' => 'Content-type', 'content' => 'text/html; charset=utf-8'));
+    $this->add_meta (array ('http-equiv' => 'Content-type', 'content' => 'text/html; charset=utf-8'))
+         ->add_meta (array ('name' => 'theme-color', 'content' => '#ffffff'))
+         ->add_meta (array ('name' => 'msapplication-TileColor', 'content' => '#ffffff'))
+         ->add_meta (array ('name' => 'msapplication-TileImage', 'content' => res_url ('res', 'image', 'favicon', 'v3', 'ms-icon-144x144.png')));
   }
 
   protected function set_componemt_path () {
