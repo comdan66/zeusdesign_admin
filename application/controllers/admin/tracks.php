@@ -22,7 +22,7 @@ class Tracks extends Admin_controller {
     $this->icon = 'icon-signal';
     $this->title = '追蹤碼';
 
-    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update')))
+    if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'reset')))
       if (!(($id = $this->uri->rsegments (3, 0)) && ($this->obj = Track::find ('one', array ('conditions' => array ('id = ?', $id))))))
         return redirect_message (array ($this->uri_1), array ('_fd' => '找不到該筆資料。'));
 
@@ -30,9 +30,6 @@ class Tracks extends Admin_controller {
          ->add_param ('icon', $this->icon)
          ->add_param ('title', $this->title)
          ->add_param ('_url', base_url ($this->uri_1));
-
-    if (in_array ($this->uri->rsegments (2, 0), array ('create', 'update')))
-      error_reporting (E_ALL & ~E_NOTICE & ~E_WARNING);
   }
 
   public function index ($offset = 0) {
@@ -128,6 +125,15 @@ class Tracks extends Admin_controller {
     return redirect_message (array ($this->uri_1), array ('_fi' => '更新成功！'));
   }
 
+  public function reset ($id) {
+    $obj = $this->obj;
+    $obj->cnt_open = 0;
+    
+    if (!Track::transaction (function () use ($obj) { return $obj->save (); }))
+      return redirect_message (array ($this->uri_1), array ('_fd' => '更新失敗！', 'posts' => $posts));
+
+    return redirect_message (array ($this->uri_1), array ('_fi' => '更新成功！'));
+  }
   public function destroy () {
     $obj = $this->obj;
     $backup = $obj->backup (true);

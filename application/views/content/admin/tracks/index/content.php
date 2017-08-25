@@ -55,7 +55,7 @@
         <th width='180' class='left'>標題<?php echo listSort ($uri_1, 'title');?></th>
         <th class='left'>網址</th>
         <th width='100' class='center'>開啟次數<?php echo listSort ($uri_1, 'cnt_open');?></th>
-        <th width='50'>編輯</th>
+        <th width='100'>編輯</th>
       </tr>
     </thead>
     <tbody>
@@ -72,6 +72,7 @@
 
           <td class='center'><?php echo $obj->cnt_open;?></td>
           <td class='edit'>
+            <a class='icon-backup' href="<?php echo base_url ($uri_1, 'reset', $obj->id);?>"></a>
             <a class='icon-pencil2' href="<?php echo base_url ($uri_1, $obj->id, 'edit');?>"></a>
           </td>
         </tr>
