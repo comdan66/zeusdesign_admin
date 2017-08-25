@@ -206,14 +206,17 @@ if (!function_exists ('redirect_message')) {
     return redirect ($uri, 'refresh');
   }
 }
+
 if (!function_exists ('res_url')) {
   function res_url () {
     $args = array_filter (func_get_args ());
     if (ENVIRONMENT !== 'production')
       return base_url ($args);
 
-    if ($args && $args[0] == 'res')
-      array_splice ($args, 1, 0, '3');
+    if ($args && $args[0] == 'res') {
+      $CI =& get_instance ();
+      array_splice ($args, 1, 0, $CI->static_file_version);
+    }
 
     return Cfg::system ('orm_uploader', 'uploader', 's3', 'url') . implode ('/', $args);
   }
