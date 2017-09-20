@@ -32,7 +32,7 @@ class Tag_work_tags extends Admin_controller {
 
     if (in_array ($this->uri->rsegments (2, 0), array ('edit', 'update', 'destroy')))
       if (!(($id = $this->uri->rsegments (4, 0)) && ($this->obj = WorkTag::find_by_id ($id))))
-        return redirect_message (array ($this->uri_1, $this->parent_tag->id, $this->uri_2), array ('_fd' => '找不到該筆資料。'));
+        return redirect_message (array ($this->uri_1, $this->parent->id, $this->uri_2), array ('_fd' => '找不到該筆資料。'));
 
     $this->add_param ('uri_1', $this->uri_1)
          ->add_param ('uri_2', $this->uri_2)
