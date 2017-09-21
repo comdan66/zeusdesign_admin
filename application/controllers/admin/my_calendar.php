@@ -361,7 +361,7 @@ class My_calendar extends Admin_controller {
   }
   public function update ($id) {
     if (!($id && ($obj = Schedule::find ('one', array ('conditions' => array ('id = ? AND user_id = ?', $id, User::current ()->id))))))
-      return $this->output_error_json ('找不到該筆資料，或您的權限不足，或者頁面不存在。。');
+      return $this->output_error_json ('找不到該筆資料，或您的權限不足，或者頁面不存在。');
 
     if (!$this->has_post ())
       return $this->output_error_json ('非 POST 方法，錯誤的頁面請求。');
@@ -405,7 +405,7 @@ class My_calendar extends Admin_controller {
   }
   public function destroy ($id) {
     if (!($id && ($obj = Schedule::find ('one', array ('conditions' => array ('id = ? AND user_id = ?', $id, User::current ()->id))))))
-      return $this->output_error_json ('找不到該筆資料，或您的權限不足，或者頁面不存在。。');
+      return $this->output_error_json ('找不到該筆資料，或您的權限不足，或者頁面不存在。');
 
     $backup = $obj->backup (true);
 
