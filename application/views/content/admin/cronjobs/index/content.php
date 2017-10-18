@@ -61,7 +61,7 @@
     <tbody>
 <?php foreach ($objs as $obj) { ?>
         <tr>
-          <td class='conter' style='color: <?php echo $obj->status == Backup::STATUS_2 ? 'rgba(34, 164, 136, 1.00)' : 'rgba(195, 55, 42, 1.00)';?>;'><?php echo Backup::$statusNames[$obj->status];?></td>
+          <td class='conter' style='color: <?php echo $obj->status == Cronjob::STATUS_2 ? 'rgba(34, 164, 136, 1.00)' : 'rgba(195, 55, 42, 1.00)';?>;'><?php echo Cronjob::$statusNames[$obj->status];?></td>
           <td class='left'><?php echo $obj->title;?></td>
           <td class='left'><?php echo $obj->rule;?></td>
           <td class='left'><?php echo $obj->mini_content (50);?></td>
