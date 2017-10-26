@@ -22,8 +22,9 @@ class Cli extends Oa_controller {
   }
   
   private function _save_cronjob ($cronjob, $title = '') {
-    $cronjob->content = ($title ? $title . ' - ' : '') . ob_get_contents ();
+    $ob = ob_get_contents ();
     @ob_end_clean ();
+    $cronjob->content = ($title ? $title . ($ob ? ' - ' . $ob : '') : '') . $ob;
 
     $cronjob->end_at = microtime (true);
     $cronjob->save ();
@@ -96,6 +97,31 @@ class Cli extends Oa_controller {
 
     $cronjob->status = Cronjob::STATUS_2;
     return $this->_save_cronjob ($cronjob);
+  }
+  public function backup_log () {
+    if (!(Cronjob::transaction (function () use (&$cronjob) {
+      return verifyCreateOrm ($cronjob = Cronjob::create (array (
+          'title' => '備份 User Log',
+          'rule' => '每日上午 03點30分 開始',
+          'content' => '',
+          'start_at' => microtime (true),
+          'end_at' => 0,
+          'status' => Cronjob::STATUS_1
+        )));
+    }) && $cronjob)) return $cronjob ? $this->_save_cronjob ($cronjob, '初始化錯誤！') : '';
+
+    $logs = UserLog::find ('all', array ('select' => 'id, backup, json', 'limit' => 1000, 'conditions' => array ('json = ?', '')));
+
+    if (!UserLog::transaction (function () use ($logs) {
+      $tmp = array_filter (array_map (function ($log) {
+        if (!write_file ($t = FCPATH . 'temp' . DIRECTORY_SEPARATOR . 'backup_user_log_' . $log->id . '.json', $log->backup)) return false;
+        return $log->json->put ($t) && !($log->backup = '') && $log->save ();
+      }, $logs));
+      return count ($tmp) == count ($logs);
+    })) return $this->_save_cronjob ($cronjob, '寫入檔案或上傳有失敗！');
+
+    $cronjob->status = Cronjob::STATUS_2;
+    return $this->_save_cronjob ($cronjob, '處理了 ' . count ($logs) . ' 筆');
   }
 
 //   public function x ($id = 0) {

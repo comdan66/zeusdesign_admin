@@ -31,6 +31,8 @@ class UserLog extends OaModel {
 
   public function __construct ($attributes = array (), $guard_attributes = true, $instantiating_via_find = false, $new_record = true) {
     parent::__construct ($attributes, $guard_attributes, $instantiating_via_find, $new_record);
+   
+    OrmFileUploader::bind ('json', 'UserLogJsonFileUploader');
   }
   public static function logRead ($icon, $title, $content = '', $backup = array ()) {
     return true;
@@ -40,6 +42,7 @@ class UserLog extends OaModel {
       'title' => $title,
       'content' => $content,
       'status' => UserLog::STATUS_1,
+      'json' => '',
       'backup'  => json_encode ($backup)));
   }
   public static function logWrite ($icon, $title, $content = '', $backup = array ()) {
@@ -49,6 +52,7 @@ class UserLog extends OaModel {
       'title' => $title,
       'content' => $content,
       'status' => UserLog::STATUS_2,
+      'json' => '',
       'backup'  => json_encode ($backup)));
   }
   public function backup ($has = false) {
