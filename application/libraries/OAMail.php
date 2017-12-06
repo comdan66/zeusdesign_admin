@@ -16,13 +16,14 @@ class OAMail extends PHPMailer {
 
     $config = Cfg::setting ('mail');
 
-    if (isset ($config['host']) && isset ($config['port']) && isset ($config['user']) && isset ($config['passwd']) && isset ($config['from']) && isset ($config['from_name']) && $config['host'] && $config['port'] && $config['user'] && $config['passwd'] && $config['from'] && $config['from_name']) {
+    if (isset ($config['host']) && isset ($config['port']) && isset ($config['user']) && isset ($config['password']) && isset ($config['from']) && isset ($config['from_name']) && $config['host'] && $config['port'] && $config['user'] && $config['password'] && $config['from'] && $config['from_name']) {
       $this->isSMTP ();
       $this->SMTPAuth = true;
       $this->Host = $config['host'];
       $this->Port = $config['port'];
       $this->Username = $config['user'];
       $this->Password = $config['password'];
+      
       $this->From = $config['from'];
       $this->FromName = $config['from_name'];
     }
