@@ -12,9 +12,11 @@ class User extends OaModel {
 
   static $has_one = array (
     array ('set', 'class_name' => 'UserSet'),
+    array ('pwd_tips', 'class_name' => 'PwdTip'),
   );
 
   static $has_many = array (
+    array ('pwds', 'class_name' => 'Pwd'),
     array ('roles', 'class_name' => 'UserRole'),
     array ('schedule_share', 'class_name' => 'ScheduleShare'),
     array ('task_mappings', 'class_name' => 'TaskUserMapping'),
@@ -89,7 +91,9 @@ class User extends OaModel {
     return $has ? array (
         '_' => $var,
         'set' => $this->subBackup ('UserSet', $has),
+        'pwd_tips' => $this->subBackup ('PwdTip', $has),
         'roles' => $this->subBackup ('UserRole', $has),
+        'pwds' => $this->subBackup ('Pwd', $has),
       ) : $var;
   }
 }

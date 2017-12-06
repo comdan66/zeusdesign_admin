@@ -8,6 +8,11 @@
 
 class Main extends Site_controller {
 
+  public function x () {
+    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+    var_dump (password ('demo@zeus'));
+    exit ();
+  }
   public function maillogo () {
     if (($code = OAInput::get ('q')) && ($code = trim ($code)) && ($code = Track::find ('one', array ('select' => 'id, cnt_open', 'conditions' => array ('code = ? AND user_id != ?', $code, User::current () ? User::current ()->id : 0))))) {
       $code->cnt_open = $code->cnt_open + 1;

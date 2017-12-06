@@ -22,7 +22,7 @@ class OAMail extends PHPMailer {
       $this->Host = $config['host'];
       $this->Port = $config['port'];
       $this->Username = $config['user'];
-      $this->Password = $config['passwd'];
+      $this->Password = $config['password'];
       $this->From = $config['from'];
       $this->FromName = $config['from_name'];
     }
