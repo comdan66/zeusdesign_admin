@@ -67,8 +67,10 @@ class Platform extends Site_controller {
   }
   
   public function fb_sign_in () {
-    if (!(Fb::login () && ($me = Fb::me ()) && ((isset ($me['name']) && ($name = $me['name'])) && (isset ($me['email']) && ($email = $me['email'])) && (isset ($me['id']) && ($fid = $me['id'])))))
+    if (!(Fb::login () && ($me = Fb::me ()) && ((isset ($me['name']) && ($name = $me['name'])) && (isset ($me['id']) && ($fid = $me['id'])))))
       return redirect_message (array ('login'), array ('_fd' => 'Facebook 登入錯誤，請通知程式設計人員!(1)'));
+    
+    $email = isset ($me['email']) ? $me['email'] : '';
 
     if (!($user = User::find ('one', array ('conditions' => array ('fid = ?', $fid)))))
       if (!User::transaction (function () use (&$user, $fid, $name, $email) {
