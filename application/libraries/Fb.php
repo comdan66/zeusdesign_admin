@@ -12,8 +12,8 @@ defined ('BASEPATH') OR exit ('No direct script access allowed');
  */
 
 class Fb {
+
   private static $fb = null;
-  private static $accessToken = null;
 
   public function __construct ($config = array ()) {
   }
@@ -26,40 +26,29 @@ class Fb {
       'app_id' => Cfg::setting ('facebook', 'appId'),
       'app_secret' => Cfg::setting ('facebook', 'secret'),
       'default_graph_version' => Cfg::setting ('facebook', 'version')
-      ]);
+    ]);
   }
 
   public static function loginUrl () {
-    if (session_status () == PHP_SESSION_NONE)
-      session_start ();
-
     $helper = self::faceBook ()->getRedirectLoginHelper ();
     $permissions = Cfg::setting ('facebook', 'scope');
-    return $helper->getLoginUrl (base_url (func_get_args ()), $permissions);
-  }
-  public static function logoutUrl () {
-    return base_url (func_get_args ());
-  }
-  public static function login () {
-    if (session_status() == PHP_SESSION_NONE)
-      session_start();
-
-    $helper = self::faceBook ()->getRedirectLoginHelper ();
-
-    try {
-      self::$accessToken = $helper->getAccessToken ();
-      return true;
-    } catch(Exception $e) {
-      return false;
-    }
-    return false;
+    return htmlspecialchars ($helper->getLoginUrl (base_url (func_get_args ()), $permissions));
   }
 
   public static function me () {
-    if (!(self::faceBook () && self::$accessToken))
+    $helper = self::faceBook ()->getRedirectLoginHelper ();
+    isset ($_GET['state']) && $helper->getPersistentDataHandler ()->set('state', $_GET['state']);
+
+    try {
+      $accessToken = $helper->getAccessToken();
+    } catch(Facebook\Exceptions\FacebookResponseException $e) {
       return null;
+    } catch(Facebook\Exceptions\FacebookSDKException $e) {
+      return null;
+    }
+
     $get_fields = implode (',', Cfg::setting ('facebook', 'get_fields'));
-    self::faceBook ()->setDefaultAccessToken (self::$accessToken);
+    self::faceBook ()->setDefaultAccessToken ($accessToken);
     return self::faceBook ()->get ('/me' . ($get_fields ? '?fields=' . $get_fields : ''))->getGraphUser ();
   }
 }
