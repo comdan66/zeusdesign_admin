@@ -8,10 +8,12 @@
 
 class Main extends Site_controller {
 
+  public function isBrowser() {
+    return preg_match('/^(Mozilla|Opera|PSP|Bunjalloo|wii)/i', $this->input->user_agent()) && !preg_match('/bot|crawl|slurp|spider/i', $this->input->user_agent());
+  }
   public function x () {
-    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump (password ('demo@zeus'));
-    exit ();
+    Article::trace('IP：' . $this->input->ip_address() . ' isBrowser：' . ($this->isBrowser() ? 'true' : 'false') . ' UserAgent：' . $this->input->user_agent());
+    return redirect ('https://comdan66.github.io/oaf2e/index.html');
   }
   public function maillogo () {
     if (($code = OAInput::get ('q')) && ($code = trim ($code)) && ($code = Track::find ('one', array ('select' => 'id, cnt_open', 'conditions' => array ('code = ? AND user_id != ?', $code, User::current () ? User::current ()->id : 0))))) {
