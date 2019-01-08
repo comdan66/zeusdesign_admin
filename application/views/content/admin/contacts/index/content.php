@@ -53,6 +53,7 @@
         <th width='60' class='center'>已讀</th>
         <th width='120'>稱呼<?php echo listSort ($uri_1, 'name');?></th>
         <th width='220'>E-Mail<?php echo listSort ($uri_1, 'email');?></th>
+        <th width='90'>新增日期</th>
         <th >內容</th>
         <th width='45' class='center'>檢視</th>
       </tr>
@@ -70,6 +71,7 @@
           <td><?php echo $obj->name;?></td>
           <td><?php echo $obj->email;?></td>
           <td><?php echo $obj->mini_message (50);?></td>
+          <td><?php echo $obj->created_at->format ('Y-m-d');?></td>
           <td class='center'>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
             <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
