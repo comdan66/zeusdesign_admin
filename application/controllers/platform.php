@@ -21,6 +21,8 @@ class Platform extends Site_controller {
 
     if (User::current () && User::current ()->is_login ()) 
       return redirect_message (explode ('/', $mail->uri), array ('_fd' => ''));
+    
+    Session::setData ('uri', explode ('/', $mail->uri), true);
 
     return redirect (str_replace('&amp;', '&', forward_static_call_array (array ('Fb', 'loginUrl'), ['platform', 'fb_sign_in'])));
   }
@@ -63,7 +65,10 @@ class Platform extends Site_controller {
       return redirect_message (array ('login'), array ('_fd' => 'Facebook 登入錯誤，請通知程式設計人員!(3)', 'posts' => $posts));
 
     Session::setData ('user_token', $user->token);
-    return redirect_message (func_get_args (), array ('_fi' => '使用 Facebook 登入成功!'));
+    $uri = Session::getData ('uri', true);
+    $uri || $uri = func_get_args ();
+
+    return redirect_message ($uri, array ('_fi' => '使用 Facebook 登入成功!'));
   }
   
   public function fb_sign_in () {
@@ -97,7 +102,10 @@ class Platform extends Site_controller {
       return redirect_message (array ('login'), array ('_fd' => 'Facebook 登入錯誤，請通知程式設計人員!(3)'));
 
     Session::setData ('user_token', $user->token);
-    return redirect_message (func_get_args (), array ('_fi' => '使用 Facebook 登入成功!'));
+    $uri = Session::getData ('uri', true);
+    $uri || $uri = func_get_args ();
+    
+    return redirect_message ($uri, array ('_fi' => '使用 Facebook 登入成功!'));
   }
 
   public function logout () {
