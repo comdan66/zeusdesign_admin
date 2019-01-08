@@ -34,9 +34,9 @@ class Cli extends Oa_controller {
     $user_ids = column_array(UserRole::find('all', ['select' => 'user_id', 'conditions' => ['name = ?', 'contact']]), 'user_id');
     $users = User::find('all', ['conditions' => ['id IN (?)', $user_ids]]);
     echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump($users);
+    var_dump(count($users));
     exit();
-    
+
     Mail::send (
       User::find_by_id(1),
       '[聯絡宙思] 宙思官網有新的留言（' . date('Y-m-d H:i:s') . '）',
