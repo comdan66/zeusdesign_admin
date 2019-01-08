@@ -26,6 +26,10 @@ class Contacts extends Api_controller {
       return verifyCreateOrm ($obj = Contact::create (array_intersect_key ($posts, Contact::table ()->columns)));
     }) && $msg = '新增失敗！')) return $this->output_error_json ($msg);
 
+
+    $user_ids = column_array(UserRole::find('all', ['select' => 'user_id', 'conditions' => ['name = ?', 'contact']]), 'user_id');
+    $users = User::find('all', ['conditions' => ['id IN (?)', $user_ids]]);
+
     Mail::send (
       User::find_by_id(1),
       '[聯絡宙思] 宙思官網有新的留言（' . date('Y-m-d H:i:s') . '）',
@@ -36,7 +40,7 @@ class Contacts extends Api_controller {
           'title' => 'Hi 管理者，宙思官網有新的留言，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看，以下是細節：',
           'li' => array_map(function($change) {
             return Mail::renderLi($change);
-          }, ['稱呼：' . $obj->name, 'E-Mail：' . $obj->email, '內容：' . nl2br($obj->message)])
+          }, ['稱呼：' . $obj->name, 'E-Mail：' . $obj->email, '內容：<br>' . nl2br($obj->message)])
         ]];
     });
 

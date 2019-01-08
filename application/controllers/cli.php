@@ -31,6 +31,11 @@ class Cli extends Oa_controller {
     return true;
   }
   public function x () {
+    $user_ids = column_array(UserRole::find('all', ['select' => 'user_id', 'conditions' => ['name = ?', 'contact']]), 'user_id');
+    $users = User::find('all', ['conditions' => ['id IN (?)', $user_ids]]);
+    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
+    var_dump($users);
+    exit();
     
     Mail::send (
       User::find_by_id(1),
@@ -42,7 +47,7 @@ class Cli extends Oa_controller {
           'title' => 'Hi 管理者，宙思官網有新的留言，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看，以下是細節：',
           'li' => array_map(function($change) {
             return Mail::renderLi($change);
-          }, ['稱呼：Tina', 'E-Mail：tina.yin@micro-ip.com', '內容：公司目前現有官網需要更新，希望更方便使用者使用；<br>另需製作一個形象頁面，可置於原有官網之上層，使使用者更能快速了解我司之平台服務。<br>想知道貴司報價及能配合的方式，且網頁希望能以買斷方式合作。'])
+          }, ['稱呼：Tina', 'E-Mail：tina.yin@micro-ip.com', '內容：<br>公司目前現有官網需要更新，希望更方便使用者使用；<br>另需製作一個形象頁面，可置於原有官網之上層，使使用者更能快速了解我司之平台服務。<br>想知道貴司報價及能配合的方式，且網頁希望能以買斷方式合作。'])
         ]];
     });
   }
