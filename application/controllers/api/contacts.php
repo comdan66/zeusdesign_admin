@@ -22,10 +22,23 @@ class Contacts extends Api_controller {
     $posts['ip'] = $this->input->ip_address ();
     $posts['status'] = Contact::STATUS_1;
 
-
     if (($msg = $this->_validation_create ($posts)) || (!Contact::transaction (function () use (&$obj, $posts) {
       return verifyCreateOrm ($obj = Contact::create (array_intersect_key ($posts, Contact::table ()->columns)));
     }) && $msg = '新增失敗！')) return $this->output_error_json ($msg);
+
+    Mail::send (
+      User::find_by_id(1),
+      '[聯絡宙思] 宙思官網有新的留言（' . date('Y-m-d H:i:s') . '）',
+      'admin/contacts/' . $obj->id . '/show',
+      function ($o) {
+        return [[
+          'type' => 'ol',
+          'title' => 'Hi 管理者，宙思官網有新的留言，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看，以下是細節：',
+          'li' => array_map(function($change) {
+            return Mail::renderLi($change);
+          }, ['稱呼：' . $obj->name, 'E-Mail：' . $obj->email, '內容：' . nl2br($obj->message)])
+        ]];
+    });
 
     return $this->output_json ($obj->backup ());
   }
