@@ -53,8 +53,8 @@
         <th width='60' class='center'>已讀</th>
         <th width='120'>稱呼<?php echo listSort ($uri_1, 'name');?></th>
         <th width='220'>E-Mail<?php echo listSort ($uri_1, 'email');?></th>
-        <th width='90'>新增日期</th>
         <th >內容</th>
+        <th width='90'>新增日期</th>
         <th width='45' class='center'>檢視</th>
       </tr>
     </thead>
