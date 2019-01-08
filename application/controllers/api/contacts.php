@@ -30,7 +30,7 @@ class Contacts extends Api_controller {
       User::find_by_id(1),
       '[聯絡宙思] 宙思官網有新的留言（' . date('Y-m-d H:i:s') . '）',
       'admin/contacts/' . $obj->id . '/show',
-      function ($o) {
+      function ($o) use ($obj) {
         return [[
           'type' => 'ol',
           'title' => 'Hi 管理者，宙思官網有新的留言，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看，以下是細節：',
