@@ -22,7 +22,7 @@ class Platform extends Site_controller {
     if (User::current () && User::current ()->is_login ()) 
       return redirect_message (explode ('/', $mail->uri), array ('_fd' => ''));
 
-    return redirect (str_replace('&amp;', '&', forward_static_call_array (array ('Fb', 'loginUrl'), array_merge (array ('platform', 'fb_sign_in'), explode ('/', $mail->uri)))));
+    return redirect (str_replace('&amp;', '&', forward_static_call_array (array ('Fb', 'loginUrl'), ['platform', 'fb_sign_in?to=' . $mail->uri])));
   }
   public function login () {
     if (User::current () && User::current ()->is_login ()) return redirect_message (array ('admin', 'my'), array ());
