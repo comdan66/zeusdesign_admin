@@ -31,17 +31,16 @@ class Cli extends Oa_controller {
     return true;
   }
   public function x () {
-    echo '<meta http-equiv="Content-type" content="text/html; charset=utf-8" /><pre>';
-    var_dump(1);
-    exit();
+    
     Mail::send (
-      $users,
-      '[宙思任務] ' . $obj->title . '',
-      'admin/my-tasks/' . $obj->id . '/show',
-      function ($o) use ($obj, $commit) {
-        return array_merge (array (
-            array ('type' => 'section', 'title' => '', 'content' => Mail::renderP (Mail::renderB ($commit->user->name) . ' 在您的任務「' . $obj->title . '」' . $commit->action . '' . ($commit->content ? '，留言內容是：「' . $commit->content . '」' : '') . '' . ((string)$commit->file ? '，上傳的檔案名稱為：「' . Mail::renderLink ((string)$commit->file, $commit->file->url ()) . '」' : '') . '，詳細內容請至' . Mail::renderLink ('宙思後台', base_url ('platform', 'mail', $o->token)) . '查看。')),
-          ));
+      User::find_by_id(1),
+      '[宙思任務] 111',
+      function ($o) {
+        return array (
+              'type' => 'section',
+              'title' => 'd',
+              'content' => 's',
+          );
     });
   }
   public function backup_2 () {
