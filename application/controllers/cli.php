@@ -34,7 +34,7 @@ class Cli extends Oa_controller {
     
     Mail::send (
       User::find_by_id(1),
-      '[聯絡宙思] 宙思官網有新的留言',
+      '[聯絡宙思] 宙思官網有新的留言（' . date('Y-m-d H:i:s') . '）',
       'admin/contacts/10/show',
       function ($o) {
         return [[
