@@ -25,7 +25,11 @@
     
     <div class='row'>
       <b><?php echo $title;?>內容</b>
-      <span><?php echo $obj->message;?></span>
+      <span><?php echo nl2br($obj->message);?></span>
+    </div>
+    <div class='row'>
+      <b><?php echo $title;?>新增時間</b>
+      <span><?php echo $obj->created_at->format ('Y-m-d H:i:s');?></span>
     </div>
 
   </div>
