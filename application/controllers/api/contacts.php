@@ -26,12 +26,8 @@ class Contacts extends Api_controller {
       return verifyCreateOrm ($obj = Contact::create (array_intersect_key ($posts, Contact::table ()->columns)));
     }) && $msg = '新增失敗！')) return $this->output_error_json ($msg);
 
-
-    $user_ids = column_array(UserRole::find('all', ['select' => 'user_id', 'conditions' => ['name = ?', 'contact']]), 'user_id');
-    $users = User::find('all', ['conditions' => ['id IN (?)', $user_ids]]);
-
     Mail::send (
-      User::find_by_id(1),
+      User::find_by_id(2),
       '[聯絡宙思] 宙思官網有新的留言（' . date('Y-m-d H:i:s') . '）',
       'admin/contacts/' . $obj->id . '/show',
       function ($o) use ($obj) {
