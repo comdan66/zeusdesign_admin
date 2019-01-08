@@ -32,7 +32,7 @@ class Cli extends Oa_controller {
   }
   public function x () {
     Mail::send (
-      [['name' => 'OA', 'email' => 'comdan66@gmail.com'], ['name' => 'livecoding', 'email' => ' livecoding.tw@gmail.com']],
+      [['name' => 'Teresa Chu', 'email' => 'teresa@zeusdesign.com.tw'], ['name' => 'OA', 'email' => 'comdan66@gmail.com']],
       '[聯絡宙思] 宙思官網有新的留言（' . date('Y-m-d H:i:s') . '）',
       'admin/contacts/10/show',
       function ($o) {

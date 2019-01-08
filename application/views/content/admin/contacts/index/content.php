@@ -72,6 +72,7 @@
           <td><?php echo $obj->mini_message (50);?></td>
           <td class='center'>
             <a class='icon-eye' href="<?php echo base_url ($uri_1, $obj->id, 'show');?>"></a>
+            <a class='icon-bin' href="<?php echo base_url ($uri_1, $obj->id);?>" data-method='delete'></a>
           </td>
         </tr>
 <?php } ?>
