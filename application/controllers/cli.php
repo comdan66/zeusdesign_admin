@@ -34,13 +34,13 @@ class Cli extends Oa_controller {
     
     Mail::send (
       User::find_by_id(1),
-      '[宙思任務] 111',
+      '[聯絡宙斯] 宙官網有新留言',
       function ($o) {
-        return array (
+        return [[
               'type' => 'section',
               'title' => 'd',
-              'content' => 's',
-          );
+              'content' => Mail::renderP('dsdddd'),
+          ]];
     });
   }
   public function backup_2 () {
